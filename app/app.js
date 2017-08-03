@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app', ['ui.router'])
+        .module('app', ['ui.router', 'ngSanitize', 'textAngular', 'angular-loading-bar', 'ngFileUpload', 'ui.bootstrap'])
         .config(config)
         .run(run);
 
