@@ -11,6 +11,7 @@
         service.getReportByWeek = getReportByWeek;
         service.Create = Create;
         service.remind = remind;
+        service.remindAll = remindAll;
 
         return service;
 
@@ -32,6 +33,10 @@
 
         function remind(id){
             return $http.get('/api/timesheet/remind/' +id).then(handleSuccess, handleError);
+        }
+
+        function remindAll(){
+            return $http.get('/api/timesheet/remindAll').then(handleSuccess, handleError);   
         }
 
         // private functions

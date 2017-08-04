@@ -35,7 +35,7 @@
             };
         })
 
-    function Controller(UserService, $filter, ReportService, _, $scope) {
+    function Controller(UserService, $filter, ReportService, _, $scope, FlashService) {
         var vm = this;
 
         vm.user = null;
@@ -43,6 +43,7 @@
         vm.remind = remind;
         vm.getAllReports = getAllReports;
         vm.exportTable = exportTable;
+        vm.remindAll = remindAll;
 
         vm.obj = {
             question: new Date()
@@ -56,8 +57,14 @@
 
         function remind(userId) {
             ReportService.remind(userId).then(function(response) {
-                console.log(response);
+                FlashService.Success('User Reminded');
             });
+        }
+
+        function remindAll(){
+            ReportService.remindAll().then(function(response) {
+                FlashService.Success('Users Reminded');
+            });   
         }
 
         function exportTable(){

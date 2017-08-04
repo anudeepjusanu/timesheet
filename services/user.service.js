@@ -59,7 +59,7 @@ function getAll() {
 
     db.users.find().toArray(function(err, users) {
         if (err) deferred.reject(err.name + ': ' + err.message);
-
+        
         if (users) {
             var usersList = _.map(users, function(e) {
                 return _.omit(e, 'hash');
