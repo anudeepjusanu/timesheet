@@ -5,10 +5,30 @@
         .module('app')
         .controller('Home.IndexController', Controller);
 
-    function Controller(UserService) {
+    function Controller(UserService, $filter, ReportService) {
         var vm = this;
 
         vm.user = null;
+        vm.post = post;
+        vm.obj = {
+            question: new Date()
+        };
+
+        function post(){
+            $filter('date')(vm.obj.question, "yyyy-Www");
+        }
+
+        function getAllReports(){
+            ReportService.getReportByWeek({'week': 'week'}).then(function(reports){
+                console.log(reports);
+            })
+        }
+
+        function getMyReport(){
+            ReportService.getMine().then(function(reports){
+                console.log(reports);
+            })
+        }
 
         initController();
 
@@ -16,6 +36,12 @@
             // get current user
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
+                console.log($filter('date')(new Date(), "yyyy-Www"));
+                /*if(vm.user.admin){
+                    getAllReports();
+                }else{
+                    getMyReport();
+                }*/
             });
         }
     }

@@ -6,19 +6,30 @@
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />
     <link href="app-content/app.css" rel="stylesheet" />
+    <link rel='stylesheet' href='bower_components/angular-loading-bar/build/loading-bar.min.css' type='text/css' media='all' />
 </head>
 <body class="container">
     <!-- header -->
-    <header>
-        <ul class="nav nav-tabs">
-            <li ng-class="{active: activeTab === 'home'}"><a ui-sref="home">Home</a></li>
-            <li ng-class="{active: activeTab === 'account'}"><a ui-sref="account">Account</a></li>
-            <li><a href="/login" target="_self">Logout</a></li>
-        </ul>
-        <div class="flash-message" ng-if="flash">
-            <div class="{{'alert alert-' + flash.type}}" ng-bind="flash.message"></div>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li ng-class="{active: activeTab === 'home'}"><a ui-sref="home">Home</a></li>
+                    <li ng-class="{active: activeTab === 'account'}"><a ui-sref="account">My Account</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/login" target="_self">Logout</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
         </div>
-    </header>
+        <!-- /.container-fluid -->
+    </nav>
+    <div class="flash-message" ng-if="flash">
+        <div class="{{'alert alert-' + flash.type}}" ng-bind="flash.message"></div>
+    </div>
 
     <!-- main -->
     <main ui-view></main>
@@ -33,15 +44,12 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.4.14/angular-sanitize.min.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script src='bower_components/textAngular/dist/textAngular-rangy.min.js'></script>
-    <script src='bower_components/textAngular/dist/textAngular-sanitize.min.js'></script>
-    <script src='bower_components/textAngular/dist/textAngular.min.js'></script>
     <script src='bower_components/angular-loading-bar/build/loading-bar.min.js'></script>
-    <script src="bower_components/ng-file-upload/ng-file-upload-shim.min.js"></script>
 
     <!-- application scripts -->
     <script src="app.js"></script>
     <script src="app-services/user.service.js"></script>
+    <script src="app-services/report.service.js"></script>
     <script src="app-services/flash.service.js"></script>
     <script src="home/index.controller.js"></script>
     <script src="account/index.controller.js"></script>

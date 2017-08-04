@@ -13,13 +13,13 @@ service.authenticate = authenticate;
 service.getById = getById;
 service.create = create;
 service.update = update;
+service.updateEmail = updateEmail;
 service.delete = _delete;
 
 module.exports = service;
 
 function authenticate(username, password) {
     var deferred = Q.defer();
-
     db.users.findOne({ username: username }, function (err, user) {
         if (err) deferred.reject(err.name + ': ' + err.message);
 
@@ -134,6 +134,43 @@ function update(_id, userParam) {
             function (err, doc) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
 
+                deferred.resolve();
+            });
+    }
+
+    return deferred.promise;
+}
+
+function updateEmail(id, userParam) {
+    var deferred = Q.defer();
+
+    // validation
+    db.users.findOne({'userId': id}, function (err, user) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (user.username) {
+            deferred.reject('Username is already mapped for you');
+        } else {
+            updateUser(user._id);
+        }
+    });
+
+    function updateUser(id) {
+        // fields to update
+        var set = {
+            username: userParam.username,
+        };
+
+        // update password if it was entered
+        if (userParam.password) {
+            set.hash = bcrypt.hashSync(userParam.password, 10);
+        }
+
+        db.users.update(
+            { _id: mongo.helper.toObjectID(id) },
+            { $set: set },
+            { upsert:true, multi: true },
+            function (err, doc) {
+                if (err) deferred.reject(err.name + ': ' + err.message);
                 deferred.resolve();
             });
     }

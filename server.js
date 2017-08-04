@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var expressJwt = require('express-jwt');
 var config = require('config.json');
 var builder = require('botbuilder');
+var userService = require('services/user.service');
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
@@ -16,8 +17,8 @@ app.use(express.static(__dirname + '/public'));
 
 
 var connector = new builder.ChatConnector({
-    appId: "03d79ab1-9dce-411e-8a3c-80244fad94ac",
-    appPassword: "jdvF9Byk9xOL8EvqextZuxb"
+    appId: "c8fc3ad9-72cb-46ff-b5f1-09432ed9b7db",
+    appPassword: "zMfewLxOUyZ1GabEjOsmrXZ"
 });
 var bot = new builder.UniversalBot(connector);
 
@@ -47,17 +48,56 @@ bot.on('deleteUserData', function(message) {
 });
 
 bot.dialog('/', function(session) {
-	session.sendTyping();
-	if(session.message.text.toLowerCase().indexOf('hello') == 0){
-		session.send(`Hey, How are you? Here's some random trivia. \n\n`);
-	}
+    session.sendTyping();
+    if (session.message.text.toLowerCase().indexOf('hello') == 0) {
+        session.send(`Hey, How are you? Here's some random trivia. \n\n`);
+    } else if (session.message.text.toLowerCase().indexOf('register') == 0) {
+        console.log("here");
+        session.beginDialog('/registerEmail');
+    }
 });
+
+bot.dialog('/registerEmail', [function(session) {
+    builder.Prompts.text(session, "Please enter your wavelabs email");
+}, function(session, results) {
+    if (results.response) {
+        var addressObj = session.message.address;
+        var regex = />\s*(.*?)\s*<\/a>/g;
+        var matches = [];
+        while (m = regex.exec(results.response)) {
+            matches.push(m[1]);
+        }
+        if (matches && matches.length) {
+            var obj = {
+                "username": matches[0],
+                "password": "wavelabs"
+            }
+
+            userService.updateEmail(addressObj.user.id, obj)
+                .then(function() {
+                    session.send("Email Registered Successfully, You can login with the password and change it later");
+                    session.endDialog();
+                })
+                .catch(function(err) {
+                    session.send(err);
+                    session.endDialog();
+                });
+        }else{
+            session.endDialog();
+            session.beginDialog('/registerEmail');
+        }
+    } else {
+        session.send("Thank you!!");
+        session.endDialog();
+    }
+}]);
 
 // routes
 app.use('/login', require('./controllers/login.controller'));
 app.use('/register', require('./controllers/register.controller'));
 app.use('/app', require('./controllers/app.controller'));
 app.use('/api/users', require('./controllers/api/users.controller'));
+app.use('/api/timesheet', require('./controllers/api/timesheet.controller'));
 
 // make '/app' default route
 app.get('/', function(req, res) {
@@ -65,6 +105,6 @@ app.get('/', function(req, res) {
 });
 
 // start server
-var server = app.listen(3000, function() {
+var server = app.listen(8080, function() {
     console.log('Server listening at http://' + server.address().address + ':' + server.address().port);
 });
