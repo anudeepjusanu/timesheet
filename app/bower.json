@@ -1,5 +1,5 @@
 {
-  "name": "oitps",
+  "name": "wavelabs",
   "authors": [
     "Anudeep"
   ],
@@ -7,6 +7,8 @@
     "textAngular": "^1.5.16",
     "angular-loading-bar": "^0.9.0",
     "ng-file-upload": "^12.2.13",
-    "angular-bootstrap": "^2.5.0"
+    "angular-bootstrap": "^2.5.0",
+    "underscore": "^1.8.3",
+    "lodash": "^4.17.4"
   }
 }

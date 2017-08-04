@@ -23,7 +23,7 @@
         }
 
         function GetAll() {
-            return $http.get('/api/users').then(handleSuccess, handleError);
+            return $http.get('/api/users/all').then(handleSuccess, handleError);
         }
 
         function GetById(_id) {
