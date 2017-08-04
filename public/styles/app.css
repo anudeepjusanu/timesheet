@@ -1,7 +1,56 @@
 body {
     padding: 20px 0;
+    background-color: #DCDDDF;
 }
-
 .flash-message {
     margin-top: 20px;
+}
+.form-bg-container{
+	background-color: #f5f5f5;
+	border:1px dotted #ccc;
+	margin: auto;
+	height: 320px;
+	width: 400px;
+	z-index: -1;
+	transform: rotate(-5deg);
+}
+.form-container{
+	background-color: #f5f5f5;
+	padding: 0 0 30px 0;
+	position: relative;
+	bottom: 320px;
+}
+.form-container h2{
+	margin: 0;
+}
+.form-head{
+	background-color: green;
+	padding: 10px;
+	color: #fff;
+}
+.firstname-field{
+	padding: 30px 20px 15px;
+}
+.lastname-field{
+	padding: 15px 20px;
+}
+.username-field{
+	padding: 15px 20px;
+}
+.password-field{
+	padding: 15px 20px;
+}
+.btn-field{
+	padding: 15px 20px 80px;
+}
+.controls{
+	padding-left: 0;
+}
+
+.register-form-container .form-bg-container{
+	height: 440px;
+	width: 400px;
+}
+.register-form-container .form-container{
+	bottom: 440px;
 }
