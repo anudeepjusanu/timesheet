@@ -52,7 +52,6 @@ bot.dialog('/', function(session) {
     if (session.message.text.toLowerCase().indexOf('hello') == 0) {
         session.send(`Hey, How are you? Here's some random trivia. \n\n`);
     } else if (session.message.text.toLowerCase().indexOf('register') == 0) {
-        console.log("here");
         session.beginDialog('/registerEmail');
     }
 });
@@ -72,17 +71,18 @@ bot.dialog('/registerEmail', [function(session) {
                 "username": matches[0],
                 "password": "wavelabs"
             }
-
+            obj.password = Math.random().toString(36).substring(7);
+            
             userService.updateEmail(addressObj.user.id, obj)
                 .then(function() {
-                    session.send("Email Registered Successfully, You can login with the password and change it later");
+                    session.send("Email Registered Successfully, \n\n Here are your login details \n\n username:" +obj.username+"\n\n Password:"+obj.password+"\n\n You can change your password under my account tab" );
                     session.endDialog();
                 })
                 .catch(function(err) {
                     session.send(err);
                     session.endDialog();
                 });
-        }else{
+        } else {
             session.endDialog();
             session.beginDialog('/registerEmail');
         }
