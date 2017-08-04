@@ -1,25 +1,31 @@
 ﻿<%- include('partials/header') %>
-<div class="form-container">
-    <h2>Login</h2>
-    <% if(locals.error) { %>
-        <div class="alert alert-danger"><%= error %></div>
-    <% } %>
-    <% if(locals.success) { %>
-        <div class="alert alert-success"><%= success %></div>
-    <% } %>
-    <form method="post">
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" name="username" id="username" value="<%= locals.username || '' %>" class="form-control" />
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" class="form-control" />
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Login</button>
-            <a href="/register" class="btn btn-link">Register</a>
-        </div>
-    </form>
+<div class="login-form-container">
+    <div class="form-bg-container"></div>
+    <div class="form-container">
+        <h2 class="form-head">Login</h2>
+        <% if(locals.error) { %>
+            <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+        <% if(locals.success) { %>
+            <div class="alert alert-success"><%= success %></div>
+        <% } %>
+        <form method="post">
+            <div class="input-group username-field">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                <input type="text" class="form-control" id="username" name="username" value="<%= locals.username || '' %>" placeholder="Username">                                        
+            </div>
+            <div class="input-group password-field">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+            </div> 
+            <div class="form-group btn-field">
+                <div class="col-sm-12 controls">
+                    <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-log-in"></i> Log in</button> 
+                    <a href="/register" class="btn btn-link">Register</a>                         
+                </div>          
+            </div>
+        </form>
+    </div>
 </div>
+
 <%- include('partials/footer') %>
