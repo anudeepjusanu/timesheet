@@ -4,7 +4,10 @@
     angular
         .module('app', ['ui.router', 'ngSanitize', 'angular-loading-bar', 'ui.bootstrap'])
         .config(config)
-        .run(run);
+        .run(run)
+        .constant('_',
+            window._
+        );
 
     function config($stateProvider, $urlRouterProvider) {
         // default route
@@ -41,7 +44,7 @@
         // update active tab on state change
         $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
             $rootScope.activeTab = toState.data.activeTab;
-            
+
         });
     }
 

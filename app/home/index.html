@@ -1,31 +1,56 @@
 ﻿<h1>Hi {{vm.user.name}}!!</h1>
-
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="invoice">
-        <div class="row">
-            <div class="col-xs-12">
-                <h2 class="page-header">
-                  <i class="fa fa-floppy-o"></i> Post Question
-                </h2>
+    <div class="container" ng-show="vm.user.admin">
+        <br>
+        <div class="clearfix">
+            <button class="btn btn-primary" ng-click="vm.exportTable()">Export</button>
+            <div class="form-group pull-right">
+                <label class="col-md-3" for="week">Filter By Week</label>
+                <div class="col-md-9">
+                    <input type="week" class="form-control" ng-model="vm.currentWeek" ng-change="vm.getAllReports(vm.currentWeek)">
+                </div>
             </div>
         </div>
-        <div class="row">
-            <form>
-                <div class="form-group has-feedback">
-                    <input type="week" name="question" id="question" ng-model="vm.obj.question" class="form-control" placeholder="Question" />
-                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                </div>
-                <div class="col-xs-12"></div>
-                <div class="col-xs-12 row">
-                    <div class="col-sm-9">
-                        
-                    </div>
-                    <div class="col-sm-3">
-                        <button class="pull-right btn btn-primary" ng-click="vm.post()">Post</button>
-                    </div>
-                </div>
-            </form>
+        <div class="table-responsive">
+            <table class="table" export-table>
+                <tr>
+                    <th>Name</th>
+                    <th>Project</th>
+                    <th>Hours</th>
+                    <th>Comments</th>
+                    <th>Action</th>
+                </tr>
+                <tr ng-repeat="report in vm.allReports">
+                    <td>{{report.name}}</td>
+                    <td>{{report.project}}</td>
+                    <td>{{report.hours}}</td>
+                    <td>{{report.comments}}</td>
+                    <td>
+                        <button class="btn btn-primary" ng-click="vm.remind(report.userId)" ng-show="report.remind">Remind</button>
+                    </td>
+                </tr>
+            </table>
         </div>
-    </section>
+    </div>
+    <div class="container" ng-show="!vm.user.admin">
+        <br>
+        <div class="clearfix">
+            <a class="btn btn-primary pull-right" style="margin-right: 25px;" ui-sref="timesheet">Add Hours</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+                    <th>Project</th>
+                    <th>Hours</th>
+                    <th>Comments</th>
+                </tr>
+                <tr ng-repeat="report in vm.myReports">
+                    <td>{{report.project}}</td>
+                    <td>{{report.hours}}</td>
+                    <td>{{report.comments}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </div>

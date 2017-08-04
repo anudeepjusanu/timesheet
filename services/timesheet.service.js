@@ -65,7 +65,7 @@ function getByWeek(week) {
 
 function getMine(userId) {
     var deferred = Q.defer();
-    db.timesheet.find({ userId: userId }).toArray(function(err, doc) {
+    db.timesheet.find({ userId: mongo.helper.toObjectID(userId) }).toArray(function(err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (doc) {
             deferred.resolve(doc);
