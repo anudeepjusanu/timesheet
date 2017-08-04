@@ -9,6 +9,7 @@
         var service = {};
         service.GetMine = GetMine;
         service.getReportByWeek = getReportByWeek;
+        service.Create = Create;
 
         return service;
 
@@ -20,8 +21,8 @@
             return $http.get('/api/timesheet/week/' + week).then(handleSuccess, handleError);
         }
 
-        function Create(user) {
-            return $http.post('/api/users', user).then(handleSuccess, handleError);
+        function Create(report) {
+            return $http.post('/api/timesheet/', report).then(handleSuccess, handleError);
         }
 
         function Update(user) {
