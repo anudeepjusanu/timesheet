@@ -18,6 +18,13 @@
                 controllerAs: 'vm',
                 data: { activeTab: 'home' }
             })
+            .state('timesheet', {
+                url: '/addTimesheet',
+                templateUrl: 'home/timesheet.html',
+                controller: 'Home.TimesheetController',
+                controllerAs: 'vm',
+                data: { activeTab: 'home' }
+            })
             .state('account', {
                 url: '/account',
                 templateUrl: 'account/index.html',

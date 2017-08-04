@@ -3,7 +3,8 @@
 
     angular
         .module('app')
-        .controller('Home.IndexController', Controller);
+        .controller('Home.IndexController', Controller)
+        .controller('Home.TimesheetController', TimesheetController);
 
     function Controller(UserService, $filter, ReportService) {
         var vm = this;
@@ -44,6 +45,13 @@
                 }*/
             });
         }
+    }
+
+    function TimesheetController(UserService, $filter, ReportService){
+        var vm = this;
+        vm.obj = {
+            
+        };
     }
 
 })();

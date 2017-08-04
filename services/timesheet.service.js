@@ -33,6 +33,7 @@ function create(user, userParam) {
             name: user.name,
             hours: userParam.hours,
             week: userParam.week,
+            postedOn: new Date(),
             project: userParam.project,
             comments: userParam.comments,
         }
