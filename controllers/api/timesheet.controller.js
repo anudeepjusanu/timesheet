@@ -93,9 +93,10 @@ function remindAll(req, res) {
                         .text("Please update your weekly hours for current week, Ignore if already updated");
                     bot.send(msg, function(err) {
                         // Return success/failure
-                        res.sendStatus(200);
+                        
                     });
                 }
+                res.sendStatus(200);
 
             } else {
                 res.sendStatus(404);
