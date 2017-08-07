@@ -25,7 +25,7 @@ var bot = new builder.UniversalBot(connector);
 // use JWT auth to secure the api
 app.use('/api', expressJwt({ secret: config.secret }).unless({ path: ['/api/users/authenticate', '/api/users/register', '/api/messages'] }));
 
-app.post('/api/messages', connector.listen());
+app.post('/bot/messages', connector.listen());
 
 bot.on('contactRelationUpdate', function(message) {
     if (message.action === 'add') {
