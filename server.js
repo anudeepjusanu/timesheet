@@ -26,6 +26,12 @@ var bot = new builder.UniversalBot(connector);
 app.use('/api', expressJwt({ secret: config.secret }).unless({ path: ['/api/users/authenticate', '/api/users/register', '/api/messages'] }));
 
 app.post('/api/messages', connector.listen());
+app.get('/api/messages', function(req, res){
+    var users = {
+        "name": "Anudeep"
+    }
+    res.json(users);
+});
 
 bot.on('contactRelationUpdate', function(message) {
     if (message.action === 'add') {
