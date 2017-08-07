@@ -69,7 +69,7 @@ function remind(req, res) {
             if (user) {
                 var msg = new builder.Message()
                     .address(user.address)
-                    .text("Hi, Please update your weekly hours for "+req.params.week);
+                    .text("Hi, Please update your weekly hours for "+req.params.week +" at http://timesheet.wavelabs.in");
                 bot.send(msg, function(err) {
                     // Return success/failure
                     res.sendStatus(200);
@@ -90,7 +90,7 @@ function remindAll(req, res) {
                 for (var i = 0, len = users.length; i < len; i++) {
                     var msg = new builder.Message()
                         .address(users[i].address)
-                        .text("Please update your weekly hours for current week, Ignore if already updated");
+                        .text("Please update your weekly hours for current week at http://timesheet.wavelabs.in , Ignore if already updated");
                     bot.send(msg, function(err) {
                         // Return success/failure
                         
