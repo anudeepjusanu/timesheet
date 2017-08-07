@@ -6,7 +6,7 @@ var timesheetService = require('services/timesheet.service');
 var builder = require('botbuilder');
 var connector = new builder.ChatConnector({
     appId: "c8fc3ad9-72cb-46ff-b5f1-09432ed9b7db",
-    appPassword: "zMfewLxOUyZ1GabEjOsmrXZ"
+    appPassword: "Y1A0xm40NNkm1XpR0MNV3sz"
 });
 var bot = new builder.UniversalBot(connector);
 
