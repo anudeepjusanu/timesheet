@@ -78,7 +78,7 @@ bot.dialog('/', function(session) {
                 session.endDialog();
             });
     } else if (session.message.text.toLowerCase().indexOf('help') == 0) {
-        session.send(`Available commands:\n\n register (first command to run) \n\n trivia  \n\n math \n\n email \n\n *messageall [your message]`);
+        session.send(`Available commands:\n\n register (first command to run) \n\n trivia  \n\n math \n\n email \n\n);
     } else if (session.message.text.toLowerCase().indexOf('trivia') == 0) {
         var options = {
             url: 'http://numbersapi.com/random/trivia'
