@@ -157,10 +157,12 @@ function updateEmail(id, userParam) {
     // validation
     db.users.findOne({ 'userId': id }, function(err, user) {
         if (err) deferred.reject(err.name + ': ' + err.message);
-        if (user.username) {
+        if (user && user.username) {
             deferred.reject('Username is already mapped for you');
-        } else {
+        } else if(user) {
             updateUser(user._id);
+        }else{
+            deferred.reject('You may have to register first by using the command register');
         }
     });
 
