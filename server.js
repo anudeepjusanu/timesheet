@@ -25,7 +25,9 @@ var bot = new builder.UniversalBot(connector);
 // use JWT auth to secure the api
 app.use('/api', expressJwt({ secret: config.secret }).unless({ path: ['/api/users/authenticate', '/api/users/register', '/api/messages'] }));
 
-app.post('/api/messages', connector.listen());
+app.post('/api/messages', function(req, res){
+    console.log("here")
+});
 app.get('/api/messages', function(req, res){
     var users = {
         "name": "Anudeep"
