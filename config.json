@@ -1,5 +1,5 @@
 ﻿{
-    "connectionString": "mongodb://localhost:27017/bot",
+    "connectionString": "mongodb://localhost:27017/timsheet",
     "apiUrl": "http://localhost:3010/api",
     "secret": "REPLACE THIS WITH YOUR OWN SECRET, IT CAN BE ANY STRING"
 }
