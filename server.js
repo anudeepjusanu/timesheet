@@ -78,7 +78,7 @@ bot.dialog('/', function(session) {
                 session.endDialog();
             });
     } else if (session.message.text.toLowerCase().indexOf('help') == 0) {
-        session.send(`Available commands:\n\n register (first command to run) \n\n trivia  \n\n math \n\n email \n\n);
+        session.send(`Available commands:\n\n register (first command to run) \n\n trivia  \n\n math \n\n email \n\n`);
     } else if (session.message.text.toLowerCase().indexOf('trivia') == 0) {
         var options = {
             url: 'http://numbersapi.com/random/trivia'
@@ -123,7 +123,7 @@ bot.dialog('/registerEmail', [function(session) {
 
             userService.updateEmail(addressObj.user.id, obj)
                 .then(function() {
-                    session.send("Email Registered Successfully, \n\n Here are your login details \n\n username:" + obj.username + "\n\n Password:" + obj.password + "\n\n You can change your password under my account tab");
+                    session.send("Email Registered Successfully, \n\n Here are your login details \n\n username:" + obj.username + "\n\n Password:" + obj.password + "\n\n login at http://timesheet.wavelabs.in You can change your password under my account tab");
                     session.endDialog();
                 })
                 .catch(function(err) {
