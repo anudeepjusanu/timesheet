@@ -44,10 +44,12 @@
         vm.getAllReports = getAllReports;
         vm.exportTable = exportTable;
         vm.remindAll = remindAll;
+        vm.closeAlert = closeAlert;
 
         vm.obj = {
             question: new Date()
         };
+        vm.alerts = [];
         var currentDate = $filter('date')(new Date(), "yyyy-Www").toString();
         vm.currentWeek = new Date();
 
@@ -56,20 +58,25 @@
         }
 
         function remind(userId) {
-            ReportService.remind(userId).then(function(response) {
-                FlashService.Success('User Reminded');
+            var week = $filter('date')(vm.currentWeek, "Www");
+            ReportService.remind(userId, week).then(function(response) {
+                vm.alerts.push({ msg: 'User Reminded!' });
             });
         }
 
-        function remindAll(){
+        function remindAll() {
             ReportService.remindAll().then(function(response) {
-                FlashService.Success('Users Reminded');
-            });   
+                vm.alerts.push({ msg: 'Users Reminded!' });
+            });
         }
 
-        function exportTable(){
+        function exportTable() {
             $scope.$broadcast('export-excl', {});
         }
+
+        function closeAlert(index) {
+            vm.alerts.splice(index, 1);
+        };
 
         function getAllReports(week) {
             var text = "";

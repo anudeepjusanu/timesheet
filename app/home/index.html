@@ -1,4 +1,5 @@
 ﻿<h1>Hi {{vm.user.name}}!!</h1>
+  <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="1000">{{alert.msg}}</div>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="container" ng-show="vm.user.admin">

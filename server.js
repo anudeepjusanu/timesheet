@@ -49,10 +49,52 @@ bot.on('deleteUserData', function(message) {
 
 bot.dialog('/', function(session) {
     session.sendTyping();
+
     if (session.message.text.toLowerCase().indexOf('hello') == 0) {
-        session.send(`Hey, How are you? Here's some random trivia. \n\n`);
-    } else if (session.message.text.toLowerCase().indexOf('register') == 0) {
+        session.send(`Hey, How are you?. \n\n`);
+    } else if (session.message.text.toLowerCase().indexOf('email') == 0) {
         session.beginDialog('/registerEmail');
+    } else if (session.message.text.toLowerCase().indexOf('register') == 0) {
+        var addressObj = session.message.address;
+        var obj = {
+            "address": addressObj,
+            "admin": false,
+            "userId": addressObj.user.id,
+            "name": addressObj.user.name
+        }
+        userService.createUser(obj)
+            .then(function(response) {
+                session.send("Welcome to Wavelabs! You have been Successfully Registered");
+                session.endDialog();
+            })
+            .catch(function(err) {
+                session.send(err);
+                session.endDialog();
+            });
+    } else if (session.message.text.toLowerCase().indexOf('help') == 0) {
+        session.send(`Available commands:\n\n register (first command to run) \n\n trivia  \n\n math \n\n email \n\n *messageall [your message]`);
+    } else if (session.message.text.toLowerCase().indexOf('trivia') == 0) {
+        var options = {
+            url: 'http://numbersapi.com/random/trivia'
+        };
+        request.get(options, function(error, response, body) {
+            if (!error) {
+                session.send(body);
+            } else {
+                session.send('Sometimes robot fails too');
+            }
+        });
+    } else if (session.message.text.toLowerCase().indexOf('math') == 0) {
+        var options = {
+            url: 'http://numbersapi.com/random/math'
+        };
+        request.get(options, function(error, response, body) {
+            if (!error) {
+                session.send(body);
+            } else {
+                session.send('Sometimes robot fails too');
+            }
+        });
     }
 });
 
@@ -72,10 +114,10 @@ bot.dialog('/registerEmail', [function(session) {
                 "password": "wavelabs"
             }
             obj.password = Math.random().toString(36).substring(7);
-            
+
             userService.updateEmail(addressObj.user.id, obj)
                 .then(function() {
-                    session.send("Email Registered Successfully, \n\n Here are your login details \n\n username:" +obj.username+"\n\n Password:"+obj.password+"\n\n You can change your password under my account tab" );
+                    session.send("Email Registered Successfully, \n\n Here are your login details \n\n username:" + obj.username + "\n\n Password:" + obj.password + "\n\n You can change your password under my account tab");
                     session.endDialog();
                 })
                 .catch(function(err) {

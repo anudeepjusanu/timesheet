@@ -14,7 +14,7 @@ var bot = new builder.UniversalBot(connector);
 router.post('/', create);
 router.get('/week/mine', getMyReport);
 router.get('/week/:weekId', getReportbyWeek);
-router.get('/remind/:id', remind);
+router.get('/remind/:id/:week', remind);
 router.get('/remindAll', remindAll);
 
 module.exports = router;
@@ -69,7 +69,7 @@ function remind(req, res) {
             if (user) {
                 var msg = new builder.Message()
                     .address(user.address)
-                    .text("Please update your weekly hours for current week");
+                    .text("Hi, Please update your weekly hours for "+req.params.week);
                 bot.send(msg, function(err) {
                     // Return success/failure
                     res.sendStatus(200);

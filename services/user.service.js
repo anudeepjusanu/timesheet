@@ -12,7 +12,7 @@ var service = {};
 service.authenticate = authenticate;
 service.getById = getById;
 service.getAll = getAll;
-service.create = create;
+service.createUser = createUser;
 service.update = update;
 service.updateEmail = updateEmail;
 service.delete = _delete;
@@ -59,7 +59,7 @@ function getAll() {
 
     db.users.find().toArray(function(err, users) {
         if (err) deferred.reject(err.name + ': ' + err.message);
-        
+
         if (users) {
             var usersList = _.map(users, function(e) {
                 return _.omit(e, 'hash');
@@ -75,31 +75,25 @@ function getAll() {
     return deferred.promise;
 }
 
-function create(userParam) {
+function createUser(userParam) {
     var deferred = Q.defer();
 
     // validation
-    db.users.findOne({ username: userParam.username },
+    db.users.findOne({ userId: userParam.userId },
         function(err, user) {
             if (err) deferred.reject(err.name + ': ' + err.message);
 
             if (user) {
                 // username already exists
-                deferred.reject('Username "' + userParam.username + '" is already taken');
+                deferred.reject('You have already Registered');
             } else {
                 createUser();
             }
         });
 
     function createUser() {
-        // set user object to userParam without the cleartext password
-        var user = _.omit(userParam, 'password');
-
-        // add hashed password to user object
-        user.hash = bcrypt.hashSync(userParam.password, 10);
-
         db.users.insert(
-            user,
+            userParam,
             function(err, doc) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
 

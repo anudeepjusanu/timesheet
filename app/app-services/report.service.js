@@ -31,8 +31,8 @@
             return $http.put('/api/timesheet/' + user._id, user).then(handleSuccess, handleError);
         }
 
-        function remind(id){
-            return $http.get('/api/timesheet/remind/' +id).then(handleSuccess, handleError);
+        function remind(id, week){
+            return $http.get('/api/timesheet/remind/' +id+ '/'+week).then(handleSuccess, handleError);
         }
 
         function remindAll(){
