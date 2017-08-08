@@ -35,6 +35,13 @@
                 controllerAs: 'vm',
                 data: { activeTab: 'home' }
             })
+            .state('adminUpdate', {
+                url: '/adminUpdate/:id',
+                templateUrl: 'home/adminUpdate.html',
+                controller: 'Home.AdminController',
+                controllerAs: 'vm',
+                data: { activeTab: 'home' }
+            })
             .state('account', {
                 url: '/account',
                 templateUrl: 'account/index.html',

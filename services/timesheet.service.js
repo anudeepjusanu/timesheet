@@ -14,6 +14,7 @@ service.update = update;
 service.getSheet = getSheet;
 service.getByWeek = getByWeek;
 service.getMine = getMine;
+service.adminUpdate = adminUpdate;
 
 module.exports = service;
 
@@ -122,5 +123,38 @@ function getMine(userId) {
             deferred.reject("You have already posted for current week");
         }
     });
+    return deferred.promise;
+}
+
+function adminUpdate(id, params) {
+    var deferred = Q.defer();
+
+    db.timesheet.findById(id, function(err, sheet) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (sheet) {
+            updateSheet();
+        } else {
+            deferred.reject("You are not authorized");
+        }
+    });
+
+    function updateSheet() {
+        // fields to update
+        var set = {
+            hours: params.hours,
+            week: params.week,
+            cDate: params.cDate,
+            postedOn: new Date(),
+            project: params.project,
+            comments: params.comments,
+        };
+
+        db.timesheet.update({ _id: mongo.helper.toObjectID(id) }, { $set: set },
+            function(err, doc) {
+                if (err) deferred.reject(err.name + ': ' + err.message);
+                deferred.resolve(doc);
+            });
+    }
+
     return deferred.promise;
 }

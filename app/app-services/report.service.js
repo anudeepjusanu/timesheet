@@ -14,6 +14,7 @@
         service.Update = Update;
         service.remind = remind;
         service.remindAll = remindAll;
+        service.adminUpdate = adminUpdate;
 
         return service;
 
@@ -43,6 +44,10 @@
 
         function remindAll(){
             return $http.get('/api/timesheet/remind/all').then(handleSuccess, handleError);   
+        }
+
+        function adminUpdate(id, obj) {
+            return $http.put('/api/timesheet/admin/' + id, obj).then(handleSuccess, handleError);
         }
 
         // private functions
