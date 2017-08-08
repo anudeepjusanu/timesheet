@@ -10,6 +10,8 @@
         service.GetMine = GetMine;
         service.getReportByWeek = getReportByWeek;
         service.Create = Create;
+        service.Get = Get;
+        service.Update = Update;
         service.remind = remind;
         service.remindAll = remindAll;
 
@@ -27,8 +29,12 @@
             return $http.post('/api/timesheet/', report).then(handleSuccess, handleError);
         }
 
-        function Update(user) {
-            return $http.put('/api/timesheet/' + user._id, user).then(handleSuccess, handleError);
+        function Get(id) {
+            return $http.get('/api/timesheet/'+id).then(handleSuccess, handleError);
+        }
+
+        function Update(id, obj) {
+            return $http.put('/api/timesheet/' + id, obj).then(handleSuccess, handleError);
         }
 
         function remind(id, week){
@@ -36,7 +42,7 @@
         }
 
         function remindAll(){
-            return $http.get('/api/timesheet/remindAll').then(handleSuccess, handleError);   
+            return $http.get('/api/timesheet/remind/all').then(handleSuccess, handleError);   
         }
 
         // private functions

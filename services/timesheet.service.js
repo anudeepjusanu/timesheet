@@ -10,6 +10,8 @@ db.bind('timesheet');
 var service = {};
 
 service.create = create;
+service.update = update;
+service.getSheet = getSheet;
 service.getByWeek = getByWeek;
 service.getMine = getMine;
 
@@ -32,6 +34,7 @@ function create(user, userParam) {
             userId: user._id,
             name: user.name,
             hours: userParam.hours,
+            cDate: userParam.cDate,
             week: userParam.week,
             postedOn: new Date(),
             project: userParam.project,
@@ -50,6 +53,52 @@ function create(user, userParam) {
     return deferred.promise;
 }
 
+function update(userId, id, params) {
+    var deferred = Q.defer();
+
+    db.timesheet.findById(id, function(err, sheet) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (sheet.userId == userId) {
+            updateSheet();
+        } else {
+            deferred.reject("You are not authorized");
+        }
+    });
+
+    function updateSheet() {
+        // fields to update
+        var set = {
+            hours: params.hours,
+            week: params.week,
+            cDate: params.cDate,
+            postedOn: new Date(),
+            project: params.project,
+            comments: params.comments,
+        };
+
+        db.timesheet.update({ _id: mongo.helper.toObjectID(id) }, { $set: set },
+            function(err, doc) {
+                if (err) deferred.reject(err.name + ': ' + err.message);
+                deferred.resolve(doc);
+            });
+    }
+
+    return deferred.promise;
+}
+
+function getSheet(id){
+    var deferred = Q.defer();
+    db.timesheet.findById(id, function(err, doc) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (doc) {
+            deferred.resolve(doc);
+        } else {
+            deferred.reject("Please select valid id");
+        }
+    });
+    return deferred.promise;
+}
+
 function getByWeek(week) {
     var deferred = Q.defer();
     db.timesheet.find({ week: week }).toArray(function(err, doc) {
@@ -57,7 +106,7 @@ function getByWeek(week) {
         if (doc) {
             deferred.resolve(doc);
         } else {
-            deferred.reject("You have already posted for current week");
+            deferred.reject("Please select valid week");
         }
     });
     return deferred.promise;

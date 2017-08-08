@@ -6,6 +6,7 @@
             <li class="active">Add Hours</li>
         </ol>
     </section>
+    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
@@ -17,14 +18,26 @@
                             <div class="form-group required">
                                 <label class="col-md-3 control-label" for="name">Project</label>
                                 <div class="col-md-9">
-                                    <input id="name" name="name" type="text" placeholder="Project" class="form-control" ng-model="vm.obj.project" ng-required="true">
+                                    <ui-select multiple ng-model="vm.obj.selected">
+                                        <ui-select-match>
+                                            <span ng-bind="$item.name"></span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="item in (vm.itemArray | filter: $select.search) track by item.id">
+                                            <span ng-bind="item.name"></span>
+                                        </ui-select-choices>
+                                    </ui-select>
                                 </div>
                             </div>
                             <!-- Week input-->
                             <div class="form-group required">
                                 <label class="col-md-3 control-label" for="week">Week</label>
                                 <div class="col-md-9">
-                                    <input id="week" name="week" type="week" placeholder="Your week" class="form-control" ng-model="vm.obj.week" ng-required="true">
+                                    <p class="input-group">
+                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.obj.week" is-open="vm.popup2.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="vm.open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </p>
                                 </div>
                             </div>
                             <!-- Email input-->

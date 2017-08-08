@@ -12,10 +12,12 @@ var bot = new builder.UniversalBot(connector);
 
 // routes
 router.post('/', create);
+router.put('/:id', update);
+router.get('/:id', getTimeSheet);
 router.get('/week/mine', getMyReport);
 router.get('/week/:weekId', getReportbyWeek);
 router.get('/remind/:id/:week', remind);
-router.get('/remindAll', remindAll);
+router.get('/remind/all', remindAll);
 
 module.exports = router;
 
@@ -41,6 +43,27 @@ function create(req, res) {
                 res.status(400).send(err);
             });
     }
+}
+
+function update(req, res){
+    var userId = req.user.sub;
+    timesheetService.update(userId, req.params.id, req.body)
+        .then(function () {
+            res.sendStatus(200);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+
+function getTimeSheet(req, res){
+    timesheetService.getSheet(req.params.id)
+        .then(function (response) {
+            res.send(response);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
 }
 
 function getMyReport(req, res) {

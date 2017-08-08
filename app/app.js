@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app', ['ui.router', 'ngSanitize', 'angular-loading-bar', 'ui.bootstrap'])
+        .module('app', ['ui.router', 'ui.select', 'ngSanitize', 'angular-loading-bar', 'ui.bootstrap'])
         .config(config)
         .run(run)
         .constant('_',
@@ -23,6 +23,13 @@
             })
             .state('timesheet', {
                 url: '/addTimesheet',
+                templateUrl: 'home/timesheet.html',
+                controller: 'Home.TimesheetController',
+                controllerAs: 'vm',
+                data: { activeTab: 'home' }
+            })
+            .state('editTimesheet', {
+                url: '/editTimesheet/:id',
                 templateUrl: 'home/timesheet.html',
                 controller: 'Home.TimesheetController',
                 controllerAs: 'vm',
