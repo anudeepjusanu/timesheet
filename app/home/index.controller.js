@@ -233,7 +233,10 @@
             { id: 3, name: 'Tapclicks' },
             { id: 4, name: 'SavingStar' },
             { id: 5, name: 'BlueSky' },
-            { id: 6, name: 'Upromise' }
+            { id: 6, name: 'Upromise' },
+            { id: 7, name: 'Coding Labs' },
+            { id: 8, name: 'Hariome' },
+            { id: 9, name: 'OT' }
         ];
 
         vm.alerts = [];
@@ -372,7 +375,10 @@
             { id: 3, name: 'Tapclicks' },
             { id: 4, name: 'SavingStar' },
             { id: 5, name: 'BlueSky' },
-            { id: 6, name: 'Upromise' }
+            { id: 6, name: 'Upromise' },
+            { id: 7, name: 'Coding Labs' },
+            { id: 8, name: 'Hariome' },
+            { id: 9, name: 'OT' }
         ];
 
         vm.alerts = [];
