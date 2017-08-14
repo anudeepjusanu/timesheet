@@ -78,7 +78,7 @@ bot.dialog('/', function(session) {
                 session.endDialog();
             });
     } else if (session.message.text.toLowerCase().indexOf('help') == 0) {
-        session.send(`Available commands:\n\n register (first command to run) \n\n email \n\n`);
+        session.send(`Available commands:\n\n register (first command to run) \n\n email \n\n password \n\n`);
     } else if (session.message.text.toLowerCase().indexOf('password') == 0) {
         var addressObj = session.message.address;
         var obj = {
@@ -93,6 +93,10 @@ bot.dialog('/', function(session) {
                 session.send(err);
                 session.endDialog();
             });
+    } else if (session.message.text.toLowerCase().indexOf('bot') == 0) {
+        var addressObj = session.message.address;
+        var notification = session.message.text.replace('bot', '');
+        session.send(notification);
     }
 });
 
