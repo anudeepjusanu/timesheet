@@ -15,6 +15,7 @@ service.getAll = getAll;
 service.createUser = createUser;
 service.update = update;
 service.updateEmail = updateEmail;
+service.createPassword = createPassword;
 service.delete = _delete;
 
 module.exports = service;
