@@ -26,7 +26,7 @@ var bot = new builder.UniversalBot(connector);
 app.use('/api', expressJwt({ secret: config.secret }).unless({ path: ['/api/users/authenticate', '/api/users/register', '/api/messages'] }));
 
 app.post('/api/messages', connector.listen());
-app.get('/api/messages', function(req, res){
+app.get('/api/messages', function(req, res) {
     var users = {
         "name": "Anudeep"
     }
@@ -78,29 +78,21 @@ bot.dialog('/', function(session) {
                 session.endDialog();
             });
     } else if (session.message.text.toLowerCase().indexOf('help') == 0) {
-        session.send(`Available commands:\n\n register (first command to run) \n\n trivia  \n\n math \n\n email \n\n`);
-    } else if (session.message.text.toLowerCase().indexOf('trivia') == 0) {
-        var options = {
-            url: 'http://numbersapi.com/random/trivia'
-        };
-        request.get(options, function(error, response, body) {
-            if (!error) {
-                session.send(body);
-            } else {
-                session.send('Sometimes robot fails too');
-            }
-        });
-    } else if (session.message.text.toLowerCase().indexOf('math') == 0) {
-        var options = {
-            url: 'http://numbersapi.com/random/math'
-        };
-        request.get(options, function(error, response, body) {
-            if (!error) {
-                session.send(body);
-            } else {
-                session.send('Sometimes robot fails too');
-            }
-        });
+        session.send(`Available commands:\n\n register (first command to run) \n\n email \n\n password \n\n`);
+    } else if (session.message.text.toLowerCase().indexOf('password') == 0) {
+        var addressObj = session.message.address;
+        var obj = {
+            "password": Math.random().toString(36).substring(7);
+        }
+        userService.createPassword(addressObj.user.id, obj)
+            .then(function(response) {
+                session.send("Here is your new password: " + obj.password);
+                session.endDialog();
+            })
+            .catch(function(err) {
+                session.send(err);
+                session.endDialog();
+            });
     }
 });
 
@@ -116,8 +108,7 @@ bot.dialog('/registerEmail', [function(session) {
         }
         if (matches && matches.length) {
             var obj = {
-                "username": matches[0],
-                "password": "wavelabs"
+                "username": matches[0]
             }
             obj.password = Math.random().toString(36).substring(7);
 

@@ -159,9 +159,9 @@ function updateEmail(id, userParam) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (user && user.username) {
             deferred.reject('Username is already mapped for you');
-        } else if(user) {
+        } else if (user) {
             updateUser(user._id);
-        }else{
+        } else {
             deferred.reject('You may have to register first by using the command register');
         }
     });
@@ -183,6 +183,27 @@ function updateEmail(id, userParam) {
                 deferred.resolve();
             });
     }
+
+    return deferred.promise;
+}
+
+function createPassword(_id, userParam) {
+    var deferred = Q.defer();
+
+    // validation
+    var set = {};
+
+    // update password if it was entered
+    if (userParam.password) {
+        set.hash = bcrypt.hashSync(userParam.password, 10);
+    }
+
+    db.users.update({ _id: mongo.helper.toObjectID(_id) }, { $set: set },
+        function(err, doc) {
+            if (err) deferred.reject(err.name + ': ' + err.message);
+
+            deferred.resolve();
+        });
 
     return deferred.promise;
 }
