@@ -199,7 +199,7 @@ function createPassword(_id, userParam) {
         set.hash = bcrypt.hashSync(userParam.password, 10);
     }
 
-    db.users.update({ _id: mongo.helper.toObjectID(_id) }, { $set: set },
+    db.users.update({ userId: mongo.helper.toObjectID(_id) }, { $set: set },
         function(err, doc) {
             if (err) deferred.reject(err.name + ': ' + err.message);
 
