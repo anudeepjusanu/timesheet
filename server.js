@@ -94,9 +94,25 @@ bot.dialog('/', function(session) {
                 session.endDialog();
             });
     } else if (session.message.text.toLowerCase().indexOf('bot') == 0) {
-        var addressObj = session.message.address;
         var notification = session.message.text.replace('bot', '');
-        session.send(notification);
+        userService.getAll()
+            .then(function(users) {
+                if (users) {
+                    for (var i = 0, len = users.length; i < len; i++) {
+                        var msg = new builder.Message()
+                            .address(users[i].address)
+                            .text(notification);
+                        bot.send(msg, function(err) {
+                            // Return success/failure
+
+                        });
+                    }
+
+                }
+            })
+            .catch(function(err) {
+                
+            });
     }
 });
 
