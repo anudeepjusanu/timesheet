@@ -193,7 +193,7 @@ function createPassword(_id, userParam) {
 
     // validation
     
-    db.users.findOne({ 'userId': id }, function(err, user) {
+    db.users.findOne({ 'userId': _id }, function(err, user) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (user) {
             updateUser(user._id);
