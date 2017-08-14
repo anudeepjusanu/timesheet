@@ -36,7 +36,7 @@
             };
         })
 
-    function Controller(UserService, $filter, ReportService, _, $scope, FlashService) {
+    function Controller(UserService, $filter, ReportService, _, $scope, FlashService, NgTableParams) {
         var vm = this;
 
         vm.user = null;
@@ -125,7 +125,22 @@
             vm.alerts.splice(index, 1);
         };
 
+        vm.projects = [
+            { id: 'Care', title: 'Care' },
+            { id: 'Care Intl', title: 'Care Intl' },
+            { id: 'Tapclicks', title: 'Tapclicks' },
+            { id: 'SavingStar', title: 'SavingStar' },
+            { id: 'BlueSky', title: 'BlueSky' },
+            { id: 'Upromise', title: 'Upromise' },
+            { id: 'Coding Labs', title: 'Coding Labs' },
+            { id: 'Hariome', title: 'Hariome' },
+            { id: 'OT', title: 'OT' }
+        ];
+
+        vm.tableParams = new NgTableParams();
+
         function getAllReports(week) {
+            vm.allReports = [];
             var text = "";
             if (week) {
                 text = $filter('date')(week, "yyyy-Www").toString();
@@ -148,6 +163,9 @@
                         result[i].remind = true;
                     }
                     vm.allReports = reports.concat(result);
+                    vm.tableParams.settings({
+                        dataset: vm.allReports
+                    });
                 });
             })
 

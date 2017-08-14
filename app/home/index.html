@@ -3,7 +3,7 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="container" ng-show="vm.user.admin">
-    	<br>
+        <br>
         <div class="clearfix row">
             <div class="col-sm-6">
                 <button class="btn btn-primary" ng-click="vm.exportTable()">Export</button>
@@ -22,22 +22,13 @@
             </div>
         </div>
         <div class="table-responsive">
-            <table class="table table-bordered" export-table>
-                <tr>
-                    <th>Name</th>
-                    <th>Project</th>
-                    <th>Hours</th>
-                    <th>Comments</th>
-                    <th>Action</th>
-                </tr>
-                <tr ng-repeat="report in vm.allReports">
-                    <td>{{report.name}}</td>
-                    <td>{{report.project}}</td>
-                    <td>{{report.hours}}</td>
-                    <td>{{report.comments}}</td>
-                    <td>
-                        <button class="btn btn-primary btn-xs" ng-click="vm.remind(report.userId)" ng-show="report.remind">Remind</button>
-                    </td>
+            <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" export-table>    
+                <tr ng-repeat="row in $data">
+                    <td data-title="'Name'" filter="{name: 'text'}">{{row.name}}</td>
+                    <td data-title="'Project'" filter="{ project: 'select'}" filter-data="vm.projects">{{row.project}}</td>
+                    <td data-title="'Hours'">{{row.hours}}</td>
+                    <td data-title="'Comments'">{{row.comments}}</td>
+                    <td data-title="'Action'"><button class="btn btn-primary btn-xs" ng-click="vm.remind(row.userId)" ng-show="row.remind">Remind</button></td>
                 </tr>
             </table>
         </div>
