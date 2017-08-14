@@ -192,20 +192,30 @@ function createPassword(_id, userParam) {
     var deferred = Q.defer();
 
     // validation
-    var set = {};
+    
+    db.users.findOne({ 'userId': id }, function(err, user) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (user) {
+            updateUser(user._id);
+        } else {
+            deferred.reject('You may have to register first by using the command register');
+        }
+    });
 
     // update password if it was entered
-    if (userParam.password) {
-        console.log("here")
-        set.hash = bcrypt.hashSync(userParam.password, 10);
+
+    function updateUser(id) {
+        var set = {};
+        if (userParam.password) {
+            set.hash = bcrypt.hashSync(userParam.password, 10);
+        }
+        db.users.update({ _id: mongo.helper.toObjectID(id) }, { $set: set },
+            function(err, doc) {
+                if (err) deferred.reject(err.name + ': ' + err.message);
+
+                deferred.resolve();
+            });
     }
-
-    db.users.update({ _id: mongo.helper.toObjectID(_id) }, { $set: set },
-        function(err, doc) {
-            if (err) deferred.reject(err.name + ': ' + err.message);
-
-            deferred.resolve();
-        });
 
     return deferred.promise;
 }
