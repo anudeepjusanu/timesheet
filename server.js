@@ -82,7 +82,7 @@ bot.dialog('/', function(session) {
     } else if (session.message.text.toLowerCase().indexOf('password') == 0) {
         var addressObj = session.message.address;
         var obj = {
-            "password": Math.random().toString(36).substring(7);
+            "password": Math.random().toString(36).substring(7)
         }
         userService.createPassword(addressObj.user.id, obj)
             .then(function(response) {
