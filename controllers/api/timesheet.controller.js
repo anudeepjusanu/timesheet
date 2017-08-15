@@ -19,6 +19,7 @@ router.get('/week/:weekId', getReportbyWeek);
 router.get('/remind/:id/:week', remind);
 router.get('/remind/all', remindAll);
 router.put('/admin/:id', adminUpdate);
+router.post('/month/report', getReportbyMonth);
 
 module.exports = router;
 
@@ -136,6 +137,16 @@ function adminUpdate(req, res){
     timesheetService.adminUpdate(req.params.id, req.body)
         .then(function () {
             res.sendStatus(200);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+
+function getReportbyMonth(req, res){
+    timesheetService.getByMonth(req.body.weekArr)
+        .then(function (reports) {
+            res.send(reports);
         })
         .catch(function (err) {
             res.status(400).send(err);

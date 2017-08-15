@@ -8,12 +8,21 @@
             <div class="col-sm-6">
                 <button class="btn btn-primary" ng-click="vm.exportTable()">Export</button>
                 <button class="btn btn-primary" ng-click="vm.remindAll()">Remind All</button>
+                <button class="btn btn-primary" ng-show="!vm.monthView" ng-click="vm.toggleView(true)">Month View</button>
+                <button class="btn btn-primary" ng-show="vm.monthView" ng-click="vm.toggleView(false)">Week View</button>
             </div>
             <div class="form-group pull-right col-sm-6">
-                <label class="col-md-3" for="week">Filter By Week</label>
+                <label class="col-md-3" for="week" ng-show="!vm.monthView">Filter By Week</label>
+                <label class="col-md-3" for="week" ng-show="vm.monthView">Filter By Month</label>
                 <div class="col-md-9">
-                    <p class="input-group">
+                    <p class="input-group" ng-show="!vm.monthView">
                         <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.currentWeek" is-open="vm.popup2.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getAllReports(vm.currentWeek)" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="vm.open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
+                    <p class="input-group" ng-show="vm.monthView">
+                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.currentMonth" is-open="vm.popup2.opened" datepicker-options="vm.monthOptions" ng-required="true" close-text="Close" ng-change="vm.getMonthReport(vm.currentMonth)" />
                         <span class="input-group-btn">
                             <button type="button" class="btn btn-default" ng-click="vm.open2()"><i class="glyphicon glyphicon-calendar"></i></button>
                         </span>
@@ -21,14 +30,51 @@
                 </div>
             </div>
         </div>
-        <div class="table-responsive">
-            <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" export-table>    
+        <div class="table-responsive" ng-show="!vm.monthView">
+            <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" export-table>
                 <tr ng-repeat="row in $data">
                     <td data-title="'Name'" filter="{name: 'text'}">{{row.name}}</td>
                     <td data-title="'Project'" filter="{ project: 'select'}" filter-data="vm.projects">{{row.project}}</td>
                     <td data-title="'Hours'">{{row.hours}}</td>
                     <td data-title="'Comments'">{{row.comments}}</td>
-                    <td data-title="'Action'"><button class="btn btn-primary btn-xs" ng-click="vm.remind(row.userId)" ng-show="row.remind">Remind</button></td>
+                    <td data-title="'Action'">
+                        <button class="btn btn-primary btn-xs" ng-click="vm.remind(row.userId)" ng-show="row.remind">Remind</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="table-responsive" ng-show="vm.monthView">
+            <table class="table table-condensed table-bordered table-striped" export-table>
+                <tr>
+                    <th ng-repeat="column in vm.monthColumns">{{column}}</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td ng-repeat="column in vm.monthColumns" ng-show="!$last">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>Project</td>
+                                <td>Hours</td>
+                                <td>Comments</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr ng-repeat="user in vm.users">
+                    <td>{{user.name}}</td>
+                    <td ng-repeat="week in user.weeks">
+                        <span ng-repeat="column in vm.monthColumns">
+                            <span ng-if="column == week.name">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td>{{week.value.project}}</td>
+                                        <td>{{week.value.hours}}</td>
+                                        <td>{{week.value.comments}}</td>
+                                    </tr>
+                                </table>
+                            </span>
+                        </span>
+                    </td>
                 </tr>
             </table>
         </div>

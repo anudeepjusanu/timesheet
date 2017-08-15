@@ -13,6 +13,7 @@ service.create = create;
 service.update = update;
 service.getSheet = getSheet;
 service.getByWeek = getByWeek;
+service.getByMonth = getByMonth;
 service.getMine = getMine;
 service.adminUpdate = adminUpdate;
 
@@ -103,6 +104,19 @@ function getSheet(id){
 function getByWeek(week) {
     var deferred = Q.defer();
     db.timesheet.find({ week: week }).toArray(function(err, doc) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (doc) {
+            deferred.resolve(doc);
+        } else {
+            deferred.reject("Please select valid week");
+        }
+    });
+    return deferred.promise;
+}
+
+function getByMonth(weekArr) {
+    var deferred = Q.defer();
+    db.timesheet.find({ "week": {"$in": weekArr} }).toArray(function(err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (doc) {
             deferred.resolve(doc);

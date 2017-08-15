@@ -15,6 +15,7 @@
         service.remind = remind;
         service.remindAll = remindAll;
         service.adminUpdate = adminUpdate;
+        service.getReportByMonth = getReportByMonth;
 
         return service;
 
@@ -48,6 +49,10 @@
 
         function adminUpdate(id, obj) {
             return $http.put('/api/timesheet/admin/' + id, obj).then(handleSuccess, handleError);
+        }
+
+        function getReportByMonth(obj){
+            return $http.post('/api/timesheet/month/report', obj).then(handleSuccess, handleError);
         }
 
         // private functions

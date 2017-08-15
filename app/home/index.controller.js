@@ -46,8 +46,11 @@
         vm.exportTable = exportTable;
         vm.remindAll = remindAll;
         vm.closeAlert = closeAlert;
-        var currentDay = new Date().getDay();
+        vm.getMonthReport = getMonthReport;
 
+        var currentDay = new Date().getDay();
+        vm.toggleView = toggleView;
+        var dayThreshold = [5, 1, 5, 6, 5, 6, 5, 5, 6, 5, 6, 5];
         vm.obj = {
             question: new Date()
         };
@@ -55,6 +58,8 @@
         vm.alerts = [];
         var currentDate = $filter('date')(new Date(), "yyyy-Www").toString();
         vm.currentWeek = new Date();
+        vm.currentMonth = new Date();
+        vm.monthView = false;
 
         switch (currentDay) {
             case 0:
@@ -90,6 +95,11 @@
             startingDay: 1
         };
 
+        vm.monthOptions = {
+            datepickerMode: "month", // Remove Single quotes
+            minMode: 'month'
+        }
+
         function disabled(data) {
             var date = data.date,
                 mode = data.mode;
@@ -102,6 +112,13 @@
 
         function post() {
             $filter('date')(vm.obj.question, "yyyy-Www");
+        }
+
+        function toggleView(isMonth) {
+            vm.monthView = isMonth;
+            if (isMonth) {
+                vm.getMonthReport(vm.currentMonth);
+            }
         }
 
         function remind(userId) {
@@ -137,7 +154,11 @@
             { id: 'OT', title: 'OT' }
         ];
 
-        vm.tableParams = new NgTableParams();
+        vm.tableParams = new NgTableParams({
+            count: 100  // hides pager
+        }, {
+            
+        });
 
         function getAllReports(week) {
             vm.allReports = [];
@@ -169,6 +190,69 @@
                 });
             })
 
+        };
+
+        function weekNumbersRangeInMonth(month, year) {
+
+            year = year || new Date().getFullYear();
+            var yearStart = new Date(year, 0, 1); // 1st Jan of the Year
+
+            var first_day_of_month = new Date(year, month, 1);
+            var first_week_number = Math.ceil((((first_day_of_month - yearStart) / 86400000) + yearStart.getDay() + 1) / 7);
+
+            var last_day_of_month = new Date(year, month + 1, 0); // Last date of the Month
+            var last_week_number = Math.ceil((((last_day_of_month - yearStart) / 86400000) + yearStart.getDay() + 1) / 7);
+
+            return [first_week_number, last_week_number];
+        }
+
+        function getMonthReport(mon) {
+            var week_no_arr = weekNumbersRangeInMonth(mon.getMonth(), mon.getFullYear());
+            var start = week_no_arr[0];
+            var end = week_no_arr[1];
+            var weeks = [];
+            vm.monthColumns = ["Name"];
+            while (start <= end) {
+                var week = mon.getFullYear() + "-W" + start;
+                weeks.push(week);
+                start++;
+            }
+            var obj = {
+                "weekArr": weeks
+            };
+            vm.monthColumns = vm.monthColumns.concat(weeks);
+
+            ReportService.getReportByMonth(obj).then(function(reports) {
+                for (var i = 0, len = vm.users.length; i < len; i++) {
+                    vm.users[i].userId = vm.users[i]._id;
+                }
+                var rep = _.groupBy(reports, "week");
+                vm.groupReports = {};
+                _.each(weeks, function(week) {
+                    if (!rep[week]) {
+                        rep[week] = [];
+                    }
+                    vm.groupReports[week] = rep[week];
+                });
+
+                _.each(vm.users, function(user) {
+                    _.each(vm.groupReports, function(item, value) {
+                        if (!user.weeks) {
+                            user.weeks = [];
+                        }
+                        var arr = {
+                            name: value
+                        }
+                        _.each(item, function(obj) {
+                            if (user.userId == obj.userId) {
+                                arr.value = obj
+                            }
+                        })
+                        user.weeks.push(arr);
+
+                    })
+                });
+            });
         }
 
         function getMyReport() {
