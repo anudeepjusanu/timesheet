@@ -32,7 +32,7 @@
         </div>
         <div class="table-responsive" ng-show="!vm.monthView">
             <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" export-table>
-                <tr ng-repeat="row in $data">
+                <tr ng-repeat="row in $data | orderBy:'name'">
                     <td data-title="'Name'" filter="{name: 'text'}">{{row.name}}</td>
                     <td data-title="'Project'" filter="{ project: 'select'}" filter-data="vm.projects">{{row.project}}</td>
                     <td data-title="'Hours'">{{row.hours}}</td>
@@ -60,7 +60,7 @@
                         </table>
                     </td>
                 </tr>
-                <tr ng-repeat="user in vm.users">
+                <tr ng-repeat="user in vm.users | orderBy:'name'">
                     <td>{{user.name}}</td>
                     <td ng-repeat="week in user.weeks">
                         <span ng-repeat="column in vm.monthColumns">
