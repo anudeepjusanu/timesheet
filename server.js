@@ -113,6 +113,8 @@ bot.dialog('/', function(session) {
             .catch(function(err) {
                 
             });
+    }else{
+        session.send(`Sorry, no donuts for you!`);
     }
 });
 
