@@ -6,6 +6,8 @@
         .controller('Home.IndexController', Controller)
         .controller('Home.TimesheetController', TimesheetController)
         .controller('Home.AdminController', AdminController)
+        .controller('Home.AdminUsersController', AdminUsersController)
+
         .directive('exportTable', function() {
             return {
                 restrict: 'A',
@@ -155,9 +157,9 @@
         ];
 
         vm.tableParams = new NgTableParams({
-            count: 100  // hides pager
+            count: 100 // hides pager
         }, {
-            
+
         });
 
         function getAllReports(week) {
@@ -558,6 +560,47 @@
             }
         }
 
+    }
+
+    function AdminUsersController(UserService, $filter, ReportService, _, $scope, FlashService, NgTableParams) {
+        var vm = this;
+
+        vm.user = null;
+        vm.deleteUser = deleteUser;
+
+        vm.tableParams = new NgTableParams({
+            count: 100 // hides pager
+        }, {
+
+        });
+
+        function deleteUser(id) {
+            UserService.Delete(id).then(function(users) {
+                getAllUsers();
+            });
+        }
+
+        function getAllUsers(week) {
+            UserService.GetAll().then(function(users) {
+                vm.users = users;
+                vm.tableParams.settings({
+                    dataset: vm.users
+                });
+            });
+        };
+
+        initController();
+
+        function initController() {
+            UserService.GetCurrent().then(function(user) {
+                vm.user = user;
+                if (vm.user.admin) {
+                    getAllUsers();
+                } else {
+                    $state.go('home');
+                }
+            });
+        }
     }
 
 })();

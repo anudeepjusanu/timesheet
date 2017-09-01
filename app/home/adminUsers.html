@@ -1,0 +1,10 @@
+<div class="table-responsive">
+    <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" export-table>
+        <tr ng-repeat="row in $data | orderBy:'name'">
+            <td data-title="'Name'" filter="{name: 'text'}">{{row.name}}</td>
+            <td data-title="'Action'">
+                <button class="btn btn-primary btn-xs" ng-click="vm.deleteUser(row._id)">Delete</button>
+            </td>
+        </tr>
+    </table>
+</div>

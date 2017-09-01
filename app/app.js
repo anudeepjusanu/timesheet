@@ -42,6 +42,13 @@
                 controllerAs: 'vm',
                 data: { activeTab: 'home' }
             })
+            .state('adminUsers', {
+                url: '/adminUsers',
+                templateUrl: 'home/adminUsers.html',
+                controller: 'Home.AdminUsersController',
+                controllerAs: 'vm',
+                data: { activeTab: 'home' }
+            })
             .state('account', {
                 url: '/account',
                 templateUrl: 'account/index.html',

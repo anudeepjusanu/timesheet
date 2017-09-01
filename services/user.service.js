@@ -222,11 +222,11 @@ function createPassword(_id, userParam) {
 
 function _delete(_id) {
     var deferred = Q.defer();
-
+    
     db.users.remove({ _id: mongo.helper.toObjectID(_id) },
         function(err) {
             if (err) deferred.reject(err.name + ': ' + err.message);
-
+            
             deferred.resolve();
         });
 
