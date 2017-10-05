@@ -5,7 +5,7 @@
         .module('app')
         .controller('Account.IndexController', Controller);
 
-    function Controller($window, UserService, FlashService) {
+    function Controller($window, UserService, FlashService, noty) {
         var vm = this;
 
         vm.user = null;
@@ -16,6 +16,7 @@
 
         function initController() {
             // get current user
+            
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
             });
@@ -24,7 +25,7 @@
         function saveUser() {
             UserService.Update(vm.user)
                 .then(function () {
-                    FlashService.Success('User updated');
+                    noty.showSuccess("Updated Successfully")
                 })
                 .catch(function (error) {
                     FlashService.Error(error);

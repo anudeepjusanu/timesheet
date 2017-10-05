@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app', ['ui.router', 'ui.select', 'ngSanitize', 'angular-loading-bar', 'ui.bootstrap', 'ngTable'])
+        .module('app', ['ui.router', 'ui.select', 'ngSanitize', 'angular-loading-bar', 'ui.bootstrap', 'ngTable', 'notyModule'])
         .config(config)
         .run(run)
         .constant('_',
@@ -22,18 +22,25 @@
                 data: { activeTab: 'home' }
             })
             .state('timesheet', {
-                url: '/addTimesheet',
-                templateUrl: 'home/timesheet.html',
-                controller: 'Home.TimesheetController',
+                url: '/timesheet',
+                templateUrl: 'timesheet/index.html',
+                controller: 'Timesheet.IndexController',
                 controllerAs: 'vm',
-                data: { activeTab: 'home' }
+                data: { activeTab: 'timesheet' }
+            })
+            .state('addTimesheet', {
+                url: '/addTimesheet',
+                templateUrl: 'timesheet/addTimesheet.html',
+                controller: 'Timesheet.TimesheetController',
+                controllerAs: 'vm',
+                data: { activeTab: 'timesheet' }
             })
             .state('editTimesheet', {
                 url: '/editTimesheet/:id',
-                templateUrl: 'home/timesheet.html',
-                controller: 'Home.TimesheetController',
+                templateUrl: 'timesheet/addTimesheet.html',
+                controller: 'Timesheet.TimesheetController',
                 controllerAs: 'vm',
-                data: { activeTab: 'home' }
+                data: { activeTab: 'timesheet' }
             })
             .state('adminUpdate', {
                 url: '/adminUpdate/:id',
@@ -58,12 +65,15 @@
             });
     }
 
-    function run($http, $rootScope, $window, UserService) {
+    function run($http, $rootScope, $window, UserService, $timeout) {
         // add JWT token as default auth header
         $http.defaults.headers.common['Authorization'] = 'Bearer ' + $window.jwtToken;
 
         // update active tab on state change
         $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+            $timeout(function() {
+                $window.dispatchEvent(new Event("resize"));
+            }, 100);
             $rootScope.activeTab = toState.data.activeTab;
 
         });

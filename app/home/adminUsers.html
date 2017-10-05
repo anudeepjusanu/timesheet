@@ -1,10 +1,60 @@
-<div class="table-responsive">
-    <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" export-table>
-        <tr ng-repeat="row in $data | orderBy:'name'">
-            <td data-title="'Name'" filter="{name: 'text'}">{{row.name}}</td>
-            <td data-title="'Action'">
-                <button class="btn btn-primary btn-xs" ng-click="vm.deleteUser(row._id)">Delete</button>
-            </td>
-        </tr>
-    </table>
+<!-- PAGE TITLE -->
+<div class="page-title">
+    <h2><span class="fa fa-users"></span> Address Book <small>{{vm.users.length}} contacts</small></h2>
+</div>
+<!-- END PAGE TITLE -->
+<ul class="breadcrumb">
+    <li><a ui-sref="home">Home</a></li>
+    <li class="active">Employees</li>
+</ul>
+<div class="page-content-wrap">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <p>Use search to find contacts. You can search by: name, address, phone. Or use the advanced search.</p>
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <span class="fa fa-search"></span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="Who are you looking for?" ng-model="vm.searchText" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3" ng-repeat="user in vm.users | filter: vm.searchText">
+            <!-- CONTACT ITEM -->
+            <div class="panel panel-default">
+                <div class="panel-body profile">
+                    <div class="profile-image">
+                        <img src="app-content/assets/user.jpg" alt="Nadia Ali" />
+                    </div>
+                    <div class="profile-data">
+                        <div class="profile-data-name">{{user.name}}</div>
+                    </div>
+                    <div class="profile-controls">
+                        <a class="profile-control-left"><span class="fa fa-info"></span></a>
+                        <a ng-if="vm.isAdmin" ng-click="vm.deleteUser(user._id)" class="profile-control-right"><span class="fa fa-times"></span></a>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="contact-info">
+                        <p><small>Mobile</small>
+                            <br/>(555) 555-55-55</p>
+                        <p><small>Email</small>
+                            <br/>{{user.username}}</p>
+                    </div>
+                </div>
+            </div>
+            <!-- END CONTACT ITEM -->
+        </div>
+    </div>
 </div>

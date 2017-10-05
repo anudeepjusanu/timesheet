@@ -1,45 +1,50 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <title>Wavelabs</title>
-
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="app-content/app.css" rel="stylesheet" />
+    <link href="app-content/theme.css" rel="stylesheet" />
     <link rel='stylesheet' href='bower_components/angular-loading-bar/build/loading-bar.min.css' type='text/css' media='all' />
     <link rel='stylesheet' href='bower_components/angular-ui-select/dist/select.css' type='text/css' />
     <link rel="stylesheet" href="app-content/ng-table.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
-<body class="container blur-theme">
-    <!-- header -->
-    <div class="body-bg"></div>
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li ng-class="{active: activeTab === 'home'}"><a ui-sref="home">Home</a></li>
-                    <li ng-class="{active: activeTab === 'account'}"><a ui-sref="account">My Account</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/login" target="_self">Logout</a></li>
-                </ul>
+
+<body>
+    <!-- START PAGE CONTAINER -->
+    <div class="page-container">
+        <!-- START PAGE SIDEBAR -->
+        <div ng-include="'sidebar/sidebar.html'"></div>
+        <!-- END PAGE SIDEBAR -->
+        <!-- PAGE CONTENT -->
+        <div class="page-content">
+            <!-- START X-NAVIGATION VERTICAL -->
+            <ul class="x-navigation x-navigation-horizontal x-navigation-panel">
+                <!-- TOGGLE NAVIGATION -->
+                <li class="xn-icon-button">
+                    <a href="#" class="x-navigation-minimize"><span class="fa fa-dedent"></span></a>
+                </li>
+                <!-- END TOGGLE NAVIGATION -->
+                <!-- END SEARCH -->
+                <!-- SIGN OUT -->
+                <li class="xn-icon-button pull-right">
+                    <a href="/login" target="_self" class="mb-control">
+                        <span class="fa fa-sign-out"></span>
+                    </a>
+                </li>
+                <!-- END SIGN OUT -->
+                <!-- END TASKS -->
+            </ul>
+            <!-- PAGE CONTENT WRAPPER -->
+            <div class="page-content-wrap" ui-view>
             </div>
-            <!-- /.navbar-collapse -->
+            <!-- END PAGE CONTENT WRAPPER -->
         </div>
-        <!-- /.container-fluid -->
-    </nav>
-    <div class="flash-message" ng-if="flash">
-        <div class="{{'alert alert-' + flash.type}}" ng-bind="flash.message"></div>
+        <!-- END PAGE CONTENT -->
     </div>
-
-    <!-- main -->
-    <main ui-view></main>
-
-    <!-- footer -->
-    <footer></footer>
-
+    <!-- END PAGE CONTAINER -->
     <!-- external scripts -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="bower_components/lodash/dist/lodash.min.js"></script>
@@ -50,17 +55,40 @@
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src='bower_components/angular-loading-bar/build/loading-bar.min.js'></script>
     <script src='bower_components/angular-ui-select/dist/select.js'></script>
-
     <script src="libs/tableExport.js"></script>
+    <script src="libs/xlsx.core.min.js"></script>
     <script src="libs/jquery.base64.js"></script>
     <script src="libs/ng-table.min.js"></script>
-
+    <script src="libs/pdfmake.min.js"></script>
+    <script src="libs/vfs_fonts.js"></script>
+    <script src='libs/js/plugins/noty/jquery.noty.js'></script>
+    <script src="libs/angular-noty.js"></script>
+    <!-- START PLUGINS -->
+    <script type="text/javascript" src="libs/js/plugins/jquery/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="libs/js/plugins/bootstrap/bootstrap.min.js"></script>
+    <!-- END PLUGINS -->
+    <!-- START THIS PAGE PLUGINS-->
+    <script type='text/javascript' src='libs/js/plugins/icheck/icheck.min.js'></script>
+    <script type="text/javascript" src="libs/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+    <script type="text/javascript" src="libs/js/plugins/scrolltotop/scrolltopcontrol.js"></script>
+    <script type='text/javascript' src='libs/js/plugins/bootstrap/bootstrap-datepicker.js'></script>
+    <script type="text/javascript" src="libs/js/plugins/owl/owl.carousel.min.js"></script>
+    <script type="text/javascript" src="libs/js/plugins/moment.min.js"></script>
+    <script type="text/javascript" src="libs/js/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- END THIS PAGE PLUGINS-->
+    <!-- START TEMPLATE -->
+    <script type="text/javascript" src="libs/js/plugins.js"></script>
+    <script type="text/javascript" src="libs/js/actions.js"></script>
+    <script type="text/javascript" src="libs/js/demo_dashboard.js"></script>
     <!-- application scripts -->
     <script src="app.js"></script>
     <script src="app-services/user.service.js"></script>
     <script src="app-services/report.service.js"></script>
     <script src="app-services/flash.service.js"></script>
     <script src="home/index.controller.js"></script>
+    <script src="timesheet/index.controller.js"></script>
     <script src="account/index.controller.js"></script>
+    <!-- END SCRIPTS -->
 </body>
+
 </html>

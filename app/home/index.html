@@ -1,106 +1,86 @@
-﻿<h1>Hi {{vm.user.name}}!!</h1>
-<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="1000">{{alert.msg}}</div>
-<div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="container" ng-show="vm.user.admin">
-        <br>
-        <div class="clearfix row">
-            <div class="col-sm-6">
-                <button class="btn btn-primary" ng-click="vm.exportTable()">Export</button>
-                <button class="btn btn-primary" ng-click="vm.remindAll()">Remind All</button>
-                <button class="btn btn-primary" ng-show="!vm.monthView" ng-click="vm.toggleView(true)">Month View</button>
-                <button class="btn btn-primary" ng-show="vm.monthView" ng-click="vm.toggleView(false)">Week View</button>
-            </div>
-            <div class="form-group pull-right col-sm-6">
-                <label class="col-md-3" for="week" ng-show="!vm.monthView">Filter By Week</label>
-                <label class="col-md-3" for="week" ng-show="vm.monthView">Filter By Month</label>
-                <div class="col-md-9">
-                    <p class="input-group" ng-show="!vm.monthView">
-                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.currentWeek" is-open="vm.popup2.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getAllReports(vm.currentWeek)" />
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-default" ng-click="vm.open2()"><i class="glyphicon glyphicon-calendar"></i></button>
-                        </span>
-                    </p>
-                    <p class="input-group" ng-show="vm.monthView">
-                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.currentMonth" is-open="vm.popup2.opened" datepicker-options="vm.monthOptions" ng-required="true" close-text="Close" ng-change="vm.getMonthReport(vm.currentMonth)" />
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-default" ng-click="vm.open2()"><i class="glyphicon glyphicon-calendar"></i></button>
-                        </span>
-                    </p>
+﻿<!-- START BREADCRUMB -->
+<ul class="breadcrumb">
+    <li><a ui-sref="home">Home</a></li>
+    <li class="active">Dashboard</li>
+</ul>
+<!-- END BREADCRUMB -->
+<div class="page-content-wrap">
+    <!-- START WIDGETS -->
+    <div class="row">
+        <div class="col-md-4">
+            <!-- START WIDGET MESSAGES -->
+            <div class="widget widget-default widget-item-icon" ui-sref="adminUsers">
+                <div class="widget-item-left">
+                    <span class="fa fa-user"></span>
+                </div>
+                <div class="widget-data">
+                    <div class="widget-int num-count">{{vm.users.length}}</div>
+                    <div class="widget-title">Employees</div>
+                    <div class="widget-subtitle">In Wavelabs</div>
                 </div>
             </div>
+            <!-- END WIDGET MESSAGES -->
         </div>
-        <div class="table-responsive" ng-show="!vm.monthView">
-            <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" export-table>
-                <tr ng-repeat="row in $data | orderBy:'name'">
-                    <td data-title="'Name'" filter="{name: 'text'}">{{row.name}}</td>
-                    <td data-title="'Project'" filter="{ project: 'select'}" filter-data="vm.projects">{{row.project}}</td>
-                    <td data-title="'Hours'">{{row.hours}}</td>
-                    <td data-title="'Comments'">{{row.comments}}</td>
-                    <td data-title="'Action'">
-                        <button class="btn btn-primary btn-xs" ng-click="vm.remind(row.userId)" ng-show="row.remind">Remind</button>
-                    </td>
-                </tr>
-            </table>
+        <div class="col-md-4">
+            <!-- START WIDGET SLIDER -->
+            <div class="widget widget-default widget-carousel">
+                <div class="owl-carousel" id="owl-example">
+                    <div>
+                        <div class="widget-title">Total Hours</div>
+                        <div class="widget-subtitle">{{vm.date | date: 'shortDate'}}</div>
+                        <div class="widget-int">{{vm.totalHours}}</div>
+                    </div>
+                    <div>
+                        <div class="widget-title">Your's</div>
+                        <div class="widget-subtitle"></div>
+                        <div class="widget-int">{{vm.myHours}}</div>
+                    </div>
+                </div>
+            </div>
+            <!-- END WIDGET SLIDER -->
         </div>
-        <div class="table-responsive" ng-show="vm.monthView">
-            <table class="table table-condensed table-bordered table-striped" export-table>
-                <tr>
-                    <th ng-repeat="column in vm.monthColumns">{{column}}</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td ng-repeat="column in vm.monthColumns" ng-show="!$last">
-                        <table class="table table-bordered">
-                            <tr>
-                                <td>Project</td>
-                                <td>Hours</td>
-                                <td>Comments</td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr ng-repeat="user in vm.users | orderBy:'name'">
-                    <td>{{user.name}}</td>
-                    <td ng-repeat="week in user.weeks">
-                        <span ng-repeat="column in vm.monthColumns">
-                            <span ng-if="column == week.name">
-                                <table class="table table-bordered">
-                                    <tr>
-                                        <td>{{week.value.project}}</td>
-                                        <td>{{week.value.hours}}</td>
-                                        <td>{{week.value.comments}}</td>
-                                    </tr>
-                                </table>
-                            </span>
-                        </span>
-                    </td>
-                </tr>
-            </table>
+        <div class="col-md-4">
+            <!-- START WIDGET CLOCK -->
+            <div class="widget widget-info widget-padding-sm">
+                <div class="widget-big-int plugin-clock">{{vm.date | date:'shortTime'}}</div>
+                <div class="widget-subtitle plugin-date">{{vm.date | date: 'EEEE, MMMM d, yyyy'}}</div>
+            </div>
+            <!-- END WIDGET CLOCK -->
         </div>
     </div>
-    <div class="container" ng-show="!vm.user.admin">
-        <br>
-        <div class="clearfix">
-            <a class="btn btn-primary pull-right" style="margin-right: 25px;" ui-sref="timesheet">Add Hours</a>
-        </div>
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <tr>
-                    <th>Project</th>
-                    <th>Week</th>
-                    <th>Hours</th>
-                    <th>Comments</th>
-                    <th>Action</th>
-                </tr>
-                <tr ng-repeat="report in vm.myReports">
-                    <td>{{report.project}}</td>
-                    <td>{{report.cDate | date: 'mediumDate'}}</td>
-                    <td>{{report.hours}}</td>
-                    <td>{{report.comments}}</td>
-                    <td><a class="btn btn-primary btn-xs" ui-sref="editTimesheet({id: report._id})">Update</a></td>
-                </tr>
-            </table>
+    <!-- END WIDGETS -->
+    <div class="row">
+        <div class="col-md-4">
+            <!-- START PROJECTS BLOCK -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title-box">
+                        <h3>Projects</h3>
+                        <span>Projects activity</span>
+                    </div>
+                </div>
+                <div class="panel-body panel-body-table">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th width="50%">Project</th>
+                                    <th width="50%">People</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="project in vm.projects">
+                                    <td><strong>{{project.name}}</strong></td>
+                                    <td><span class="label label-success">{{project.total}}</span></td>
+                                    
+                                </tr>
+                               
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- END PROJECTS BLOCK -->
         </div>
     </div>
 </div>
