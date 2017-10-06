@@ -22,7 +22,7 @@ module.exports = service;
 function create(user, userParam) {
     var deferred = Q.defer();
 
-    db.timesheet.findOne({ userId: user._id, week: userParam.week }, function(err, doc) {
+    db.timesheet.findOne({ userId: user._id, week: userParam.week, project:  userParam.project}, function(err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (!doc) {
             postHours();

@@ -8,22 +8,28 @@
         .controller('Home.AdminUsersController', AdminUsersController)
         .controller('Home.AdminController', AdminController)
 
-    function Controller(UserService, ReportService, $filter, _) {
+    function Controller(UserService, ReportService, $filter, _, $interval) {
         var vm = this;
         vm.users = null;
         vm.totalHours = null;
         vm.myHours = null;
-        vm.date = new Date();
+        
         var currentDate = $filter('date')(new Date(), "yyyy-Www").toString();
-        vm.projects = [{ id: 1, name: 'Care' , 'total':34},
-            { id: 2, name: 'Care Intl' , 'total':5},
-            { id: 3, name: 'Tapclicks' , 'total':2},
-            { id: 4, name: 'SavingStar' , 'total':4},
-            { id: 5, name: 'BlueSky' , 'total':8},
-            { id: 6, name: 'Upromise' , 'total':1},
-            { id: 7, name: 'Coding Labs' , 'total':5},
-            { id: 8, name: 'Hariome' , 'total':3},
-        ]
+        vm.projects = [{ id: 1, name: 'Care', 'total': 34 },
+            { id: 2, name: 'Care Intl', 'total': 5 },
+            { id: 3, name: 'Tapclicks', 'total': 2 },
+            { id: 4, name: 'SavingStar', 'total': 4 },
+            { id: 5, name: 'BlueSky', 'total': 8 },
+            { id: 6, name: 'Upromise', 'total': 1 },
+            { id: 7, name: 'Coding Labs', 'total': 5 },
+            { id: 8, name: 'Hariome', 'total': 3 },
+        ];
+
+        var tick = function() {
+            vm.date = new Date();
+        }
+        tick();
+        $interval(tick, 1000);
 
         function getUsers() {
             UserService.GetAll().then(function(users) {

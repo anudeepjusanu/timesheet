@@ -342,7 +342,6 @@
         var vm = this;
         var currentDay = new Date().getDay();
         vm.closeAlert = closeAlert;
-
         vm.obj = {
             week: new Date()
         };
@@ -390,7 +389,7 @@
         function open2() {
             vm.popup2.opened = true;
         };
-
+        vm.projectsArr = ['Care', 'Care Intl', 'Tapclicks', 'SavingStar', 'BlueSky', 'Upromise', 'Coding Labs', 'Hariome'];
         vm.itemArray = [
             { id: 1, name: 'Care' },
             { id: 2, name: 'Care Intl' },
@@ -412,13 +411,9 @@
         function getSheet(id) {
             ReportService.Get(id).then(function(response) {
                 if (response.project) {
-                    var projects = response.project.split(',');
-                    vm.obj.selected = [];
                     for (var i = 0, len = vm.itemArray.length; i < len; i++) {
-                        for (var j = 0, size = projects.length; j < size; j++) {
-                            if (projects[j] == vm.itemArray[i].name) {
-                                vm.obj.selected.push(vm.itemArray[i]);
-                            }
+                        if (response.project == vm.itemArray[i].name) {
+                            vm.obj.project = vm.itemArray[i];
                         }
                     }
                 }
@@ -429,21 +424,23 @@
         }
 
         function post(form) {
-            var projects = [];
+            /*var projects = [];
             for (var i = 0, len = vm.obj.selected.length; i < len; i++) {
                 projects.push(vm.obj.selected[i].name);
-            }
-            if (form.$valid && projects.length) {
+            }*/
+            if (form.$valid && vm.obj.project) {
 
                 var obj = {
                     "week": $filter('date')(vm.obj.week, "yyyy-Www").toString(),
                     "hours": vm.obj.hours,
                     "comments": vm.obj.comments,
-                    "cDate": vm.obj.week
+                    "cDate": vm.obj.week,
+                    "project": vm.obj.project.name
                 }
-                obj.project = projects.toString();
+
 
                 if (vm.isNew) {
+
                     ReportService.Create(obj).then(function(response) {
                         vm.alerts.push({ msg: "Thank you for the update", type: 'success' });
                         noty.showSuccess("Thank you for the update!");
