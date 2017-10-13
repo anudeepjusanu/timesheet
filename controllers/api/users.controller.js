@@ -9,6 +9,7 @@ router.post('/register', registerUser);
 router.get('/current', getCurrentUser);
 router.put('/:_id', updateUser);
 router.delete('/:_id', deleteUser);
+router.put('/grantAdmin/:_id', adminAccess);
 router.get('/all', getAllUsers);
 
 module.exports = router;
@@ -78,6 +79,17 @@ function deleteUser(req, res) {
             res.status(400).send(err);
         });
 }
+
+function adminAccess(req, res) {
+    userService.adminAccess(req.params._id)
+        .then(function () {
+            res.sendStatus(200);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+
 
 function getAllUsers(req, res) {
     userService.getAll()

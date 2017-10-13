@@ -17,6 +17,7 @@ service.update = update;
 service.updateEmail = updateEmail;
 service.createPassword = createPassword;
 service.delete = _delete;
+service.adminAccess = adminAccess;
 
 module.exports = service;
 
@@ -224,6 +225,21 @@ function _delete(_id) {
     var deferred = Q.defer();
     
     db.users.remove({ _id: mongo.helper.toObjectID(_id) },
+        function(err) {
+            if (err) deferred.reject(err.name + ': ' + err.message);
+            
+            deferred.resolve();
+        });
+
+    return deferred.promise;
+}
+
+function adminAccess(_id) {
+    var deferred = Q.defer();
+    var set = {
+        admin: true
+    }
+    db.users.update({ _id: mongo.helper.toObjectID(_id) }, { $set: set },
         function(err) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             
