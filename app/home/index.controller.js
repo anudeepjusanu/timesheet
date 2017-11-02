@@ -7,13 +7,14 @@
         .controller('Home.SidebarController', SidebarController)
         .controller('Home.AdminUsersController', AdminUsersController)
         .controller('Home.AdminController', AdminController)
+        .controller('Home.UserInfoController', UserInfoController)
 
     function Controller(UserService, ReportService, $filter, _, $interval) {
         var vm = this;
         vm.users = null;
         vm.totalHours = null;
         vm.myHours = null;
-        
+
         var currentDate = $filter('date')(new Date(), "yyyy-Www").toString();
         vm.projects = [{ id: 1, name: 'Care', 'total': 34 },
             { id: 2, name: 'Care Intl', 'total': 5 },
@@ -250,6 +251,50 @@
             }
         }
 
+    }
+
+    function UserInfoController(UserService, $stateParams, $state, _, noty) {
+        var vm = this;
+        vm.updateUser = updateUser;
+
+        function getEmployeeInfo() {
+            UserService.GetEmployeeInfo($stateParams.id).then(function(employee) {
+                vm.employee = employee;
+            })
+        };
+
+        function updateUser(userForm) {
+            if (userForm.$valid) {
+                var obj = {
+                    "name": vm.employee.name,
+                    "phone": vm.employee.phone,
+                    "username": vm.employee.username,
+                    "notifications": vm.employee.notifications
+                }
+                UserService.UpdateEmployeeInfo($stateParams.id, obj).then(function(employee) {
+                    noty.showSuccess("Employee updated Successfully");
+                    $state.go('users');
+                }, function(error){
+                    noty.showError("Something went wrong!");
+                });
+            }else{
+                noty.showError("Please fill in the required fields");
+            }
+        }
+
+        function init() {
+            UserService.GetCurrent().then(function(user) {
+                vm.user = user;
+                if (vm.user.admin && $stateParams.id) {
+                    vm.isAdmin = true;
+                    getEmployeeInfo();
+                } else {
+                    vm.isAdmin = false;
+                    $state.go('home');
+                }
+            });
+        }
+        init();
     }
 
 })();

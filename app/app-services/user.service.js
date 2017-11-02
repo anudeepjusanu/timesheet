@@ -15,6 +15,8 @@
         service.Create = Create;
         service.Update = Update;
         service.Delete = Delete;
+        service.GetEmployeeInfo = GetEmployeeInfo;
+        service.UpdateEmployeeInfo = UpdateEmployeeInfo;
 
         return service;
 
@@ -44,6 +46,14 @@
 
         function Delete(_id) {
             return $http.delete('/api/users/' + _id).then(handleSuccess, handleError);
+        }
+
+        function GetEmployeeInfo(_id){
+            return $http.get('/api/users/admin/' + _id).then(handleSuccess, handleError);
+        }
+
+        function UpdateEmployeeInfo(_id, employee){
+            return $http.put('/api/users/adminUpdate/' + _id, employee).then(handleSuccess, handleError);
         }
 
         // private functions

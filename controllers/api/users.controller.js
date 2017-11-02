@@ -7,10 +7,12 @@ var userService = require('services/user.service');
 router.post('/authenticate', authenticateUser);
 router.post('/register', registerUser);
 router.get('/current', getCurrentUser);
+router.get('/admin/:_id', getUser);
 router.put('/:_id', updateUser);
 router.delete('/:_id', deleteUser);
 router.put('/grantAdmin/:_id', adminAccess);
 router.get('/all', getAllUsers);
+router.put('/adminUpdate/:_id', adminUpdate);
 
 module.exports = router;
 
@@ -42,6 +44,20 @@ function registerUser(req, res) {
 
 function getCurrentUser(req, res) {
     userService.getById(req.user.sub)
+        .then(function (user) {
+            if (user) {
+                res.send(user);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+
+function getUser(req, res) {
+    userService.getUserById(req.params._id)
         .then(function (user) {
             if (user) {
                 res.send(user);
@@ -93,6 +109,21 @@ function adminAccess(req, res) {
 
 function getAllUsers(req, res) {
     userService.getAll()
+        .then(function (user) {
+            if (user) {
+                res.send(user);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+
+function adminUpdate(req, res){
+    console.log(req.user.sub);
+    userService.adminUpdate(req.user.sub, req.params._id, req.body)
         .then(function (user) {
             if (user) {
                 res.send(user);

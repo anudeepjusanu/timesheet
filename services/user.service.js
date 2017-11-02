@@ -11,6 +11,7 @@ var service = {};
 
 service.authenticate = authenticate;
 service.getById = getById;
+service.getUserById = getUserById;
 service.getAll = getAll;
 service.createUser = createUser;
 service.update = update;
@@ -18,6 +19,7 @@ service.updateEmail = updateEmail;
 service.createPassword = createPassword;
 service.delete = _delete;
 service.adminAccess = adminAccess;
+service.adminUpdate = adminUpdate;
 
 module.exports = service;
 
@@ -39,6 +41,24 @@ function authenticate(username, password) {
 }
 
 function getById(_id) {
+    var deferred = Q.defer();
+
+    db.users.findById(_id, function(err, user) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+
+        if (user) {
+            // return user (without hashed password)
+            deferred.resolve(_.omit(user, 'hash'));
+        } else {
+            // user not found
+            deferred.resolve();
+        }
+    });
+
+    return deferred.promise;
+}
+
+function getUserById(_id) {
     var deferred = Q.defer();
 
     db.users.findById(_id, function(err, user) {
@@ -245,6 +265,31 @@ function adminAccess(_id) {
             
             deferred.resolve();
         });
+
+    return deferred.promise;
+}
+
+function adminUpdate(id, userId, userParam) {
+    var deferred = Q.defer();
+    db.users.findById(id, function(err, user) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (user && user.admin) {
+            update_user(userId, userParam);
+        } else {
+            deferred.reject('You dont have prvilage to update the user');
+        }
+    });
+
+    function update_user(userId, userParam) {
+        
+        db.users.update({ _id: mongo.helper.toObjectID(userId) }, { $set: userParam },
+            function(err, doc) {
+                if (err) deferred.reject(err.name + ': ' + err.message);
+                deferred.resolve(doc);
+            }, function(err){
+                deferred.reject('something went wrong');
+            });
+    }
 
     return deferred.promise;
 }

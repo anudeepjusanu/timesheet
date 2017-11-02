@@ -49,10 +49,17 @@
                 controllerAs: 'vm',
                 data: { activeTab: 'home' }
             })
-            .state('adminUsers', {
-                url: '/adminUsers',
+            .state('users', {
+                url: '/users',
                 templateUrl: 'home/adminUsers.html',
                 controller: 'Home.AdminUsersController',
+                controllerAs: 'vm',
+                data: { activeTab: 'home' }
+            })
+            .state('userInfo', {
+                url: '/users/:id',
+                templateUrl: 'home/userInfo.html',
+                controller: 'Home.UserInfoController',
                 controllerAs: 'vm',
                 data: { activeTab: 'home' }
             })

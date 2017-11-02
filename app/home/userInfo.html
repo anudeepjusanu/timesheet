@@ -1,0 +1,89 @@
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb">
+    <li><a ui-sref="home">Home</a></li>
+    <li><a ui-sref="users">Users</a></li>
+    <li class="active">{{vm.employee.name}}</li>
+</ul>
+<!-- END BREADCRUMB -->
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form-horizontal" name="userForm">
+                <div class="panel panel-default tabs">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="active"><a href="#tab-first" role="tab" data-toggle="tab">Personal Data</a></li>
+                        <li><a href="#tab-second" role="tab" data-toggle="tab">Project Settings</a></li>
+                    </ul>
+                    <div class="panel-body tab-content">
+                        <div class="tab-pane active" id="tab-first">
+                            <p></p>
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-12 control-label">Name</label>
+                                <div class="col-md-6 col-xs-12">
+                                    <input type="text" required="true" ng-model="vm.employee.name" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-12 control-label">Email</label>
+                                <div class="col-md-6 col-xs-12">
+                                    <input type="email" required="true" ng-model="vm.employee.username" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-12 control-label">Mobile</label>
+                                <div class="col-md-6 col-xs-12">
+                                    <input type="text" required="true" ng-model="vm.employee.phone" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-12 control-label">Timesheet</label>
+                                <div class="col-md-6 col-xs-12">
+                                    <label class="check">
+                                        <input type="checkbox" class="icheckbox" ng-model="vm.employee.notifications" /> I want to opt out of timesheet notifications</label>
+                                    <span class="help-block">If you wish of course</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab-second">
+                            <p>Donec tristique eu sem et aliquam. Proin sodales elementum urna et euismod. Quisque nisl nisl, venenatis eget dignissim et, adipiscing eu tellus. Sed nulla massa, luctus id orci sed, elementum consequat est. Proin dictum odio quis diam gravida facilisis. Sed pharetra dolor a tempor tristique. Sed semper sed urna ac dignissim. Aenean fermentum leo at posuere mattis. Etiam vitae quam in magna viverra dictum. Curabitur feugiat ligula in dui luctus, sed aliquet neque posuere.</p>
+                            <div class="form-group">
+                                <label class="col-md-2 col-xs-12 control-label">Project</label>
+                                <div class="col-md-2">
+                                    <select class="form-control select">
+                                        <option>PayPal</option>
+                                        <option selected="selected">Payoneer</option>
+                                        <option>Skrill</option>
+                                        <option>SWIFT</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-10">Fusce enim dui, pulvinar a augue nec, dapibus hendrerit mauris. Praesent efficitur, elit non convallis faucibus.</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 col-xs-12 control-label">E-mail</label>
+                                <div class="col-md-6 col-xs-12">
+                                    <input type="text" class="form-control" value="johndoe@domain.com" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 col-xs-12 control-label"></label>
+                                <div class="col-md-6 col-xs-12">
+                                    <label class="check">
+                                        <input type="checkbox" class="icheckbox" checked="checked" /> I agree</label>
+                                    <span class="help-block">Read <a href="#">terms</a> and confirm that you agree</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <button class="btn btn-primary pull-right" ng-click="vm.updateUser(userForm)">Save Changes <span class="fa fa-floppy-o fa-right"></span></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT WRAPPER -->
