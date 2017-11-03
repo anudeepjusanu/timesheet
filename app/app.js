@@ -69,7 +69,14 @@
                 controller: 'Account.IndexController',
                 controllerAs: 'vm',
                 data: { activeTab: 'account' }
-            });
+            })
+            .state('projects', {
+                url: '/projects',
+                templateUrl: 'projects/index.html',
+                controller: 'Projects.IndexController',
+                controllerAs: 'vm',
+                data: { activeTab: 'projects' }
+            })
     }
 
     function run($http, $rootScope, $window, UserService, $timeout) {

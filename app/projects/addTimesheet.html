@@ -1,0 +1,70 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <ul class="breadcrumb">
+        <li><a ui-sref="timesheet"><i class="fa fa-dashboard"></i> Timesheet</a></li>
+        <li class="active">Add Hours</li>
+    </ul>
+    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
+    <div class="page-content-wrap">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="well well-sm">
+                    <form class="form-horizontal" name="vm.addForm">
+                        <fieldset>
+                            <legend class="text-center">Add Hours</legend>
+                            <!-- Name input-->
+                            <div class="form-group required">
+                                <label class="col-md-3 control-label" for="name">Project</label>
+                                <div class="col-md-9">
+                                    <!-- <ui-select multiple ng-model="vm.obj.selected">
+                                        <ui-select-match>
+                                            <span ng-bind="$item.name"></span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="item in (vm.itemArray | filter: $select.search) track by item.id">
+                                            <span ng-bind="item.name"></span>
+                                        </ui-select-choices>
+                                    </ui-select> -->
+                                    <select class="form-control" ng-model="vm.obj.project" ng-options="item as item.name for item in vm.itemArray">
+                                        
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Week input-->
+                            <div class="form-group required">
+                                <label class="col-md-3 control-label" for="week">Week</label>
+                                <div class="col-md-9">
+                                    <p class="input-group">
+                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.obj.week" is-open="vm.popup2.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="vm.open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Email input-->
+                            <div class="form-group required">
+                                <label class="col-md-3 control-label" for="hours">Hours</label>
+                                <div class="col-md-9">
+                                    <input id="hours" name="hours" type="number" min="0" max="70" placeholder="Your hours" class="form-control" ng-model="vm.obj.hours" ng-required="true">
+                                </div>
+                            </div>
+                            <!-- Message body -->
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="message">Comments</label>
+                                <div class="col-md-9">
+                                    <textarea class="form-control" id="message" name="message" placeholder="Please enter your comments here if any..." rows="5" ng-model="vm.obj.comments"></textarea>
+                                </div>
+                            </div>
+                            <!-- Form actions -->
+                            <div class="form-group">
+                                <div class="col-md-12 text-right">
+                                    <button type="button" class="btn btn-primary btn-lg" ng-click="vm.post(vm.addForm)">Submit</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -159,6 +159,7 @@ app.use('/register', require('./controllers/register.controller'));
 app.use('/app', require('./controllers/app.controller'));
 app.use('/api/users', require('./controllers/api/users.controller'));
 app.use('/api/timesheet', require('./controllers/api/timesheet.controller'));
+app.use('/api/projects', require('./controllers/api/projects.controller'));
 
 // make '/app' default route
 app.get('/', function(req, res) {
