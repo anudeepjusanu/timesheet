@@ -30,14 +30,14 @@
             })
             .state('addTimesheet', {
                 url: '/addTimesheet',
-                templateUrl: 'timesheet/addTimesheet.html',
+                templateUrl: 'timesheet/addProject.html',
                 controller: 'Timesheet.TimesheetController',
                 controllerAs: 'vm',
                 data: { activeTab: 'timesheet' }
             })
             .state('editTimesheet', {
                 url: '/editTimesheet/:id',
-                templateUrl: 'timesheet/addTimesheet.html',
+                templateUrl: 'timesheet/addProject.html',
                 controller: 'Timesheet.TimesheetController',
                 controllerAs: 'vm',
                 data: { activeTab: 'timesheet' }
@@ -73,6 +73,13 @@
             .state('projects', {
                 url: '/projects',
                 templateUrl: 'projects/index.html',
+                controller: 'Projects.IndexController',
+                controllerAs: 'vm',
+                data: { activeTab: 'projects' }
+            })
+            .state('addProject', {
+                url: '/addProject',
+                templateUrl: 'projects/addProject.html',
                 controller: 'Projects.IndexController',
                 controllerAs: 'vm',
                 data: { activeTab: 'projects' }

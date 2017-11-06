@@ -4,30 +4,56 @@
     angular
         .module('app')
         .controller('Projects.IndexController', Controller)
-        .controller('Projects.TimesheetController', TimesheetController)
+        .controller('Projects.AddProjectController', AddProjectController)
 
-    function Controller(UserService, $filter, ReportService, _, $scope, FlashService, NgTableParams, noty) {
+    function Controller(UserService, ProjectService, $filter, _, FlashService, NgTableParams, noty) {
         var vm = this;
-        vm.user = null;
-        vm.post = post;
-        vm.remind = remind;
+        vm.user = {};
+        vm.projects = [];
 
+        function getProjects(){
+            ProjectService.getAll().then(function(response) {
+                vm.projects = response;
+            }, function(error){
+                console.log(error);
+            });
+        }
 
         initController();
-
         function initController() {
-            // get current user
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
-                if (vm.user.admin) {
-
-                } else {
+                if (vm.user.admin !== true) {
 
                 }
             });
+            getProjects();
         }
     }
 
+    function Controller(UserService, ProjectService, $filter, _, FlashService, NgTableParams, noty) {
+        var vm = this;
+        vm.user = {};
+        vm.projects = [];
 
+        function getProjects(){
+            ProjectService.getAll().then(function(response) {
+                vm.projects = response;
+            }, function(error){
+                console.log(error);
+            });
+        }
+
+        initController();
+        function initController() {
+            UserService.GetCurrent().then(function(user) {
+                vm.user = user;
+                if (vm.user.admin !== true) {
+
+                }
+            });
+            getProjects();
+        }
+    }
 
 })();

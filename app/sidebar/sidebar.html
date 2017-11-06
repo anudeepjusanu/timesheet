@@ -33,7 +33,7 @@
         <li class="" ng-class="{active: activeTab === 'account'}">
             <a ui-sref="account"><span class="fa fa-cogs"></span> <span class="xn-text">Account</span></a>
         </li>
-        <li class="" ng-class="{active: activeTab === 'projects'}">
+        <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'projects'}">
             <a ui-sref="projects"><span class="fa fa-cogs"></span> <span class="xn-text">Projects</span></a>
         </li>
     </ul>

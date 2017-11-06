@@ -22,7 +22,7 @@ function create(projectParam) {
     var projectObj = {
         clientName: projectParam.clientName,
         projectName: projectParam.projectName,
-        start_date: projectParam.startDate,
+        startDate: projectParam.startDate,
         createdOn: new Date(),
         updatedOn: new Date()
     }
@@ -74,20 +74,14 @@ function getProjectById(projectId){
 
 function getAllProjects(){
     var deferred = Q.defer();
-
     db.projects.find().toArray(function(err, projects) {
         if (err) deferred.reject(err.name + ': ' + err.message);
-
         if (projects) {
-            /*var usersList = _.map(users, function(e) {
-                return _.omit(e, 'hash');
-            });*/
             deferred.resolve(projects);
         } else {
             // project not found
             deferred.resolve();
         }
     });
-
     return deferred.promise;
 }

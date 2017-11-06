@@ -1,8 +1,8 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <ul class="breadcrumb">
-        <li><a ui-sref="timesheet"><i class="fa fa-dashboard"></i> Timesheet</a></li>
-        <li class="active">Add Hours</li>
+        <li><a ui-sref="projects"><i class="fa fa-dashboard"></i> Projects</a></li>
+        <li class="active">Add Project</li>
     </ul>
     <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
     <div class="page-content-wrap">
@@ -11,19 +11,11 @@
                 <div class="well well-sm">
                     <form class="form-horizontal" name="vm.addForm">
                         <fieldset>
-                            <legend class="text-center">Add Hours</legend>
+                            <legend class="text-center">Add Project</legend>
                             <!-- Name input-->
                             <div class="form-group required">
                                 <label class="col-md-3 control-label" for="name">Project</label>
                                 <div class="col-md-9">
-                                    <!-- <ui-select multiple ng-model="vm.obj.selected">
-                                        <ui-select-match>
-                                            <span ng-bind="$item.name"></span>
-                                        </ui-select-match>
-                                        <ui-select-choices repeat="item in (vm.itemArray | filter: $select.search) track by item.id">
-                                            <span ng-bind="item.name"></span>
-                                        </ui-select-choices>
-                                    </ui-select> -->
                                     <select class="form-control" ng-model="vm.obj.project" ng-options="item as item.name for item in vm.itemArray">
                                         
                                     </select>
