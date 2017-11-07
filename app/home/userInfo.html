@@ -18,62 +18,124 @@
                     <div class="panel-body tab-content">
                         <div class="tab-pane active" id="tab-first">
                             <p></p>
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label class="col-md-3 col-xs-12 control-label">Name</label>
                                 <div class="col-md-6 col-xs-12">
                                     <input type="text" required="true" ng-model="vm.employee.name" class="form-control" />
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label class="col-md-3 col-xs-12 control-label">Email</label>
                                 <div class="col-md-6 col-xs-12">
                                     <input type="email" required="true" ng-model="vm.employee.username" class="form-control" />
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label class="col-md-3 col-xs-12 control-label">Mobile</label>
                                 <div class="col-md-6 col-xs-12">
                                     <input type="text" required="true" ng-model="vm.employee.phone" class="form-control" />
                                 </div>
                             </div>
+                            <div class="form-group required">
+                                <label class="col-md-3 col-xs-12 control-label">Designation</label>
+                                <div class="col-md-6 col-xs-12">
+                                    <input type="text" required="true" ng-model="vm.employee.designation" class="form-control" />
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Timesheet</label>
                                 <div class="col-md-6 col-xs-12">
-                                    <label class="check">
-                                        <input type="checkbox" class="icheckbox" ng-model="vm.employee.notifications" /> I want to opt out of timesheet notifications</label>
-                                    <span class="help-block">If you wish of course</span>
+                                    <label class="switch">
+                                        <input type="checkbox" class="switch" ng-model="vm.employee.notifications" />
+                                        <span></span>
+                                    </label>
+                                    <span class="help-block">I want to opt out of timesheet notifications</span>
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane" id="tab-second">
                             <p>Donec tristique eu sem et aliquam. Proin sodales elementum urna et euismod. Quisque nisl nisl, venenatis eget dignissim et, adipiscing eu tellus. Sed nulla massa, luctus id orci sed, elementum consequat est. Proin dictum odio quis diam gravida facilisis. Sed pharetra dolor a tempor tristique. Sed semper sed urna ac dignissim. Aenean fermentum leo at posuere mattis. Etiam vitae quam in magna viverra dictum. Curabitur feugiat ligula in dui luctus, sed aliquet neque posuere.</p>
-                            <div class="form-group">
-                                <label class="col-md-2 col-xs-12 control-label">Project</label>
-                                <div class="col-md-2">
-                                    <select class="form-control select">
-                                        <option>PayPal</option>
-                                        <option selected="selected">Payoneer</option>
-                                        <option>Skrill</option>
-                                        <option>SWIFT</option>
-                                    </select>
+                            <div class="clearfix">
+                                <button class="btn btn-primary pull-right" ng-click="vm.addProject()">Add Project</button>
+                            </div>
+                            <br>
+                            <div class="panel panel-default" ng-repeat="project in vm.employee.project">
+                                <div class="panel-heading ui-draggable-handle">
+                                    <h3 class="panel-title">Project {{$index + 1}}</h3>
+                                    <ul class="panel-controls">
+                                        <li><a ng-click="vm.deleteProject($index)" class="panel-remove"><span class="fa fa-times"></span></a></li>
+                                    </ul>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-2"></div>
-                                <div class="col-md-10">Fusce enim dui, pulvinar a augue nec, dapibus hendrerit mauris. Praesent efficitur, elit non convallis faucibus.</div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 col-xs-12 control-label">E-mail</label>
-                                <div class="col-md-6 col-xs-12">
-                                    <input type="text" class="form-control" value="johndoe@domain.com" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 col-xs-12 control-label"></label>
-                                <div class="col-md-6 col-xs-12">
-                                    <label class="check">
-                                        <input type="checkbox" class="icheckbox" checked="checked" /> I agree</label>
-                                    <span class="help-block">Read <a href="#">terms</a> and confirm that you agree</span>
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="col-md-2 col-xs-12 control-label">Client Name</label>
+                                        <div class="col-md-4">
+                                            <select class="form-control select" ng-model="project.clientName" ng-options="item as item.clientName for item in vm.projects" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 col-xs-12 control-label">Project Name</label>
+                                        <div class="col-md-4">
+                                            <select class="form-control select" ng-model="project.projectName" ng-options="item as item for item in project.clientName.projectName" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 col-xs-12 control-label" for="week">Start Date</label>
+                                        <div class="col-md-4 col-xs-12">
+                                            <p class="input-group">
+                                                <input type="text" class="form-control" uib-datepicker-popup ng-model="project.startDate" is-open="project.opened" datepicker-options="vm.dateOptions" close-text="Close" />
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" ng-click="vm.open2(project)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 col-xs-12 control-label">Is Billable {{project.isBillable}}</label>
+                                        <div class="col-md-6 col-xs-12">
+                                            <label class="switch">
+                                                <input type="checkbox" class="switch" ng-model="project.isBillable" ng-change="vm.updateBilling(project)" />
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix" ng-show="project.isBillable">
+                                        <h6 class="pull-left">Billing Dates</h6>
+                                        <button class="btn btn-xs btn-primary pull-right" ng-click="vm.addDate(project)">Add</button>
+                                    </div>
+                                    <hr>
+                                    <div ng-repeat="dates in project.date" class="row" ng-show="project.isBillable">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label class="col-md-4 col-xs-12 control-label" for="week">Start Date</label>
+                                                <div class="col-md-8 col-xs-12">
+                                                    <p class="input-group">
+                                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="dates.start" is-open="dates.startOpened" datepicker-options="vm.dateOptions" close-text="Close" />
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-default" ng-click="vm.open2(dates, 'startOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label class="col-md-4 col-xs-12 control-label" for="week">End Date</label>
+                                                <div class="col-md-8 col-xs-12">
+                                                    <p class="input-group">
+                                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="dates.end" is-open="dates.endOpened" datepicker-options="vm.dateOptions" close-text="Close" />
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-default" ng-click="vm.open2(dates, 'endOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <a ng-click="vm.deleteDate(project, $index)"><span class="fa fa-times"></span></a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

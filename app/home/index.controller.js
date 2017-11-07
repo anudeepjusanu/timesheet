@@ -11,11 +11,20 @@
 
     function Controller(UserService, ReportService, $filter, _, $interval) {
         var vm = this;
+        var currentDate;
         vm.users = null;
         vm.totalHours = null;
         vm.myHours = null;
 
-        var currentDate = $filter('date')(new Date(), "yyyy-Www").toString();
+
+        var currentDay = new Date().getDay();
+        if (currentDay < 5) {
+            var oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            currentDate = $filter('date')(oneWeekAgo, "yyyy-Www").toString();
+        } else {
+            currentDate = $filter('date')(new Date(), "yyyy-Www").toString();
+        }
         vm.projects = [{ id: 1, name: 'Care', 'total': 34 },
             { id: 2, name: 'Care Intl', 'total': 5 },
             { id: 3, name: 'Tapclicks', 'total': 2 },
@@ -38,7 +47,7 @@
             })
         }
 
-        function getAllReports(week) {
+        function getAllReports() {
             ReportService.getReportByWeek(currentDate).then(function(reports) {
                 vm.totalHours = _.sum(_.map(reports, 'hours'));
             });
@@ -253,31 +262,145 @@
 
     }
 
-    function UserInfoController(UserService, $stateParams, $state, _, noty) {
+    function UserInfoController(UserService, $stateParams, $state, _, noty, ProjectService) {
         var vm = this;
         vm.updateUser = updateUser;
+        vm.addProject = addProject;
+        vm.deleteProject = deleteProject;
+        vm.updateBilling = updateBilling;
+        vm.addDate = addDate;
+        vm.deleteDate = deleteDate;
+
+        vm.open2 = open2;
+        vm.popup2 = {
+            opened: false
+        };
+        vm.dateOptions = {
+            formatYear: 'yy',
+            maxDate: new Date(2025, 5, 22),
+            startingDay: 1
+        };
+
+        function open2(project, text) {
+            if (text) {
+                project[text] = true;
+            } else {
+                project.opened = true;
+            }
+        };
 
         function getEmployeeInfo() {
             UserService.GetEmployeeInfo($stateParams.id).then(function(employee) {
                 vm.employee = employee;
+                if (!vm.employee.project) {
+                    vm.employee.project = [];
+                } else {
+                    _.each(vm.employee.project, function(item) {
+                        item.opened = false;
+                        item.startDate = new Date(item.startDate);
+                        if (!item.date) {
+                            item.date = [];
+                        } else {
+                            _.each(item.date, function(dates) {
+                                dates.startOpened = false;
+                                dates.endOpened = false;
+                                dates.start = new Date(dates.start);
+                                dates.end = new Date(dates.end);
+                            });
+                        }
+                    });
+                    _.each(vm.projects, function(project) {
+                        _.each(vm.employee.project, function(item) {
+                            if (item._id == project._id) {
+                                item.clientName = project;
+                            }
+                        });
+                    });
+                }
+
             })
         };
 
+        function getAllProjects() {
+            ProjectService.GetAll().then(function(projects) {
+                vm.projects = projects;
+                getEmployeeInfo();
+            }, function(error) {
+                console.log("Error loading projects");
+            })
+        }
+
+        function addProject() {
+            if (!vm.employee.project) {
+                vm.employee.project = [];
+            } else {
+                vm.employee.project.push({});
+            }
+        }
+
+        function deleteProject(index) {
+            vm.employee.project.splice(index, 1);
+        }
+
+        function addDate(project) {
+            if (!project.date) {
+                project.date = [{}];
+            } else {
+                project.date.push({});
+            }
+        }
+
+        function deleteDate(project, index) {
+            project.date.splice(index, 1);
+        }
+
+        function updateBilling(project) {
+            if (project.isBillable) {
+                if (!project.date) {
+                    project.date = [{}];
+                } else
+                    project.date.push({});
+            } else {
+                project.date = [];
+            }
+        }
+
         function updateUser(userForm) {
             if (userForm.$valid) {
+                _.each(vm.employee.project, function(project) {
+                    delete project.opened;
+                    _.each(project.date, function(item) {
+                        delete item.startOpened;
+                        delete item.endOpened;
+                    });
+                });
                 var obj = {
                     "name": vm.employee.name,
                     "phone": vm.employee.phone,
                     "username": vm.employee.username,
+                    "designation": vm.employee.designation,
                     "notifications": vm.employee.notifications
                 }
+                var projectObj = [];
+                _.each(vm.employee.project, function(project) {
+                    projectObj.push({
+                        "_id": project.clientName._id,
+                        "projectName": project.projectName,
+                        "clientName": project.clientName.clientName,
+                        "startDate": project.startDate,
+                        "date": project.date,
+                        "isBillable": project.isBillable
+                    });
+                });
+                obj.project = projectObj;
+
                 UserService.UpdateEmployeeInfo($stateParams.id, obj).then(function(employee) {
                     noty.showSuccess("Employee updated Successfully");
                     $state.go('users');
-                }, function(error){
+                }, function(error) {
                     noty.showError("Something went wrong!");
                 });
-            }else{
+            } else {
                 noty.showError("Please fill in the required fields");
             }
         }
@@ -287,7 +410,7 @@
                 vm.user = user;
                 if (vm.user.admin && $stateParams.id) {
                     vm.isAdmin = true;
-                    getEmployeeInfo();
+                    getAllProjects();
                 } else {
                     vm.isAdmin = false;
                     $state.go('home');

@@ -30,14 +30,14 @@
             })
             .state('addTimesheet', {
                 url: '/addTimesheet',
-                templateUrl: 'timesheet/addProject.html',
+                templateUrl: 'timesheet/addTimesheet.html',
                 controller: 'Timesheet.TimesheetController',
                 controllerAs: 'vm',
                 data: { activeTab: 'timesheet' }
             })
             .state('editTimesheet', {
                 url: '/editTimesheet/:id',
-                templateUrl: 'timesheet/addProject.html',
+                templateUrl: 'timesheet/addTimesheet.html',
                 controller: 'Timesheet.TimesheetController',
                 controllerAs: 'vm',
                 data: { activeTab: 'timesheet' }

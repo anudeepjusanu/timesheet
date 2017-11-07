@@ -122,7 +122,6 @@ function getAllUsers(req, res) {
 }
 
 function adminUpdate(req, res){
-    console.log(req.user.sub);
     userService.adminUpdate(req.user.sub, req.params._id, req.body)
         .then(function (user) {
             if (user) {
