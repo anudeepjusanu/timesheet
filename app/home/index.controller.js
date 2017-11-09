@@ -304,8 +304,10 @@
                             _.each(item.date, function(dates) {
                                 dates.startOpened = false;
                                 dates.endOpened = false;
-                                dates.start = new Date(dates.start);
-                                dates.end = new Date(dates.end);
+                                if (dates.start)
+                                    dates.start = new Date(dates.start);
+                                if (dates.end)
+                                    dates.end = new Date(dates.end);
                             });
                         }
                     });
@@ -322,7 +324,7 @@
         };
 
         function getAllProjects() {
-            ProjectService.GetAll().then(function(projects) {
+            ProjectService.getAll().then(function(projects) {
                 vm.projects = projects;
                 getEmployeeInfo();
             }, function(error) {
@@ -334,7 +336,9 @@
             if (!vm.employee.project) {
                 vm.employee.project = [];
             } else {
-                vm.employee.project.push({});
+                vm.employee.project.push({
+                    "startDate": new Date()
+                });
             }
         }
 

@@ -2,7 +2,7 @@
     {{alert.msg}}</div>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <div class="" ng-if="vm.user.admin">
+    <div class="" ng-if="!vm.user.admin">
         <!-- START DEFAULT TABLE EXPORT -->
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -82,7 +82,7 @@
             </div>
         </div>
     </div>
-    <div ng-if="!vm.user.admin">
+    <div ng-if="vm.user.admin">
         <br>
         <a class="btn btn-primary" ui-sref="addTimesheet">Add Hours</a>
         <div class="table-responsive">

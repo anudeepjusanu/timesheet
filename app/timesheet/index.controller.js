@@ -329,7 +329,7 @@
             // get current user
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
-                if (vm.user.admin) {
+                if (!vm.user.admin) {
                     getAllReports();
                 } else {
                     getMyReport();
@@ -370,9 +370,6 @@
 
         vm.post = post;
         vm.open2 = open2;
-        vm.popup2 = {
-            opened: false
-        };
         vm.dateOptions = {
             dateDisabled: disabled,
             formatYear: 'yy',
@@ -386,8 +383,8 @@
             return mode === 'day' && (date.getDay() != 5);
         }
 
-        function open2() {
-            vm.popup2.opened = true;
+        function open2(project) {
+            project.opened = true;
         };
         vm.projectsArr = ['Care', 'Care Intl', 'Tapclicks', 'SavingStar', 'BlueSky', 'Upromise', 'Coding Labs', 'Hariome'];
         vm.itemArray = [
@@ -423,26 +420,19 @@
             });
         }
 
-        function post(form) {
-            /*var projects = [];
-            for (var i = 0, len = vm.obj.selected.length; i < len; i++) {
-                projects.push(vm.obj.selected[i].name);
-            }*/
-            if (form.$valid && vm.obj.project) {
-
+        function post(project) {
+            if (project.addForm.$valid) {
                 var obj = {
-                    "week": $filter('date')(vm.obj.week, "yyyy-Www").toString(),
-                    "hours": vm.obj.hours,
-                    "comments": vm.obj.comments,
-                    "cDate": vm.obj.week,
-                    "project": vm.obj.project.name
+                    "week": $filter('date')(project.week, "yyyy-Www").toString(),
+                    "hours": project.hours,
+                    "comments": project.comments,
+                    "cDate": project.week,
+                    "project": project.projectName,
+                    "client": project.clientName
                 }
-
-
                 if (vm.isNew) {
 
                     ReportService.Create(obj).then(function(response) {
-                        vm.alerts.push({ msg: "Thank you for the update", type: 'success' });
                         noty.showSuccess("Thank you for the update!");
                         $state.go('timesheet');
                     }, function(error) {
@@ -452,7 +442,6 @@
                     });
                 } else {
                     ReportService.Update($stateParams.id, obj).then(function(response) {
-                        //vm.alerts.push({ msg: "Updated Successfully", type: 'success' });
                         noty.showSuccess("Updated Successfully!");
                         $state.go('timesheet');
                     }, function(error) {
@@ -469,12 +458,17 @@
         initController();
 
         function initController() {
-            if ($stateParams.id) {
-                vm.isNew = false;
-                getSheet($stateParams.id);
-            } else {
-                vm.isNew = true;
-            }
+            UserService.GetCurrent().then(function(user) {
+                vm.user = user;
+                console.log(vm.user);
+                if ($stateParams.id) {
+                    vm.isNew = false;
+                    getSheet($stateParams.id);
+                } else {
+                    vm.isNew = true;
+                }
+            });
+
         }
 
     }
