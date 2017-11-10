@@ -13,6 +13,8 @@
         service.create = create;
         service.update = update;
         service.delete = del;
+        service.getAssignedUsers = getAssignedUsers;
+        service.assignUsers = assignUsers;
 
         return service;
 
@@ -34,6 +36,14 @@
 
         function del(_id) {
             return $http.delete('/api/projects/' + _id).then(handleSuccess, handleError);
+        }
+
+        function getAssignedUsers(_id) {
+            return $http.get('/api/projects/assignedUsers/' + _id).then(handleSuccess, handleError);
+        }
+
+        function assignUsers(_id, users) {
+            return $http.post('/api/projects/assignedUsers/' + _id, users).then(handleSuccess, handleError);
         }
 
         // private functions

@@ -20,6 +20,7 @@
                         <th>S.No</th>
                         <th>Customer Name</th>
                         <th>Project Name</th>
+                        <th>Description</th>
                         <th>Start Date</th>
                         <th>Action</th>
                     </tr>
@@ -27,8 +28,13 @@
                         <td>{{$index+1}}</td>
                         <td>{{project.clientName}}</td>
                         <td>{{project.projectName}}</td>
+                        <td>{{project.description}}</td>
                         <td>{{project.startDate}}</td>
-                        <td> </td>
+                        <td>
+                            <a class="btn btn-primary btn-xs" ui-sref="assignUsers({id: project._id})">Assign Users</a>
+                            <a class="btn btn-primary btn-xs" ui-sref="editProject({id: project._id})">Update</a>
+                            <buttion class="btn btn-primary btn-xs" ng-click="vm.delProject(project._id)">Delete</buttion>
+                        </td>
                     </tr>
                 </table>
             </div>

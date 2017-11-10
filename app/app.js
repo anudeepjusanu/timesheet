@@ -80,7 +80,21 @@
             .state('addProject', {
                 url: '/addProject',
                 templateUrl: 'projects/addProject.html',
-                controller: 'Projects.IndexController',
+                controller: 'Projects.AddProjectController',
+                controllerAs: 'vm',
+                data: { activeTab: 'projects' }
+            })
+            .state('editProject', {
+                url: '/editProject/:id',
+                templateUrl: 'projects/addProject.html',
+                controller: 'Projects.AddProjectController',
+                controllerAs: 'vm',
+                data: { activeTab: 'projects' }
+            })
+            .state('assignUsers', {
+                url: '/assignUsers/:id',
+                templateUrl: 'projects/assignUsers.html',
+                controller: 'Projects.AssignUsersController',
                 controllerAs: 'vm',
                 data: { activeTab: 'projects' }
             })

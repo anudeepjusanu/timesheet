@@ -6,6 +6,7 @@ var Q = require('q');
 var mongo = require('mongoskin');
 var db = mongo.db(config.connectionString, { native_parser: true });
 db.bind('projects');
+db.bind('users');
 
 var service = {};
 
@@ -14,6 +15,8 @@ service.update = update;
 service.delete = del;
 service.getProjectById = getProjectById;
 service.getAllProjects = getAllProjects;
+service.getAssignedUsers = getAssignedUsers;
+service.assignUsers = assignUsers;
 
 module.exports = service;
 
@@ -23,6 +26,7 @@ function create(projectParam) {
         clientName: projectParam.clientName,
         projectName: projectParam.projectName,
         startDate: projectParam.startDate,
+        description: projectParam.description,
         createdOn: new Date(),
         updatedOn: new Date()
     }
@@ -37,8 +41,14 @@ function create(projectParam) {
 
 function update(_id, params) {
     var deferred = Q.defer();
-    params.updatedOn = new Date();
-    db.projects.update({ _id: mongo.helper.toObjectID(_id) }, { $set: params },
+    var projectObj = {
+        clientName: params.clientName,
+        projectName: params.projectName,
+        startDate: params.startDate,
+        description: params.description
+    }
+    projectObj.updatedOn = new Date();
+    db.projects.update({ _id: mongo.helper.toObjectID(_id) }, { '$set': projectObj },
         function(err, project) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             deferred.resolve(project);
@@ -83,5 +93,62 @@ function getAllProjects(){
             deferred.resolve();
         }
     });
+    return deferred.promise;
+}
+
+function getAssignedUsers(projectId){
+    var deferred = Q.defer();
+    db.users.find({"project.projectId": {"$in":[projectId]}}).toArray(function(err, users) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (users) {
+            var assignedUsers = [];
+            _.each(users, function (user) {
+                assignedUsers.push({
+                    userId: user._id,
+                    userName: user.name
+                });
+            });
+            deferred.resolve(assignedUsers);
+        } else {
+            // project not found
+            deferred.resolve();
+        }
+    });
+    return deferred.promise;
+}
+
+function assignUsers(projectId, users) {
+    var deferred = Q.defer();
+
+    _.each(users, function (user) {
+        db.users.findById(user.userId, function(err, userRoc) {
+            if (err) deferred.reject(err.name + ': ' + err.message);
+            if (userRoc) {
+                var rowData = {
+                    "project": []
+                };
+                if(userRoc.project){
+                    rowData.project = userRoc.project;
+                }
+                var projectIndex = _.findIndex(rowData.project, {"projectId": projectId});
+                console.log(userIndex);
+                if(userIndex >=0 ){
+
+                }else{
+                    rowData.project.push({"projectId":projectId});
+                    db.users.update({ _id: mongo.helper.toObjectID(userRoc._id) }, { '$set': rowData },
+                        function(err, project) {
+                            if (err) deferred.reject(err.name + ': ' + err.message);
+                            deferred.resolve(project);
+                        });
+                }
+
+            } else {
+                deferred.reject("Please select valid id");
+            }
+        });
+        deferred.resolve();
+    });
+
     return deferred.promise;
 }
