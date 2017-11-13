@@ -118,6 +118,7 @@
     
     function AssignUsersController($state, UserService, ProjectService, $stateParams, noty, _, $uibModal) {
         var vm = this;
+        vm.alerts = [];
         vm.project = {};
         vm.users = [];
         vm.assignedUsers = [];
@@ -160,7 +161,6 @@
                         vm.users.splice(userIndex, 1);
                     }
                 });
-                console.log(vm.assignedUsers);
             }, function(error) {
                 if (error) {
                     vm.alerts.push({ msg: error, type: 'danger' });
@@ -169,7 +169,7 @@
         }
 
         vm.addColumn = function (user) {
-
+            user.isNew = true;
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -184,39 +184,59 @@
                     },
                     project: function () {
                         return vm.project;
+                    },
+                    parentAlerts: function () {
+                        return vm.alerts;
                     }
                 }
             });
-
+            
             modalInstance.result.then(function (userObj) {
-                console.log(userObj);
-                /*var index = vm.users.indexOf(user);
-                vm.assignedUsers.push(user);
-                vm.users.splice(index, 1);*/
+                vm.getAllUsers();
             }, function () {
                 //$log.info('Modal dismissed at: ' + new Date());
             });
         }
 
-        vm.deleteColumn = function (user) {
-            var index = vm.assignedUsers.indexOf(user);
-            vm.users.push(user);
-            vm.assignedUsers.splice(index, 1);
-        }
-        
-        vm.saveAssignedUsers = function (form) {
-            if (form.$valid) {
-                ProjectService.assignUsers(vm.project._id, vm.assignedUsers).then(function(response) {
-                    noty.showSuccess("Saved successfully!");
-                    $state.go('projects');
-                }, function(error) {
-                    if (error) {
-                        vm.alerts.push({ msg: error, type: 'danger' });
+        vm.editAssignUser = function (user) {
+            user.isNew = false;
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'projects/assignUserModel.html',
+                controller: 'Projects.AssignUserModel',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    user: function () {
+                        return user;
+                    },
+                    project: function () {
+                        return vm.project;
+                    },
+                    parentAlerts: function () {
+                        return vm.alerts;
                     }
-                });
-            } else {
-                vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
-            }
+                }
+            });
+
+            modalInstance.result.then(function (userObj) {
+                vm.getAllUsers();
+            }, function () {
+                vm.getAllUsers();
+            });
+        }
+
+        vm.deleteAssignedUser = function (user) {
+            ProjectService.unassignUser(vm.project._id, user.userId).then(function(response) {
+                noty.showSuccess("Unassigned successfully!");
+                $state.go('projects');
+            }, function(error) {
+                if (error) {
+                    vm.alerts.push({ msg: error, type: 'danger' });
+                }
+            });
         }
 
         init();
@@ -231,13 +251,77 @@
         }
     }
 
-    function AssignUserModel($uibModalInstance, user, project) {
+    function AssignUserModel($uibModalInstance, ProjectService, noty, user, project, parentAlerts) {
         var vm = this;
+        vm.enableSaveBtn = true;
+        vm.alerts = parentAlerts;
+        vm.resourceTypes = [
+            {"resourceTypeId":"shadow", "resourceTypeVal":"Shadow"},
+            {"resourceTypeId":"buffer", "resourceTypeVal":"Buffer"},
+            {"resourceTypeId":"billable", "resourceTypeVal":"Billable"}
+        ];
+        if(!vm.alerts){
+            vm.alerts = [];
+        }
         vm.user = user;
+        if(vm.user.startDate){
+            vm.user.startDate = new Date(vm.user.startDate);
+        }
+        if(vm.user.billDates){
+            _.each(vm.user.billDates, function (billDate) {
+                if(billDate.start){
+                    billDate.start = new Date(billDate.start);
+                }
+                if(billDate.end){
+                    billDate.end = new Date(billDate.end);
+                }
+            });
+        }
         vm.project = project;
+        var currentDay = new Date().getDay();
+        vm.open2 = function () {
+            vm.popup2.opened = true;
+        };
+        vm.popup2 = {
+            opened: false
+        };
+        vm.dateOptions = {
+            formatYear: 'yy',
+            maxDate: new Date(2020, 5, 22),
+            startingDay: 1
+        };
 
-        vm.ok = function () {
-            $uibModalInstance.close(vm.user);
+        vm.addBillDate = function () {
+            if(!vm.user.billDates){
+                vm.user.billDates = [];
+            }
+            vm.user.billDates.push({"start":"", "end":""});
+        }
+
+        vm.deleteBillDate = function (billDate, index) {
+            vm.user.billDates.splice(index, 1);
+        }
+
+        vm.ok = function (form) {
+            if (form.$valid) {
+                vm.enableSaveBtn = false;
+                var assignedUsers = [];
+                assignedUsers.push(vm.user);
+                ProjectService.assignUsers(vm.project._id, assignedUsers).then(function(response) {
+                    noty.showSuccess("Saved successfully!");
+                    vm.enableSaveBtn = true;
+                    $uibModalInstance.close(vm.user);
+                }, function(error) {
+                    if (error) {
+                        vm.alerts.push({ msg: error, type: 'danger' });
+                    }
+                    vm.enableSaveBtn = true;
+                    $uibModalInstance.close(vm.user);
+                });
+            } else {
+                vm.enableSaveBtn = true;
+                vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
+            }
         };
 
         vm.cancel = function () {

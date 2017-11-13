@@ -17,6 +17,8 @@ service.getProjectById = getProjectById;
 service.getAllProjects = getAllProjects;
 service.getAssignedUsers = getAssignedUsers;
 service.assignUsers = assignUsers;
+service.assignUser = assignUser;
+service.unassignUser = unassignUser;
 
 module.exports = service;
 
@@ -98,14 +100,24 @@ function getAllProjects(){
 
 function getAssignedUsers(projectId){
     var deferred = Q.defer();
-    db.users.find({"project.projectId": {"$in":[projectId]}}).toArray(function(err, users) {
+    db.users.find({"projects.projectId": {"$in":[projectId]}}).toArray(function(err, users) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (users) {
             var assignedUsers = [];
             _.each(users, function (user) {
+                var userProject = _.find(user.projects, {"projectId": projectId});
+                if(!userProject.isBillable){
+                    userProject.isBillable = false;
+                }
+                if(!userProject.billDates){
+                    userProject.billDates = [];
+                }
                 assignedUsers.push({
                     userId: user._id,
-                    userName: user.name
+                    userName: user.name,
+                    startDate: userProject.startDate,
+                    isBillable: userProject.isBillable,
+                    billDates: userProject.billDates
                 });
             });
             deferred.resolve(assignedUsers);
@@ -125,30 +137,101 @@ function assignUsers(projectId, users) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             if (userRoc) {
                 var rowData = {
-                    "project": []
+                    "projects": []
                 };
-                if(userRoc.project){
-                    rowData.project = userRoc.project;
+                if(userRoc.projects){
+                    rowData.projects = userRoc.projects;
                 }
-                var projectIndex = _.findIndex(rowData.project, {"projectId": projectId});
-                console.log(userIndex);
-                if(userIndex >=0 ){
-
+                var projectData = {
+                    "projectId": projectId,
+                    "startDate": user.startDate,
+                    "isBillable": user.isBillable,
+                    "billDates": user.billDates
+                }
+                var projectIndex = _.findIndex(rowData.projects, {"projectId": projectId});
+                if(projectIndex >=0 ){
+                    rowData.projects[projectIndex] = projectData;
                 }else{
-                    rowData.project.push({"projectId":projectId});
-                    db.users.update({ _id: mongo.helper.toObjectID(userRoc._id) }, { '$set': rowData },
-                        function(err, project) {
-                            if (err) deferred.reject(err.name + ': ' + err.message);
-                            deferred.resolve(project);
-                        });
+                    rowData.projects.push(projectData);
                 }
-
+                db.users.update({ _id: mongo.helper.toObjectID(userRoc._id) }, { '$set': rowData },
+                    function(err, project) {
+                        if (err) deferred.reject(err.name + ': ' + err.message);
+                        deferred.resolve(project);
+                    });
             } else {
                 deferred.reject("Please select valid id");
             }
         });
         deferred.resolve();
     });
+
+    return deferred.promise;
+}
+
+function assignUser(projectId, user) {
+    var deferred = Q.defer();
+
+    db.users.findById(user.userId, function(err, userRoc) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (userRoc) {
+            var rowData = {
+                "projects": []
+            };
+            if(userRoc.projects){
+                rowData.projects = userRoc.projects;
+            }
+            var projectData = {
+                "projectId": projectId,
+                "startDate": user.startDate,
+                "isBillable": user.isBillable,
+                "billDates": user.billDates
+            }
+            var projectIndex = _.findIndex(rowData.projects, {"projectId": projectId});
+            if(projectIndex >=0 ){
+                rowData.projects[projectIndex] = projectData;
+            }else{
+                rowData.projects.push(projectData);
+            }
+            db.users.update({ _id: mongo.helper.toObjectID(userRoc._id) }, { '$set': rowData },
+                function(err, project) {
+                    if (err) deferred.reject(err.name + ': ' + err.message);
+                    deferred.resolve(project);
+                });
+        } else {
+            deferred.reject("Please select valid id");
+        }
+    });
+    deferred.resolve();
+
+    return deferred.promise;
+}
+
+function unassignUser(projectId, userId) {
+    var deferred = Q.defer();
+    db.users.findById(userId, function(err, userRoc) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (userRoc) {
+            var rowData = {
+                "projects": []
+            };
+            if(userRoc.projects){
+                rowData.projects = userRoc.projects;
+            }
+            var projectIndex = _.findIndex(rowData.projects, {"projectId": projectId});
+            if(projectIndex >=0 ){
+                rowData.projects.splice(projectIndex, 1);
+            }
+            db.users.update({ _id: mongo.helper.toObjectID(userRoc._id) }, { '$set': rowData },
+                function(err, project) {
+                    if (err) deferred.reject(err.name + ': ' + err.message);
+                    deferred.resolve(project);
+                });
+        } else {
+            deferred.reject("Please select valid id");
+        }
+    });
+    deferred.resolve();
 
     return deferred.promise;
 }

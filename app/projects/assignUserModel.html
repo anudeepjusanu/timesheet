@@ -2,42 +2,128 @@
     <h3 class="modal-title" id="modal-title">Assign Project</h3>
 </div>
 <div class="modal-body" id="modal-body">
-
-        <div class="row">
-            <div class="col-md-2 image">
-                <img src="app-content/assets/user.jpg" class="img-circle group-item-img" style="height: 80px; margin-right: 20px;" alt="{{vm.user.userName}}">
-            </div>
-            <div class="col-md-10 info">
-                <form class="form-horizontal" name="vm.assignForm">
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">Name</label>
-                        <div class="col-md-10">
-                            {{vm.user.userName}}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">Project Name</label>
-                        <div class="col-md-10">
-                            {{vm.project.projectName}}
-                        </div>
-                    </div>
-                    <div class="form-group required">
-                        <label class="col-md-2 control-label" for="isBillable">Is Billable</label>
-                        <div class="col-md-10">
-                            <label class="switch">
-                                <input type="checkbox" id="isBillable" class="switch" ng-model="vm.user.isBillable" />
-                                <span></span>
-                            </label>
-                        </div>
-                    </div>
-
-
-                </form>
-            </div>
+    <div class="row">
+        <div class="col-md-2 image">
+            <img src="app-content/assets/user.jpg" class="img-circle group-item-img" style="height: 80px; margin-right: 20px;" alt="{{vm.user.userName}}">
         </div>
-
+        <div class="col-md-10 info">
+            <form class="form-horizontal" name="vm.assignForm">
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Name</label>
+                    <div class="col-md-10">
+                        {{vm.user.userName}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Project Name</label>
+                    <div class="col-md-10">
+                        {{vm.project.projectName}}
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label class="col-md-2 control-label" for="startDate">Start Date</label>
+                    <div class="col-md-10">
+                        <p class="input-group">
+                            <input type="text" id="startDate" class="form-control" uib-datepicker-popup ng-model="vm.user.startDate" is-open="vm.popup2.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="vm.open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <!--div class="form-group required">
+                    <label class="col-md-2 control-label" for="isBillable">Is Billable</label>
+                    <div class="col-md-10">
+                        <label class="switch">
+                            <input type="checkbox" id="isBillable" class="switch" ng-model="vm.user.isBillable" />
+                            <span></span>
+                        </label>
+                    </div>
+                </div-->
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Billable Dates</label>
+                    <div class="col-md-10">
+                        <button type="button" class="btn btn-xs btn-primary pull-right" ng-click="vm.addBillDate(vm.user)">Add</button>
+                        <!--hr/-->
+                        <table id="" class="table">
+                            <tr ng-if="vm.user.billDates.length > 0">
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Resource Type</th>
+                                <th></th>
+                            </tr>
+                            <tr ng-repeat="billDate in vm.user.billDates" class="">
+                                <td>
+                                    <p class="input-group">
+                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="billDate.start" is-open="billDate.startOpened" datepicker-options="vm.dateOptions" close-text="Close" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="billDate.startOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </p>
+                                </td>
+                                <td>
+                                    <p class="input-group">
+                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="billDate.end" is-open="billDate.endOpened" datepicker-options="vm.dateOptions" close-text="Close" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="billDate.endOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </p>
+                                </td>
+                                <td>
+                                    <select class="form-control" ng-model="billDate.resourceType" ng-options="resourceType.resourceTypeId as resourceType.resourceTypeVal for resourceType in vm.resourceTypes">
+                                    </select>
+                                </td>
+                                <td>
+                                    <a ng-click="vm.deleteBillDate(billDate, $index)"><span class="fa fa-times"></span></a>
+                                </td>
+                            </tr>
+                        </table>
+                        <!--div-- ng-repeat="billDate in vm.user.billDates" class="row" ng-show="vm.user.isBillable">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="col-md-4 col-xs-12 control-label">Start Date</label>
+                                    <div class="col-md-8 col-xs-12">
+                                        <p class="input-group">
+                                            <input type="text" class="form-control" uib-datepicker-popup ng-model="billDate.start" is-open="billDate.startOpened" datepicker-options="vm.dateOptions" close-text="Close" />
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="billDate.startOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="col-md-4 col-xs-12 control-label">End Date</label>
+                                    <div class="col-md-8 col-xs-12">
+                                        <p class="input-group">
+                                            <input type="text" class="form-control" uib-datepicker-popup ng-model="billDate.end" is-open="billDate.endOpened" datepicker-options="vm.dateOptions" close-text="Close" />
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="billDate.endOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="col-md-8 col-xs-12">
+                                        <select class="form-control" ng-model="billDate.resourceType" ng-options="resourceType.resourceTypeId as resourceType.resourceTypeVal for resourceType in vm.resourceTypes">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <a ng-click="vm.deleteBillDate(billDate, $index)"><span class="fa fa-times"></span></a>
+                            </div>
+                        </div-->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-click="vm.ok(vm.assignForm)">Save</button>
+    <button class="btn btn-primary" type="button" ng-disabled="!vm.enableSaveBtn" ng-click="vm.ok(vm.assignForm)">Save</button>
     <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
 </div>

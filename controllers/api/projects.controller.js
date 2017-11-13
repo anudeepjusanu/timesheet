@@ -11,6 +11,8 @@ router.put('/:_id', updateProject);
 router.delete('/:_id', deleteProject);
 router.get('/assignedUsers/:_id', getAssignedUsers);
 router.post('/assignedUsers/:_id', assignedUsers);
+router.post('/assignUser/:_id', addAssignUser);
+router.delete('/assignUser/:_id/:_userId', unassignUser);
 
 module.exports = router;
 
@@ -88,6 +90,26 @@ function getAssignedUsers(req, res) {
 
 function assignedUsers(req, res) {
     projectService.assignUsers(req.params._id, req.body)
+        .then(function (response) {
+            res.sendStatus(200);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+
+function addAssignUser(req, res) {
+    projectService.assignUser(req.params._id, req.body)
+        .then(function (response) {
+            res.sendStatus(200);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+
+function unassignUser(req, res) {
+    projectService.unassignUser(req.params._id, req.params._userId)
         .then(function (response) {
             res.sendStatus(200);
         })
