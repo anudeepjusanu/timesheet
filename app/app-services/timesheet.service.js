@@ -11,8 +11,8 @@
         service.createTimesheet = createTimesheet;
         service.updateTimesheet = updateTimesheet;
         service.getTimesheet = getTimesheet;
-        /*service.getReportByWeek = getReportByWeek;
-        service.Create = Create;
+        service.getReportByWeek = getReportByWeek;
+        /*service.Create = Create;
         service.Get = Get;
         service.Update = Update;
         service.remind = remind;
@@ -36,6 +36,10 @@
 
         function getTimesheet(id) {
             return $http.get('/api/timesheet/'+id).then(handleSuccess, handleError);
+        }
+
+        function getReportByWeek(week) {
+            return $http.get('/api/timesheet/week/' + week).then(handleSuccess, handleError);
         }
 
         /*function Create(report) {

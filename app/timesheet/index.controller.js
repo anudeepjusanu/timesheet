@@ -42,11 +42,12 @@
             };
         })
 
-    function Controller(UserService, TimesheetService, $filter, ReportService, _, $scope, FlashService, NgTableParams, noty) {
+    function Controller(UserService, TimesheetService, ProjectService, $filter, ReportService, _, $scope, FlashService, NgTableParams, noty) {
         var vm = this;
 
         vm.user = null;
         vm.timesheets = [];
+        vm.projects = [];
         vm.post = post;
         vm.remind = remind;
         vm.getAllReports = getAllReports;
@@ -205,18 +206,6 @@
             vm.alerts.splice(index, 1);
         };
 
-        vm.projects = [
-            { id: 'Care', title: 'Care' },
-            { id: 'Care Intl', title: 'Care Intl' },
-            { id: 'Tapclicks', title: 'Tapclicks' },
-            { id: 'SavingStar', title: 'SavingStar' },
-            { id: 'BlueSky', title: 'BlueSky' },
-            { id: 'Upromise', title: 'Upromise' },
-            { id: 'Coding Labs', title: 'Coding Labs' },
-            { id: 'Hariome', title: 'Hariome' },
-            { id: 'OT', title: 'OT' }
-        ];
-
         vm.tableParams = new NgTableParams({
             count: 100 // hides pager
         }, {
@@ -224,35 +213,42 @@
         });
 
         function getAllReports(week) {
-            vm.allReports = [];
-            var text = "";
+            var filterDate = "";
             if (week) {
-                text = $filter('date')(week, "yyyy-Www").toString();
+                filterDate = $filter('date')(week, "yyyy-Www").toString();
             } else {
-                text = currentDate;
+                filterDate = currentDate;
             }
-            vm.filterDate = text;
+            vm.filterDate = filterDate;
             UserService.GetAll().then(function(users) {
-                vm.users = users;
-                for (var i = 0, len = vm.users.length; i < len; i++) {
-                    vm.users[i].userId = vm.users[i]._id;
-                }
-                ReportService.getReportByWeek(text).then(function(reports) {
-                    var result = _(vm.users)
-                        .differenceBy(reports, 'userId')
-                        .map(_.partial(_.pick, _, 'userId', 'name'))
-                        .value();
-                    for (var i = 0, len = result.length; i < len; i++) {
-                        result[i].project = "";
-                        result[i].hours = "";
-                        result[i].remind = true;
-                    }
-                    vm.allReports = reports.concat(result);
-                    vm.tableParams.settings({
-                        dataset: vm.allReports
+                vm.users = [];
+                _.each(users, function (userObj) {
+                    vm.users.push({
+                        userId: userObj._id,
+                        userName: userObj.name,
+                        week: "",
+                        weekDate: "",
+                        projects: [],
+                        totalHours: "",
+                        remind: true
                     });
                 });
-            })
+                vm.users = _.sortBy(vm.users, ['userName']);
+                TimesheetService.getReportByWeek(filterDate).then(function(timesheets) {
+                    _.each(timesheets, function (timesheet) {
+                        var userObj = _.find(vm.users, {userId: timesheet.userId});
+                        if(userObj){
+                            userObj.week = timesheet.week;
+                            userObj.weekDate = timesheet.weekDate;
+                            userObj.projects = timesheet.projects;
+                            userObj.totalHours = timesheet.totalHours;
+                        }
+                    });
+                    vm.tableParams.settings({
+                        dataset: vm.users
+                    });
+                });
+            });
         };
 
         function weekNumbersRangeInMonth(month, year) {
@@ -323,6 +319,14 @@
                 vm.timesheets = timesheets;
             });
         }
+        
+        function getProjects() {
+            ProjectService.getAll().then(function(projects) {
+                _.each(projects, function (project) {
+                    vm.projects.push({id: project._id, title:project.projectName});
+                });
+            });
+        }
 
         initController();
         function initController() {
@@ -334,6 +338,7 @@
                 } else {
                     getMyTimesheets();
                 }
+                getProjects();
             });
         }
     }

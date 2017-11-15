@@ -98,7 +98,7 @@ function getByWeek(week) {
 
 function getByMonth(weekArr) {
     var deferred = Q.defer();
-    db.timesheet.find({ "week": {"$in": weekArr} }).toArray(function(err, doc) {
+    db.timesheets.find({ "week": {"$in": weekArr} }).toArray(function(err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (doc) {
             deferred.resolve(doc);
@@ -125,7 +125,7 @@ function getMine(userId) {
 function adminUpdate(id, params) {
     var deferred = Q.defer();
 
-    db.timesheet.findById(id, function(err, sheet) {
+    db.timesheets.findById(id, function(err, sheet) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (sheet) {
             updateSheet();
