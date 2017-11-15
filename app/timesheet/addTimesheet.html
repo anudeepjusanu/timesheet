@@ -3,8 +3,8 @@
     <ul class="breadcrumb">
         <li><a ui-sref="timesheet"><i class="fa fa-dashboard"></i> Timesheet</a></li>
         <li class="active">
-            <span ng-if="isNew">Add Hours</span>
-            <span ng-if="!isNew">Edit Hours</span>
+            <span ng-if="vm.isNew">Add Hours</span>
+            <span ng-if="!vm.isNew">Edit Hours</span>
         </li>
     </ul>
     <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
@@ -13,68 +13,47 @@
             <div class="col-md-12">
                 <div class="well well-sm">
                     <form class="form-horizontal" name="timesheetForm">
-                        <div class="form-group required">
-                            <label class="col-md-2 control-label">Week</label>
-                            <div class="col-md-4">
-                                <p class="input-group">
-                                    <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.timesheet.weekDate" is-open="vm.timesheetDateOpened" datepicker-options="vm.dateOptions" readonly ng-required="true" close-text="Close" />
-                                    <span class="input-group-btn">
+                        <div class="row">
+                            <div class="col-md-8"></div>
+                            <div class="form-group required col-md-4">
+                                <label class="col-md-2 control-label">Week</label>
+                                <div class="col-md-8">
+                                    <p class="input-group">
+                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.timesheet.weekDate" is-open="vm.timesheetDateOpened" datepicker-options="vm.dateOptions" readonly ng-required="true" close-text="Close" />
+                                        <span class="input-group-btn">
                                         <button type="button" class="btn btn-default" ng-click="vm.timesheetDateOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
                                     </span>
-                                </p>
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group required">
-                            <div class="col-md-10 col-md-offset-2">
-                                <div class="row">
-                                    <div class="col-md-4"><h4>Project</h4></div>
-                                    <div class="col-md-2"><h4>Hours</h4></div>
-                                    <div class="col-md-5"><h4>Comments</h4></div>
-                                    <div class="col-md-1"> <!--button class="btn btn-primary">Add</button--> </div>
-                                </div>
-                                <div class="row" ng-repeat="project in vm.timesheet.projects">
-                                    <div class="col-md-4">{{project.projectName}}</div>
-                                    <div class="col-md-2"><input type="number" min="0" max="70" placeholder="Your Hours" class="form-control" ng-model="project.projectHours" ng-change="vm.calTotalHours();" ng-required="true"/></div>
-                                    <div class="col-md-5"><textarea class="form-control" placeholder="Please enter your comment" rows="2" ng-model="project.projectComment"></textarea></div>
-                                    <div class="col-md-1"> </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4"><h4>Total Hours :</h4></div>
-                                    <div class="col-md-2"><h4>{{vm.timesheet.totalHours}}</h4></div>
-                                    <div class="col-md-6"></div>
-                                </div>
-                                <!--table class="table">
-                                    <tr>
-                                        <th>Project</th>
-                                        <th>Hours</th>
-                                        <th>Comments</th>
-                                        <th><button class="btn btn-primary">Add</button></th>
-                                    </tr>
-                                    <tr ng-repeat="project in vm.timesheet.projects">
-                                        <td>
-                                            <span ng-if="project.isAssigned">{{project.projectName}}</span>
-                                            <select ng-if="project.isAssigned!==true" class="form-control" ng-model="project.projectId" ng-options="project.projectId as project.projectName for project in vm.user.projects"></select>
-                                        </td>
-                                        <td>
-                                            <input type="number" min="0" max="70" placeholder="Your Hours" class="form-control" ng-model="project.projectHours" ng-required="true"/>
-                                        </td>
-                                        <td>
-                                            <textarea class="form-control" placeholder="Please enter your comment" rows="2" ng-model="project.projectComment"></textarea>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>Total Hours :</th>
-                                        <th>{{vm.userTotalHours}}</th>
-                                        <th></th>
-                                    </tr>
-                                </table-->
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-12 text-center">
-                                <button type="button" class="btn btn-primary btn-lg" ng-click="vm.saveTimesheet(timesheetForm);">Submit</button>
-                            </div>
-                        </div>
+                        <table class="table">
+                            <tr>
+                                <th>Project</th>
+                                <th>Hours</th>
+                                <th>Comments</th>
+                                <!-- <th>
+                                    <button class="btn btn-primary">Add</button>
+                                </th> -->
+                            </tr>
+                            <tr ng-repeat="project in vm.timesheet.projects">
+                                <td>
+                                    <span ng-if="project.isAssigned">{{project.projectName}}</span>
+                                    <select ng-if="project.isAssigned!==true" class="form-control" ng-model="project.projectId" ng-options="project.projectId as project.projectName for project in vm.user.projects"></select>
+                                </td>
+                                <td>
+                                    <input type="number" min="0" max="70" placeholder="Your Hours" class="form-control" ng-model="project.projectHours" ng-required="true" ng-change="vm.calTotalHours();" />
+                                </td>
+                                <td>
+                                    <textarea class="form-control" placeholder="Please enter your comment" rows="2" ng-model="project.projectComment"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Total Hours :</th>
+                                <th>{{vm.timesheet.totalHours}}</th>
+                                <th style="text-align: right;"><button type="button" class="btn btn-primary btn-lg" ng-click="vm.saveTimesheet(timesheetForm);">Submit</button></th>
+                            </tr>
+                        </table>
                     </form>
                 </div>
             </div>
