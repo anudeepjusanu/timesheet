@@ -320,7 +320,6 @@
 
         function getMyTimesheets() {
             TimesheetService.getMine().then(function(timesheets) {
-                console.log(timesheets);
                 vm.timesheets = timesheets;
             });
         }

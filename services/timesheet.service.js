@@ -85,7 +85,7 @@ function getTimesheet(id){
 
 function getByWeek(week) {
     var deferred = Q.defer();
-    db.timesheet.find({ week: week }).toArray(function(err, doc) {
+    db.timesheets.find({ week: week }).toArray(function(err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (doc) {
             deferred.resolve(doc);
