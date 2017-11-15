@@ -7,6 +7,7 @@
         .controller('Projects.AddProjectController', AddProjectController)
         .controller('Projects.AssignUsersController', AssignUsersController)
         .controller('Projects.AssignUserModel', AssignUserModel)
+        .controller('Projects.ClientModel', ClientModel)
 
     function Controller(UserService, ProjectService, $filter, _, FlashService, NgTableParams, noty) {
         var vm = this;
@@ -43,9 +44,10 @@
         }
     }
 
-    function AddProjectController($state, UserService, ProjectService, $stateParams, $filter, _, FlashService, noty) {
+    function AddProjectController($state, UserService, ProjectService, $stateParams, $filter, _, FlashService, noty, $uibModal) {
         var vm = this;
         vm.user = {};
+        vm.clients = [];
         var currentDay = new Date().getDay();
         vm.open2 = function () {
             vm.popup2.opened = true;
@@ -65,6 +67,16 @@
         vm.obj = {};
         vm.isNew = true;
         
+        vm.getClients = function () {
+            ProjectService.getClients().then(function(response) {
+                vm.clients = response;
+            }, function(error) {
+                if (error) {
+                    vm.alerts.push({ msg: error, type: 'danger' });
+                }
+            });
+        }
+
         vm.getProject = function (projectId) {
             ProjectService.getById(projectId).then(function(response) {
                 vm.obj = response;
@@ -78,6 +90,10 @@
 
         vm.saveProject = function(form) {
             if (form.$valid) {
+                var clientObj = _.find(vm.clients, {_id: vm.obj.clientId});
+                if(clientObj){
+                    vm.obj.clientName = clientObj.clientName;
+                }
                 if (vm.isNew) {
                     ProjectService.create(vm.obj).then(function(response) {
                         noty.showSuccess("New Project has been added successfully!");
@@ -102,6 +118,36 @@
             }
         }
 
+        vm.viewClientModel = function (clientObj) {
+            var client = {};
+            if(clientObj){
+                client = clientObj;
+                client.isNew = false;
+            }else{
+                client.isNew = true;
+            }
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'projects/addClientModel.html',
+                controller: 'Projects.ClientModel',
+                controllerAs: 'vm',
+                size: 'md',
+                resolve: {
+                    client: function () {
+                        return client;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (clientObj) {
+                vm.getClients();
+            }, function () {
+                vm.getClients();
+            });
+        }
+
         initController();
         function initController() {
             UserService.GetCurrent().then(function(user) {
@@ -113,6 +159,7 @@
             } else {
                 vm.isNew = true;
             }
+            vm.getClients();
         }
     }
     
@@ -317,6 +364,37 @@
                     }
                     vm.enableSaveBtn = true;
                     $uibModalInstance.close(vm.user);
+                });
+            } else {
+                vm.enableSaveBtn = true;
+                vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
+            }
+        };
+
+        vm.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+    };
+
+    function ClientModel($uibModalInstance, ProjectService, noty, client) {
+        var vm = this;
+        vm.enableSaveBtn = true;
+        vm.alerts = [];
+        vm.client = client;
+
+        vm.ok = function (form) {
+            if (form.$valid) {
+                vm.enableSaveBtn = false;
+                ProjectService.createClient(vm.client).then(function(response) {
+                    noty.showSuccess("New Client Created successfully!");
+                    vm.enableSaveBtn = true;
+                    $uibModalInstance.close(vm.client);
+                }, function(error) {
+                    if (error) {
+                        vm.alerts.push({ msg: error, type: 'danger' });
+                    }
+                    vm.enableSaveBtn = true;
+                    $uibModalInstance.close(vm.client);
                 });
             } else {
                 vm.enableSaveBtn = true;

@@ -2,7 +2,7 @@
     {{alert.msg}}</div>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <div class="" ng-if="!vm.user.admin">
+    <div class="" ng-if="vm.user.admin">
         <!-- START DEFAULT TABLE EXPORT -->
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -82,24 +82,34 @@
             </div>
         </div>
     </div>
-    <div ng-if="vm.user.admin">
+    <div ng-if="!vm.user.admin">
         <br>
         <a class="btn btn-primary" ui-sref="addTimesheet">Add Hours</a>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <tr>
-                    <th>Project</th>
                     <th>Week</th>
-                    <th>Hours</th>
-                    <th>Comments</th>
+                    <th>
+                        <div class="row">
+                            <div class="col-md-4">Project</div>
+                            <div class="col-md-4">Hours</div>
+                            <div class="col-md-4">Comment</div>
+                        </div>
+                    </th>
+                    <th>Total Hours</th>
                     <th>Action</th>
                 </tr>
-                <tr ng-repeat="report in vm.myReports | orderBy: cDate">
-                    <td>{{report.project}}</td>
-                    <td>{{report.cDate | date: 'mediumDate'}}</td>
-                    <td>{{report.hours}}</td>
-                    <td>{{report.comments}}</td>
-                    <td><a class="btn btn-primary btn-xs" ui-sref="editTimesheet({id: report._id})">Update</a></td>
+                <tr ng-repeat="sheet in vm.timesheets | orderBy: weekDate">
+                    <td>{{sheet.weekDate | date: 'mediumDate'}}</td>
+                    <td>
+                        <div class="row" ng-repeat="project in sheet.projects">
+                            <div class="col-md-4">{{project.projectName}}</div>
+                            <div class="col-md-4">{{project.projectHours}}</div>
+                            <div class="col-md-4">{{project.projectComment}}</div>
+                        </div>
+                    </td>
+                    <th>{{sheet.totalHours}}</th>
+                    <td><a class="btn btn-primary btn-xs" ui-sref="editTimesheet({id: sheet._id})">Update</a></td>
                 </tr>
             </table>
         </div>

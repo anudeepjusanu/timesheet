@@ -5,13 +5,13 @@ var bcrypt = require('bcryptjs');
 var Q = require('q');
 var mongo = require('mongoskin');
 var db = mongo.db(config.connectionString, { native_parser: true });
-db.bind('timesheet');
+db.bind('timesheets');
 
 var service = {};
 
-service.create = create;
-service.update = update;
-service.getSheet = getSheet;
+service.createTimesheet = createTimesheet;
+service.updateTimesheet = updateTimesheet;
+service.getTimesheet = getTimesheet;
 service.getByWeek = getByWeek;
 service.getByMonth = getByMonth;
 service.getMine = getMine;
@@ -19,78 +19,60 @@ service.adminUpdate = adminUpdate;
 
 module.exports = service;
 
-function create(user, userParam) {
+function createTimesheet(user, userParam) {
     var deferred = Q.defer();
 
-    db.timesheet.findOne({ userId: user._id, week: userParam.week, project:  userParam.project}, function(err, doc) {
+    db.timesheets.findOne({ userId: user._id, week: userParam.week}, function(err, sheet) {
         if (err) deferred.reject(err.name + ': ' + err.message);
-        if (!doc) {
-            postHours();
+        if (!sheet) {
+            var sheetObj = {
+                userId: user._id,
+                week: userParam.week,
+                weekDate: userParam.weekDate,
+                totalHours: userParam.totalHours,
+                projects: userParam.projects
+            }
+            db.timesheets.insert(sheetObj, function(err, sheet) {
+                if (err) deferred.reject(err.name + ': ' + err.message);
+                deferred.resolve(sheet);
+            });
         } else {
             deferred.reject("You have already posted for current week");
         }
     });
 
-    function postHours() {
-        var weeklyHour = {
-            userId: user._id,
-            name: user.name,
-            hours: userParam.hours,
-            cDate: userParam.cDate,
-            week: userParam.week,
-            postedOn: new Date(),
-            project: userParam.project,
-            comments: userParam.comments,
-        }
-
-        db.timesheet.insert(
-            weeklyHour,
-            function(err, doc) {
-                if (err) deferred.reject(err.name + ': ' + err.message);
-                deferred.resolve(doc.ops[0]);
-            });
-    }
-
-
     return deferred.promise;
 }
 
-function update(userId, id, params) {
+function updateTimesheet(userId, id, userParam) {
     var deferred = Q.defer();
 
-    db.timesheet.findById(id, function(err, sheet) {
+    db.timesheets.findById(id, function(err, sheet) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (sheet.userId == userId) {
-            updateSheet();
+            var sheetObj = {
+                userId: mongo.helper.toObjectID(userId),
+                week: userParam.week,
+                weekDate: userParam.weekDate,
+                totalHours: userParam.totalHours,
+                projects: userParam.projects
+            }
+            db.timesheets.update({ _id: mongo.helper.toObjectID(id) }, { $set: sheetObj },
+                function(err, sheet) {
+                    if (err) deferred.reject(err.name + ': ' + err.message);
+                    deferred.resolve(sheet);
+                });
         } else {
             deferred.reject("You are not authorized");
         }
     });
 
-    function updateSheet() {
-        // fields to update
-        var set = {
-            hours: params.hours,
-            week: params.week,
-            cDate: params.cDate,
-            postedOn: new Date(),
-            project: params.project,
-            comments: params.comments,
-        };
-
-        db.timesheet.update({ _id: mongo.helper.toObjectID(id) }, { $set: set },
-            function(err, doc) {
-                if (err) deferred.reject(err.name + ': ' + err.message);
-                deferred.resolve(doc);
-            });
-    }
-
     return deferred.promise;
 }
 
-function getSheet(id){
+function getTimesheet(id){
     var deferred = Q.defer();
-    db.timesheet.findById(id, function(err, doc) {
+    db.timesheets.findById(id, function(err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (doc) {
             deferred.resolve(doc);
@@ -129,7 +111,7 @@ function getByMonth(weekArr) {
 
 function getMine(userId) {
     var deferred = Q.defer();
-    db.timesheet.find({ userId: mongo.helper.toObjectID(userId) }).toArray(function(err, doc) {
+    db.timesheets.find({ userId: mongo.helper.toObjectID(userId) }).toArray(function(err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (doc) {
             deferred.resolve(doc);

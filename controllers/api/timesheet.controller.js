@@ -11,9 +11,9 @@ var connector = new builder.ChatConnector({
 var bot = new builder.UniversalBot(connector);
 
 // routes
-router.post('/', create);
-router.put('/:id', update);
-router.get('/:id', getTimeSheet);
+router.post('/', createTimesheet);
+router.put('/:id', updateTimesheet);
+router.get('/:id', getTimesheet);
 router.get('/week/mine', getMyReport);
 router.get('/week/:weekId', getReportbyWeek);
 router.get('/remind/:id/:week', remind);
@@ -23,11 +23,16 @@ router.post('/month/report', getReportbyMonth);
 
 module.exports = router;
 
-function create(req, res) {
+function createTimesheet(req, res) {
     userService.getById(req.user.sub)
         .then(function(user) {
             if (user) {
-                createTimeSheet(user);
+                timesheetService.createTimesheet(user, req.body)
+                    .then(function() {
+                        res.sendStatus(200);
+                    }).catch(function(err) {
+                        res.status(400).send(err);
+                    });
             } else {
                 res.sendStatus(404);
             }
@@ -35,8 +40,7 @@ function create(req, res) {
         .catch(function(err) {
             res.status(400).send(err);
         });
-
-    function createTimeSheet(user) {
+    /*function createTimeSheet(user) {
         timesheetService.create(user, req.body)
             .then(function() {
                 res.sendStatus(200);
@@ -44,12 +48,12 @@ function create(req, res) {
             .catch(function(err) {
                 res.status(400).send(err);
             });
-    }
+    }*/
 }
 
-function update(req, res){
+function updateTimesheet(req, res){
     var userId = req.user.sub;
-    timesheetService.update(userId, req.params.id, req.body)
+    timesheetService.updateTimesheet(userId, req.params.id, req.body)
         .then(function () {
             res.sendStatus(200);
         })
@@ -58,8 +62,8 @@ function update(req, res){
         });
 }
 
-function getTimeSheet(req, res){
-    timesheetService.getSheet(req.params.id)
+function getTimesheet(req, res){
+    timesheetService.getTimesheet(req.params.id)
         .then(function (response) {
             res.send(response);
         })

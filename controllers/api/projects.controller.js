@@ -5,6 +5,7 @@ var projectService = require('services/project.service');
 
 // routes
 router.get('/all', getAllProjects);
+router.get('/clients', getClients);
 router.get('/:_id', getProjectById);
 router.post('/', addProject);
 router.put('/:_id', updateProject);
@@ -13,6 +14,10 @@ router.get('/assignedUsers/:_id', getAssignedUsers);
 router.post('/assignedUsers/:_id', assignedUsers);
 router.post('/assignUser/:_id', addAssignUser);
 router.delete('/assignUser/:_id/:_userId', unassignUser);
+router.get('/client/:_id', getClientById);
+router.post('/client/', addClient);
+router.put('/client/:_id', updateClient);
+router.delete('/client/:_id', deleteClient);
 
 module.exports = router;
 
@@ -117,3 +122,62 @@ function unassignUser(req, res) {
             res.status(400).send(err);
         });
 }
+
+function getClients(req, res) {
+    projectService.getClients()
+        .then(function (clients) {
+            if (clients) {
+                res.send(clients);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+
+function getClientById(req, res) {
+    projectService.getClientById(req.params._id)
+        .then(function (client) {
+            if (client) {
+                res.send(client);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+
+function addClient(req, res) {
+    projectService.createClient(req.body)
+        .then(function (response) {
+            res.sendStatus(200).send(response);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+
+function updateClient(req, res) {
+    projectService.updateClient(req.params._id, req.body)
+        .then(function (response) {
+            res.sendStatus(200);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+
+function deleteClient(req, res) {
+    projectService.deleteClient(req.params._id)
+        .then(function (response) {
+            res.sendStatus(200);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+

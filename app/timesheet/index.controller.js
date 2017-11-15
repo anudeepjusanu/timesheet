@@ -42,10 +42,11 @@
             };
         })
 
-    function Controller(UserService, $filter, ReportService, _, $scope, FlashService, NgTableParams, noty) {
+    function Controller(UserService, TimesheetService, $filter, ReportService, _, $scope, FlashService, NgTableParams, noty) {
         var vm = this;
 
         vm.user = null;
+        vm.timesheets = [];
         vm.post = post;
         vm.remind = remind;
         vm.getAllReports = getAllReports;
@@ -317,122 +318,92 @@
             });
         }
 
-        function getMyReport() {
-            ReportService.GetMine().then(function(reports) {
-                vm.myReports = reports;
+        function getMyTimesheets() {
+            TimesheetService.getMine().then(function(timesheets) {
+                console.log(timesheets);
+                vm.timesheets = timesheets;
             });
         }
 
         initController();
-
         function initController() {
             // get current user
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
-                if (!vm.user.admin) {
+                if (vm.user.admin) {
                     getAllReports();
                 } else {
-                    getMyReport();
+                    getMyTimesheets();
                 }
             });
         }
     }
 
-    function TimesheetController(UserService, $filter, ReportService, $state, $stateParams, noty) {
+    function TimesheetController(UserService, TimesheetService, $filter, ReportService, $state, $stateParams, noty) {
         var vm = this;
         var currentDay = new Date().getDay();
-        vm.closeAlert = closeAlert;
-        vm.obj = {
-            week: new Date()
+        vm.timesheet = {
+            weekDate: new Date(),
+            projects: [],
+            totalHours: 0
         };
         switch (currentDay) {
             case 0:
-                vm.obj.week.setDate(vm.obj.week.getDate() + 5);
+                vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() + 5);
             case 1:
-                vm.obj.week.setDate(vm.obj.week.getDate() + 4);
+                vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() + 4);
                 break;
             case 2:
-                vm.obj.week.setDate(vm.obj.week.getDate() + 3);
+                vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() + 3);
                 break;
             case 3:
-                vm.obj.week.setDate(vm.obj.week.getDate() + 2);
+                vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() + 2);
                 break;
             case 4:
-                vm.obj.week.setDate(vm.obj.week.getDate() + 1);
+                vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() + 1);
                 break;
             case 6:
-                vm.obj.week.setDate(vm.obj.week.getDate() - 1);
+                vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() - 1);
                 break;
             case 7:
-                vm.obj.week.setDate(vm.obj.week.getDate() - 2);
+                vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() - 2);
                 break;
         }
-
-        vm.post = post;
-        vm.open2 = open2;
+        vm.timesheetDateOpened = false;
         vm.dateOptions = {
-            dateDisabled: disabled,
+            dateDisabled: function(data) {
+                var date = data.date,
+                    mode = data.mode;
+                return mode === 'day' && (date.getDay() != 5);
+            },
             formatYear: 'yy',
             maxDate: new Date(2020, 5, 22),
             startingDay: 1
         };
 
-        function disabled(data) {
-            var date = data.date,
-                mode = data.mode;
-            return mode === 'day' && (date.getDay() != 5);
-        }
-
-        function open2(project) {
-            project.opened = true;
-        };
-        vm.projectsArr = ['Care', 'Care Intl', 'Tapclicks', 'SavingStar', 'BlueSky', 'Upromise', 'Coding Labs', 'Hariome'];
-        vm.itemArray = [
-            { id: 1, name: 'Care' },
-            { id: 2, name: 'Care Intl' },
-            { id: 3, name: 'Tapclicks' },
-            { id: 4, name: 'SavingStar' },
-            { id: 5, name: 'BlueSky' },
-            { id: 6, name: 'Upromise' },
-            { id: 7, name: 'Coding Labs' },
-            { id: 8, name: 'Hariome' },
-            { id: 9, name: 'OT' }
-        ];
-
         vm.alerts = [];
-
-        function closeAlert(index) {
+        vm.closeAlert = function(index) {
             vm.alerts.splice(index, 1);
         };
+       vm.calTotalHours = function () {
+           vm.timesheet.totalHours = 0;
+           _.each(vm.timesheet.projects, function (project) {
+               vm.timesheet.totalHours += project.projectHours;
+           });
+       }
 
-        function getSheet(id) {
-            ReportService.Get(id).then(function(response) {
-                if (response.project) {
-                    for (var i = 0, len = vm.itemArray.length; i < len; i++) {
-                        if (response.project == vm.itemArray[i].name) {
-                            vm.obj.project = vm.itemArray[i];
-                        }
-                    }
-                }
-                vm.obj.hours = response.hours;
-                vm.obj.comments = response.comments;
-                vm.obj.week = new Date(response.cDate);
+        function getTimesheet(id) {
+            TimesheetService.getTimesheet(id).then(function(response) {
+                vm.timesheet = response;
+                vm.timesheet.weekDate = new Date(vm.timesheet.weekDate);
             });
         }
-
-        function post(project) {
-            if (project.addForm.$valid) {
-                var obj = {
-                    "week": $filter('date')(project.week, "yyyy-Www").toString(),
-                    "hours": project.hours,
-                    "comments": project.comments,
-                    "cDate": project.week,
-                    "project": project.projectName,
-                    "client": project.clientName
-                }
-                if (vm.isNew) {
-
-                    ReportService.Create(obj).then(function(response) {
+        
+        vm.saveTimesheet = function (timesheetForm) {
+            if(timesheetForm.$valid){
+                vm.timesheet.week = $filter('date')(vm.timesheet.weekDate, "yyyy-Www").toString();
+                if(vm.isNew){
+                    TimesheetService.createTimesheet(vm.timesheet).then(function(response) {
                         noty.showSuccess("Thank you for the update!");
                         $state.go('timesheet');
                     }, function(error) {
@@ -440,9 +411,9 @@
                             vm.alerts.push({ msg: error, type: 'danger' });
                         }
                     });
-                } else {
-                    ReportService.Update($stateParams.id, obj).then(function(response) {
-                        noty.showSuccess("Updated Successfully!");
+                }else{
+                    TimesheetService.updateTimesheet(vm.timesheet._id, vm.timesheet).then(function(response) {
+                        noty.showSuccess("Thank you for the update!");
                         $state.go('timesheet');
                     }, function(error) {
                         if (error) {
@@ -450,27 +421,35 @@
                         }
                     });
                 }
-            } else {
-                vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
+
             }
         }
 
-        initController();
+        function setAssignedProjects() {
+            _.each(vm.user.projects, function (project) {
+                vm.timesheet.projects.push({
+                    projectId: project.projectId,
+                    projectName: project.projectName,
+                    projectHours: 0,
+                    projectComment: "",
+                    isAssigned: true
+                });
+            });
+        }
 
+        initController();
         function initController() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
-                console.log(vm.user);
+                setAssignedProjects();
                 if ($stateParams.id) {
                     vm.isNew = false;
-                    getSheet($stateParams.id);
+                    getTimesheet($stateParams.id);
                 } else {
                     vm.isNew = true;
                 }
             });
-
         }
-
     }
 
 })();

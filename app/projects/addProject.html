@@ -16,7 +16,12 @@
                             <div class="form-group required">
                                 <label class="col-md-3 control-label" for="clientName">Customer Name</label>
                                 <div class="col-md-9">
-                                    <input id="clientName" name="clientName" type="text" min="0" max="70" placeholder="Customer Name" class="form-control" ng-model="vm.obj.clientName" ng-required="true">
+                                    <p class="input-group">
+                                        <select id="clientName" class="form-control" ng-model="vm.obj.clientId" ng-options="client._id as client.clientName for client in vm.clients" ng-required="true"></select>
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="vm.viewClientModel();">Add New</button>
+                                        </span>
+                                    </p>
                                 </div>
                             </div>
                             <div class="form-group required">

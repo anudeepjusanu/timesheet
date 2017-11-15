@@ -1,0 +1,23 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">
+        <span ng-if="vm.client.isNew">Add Client</span>
+        <span ng-if="vm.client.isNew===false">Edit Client</span>
+    </h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
+    <div class="row">
+        <form class="form-horizontal" name="vm.clientForm">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Client Name</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" ng-model="vm.client.clientName" ng-required="true" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-disabled="!vm.enableSaveBtn" ng-click="vm.ok(vm.clientForm)">Save</button>
+    <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
+</div>

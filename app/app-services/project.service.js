@@ -17,6 +17,10 @@
         service.assignUsers = assignUsers;
         service.assignUser = assignUser;
         service.unassignUser = unassignUser;
+        service.getClients = getClients;
+        service.createClient = createClient;
+        service.updateClient = updateClient;
+        service.deleteClient = deleteClient;
 
         return service;
 
@@ -54,6 +58,22 @@
 
         function unassignUser(_id, userId) {
             return $http.delete('/api/projects/assignUser/' + _id + '/' + userId).then(handleSuccess, handleError);
+        }
+
+        function getClients() {
+            return $http.get('/api/projects/clients').then(handleSuccess, handleError);
+        }
+
+        function createClient(client) {
+            return $http.post('/api/projects/client', client).then(handleSuccess, handleError);
+        }
+
+        function updateClient(client) {
+            return $http.put('/api/projects/client/' + client._id, client).then(handleSuccess, handleError);
+        }
+
+        function deleteClient(_id) {
+            return $http.delete('/api/projects/client/' + _id).then(handleSuccess, handleError);
         }
 
         // private functions
