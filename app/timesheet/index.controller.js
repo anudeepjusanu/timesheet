@@ -42,7 +42,7 @@
             };
         })
 
-    function Controller(UserService, TimesheetService, ProjectService, $filter, ReportService, _, $scope, FlashService, NgTableParams, noty) {
+    function Controller(UserService, TimesheetService, ProjectService, $filter, _, $scope, FlashService, NgTableParams, noty) {
         var vm = this;
 
         vm.user = null;
@@ -131,13 +131,13 @@
 
         function remind(userId) {
             var week = $filter('date')(vm.currentWeek, "Www");
-            ReportService.remind(userId, week).then(function(response) {
+            TimesheetService.remind(userId, week).then(function(response) {
                 noty.showSuccess("User Reminded!")
             });
         }
 
         function remindAll() {
-            ReportService.remindAll().then(function(response) {
+            TimesheetService.remindAll().then(function(response) {
                 noty.showSuccess("Users Reminded!")
             });
         }
@@ -281,7 +281,7 @@
             };
             vm.monthColumns = vm.monthColumns.concat(weeks);
 
-            ReportService.getReportByMonth(obj).then(function(reports) {
+            TimesheetService.getReportByMonth(obj).then(function(reports) {
                 for (var i = 0, len = vm.users.length; i < len; i++) {
                     vm.users[i].userId = vm.users[i]._id;
                 }
@@ -343,7 +343,7 @@
         }
     }
 
-    function TimesheetController(UserService, TimesheetService, $filter, ReportService, $state, $stateParams, noty) {
+    function TimesheetController(UserService, TimesheetService, $filter, $state, $stateParams, noty) {
         var vm = this;
         var currentDay = new Date().getDay();
         vm.timesheet = {

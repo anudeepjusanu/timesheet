@@ -1,11 +1,14 @@
 ﻿var config = require('config.json');
 var express = require('express');
+var _ = require('lodash');
 var router = express.Router();
 var projectService = require('services/project.service');
+var userService = require('services/user.service');
 
 // routes
 router.get('/all', getAllProjects);
 router.get('/clients', getClients);
+router.get('/projectsWithUserCount', getProjectsWithUserCount);
 router.get('/:_id', getProjectById);
 router.post('/', addProject);
 router.put('/:_id', updateProject);
@@ -179,5 +182,40 @@ function deleteClient(req, res) {
         .catch(function (err) {
             res.status(400).send(err);
         });
+}
+
+function getProjectsWithUserCount(req, res) {
+    projectService.getAllProjects().then(function (projectData) {
+        if (projectData) {
+            var projects = [];
+            _.each(projectData, function (projectObj) {
+                projects.push({
+                    projectId: projectObj._id+"",
+                    projectName: projectObj.projectName,
+                    clientName: projectObj.clientName,
+                    userCount: 0
+                });
+            });
+            userService.getAll().then(function (users) {
+                if(users){
+                    _.each(users, function (userObj) {
+                        _.each(userObj.projects, function (assignPrj) {
+                            var projectObj = _.find(projects, {projectId: assignPrj.projectId});
+                            if(projectObj){
+                                projectObj.userCount++;
+                            }
+                        });
+                    });
+                }
+                res.send(projects);
+            }).catch(function (err) {
+                res.status(400).send(err);
+            });
+        } else {
+            res.sendStatus(404);
+        }
+    }).catch(function (err) {
+        res.status(400).send(err);
+    });
 }
 

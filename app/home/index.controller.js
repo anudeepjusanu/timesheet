@@ -9,13 +9,12 @@
         .controller('Home.AdminController', AdminController)
         .controller('Home.UserInfoController', UserInfoController)
 
-    function Controller(UserService, ReportService, $filter, _, $interval) {
+    function Controller(UserService, TimesheetService, ProjectService, $filter, _, $interval) {
         var vm = this;
         var currentDate;
         vm.users = null;
         vm.totalHours = null;
         vm.myHours = null;
-
 
         var currentDay = new Date().getDay();
         if (currentDay < 5) {
@@ -25,15 +24,7 @@
         } else {
             currentDate = $filter('date')(new Date(), "yyyy-Www").toString();
         }
-        vm.projects = [{ id: 1, name: 'Care', 'total': 34 },
-            { id: 2, name: 'Care Intl', 'total': 5 },
-            { id: 3, name: 'Tapclicks', 'total': 2 },
-            { id: 4, name: 'SavingStar', 'total': 4 },
-            { id: 5, name: 'BlueSky', 'total': 8 },
-            { id: 6, name: 'Upromise', 'total': 1 },
-            { id: 7, name: 'Coding Labs', 'total': 5 },
-            { id: 8, name: 'Hariome', 'total': 3 },
-        ];
+        vm.projects = [];
 
         var tick = function() {
             vm.date = new Date();
@@ -48,21 +39,28 @@
         }
 
         function getAllReports() {
-            ReportService.getReportByWeek(currentDate).then(function(reports) {
+            TimesheetService.getReportByWeek(currentDate).then(function(reports) {
                 vm.totalHours = _.sum(_.map(reports, 'hours'));
             });
         };
 
         function getMyReport() {
-            ReportService.GetMine().then(function(reports) {
+            TimesheetService.getMine().then(function(reports) {
                 vm.myHours = _.sum(_.map(reports, 'hours'));
             });
         }
+
+        function getProjectsWithUserCount() {
+            TimesheetService.getProjectsWithUserCount().then(function(projects) {
+                vm.projects = projects;
+            });
+        };
 
         var init = function() {
             getUsers();
             getAllReports();
             getMyReport();
+            getProjectsWithUserCount();
         }
 
         init();

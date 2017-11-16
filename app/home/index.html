@@ -64,14 +64,14 @@
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th width="50%">Project</th>
-                                    <th width="50%">People</th>
+                                    <th width="80%">Project</th>
+                                    <th>People</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="project in vm.projects">
-                                    <td><strong>{{project.name}}</strong></td>
-                                    <td><span class="label label-success">{{project.total}}</span></td>
+                                    <td><strong>{{project.projectName}}</strong></td>
+                                    <td><span class="label label-success">{{project.userCount}}</span></td>
                                 </tr>
                             </tbody>
                         </table>
