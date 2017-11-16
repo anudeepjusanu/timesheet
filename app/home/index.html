@@ -27,7 +27,7 @@
                 <div class="owl-carousel" id="owl-example">
                     <div>
                         <div class="widget-title">Total Hours</div>
-                        <div class="widget-subtitle">{{vm.date | date: 'shortDate'}}</div>
+                        <div class="widget-subtitle">{{vm.widgetDate | date: 'shortDate'}}</div>
                         <div class="widget-int">{{vm.totalHours}}</div>
                     </div>
                     <div>
@@ -50,6 +50,22 @@
     </div>
     <!-- END WIDGETS -->
     <div class="row">
+        <div class="col-md-4">
+            <!-- START VISITORS BLOCK -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title-box">
+                        <h3>Timesheet</h3>
+                        <span>Capacity in hrs ({{vm.currentCapacity}})</span>
+                    </div>
+                </div>
+                <div class="panel-body padding-0">
+                    <canvas id="pie" class="chart chart-pie" chart-colors="vm.hoursChart.colors" chart-options="vm.hoursChart.options" chart-data="vm.hoursChart.data" chart-labels="vm.hoursChart.labels">
+                    </canvas>
+                </div>
+            </div>
+            <!-- END VISITORS BLOCK -->
+        </div>
         <div class="col-md-4">
             <!-- START PROJECTS BLOCK -->
             <div class="panel panel-default">

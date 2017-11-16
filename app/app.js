@@ -2,14 +2,14 @@
     'use strict';
 
     angular
-        .module('app', ['ui.router', 'ui.select', 'ngSanitize', 'angular-loading-bar', 'ui.bootstrap', 'ngTable', 'notyModule'])
+        .module('app', ['ui.router', 'ui.select', 'ngSanitize', 'angular-loading-bar', 'ui.bootstrap', 'ngTable', 'notyModule', 'chart.js'])
         .config(config)
         .run(run)
         .constant('_',
             window._
         );
 
-    function config($stateProvider, $urlRouterProvider) {
+    function config($stateProvider, $urlRouterProvider, ChartJsProvider) {
         // default route
         $urlRouterProvider.otherwise("/");
 
@@ -97,7 +97,8 @@
                 controller: 'Projects.AssignUsersController',
                 controllerAs: 'vm',
                 data: { activeTab: 'projects' }
-            })
+            });
+            ChartJsProvider.setOptions({ colors : [ '#1caf9a', '#273541'] });
     }
 
     function run($http, $rootScope, $window, UserService, $timeout) {

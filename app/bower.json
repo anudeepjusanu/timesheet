@@ -10,7 +10,8 @@
     "angular-bootstrap": "^2.5.0",
     "underscore": "^1.8.3",
     "lodash": "^4.17.4",
-    "angular-ui-select": "^0.19.8"
+    "angular-ui-select": "^0.19.8",
+    "angular-chart.js": "^1.1.1"
   },
   "devDependencies": {
     "angular-chips": "^1.0.11"

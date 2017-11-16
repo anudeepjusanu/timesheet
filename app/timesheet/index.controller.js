@@ -144,62 +144,6 @@
 
         function exportTable() {
             $scope.$broadcast('export-excl', { "date": vm.filterDate });
-
-            /*var itemsDetailed = [
-                [{ text: 'Name', style: 'subheader' }, { text: 'Project', style: 'subheader' },
-                    { text: 'Hours', style: 'subheader' }, { text: 'Comments', style: 'subheader' },
-                ]
-            ];
-            
-            for(var i=0,len=vm.allReports.length; i<len; i++){
-                var reportArr = [];
-                if(!vm.allReports[i].comments){
-                    vm.allReports[i].comments = ''
-                }
-                reportArr.push(vm.allReports[i].name, vm.allReports[i].project, vm.allReports[i].hours.toString(), vm.allReports[i].comments);
-                itemsDetailed.push(reportArr);
-            }
-            
-
-            var docDefinition = {
-                content: [{
-                    text: 'Wavelabs',
-                    style: 'header',
-                    alignment: 'center'
-                }, {
-                    text: '\nWeek:' + vm.filterDate
-                }, {
-                    style: 'demoTable',
-                    table: {
-                        widths: ['*', '*', '*', '*'],
-                        body: itemsDetailed
-                    }
-                }, {
-                    table: {
-                        widths: ['*', '*', '*', '*'],
-                        body: [
-                            ["", "", "", ""]
-                        ]
-                    }
-                }],
-                styles: {
-                    header: {
-                        bold: true,
-                        color: '#000',
-                        fontSize: 16
-                    },
-                    subheader: {
-                        bold: true,
-                        color: '#000',
-                        fontSize: 12
-                    },
-                    demoTable: {
-                        color: '#666',
-                        fontSize: 10
-                    }
-                }
-            };
-            pdfMake.createPdf(docDefinition).download('WeeklyReport.pdf');*/
         }
 
         function closeAlert(index) {

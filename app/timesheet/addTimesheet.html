@@ -19,10 +19,10 @@
                                 <label class="col-md-2 control-label">Week</label>
                                 <div class="col-md-8">
                                     <p class="input-group">
-                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.timesheet.weekDate" is-open="vm.timesheetDateOpened" datepicker-options="vm.dateOptions" readonly ng-required="true" close-text="Close" />
+                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.timesheet.weekDate" is-open="vm.timesheetDateOpened" datepicker-options="vm.dateOptions" readonly ng-required="true" close-text="Close" ng-disabled="!vm.isNew" />
                                         <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default" ng-click="vm.timesheetDateOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
-                                    </span>
+                                            <button type="button" class="btn btn-default" ng-click="vm.timesheetDateOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
                                     </p>
                                 </div>
                             </div>

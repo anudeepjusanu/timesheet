@@ -11,7 +11,7 @@
                     <div class="col-sm-6">
                         <button class="btn btn-primary" ng-click="vm.exportTable()">Export</button>
                         <button class="btn btn-primary" ng-click="vm.remindAll()">Remind All</button>
-                        <button class="btn btn-primary" ng-show="!vm.monthView" ng-click="vm.toggleView(true)">Month View</button>
+                        <button class="btn btn-primary" ng-show="!vm.monthView" ng-click="vm.toggleView(true)" style="display: none;">Month View</button>
                         <button class="btn btn-primary" ng-show="vm.monthView" ng-click="vm.toggleView(false)">Week View</button>
                     </div>
                     <div class="form-group pull-right col-sm-6">
@@ -38,7 +38,7 @@
                 <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" export-table ng-show="!vm.monthView">
                     <tr ng-repeat="row in $data | orderBy:'name'">
                         <td data-title="'Name'" filter="{userName: 'text'}">{{row.userName}}</td>
-                        <td data-title="'Project(s)'" filter="{ projectsText: 'select'}" filter-data="vm.projects">
+                        <td data-title="'Project(s)'">
                             <div class="row" ng-repeat="project in row.projects">
                                 <div class="col-md-4">{{project.projectName}}</div>
                                 <div class="col-md-2">{{project.projectHours}}</div>

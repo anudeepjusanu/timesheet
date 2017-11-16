@@ -12,19 +12,31 @@
     function Controller(UserService, TimesheetService, ProjectService, $filter, _, $interval) {
         var vm = this;
         var currentDate;
+        vm.widgetDate;
         vm.users = null;
         vm.totalHours = null;
         vm.myHours = null;
+        vm.hoursChart = {
+            "options": {
+                legend: {
+                    display: true
+                }
+            },
+            "colors": ['#1caf9a', '#273541']
+        };
+        vm.projects = [];
 
         var currentDay = new Date().getDay();
         if (currentDay < 5) {
             var oneWeekAgo = new Date();
             oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            vm.widgetDate = angular.copy(oneWeekAgo);
             currentDate = $filter('date')(oneWeekAgo, "yyyy-Www").toString();
         } else {
+            vm.widgetDate = new Date();
             currentDate = $filter('date')(new Date(), "yyyy-Www").toString();
         }
-        vm.projects = [];
+        
 
         var tick = function() {
             vm.date = new Date();
@@ -35,20 +47,26 @@
         function getUsers() {
             UserService.GetAll().then(function(users) {
                 vm.users = users;
+                getAllReports();
+                getMyReport();
             })
-        }
+        };
 
         function getAllReports() {
             TimesheetService.getReportByWeek(currentDate).then(function(reports) {
-                vm.totalHours = _.sum(_.map(reports, 'hours'));
+                vm.totalHours = _.sum(_.map(reports, 'totalHours'));
+                vm.currentCapacity = vm.users.length * 40;
+                var leave = vm.currentCapacity - vm.totalHours;
+                vm.hoursChart.data = [vm.totalHours, leave];
+                vm.hoursChart.labels = ["Added Hours", "Left Hours"];
             });
         };
 
         function getMyReport() {
             TimesheetService.getMine().then(function(reports) {
-                vm.myHours = _.sum(_.map(reports, 'hours'));
+                vm.myHours = _.sum(_.map(reports, 'totalHours'));
             });
-        }
+        };
 
         function getProjectsWithUserCount() {
             TimesheetService.getProjectsWithUserCount().then(function(projects) {
@@ -58,13 +76,10 @@
 
         var init = function() {
             getUsers();
-            getAllReports();
-            getMyReport();
             getProjectsWithUserCount();
-        }
+        };
 
         init();
-
     }
 
     function SidebarController(UserService) {

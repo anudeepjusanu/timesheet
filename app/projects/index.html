@@ -10,7 +10,7 @@
                 <h3 class="panel-title">Projects</h3>
                 <div class="clearfix row">
                     <div class="col-sm-6">
-                        <a class="btn btn-primary" ui-sref="addProject">Add Project</a>
+                        <a class="btn btn-primary" ui-sref="addProject" ng-if="vm.user.admin">Add Project</a>
                     </div>
                 </div>
             </div>
@@ -22,7 +22,7 @@
                         <th>Project Name</th>
                         <th>Description</th>
                         <th>Start Date</th>
-                        <th>Action</th>
+                        <th ng-if="vm.user.admin">Action</th>
                     </tr>
                     <tr ng-repeat="project in vm.projects | orderBy:'name'">
                         <td>{{$index+1}}</td>
@@ -30,7 +30,7 @@
                         <td>{{project.projectName}}</td>
                         <td>{{project.description}}</td>
                         <td>{{project.startDate}}</td>
-                        <td>
+                        <td ng-if="vm.user.admin">
                             <a class="btn btn-primary btn-xs" ui-sref="assignUsers({id: project._id})">Assign Users</a>
                             <a class="btn btn-primary btn-xs" ui-sref="editProject({id: project._id})">Update</a>
                             <buttion class="btn btn-primary btn-xs" ng-click="vm.delProject(project._id)">Delete</buttion>
