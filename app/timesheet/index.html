@@ -37,6 +37,7 @@
             <div class="panel-body panel-body-table">
                 <table ng-table="vm.tableParams" class="table table-condensed table-bordered table-striped" export-table ng-show="!vm.monthView">
                     <tr ng-repeat="row in $data | orderBy:'name'">
+                        <td data-title="'#'">{{$index + 1}}</td>
                         <td data-title="'Name'" filter="{userName: 'text'}">{{row.userName}}</td>
                         <td data-title="'Project(s)'">
                             <div class="row" ng-repeat="project in row.projects">

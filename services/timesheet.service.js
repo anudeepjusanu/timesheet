@@ -6,6 +6,7 @@ var Q = require('q');
 var mongo = require('mongoskin');
 var db = mongo.db(config.connectionString, { native_parser: true });
 db.bind('timesheets');
+db.bind('users');
 
 var service = {};
 
@@ -21,25 +22,60 @@ module.exports = service;
 
 function createTimesheet(user, userParam) {
     var deferred = Q.defer();
-
-    db.timesheets.findOne({ userId: user._id, week: userParam.week}, function(err, sheet) {
-        if (err) deferred.reject(err.name + ': ' + err.message);
-        if (!sheet) {
-            var sheetObj = {
-                userId: user._id,
-                week: userParam.week,
-                weekDate: userParam.weekDate,
-                totalHours: userParam.totalHours,
-                projects: userParam.projects
-            }
-            db.timesheets.insert(sheetObj, function(err, sheet) {
-                if (err) deferred.reject(err.name + ': ' + err.message);
-                deferred.resolve(sheet);
-            });
-        } else {
-            deferred.reject("You have already posted for current week");
-        }
+    _.each(userParam.projects, function (projectObj) {
+        projectObj.resourceType = "";
     });
+    db.users.findById(user._id, function(err, user) {
+        if (user && user.projects) {
+            _.each(userParam.projects, function (projectObj) {
+                var prjData = _.find(user.projects, {projectId: projectObj.projectId});
+                if(prjData && prjData.billDates){
+                    var weekDate = new Date(userParam.weekDate);
+                    _.each(prjData.billDates, function (billDate) {
+                        if(billDate.start && billDate.start != "" && billDate.end && billDate.end != ""){
+                            var startDate = new Date(billDate.start);
+                            var endDate = new Date(billDate.end);
+                            if(weekDate >= startDate && weekDate <= endDate){
+                                projectObj.resourceType = billDate.resourceType
+                            }
+                        }else if(billDate.start && billDate.start != ""){
+                            var startDate = new Date(billDate.start);
+                            if(weekDate >= startDate){
+                                projectObj.resourceType = billDate.resourceType
+                            }
+                        }else if(billDate.end && billDate.end != ""){
+                            var endDate = new Date(billDate.end);
+                            if(weekDate <= endDate){
+                                projectObj.resourceType = billDate.resourceType
+                            }
+                        }else if(billDate.start == "" && billDate.end == ""){
+                            projectObj.resourceType = billDate.resourceType
+                        }
+                    });
+                }
+            });
+        }
+
+        db.timesheets.findOne({ userId: user._id, week: userParam.week}, function(err, sheet) {
+            if (err) deferred.reject(err.name + ': ' + err.message);
+            if (!sheet) {
+                var sheetObj = {
+                    userId: user._id,
+                    week: userParam.week,
+                    weekDate: userParam.weekDate,
+                    totalHours: userParam.totalHours,
+                    projects: userParam.projects
+                }
+                db.timesheets.insert(sheetObj, function(err, sheet) {
+                    if (err) deferred.reject(err.name + ': ' + err.message);
+                    deferred.resolve(sheet);
+                });
+            } else {
+                deferred.reject("You have already posted for current week");
+            }
+        });
+    });
+
 
     return deferred.promise;
 }
@@ -47,24 +83,57 @@ function createTimesheet(user, userParam) {
 function updateTimesheet(userId, id, userParam) {
     var deferred = Q.defer();
 
-    db.timesheets.findById(id, function(err, sheet) {
-        if (err) deferred.reject(err.name + ': ' + err.message);
-        if (sheet.userId == userId) {
-            var sheetObj = {
-                userId: mongo.helper.toObjectID(userId),
-                week: userParam.week,
-                weekDate: userParam.weekDate,
-                totalHours: userParam.totalHours,
-                projects: userParam.projects
-            }
-            db.timesheets.update({ _id: mongo.helper.toObjectID(id) }, { $set: sheetObj },
-                function(err, sheet) {
-                    if (err) deferred.reject(err.name + ': ' + err.message);
-                    deferred.resolve(sheet);
-                });
-        } else {
-            deferred.reject("You are not authorized");
+    db.users.findById(userId, function(err, user) {
+        if (user && user.projects) {
+            _.each(userParam.projects, function (projectObj) {
+                var prjData = _.find(user.projects, {projectId: projectObj.projectId});
+                if (prjData && prjData.billDates) {
+                    var weekDate = new Date(userParam.weekDate);
+                    _.each(prjData.billDates, function (billDate) {
+                        if (billDate.start && billDate.start != "" && billDate.end && billDate.end != "") {
+                            var startDate = new Date(billDate.start);
+                            var endDate = new Date(billDate.end);
+                            if (weekDate >= startDate && weekDate <= endDate) {
+                                projectObj.resourceType = billDate.resourceType
+                            }
+                        } else if (billDate.start && billDate.start != "") {
+                            var startDate = new Date(billDate.start);
+                            if (weekDate >= startDate) {
+                                projectObj.resourceType = billDate.resourceType
+                            }
+                        } else if (billDate.end && billDate.end != "") {
+                            var endDate = new Date(billDate.end);
+                            if (weekDate <= endDate) {
+                                projectObj.resourceType = billDate.resourceType
+                            }
+                        } else if (billDate.start == "" && billDate.end == "") {
+                            projectObj.resourceType = billDate.resourceType
+                        }
+                    });
+                }
+            });
         }
+
+
+        db.timesheets.findById(id, function(err, sheet) {
+            if (err) deferred.reject(err.name + ': ' + err.message);
+            if (sheet.userId == userId) {
+                var sheetObj = {
+                    userId: mongo.helper.toObjectID(userId),
+                    week: userParam.week,
+                    weekDate: userParam.weekDate,
+                    totalHours: userParam.totalHours,
+                    projects: userParam.projects
+                }
+                db.timesheets.update({ _id: mongo.helper.toObjectID(id) }, { $set: sheetObj },
+                    function(err, sheet) {
+                        if (err) deferred.reject(err.name + ': ' + err.message);
+                        deferred.resolve(sheet);
+                    });
+            } else {
+                deferred.reject("You are not authorized");
+            }
+        });
     });
 
     return deferred.promise;
