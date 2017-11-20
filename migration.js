@@ -26,7 +26,7 @@ db.timesheet.find().toArray(function(err, timesheet) {
                         projectId: mongo.helper.toObjectID(prjData.projectId),
                         projectName: prjData.projectName,
                         projectHours: sheet.hours,
-                        projectComment: '',
+                        projectComment: sheet.comments,
                         isAssigned: true,
                         resourceType: ''
                     });

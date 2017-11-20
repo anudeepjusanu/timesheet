@@ -94,7 +94,7 @@ function getProjectById(projectId){
 
 function getAllProjects(){
     var deferred = Q.defer();
-    db.projects.find().toArray(function(err, projects) {
+    db.projects.find().sort({clientName: 1, projectName: 1}).toArray(function(err, projects) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (projects) {
             deferred.resolve(projects);
@@ -114,9 +114,6 @@ function getAssignedUsers(projectId){
             var assignedUsers = [];
             _.each(users, function (user) {
                 var userProject = _.find(user.projects, {"projectId": projectId});
-                if(!userProject.isBillable){
-                    userProject.isBillable = false;
-                }
                 if(!userProject.billDates){
                     userProject.billDates = [];
                 }
@@ -158,7 +155,6 @@ function assignUsers(projectId, users) {
                             "projectName": projectRoc.projectName,
                             "clientName": projectRoc.clientName,
                             "startDate": user.startDate,
-                            "isBillable": user.isBillable,
                             "billDates": user.billDates
                         }
                         var projectIndex = _.findIndex(rowData.projects, {"projectId": projectId});
@@ -202,8 +198,9 @@ function assignUser(projectId, user) {
                     }
                     var projectData = {
                         "projectId": projectId,
+                        "projectName": projectRoc.projectName,
+                        "clientName": projectRoc.clientName,
                         "startDate": user.startDate,
-                        "isBillable": user.isBillable,
                         "billDates": user.billDates
                     }
                     var projectIndex = _.findIndex(rowData.projects, {"projectId": projectId});

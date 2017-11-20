@@ -287,7 +287,7 @@
         }
     }
 
-    function TimesheetController(UserService, TimesheetService, $filter, $state, $stateParams, noty) {
+    function TimesheetController(UserService, TimesheetService, ProjectService, $filter, $state, $stateParams, noty) {
         var vm = this;
         var currentDay = new Date().getDay();
         vm.timesheet = {
@@ -295,6 +295,7 @@
             projects: [],
             totalHours: 0
         };
+        vm.hasProjects = true;
         switch (currentDay) {
             case 0:
                 vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() + 5);
@@ -385,6 +386,73 @@
             });
         }
 
+
+        // Assign New Project
+        vm.clients = [];
+        vm.projects = [];
+        vm.projectUser = {
+            userId: null,
+            startDate: new Date(2017, 0, 1),
+            billDates: [
+                {
+                    start: new Date(2017, 0, 1),
+                    end: "",
+                    resourceType: "billable",
+                    startOpened: false,
+                    endOpened: false
+                }
+            ]
+        };
+        vm.projectDateOptions = {
+            formatYear: 'yy',
+            maxDate: new Date(2020, 0, 1),
+            startingDay: 1
+        };
+        vm.enableSaveBtn = true;
+        vm.resourceTypes = [
+            {"resourceTypeId":"shadow", "resourceTypeVal":"Shadow"},
+            {"resourceTypeId":"buffer", "resourceTypeVal":"Buffer"},
+            {"resourceTypeId":"billable", "resourceTypeVal":"Billable"}
+        ];
+
+        function getClients() {
+            ProjectService.getClients().then(function(response) {
+                vm.clients = response;
+            }, function(error) {
+                if (error) {
+                    vm.alerts.push({ msg: error, type: 'danger' });
+                }
+            });
+        }
+
+        function getProjects(){
+            ProjectService.getAll().then(function(response) {
+                vm.projects = response;
+            }, function(error){
+                console.log(error);
+            });
+        }
+
+        vm.assignNewProject = function (form) {
+            if (form.$valid) {
+                vm.enableSaveBtn = false;
+                ProjectService.assignUser(vm.projectUser.projectId, vm.projectUser).then(function(response) {
+                    noty.showSuccess("New Project has been assigned successfully!");
+                    vm.enableSaveBtn = true;
+                    $state.go('timesheet');
+                }, function(error) {
+                    if (error) {
+                        vm.alerts.push({ msg: error, type: 'danger' });
+                    }
+                    vm.enableSaveBtn = true;
+                    $state.go('timesheet');
+                });
+            } else {
+                vm.enableSaveBtn = true;
+                vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
+            }
+        }
+
         initController();
         function initController() {
             UserService.GetCurrent().then(function(user) {
@@ -395,6 +463,14 @@
                     getTimesheet($stateParams.id);
                 } else {
                     vm.isNew = true;
+                }
+                vm.projectUser.userId = vm.user._id;
+                if(vm.user.projects && vm.user.projects.length > 0){
+                    vm.hasProjects = true;
+                }else{
+                    getClients();
+                    getProjects();
+                    vm.hasProjects = false;
                 }
             });
         }
