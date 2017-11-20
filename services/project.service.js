@@ -51,7 +51,7 @@ function create(projectParam) {
 function update(_id, params) {
     var deferred = Q.defer();
     var projectObj = {
-        clientId: mongo.helper.toObjectID(projectParam.clientId),
+        clientId: mongo.helper.toObjectID(params.clientId),
         projectName: params.projectName,
         clientName: params.clientName,
         startDate: params.startDate,
