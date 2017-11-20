@@ -23,6 +23,7 @@ module.exports = service;
 function createTimesheet(user, userParam) {
     var deferred = Q.defer();
     _.each(userParam.projects, function (projectObj) {
+        projectObj.projectId = mongo.helper.toObjectID(projectObj.projectId);
         projectObj.resourceType = "";
     });
     db.users.findById(user._id, function(err, user) {
@@ -83,6 +84,9 @@ function createTimesheet(user, userParam) {
 function updateTimesheet(userId, id, userParam) {
     var deferred = Q.defer();
 
+    _.each(userParam.projects, function (projectObj) {
+        projectObj.projectId = mongo.helper.toObjectID(projectObj.projectId);
+    });
     db.users.findById(userId, function(err, user) {
         if (user && user.projects) {
             _.each(userParam.projects, function (projectObj) {
