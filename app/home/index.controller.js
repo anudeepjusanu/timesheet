@@ -58,7 +58,7 @@
                 vm.currentCapacity = vm.users.length * 40;
                 var leave = vm.currentCapacity - vm.totalHours;
                 vm.hoursChart.data = [vm.totalHours, leave];
-                vm.hoursChart.labels = ["Added Hours", "Left Hours"];
+                vm.hoursChart.labels = ["Filled Hours", "Unfilled Hours"];
             });
         };
 
