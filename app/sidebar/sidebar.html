@@ -15,7 +15,12 @@
                 </div>
                 <div class="profile-data">
                     <div class="profile-data-name">{{vm.user.name}}</div>
-                    <div class="profile-data-title">Software Developer</div>
+                    <div class="profile-data-title" ng-if="vm.user.designation">
+                        {{vm.user.designation}}
+                    </div>
+                    <div class="profile-data-title" ng-if="!vm.user.designation">
+                        NA
+                    </div>
                 </div>
                 <div class="profile-controls">
                     <a ui-sref="account" class="profile-control-left"><span class="fa fa-info"></span></a>
