@@ -66,7 +66,7 @@
             </div>
             <!-- END VISITORS BLOCK -->
         </div>
-        <div class="col-md-4">
+        <div class="col-md-8">
             <!-- START PROJECTS BLOCK -->
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -75,17 +75,19 @@
                         <span>Projects activity</span>
                     </div>
                 </div>
-                <div class="panel-body panel-body-table" style="height: 165px; overflow-y: scroll;">
+                <div class="panel-body panel-body-table" style="height: 205px; overflow-y: scroll;">
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th width="80%">Project</th>
+                                    <th width="30%">Client</th>
+                                    <th width="50%">Project</th>
                                     <th>People</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="project in vm.projects">
+                                    <td><strong>{{project.clientName}}</strong></td>
                                     <td><strong>{{project.projectName}}</strong></td>
                                     <td><span class="label label-success">{{project.userCount}}</span></td>
                                 </tr>
@@ -102,12 +104,12 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="panel-title-box pull-left">
-                        <h3>Organization Man Power</h3>
+                        <h3>Organization Manpower</h3>
                         <span>Capacity</span>
                     </div>
                     <div class="panel-controls pull-right" style="width: 200px;">
                         <p class="input-group">
-                            <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.manpowerChart.weekDate" is-open="vm.manpowerChart.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getAllUserHoursByweek();" readonly />
+                            <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.manpowerChart.weekDate" is-open="vm.manpowerChart.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getAllUserHoursByWeek();" readonly />
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default" ng-click="vm.manpowerChart.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
                             </span>
@@ -123,13 +125,22 @@
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <div class="panel-title-box">
-                        <h3>Man Power Hours</h3>
+                    <div class="panel-title-box pull-left">
+                        <h3>Monthly Hours</h3>
                         <span>Capacity</span>
+                    </div>
+                    <div class="panel-controls pull-right" style="width: 140px; margin-left: 10px;">
+                        <p class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.monthHoursChart.weekDate" is-open="vm.monthHoursChart.opened" datepicker-options="vm.monthOptions" ng-required="true" close-text="Close" ng-change="vm.getAllUserHoursByMonth();" readonly />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="vm.monthHoursChart.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
                     </div>
                 </div>
                 <div class="panel-body padding-0">
-
+                    <canvas class="chart chart-bar" chart-colors="vm.monthHoursChart.colors" chart-options="vm.monthHoursChart.options" chart-data="vm.monthHoursChart.data" chart-labels="vm.monthHoursChart.labels" chart-series="vm.monthHoursChart.series">
+                    </canvas>
                 </div>
             </div>
         </div>

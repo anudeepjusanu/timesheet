@@ -20,6 +20,7 @@ service.adminUpdate = adminUpdate;
 service.allUserHoursByWeek = allUserHoursByWeek;
 service.projectUserHoursByWeek = projectUserHoursByWeek;
 service.clientUserHoursByWeek = clientUserHoursByWeek;
+service.allUserHoursByMonth = allUserHoursByMonth;
 
 module.exports = service;
 
@@ -255,6 +256,7 @@ function allUserHoursByWeek(week) {
                 report.totalUserCount += 1;
                 report.totalHours += sheet.totalHours;
                 _.each(sheet.projects, function (project) {
+                    //var resourceTypeId = (project.resourceType == "")?"other":project.resourceType;
                     var resourceTypeId = (project.resourceType == "")?"buffer":project.resourceType;
                     var resourceTypeObj = _.find(report.resourceTypes, {"resourceType": resourceTypeId});
                     if(resourceTypeObj){
@@ -294,6 +296,68 @@ function clientUserHoursByWeek(week, clientId) {
         } else {
             deferred.reject("Please select valid week");
         }
+    });
+    return deferred.promise;
+}
+
+function allUserHoursByMonth(month, year) {
+    var deferred = Q.defer();
+    Date.prototype.getWeek = function() {
+        var onejan = new Date(this.getFullYear(), 0, 1);
+        return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+    }
+    var resultData = [];
+    var weeks = [];
+    var startDate = new Date(year, month, 1);
+    if(month >= 11){
+        var endDate = new Date(year+1, 0, 0);
+    }else{
+        var endDate = new Date(year, month + 1, 0);
+    }
+    var loop = 1;
+    while (startDate < endDate && loop++ < 6){
+        weeks.push(startDate.getFullYear()+"-W"+startDate.getWeek());
+        startDate.setDate(startDate.getDate() + 7);
+    }
+    _.each(weeks, function (weekVal) {
+        db.timesheets.find({ week: weekVal }).toArray(function(err, sheets) {
+            if (err) deferred.reject(err.name + ': ' + err.message);
+            if (sheets) {
+                var report = {
+                    week: weekVal,
+                    availableUserCount: 0,
+                    availableHours: 0,
+                    totalUserCount: 0,
+                    totalHours: 0,
+                    resourceTypes: []
+                };
+                _.each(resourceTypes, function (resourceType) {
+                    report.resourceTypes.push({
+                        resourceType: resourceType,
+                        projectUserCount: 0,
+                        projectHours: 0
+                    });
+                })
+                _.each(sheets, function (sheet) {
+                    report.totalUserCount += 1;
+                    report.totalHours += sheet.totalHours;
+                    _.each(sheet.projects, function (project) {
+                        var resourceTypeId = (project.resourceType == "")?"buffer":project.resourceType;
+                        var resourceTypeObj = _.find(report.resourceTypes, {"resourceType": resourceTypeId});
+                        if(resourceTypeObj){
+                            resourceTypeObj.projectUserCount += 1;
+                            resourceTypeObj.projectHours += project.projectHours;
+                        }
+                    });
+                });
+                resultData.push(report);
+                if(resultData.length == weeks.length){
+                    deferred.resolve(resultData);
+                }
+            } else {
+                deferred.reject("Please select valid week");
+            }
+        });
     });
     return deferred.promise;
 }

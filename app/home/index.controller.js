@@ -24,6 +24,19 @@
             },
             "colors": ['#1caf9a', '#273541']
         };
+        vm.monthHoursChart = {
+            week: "",
+            weekDate: new Date(),
+            options: {
+                legend: {
+                    display: true
+                }
+            },
+            colors: ['#803690', '#00ADF9', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360', '#DCDCDC'],
+            data: [],
+            series: [],
+            labels: []
+        };
         vm.manpowerChart = {
             week: "",
             weekDate: new Date(),
@@ -41,17 +54,6 @@
         }else if(vm.manpowerChart.weekDate.getDay() == 6){
             vm.manpowerChart.weekDate.setDate(vm.manpowerChart.weekDate.getDate() - 1);
         }
-
-        vm.projectManpowerChart = {
-            options: {
-                legend: {
-                    display: true
-                }
-            },
-            colors: ['#803690', '#00ADF9', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360', '#DCDCDC'],
-            data: [],
-            labels: []
-        };
         vm.projects = [];
 
         vm.dateOptions = {
@@ -63,6 +65,10 @@
             formatYear: 'yy',
             maxDate: new Date(2020, 5, 22),
             startingDay: 1
+        };
+        vm.monthOptions = {
+            datepickerMode: "month", // Remove Single quotes
+            minMode: 'month'
         };
 
         var currentDay = new Date().getDay();
@@ -112,9 +118,8 @@
             });
         };
 
-        function getAllUserHoursByweek() {
+        vm.getAllUserHoursByWeek = function() {
             var week = $filter('date')(new Date(vm.manpowerChart.weekDate), "yyyy-Www").toString();
-            console.log(week);
             TimesheetService.allUserHoursByWeek(week).then(function(manpowerData) {
                 vm.manpowerChart.labels = [];
                 vm.manpowerChart.data = [];
@@ -125,10 +130,37 @@
             });
         };
 
+        vm.getAllUserHoursByMonth = function() {
+            TimesheetService.allUserHoursByMonth(vm.monthHoursChart.weekDate.getMonth(), vm.monthHoursChart.weekDate.getFullYear()).then(function(manpowerData) {
+                console.log(manpowerData);
+                vm.monthHoursChart.labels = [];
+                vm.monthHoursChart.data = [];
+                vm.monthHoursChart.series = [];
+                _.each(manpowerData[0].resourceTypes, function (resourceTypeObj) {
+                    vm.monthHoursChart.series.push(resourceTypeObj.resourceType);
+                });
+                _.each(manpowerData, function (manpower) {
+                    vm.monthHoursChart.labels.push(manpower.week);
+                });
+                _.each(vm.monthHoursChart.series, function (resourceTypeVal) {
+                    var dataObj = [];
+                    _.each(manpowerData, function (manpowerObj) {
+                        var resourceTypeObj = _.find(manpowerObj.resourceTypes, {"resourceType": resourceTypeVal});
+                        if(resourceTypeObj){
+                            dataObj.push(resourceTypeObj.projectHours);
+                        }
+                    });
+                    vm.monthHoursChart.data.push(dataObj);
+                });
+                console.log(vm.monthHoursChart);
+            });
+        };
+
         var init = function() {
             getUsers();
             getProjectsWithUserCount();
-            getAllUserHoursByweek();
+            vm.getAllUserHoursByWeek();
+            vm.getAllUserHoursByMonth();
         };
 
         init();

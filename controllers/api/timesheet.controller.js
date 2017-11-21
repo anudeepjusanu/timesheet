@@ -23,6 +23,7 @@ router.post('/month/report', getReportbyMonth);
 router.get('/allUserHoursByWeek/:weekId', allUserHoursByWeek);
 router.get('/projectUserHoursByWeek/:weekId/:projectId', projectUserHoursByWeek);
 router.get('/clientUserHoursByWeek/:weekId/:clientId', clientUserHoursByWeek);
+router.get('/allUserHoursByMonth/:monthId/:yearId', allUserHoursByMonth);
 
 module.exports = router;
 
@@ -175,6 +176,18 @@ function clientUserHoursByWeek(req, res) {
     timesheetService.clientUserHoursByWeek(req.params.weekId, req.params.clientId)
         .then(function(reports) {
             res.send(reports);
+        })
+        .catch(function(err) {
+            res.status(400).send(err);
+        });
+}
+
+function allUserHoursByMonth(req, res) {
+    var year = req.params.yearId || new Date().getFullYear();
+    var month = req.params.monthId || new Date().getMonth();
+    timesheetService.allUserHoursByMonth(month, year)
+        .then(function(result) {
+            res.send(result);
         })
         .catch(function(err) {
             res.status(400).send(err);
