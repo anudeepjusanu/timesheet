@@ -16,46 +16,6 @@
         vm.users = null;
         vm.totalHours = null;
         vm.myHours = null;
-        vm.hoursChart = {
-            "options": {
-                legend: {
-                    display: true
-                }
-            },
-            "colors": ['#1caf9a', '#273541']
-        };
-        vm.monthHoursChart = {
-            week: "",
-            weekDate: new Date(),
-            options: {
-                legend: {
-                    display: true
-                }
-            },
-            colors: ['#803690', '#00ADF9', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360', '#DCDCDC'],
-            data: [],
-            series: [],
-            labels: []
-        };
-        vm.manpowerChart = {
-            week: "",
-            weekDate: new Date(),
-            options: {
-                legend: {
-                    display: true
-                }
-            },
-            colors: ['#803690', '#00ADF9', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360', '#DCDCDC'],
-            data: [],
-            labels: []
-        };
-        if(vm.manpowerChart.weekDate.getDay() < 5){
-            vm.manpowerChart.weekDate.setDate(vm.manpowerChart.weekDate.getDate() - (vm.manpowerChart.weekDate.getDay() + 2));
-        }else if(vm.manpowerChart.weekDate.getDay() == 6){
-            vm.manpowerChart.weekDate.setDate(vm.manpowerChart.weekDate.getDate() - 1);
-        }
-        vm.projects = [];
-
         vm.dateOptions = {
             dateDisabled: function (data) {
                 var date = data.date,
@@ -70,6 +30,81 @@
             datepickerMode: "month", // Remove Single quotes
             minMode: 'month'
         };
+        vm.chartColors = ['#803690', '#00ADF9', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360', '#DCDCDC'];
+        vm.hoursChart = {
+            "options": {
+                legend: {
+                    display: true
+                }
+            },
+            "colors": ['#1caf9a', '#273541']
+        };
+
+        vm.manpowerChart = {
+            week: "",
+            weekDate: new Date(),
+            options: {
+                legend: {
+                    display: true
+                }
+            },
+            colors: vm.chartColors,
+            data: [],
+            labels: []
+        };
+        if(vm.manpowerChart.weekDate.getDay() < 5){
+            vm.manpowerChart.weekDate.setDate(vm.manpowerChart.weekDate.getDate() - (vm.manpowerChart.weekDate.getDay() + 2));
+        }else if(vm.manpowerChart.weekDate.getDay() == 6){
+            vm.manpowerChart.weekDate.setDate(vm.manpowerChart.weekDate.getDate() - 1);
+        }
+        vm.monthHoursChart = {
+            week: "",
+            weekDate: new Date(),
+            options: {
+                legend: {
+                    display: true
+                }
+            },
+            colors: vm.chartColors,
+            data: [],
+            series: [],
+            labels: []
+        };
+
+        vm.projectManpower = {
+            projectId: "",
+            week: "",
+            weekDate: new Date(),
+            options: {
+                legend: {
+                    display: true
+                }
+            },
+            colors: vm.chartColors,
+            data: [],
+            labels: []
+        };
+        if(vm.projectManpower.weekDate.getDay() < 5){
+            vm.projectManpower.weekDate.setDate(vm.projectManpower.weekDate.getDate() - (vm.projectManpower.weekDate.getDay() + 2));
+        }else if(vm.projectManpower.weekDate.getDay() == 6){
+            vm.projectManpower.weekDate.setDate(vm.projectManpower.weekDate.getDate() - 1);
+        }
+        vm.projectMonthlyHours = {
+            projectId: "",
+            week: "",
+            weekDate: new Date(),
+            options: {
+                legend: {
+                    display: true
+                }
+            },
+            colors: vm.chartColors,
+            data: [],
+            series: [],
+            labels: []
+        };
+
+        vm.projects = [];
 
         var currentDay = new Date().getDay();
         if (currentDay < 5) {
@@ -152,6 +187,46 @@
                     vm.monthHoursChart.data.push(dataObj);
                 });
             });
+        };
+
+        vm.getProjectUserHoursByWeek = function() {
+            if(vm.projectManpower.projectId) {
+                var week = $filter('date')(new Date(vm.projectManpower.weekDate), "yyyy-Www").toString();
+                TimesheetService.projectUserHoursByWeek(week, vm.projectManpower.projectId).then(function (manpowerData) {
+                    vm.projectManpower.labels = [];
+                    vm.projectManpower.data = [];
+                    _.each(manpowerData.resourceTypes, function (resourceTypeObj) {
+                        vm.projectManpower.labels.push(resourceTypeObj.resourceType);
+                        vm.projectManpower.data.push(resourceTypeObj.projectHours);
+                    });
+                });
+            }
+        };
+
+        vm.getProjectUserHoursByMonth = function() {
+            if(vm.projectMonthlyHours.projectId) {
+                TimesheetService.projectUserHoursByMonth(vm.projectMonthlyHours.weekDate.getMonth(), vm.projectMonthlyHours.weekDate.getFullYear(), vm.projectMonthlyHours.projectId).then(function (manpowerData) {
+                    vm.projectMonthlyHours.labels = [];
+                    vm.projectMonthlyHours.data = [];
+                    vm.projectMonthlyHours.series = [];
+                    _.each(manpowerData[0].resourceTypes, function (resourceTypeObj) {
+                        vm.projectMonthlyHours.series.push(resourceTypeObj.resourceType);
+                    });
+                    _.each(manpowerData, function (manpower) {
+                        vm.projectMonthlyHours.labels.push(manpower.week);
+                    });
+                    _.each(vm.projectMonthlyHours.series, function (resourceTypeVal) {
+                        var dataObj = [];
+                        _.each(manpowerData, function (manpowerObj) {
+                            var resourceTypeObj = _.find(manpowerObj.resourceTypes, {"resourceType": resourceTypeVal});
+                            if (resourceTypeObj) {
+                                dataObj.push(resourceTypeObj.projectHours);
+                            }
+                        });
+                        vm.projectMonthlyHours.data.push(dataObj);
+                    });
+                });
+            }
         };
 
         var init = function() {

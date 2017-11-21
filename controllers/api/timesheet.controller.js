@@ -24,6 +24,7 @@ router.get('/allUserHoursByWeek/:weekId', allUserHoursByWeek);
 router.get('/projectUserHoursByWeek/:weekId/:projectId', projectUserHoursByWeek);
 router.get('/clientUserHoursByWeek/:weekId/:clientId', clientUserHoursByWeek);
 router.get('/allUserHoursByMonth/:monthId/:yearId', allUserHoursByMonth);
+router.get('/projectUserHoursByMonth/:monthId/:yearId/:projectId', projectUserHoursByMonth);
 
 module.exports = router;
 
@@ -186,6 +187,18 @@ function allUserHoursByMonth(req, res) {
     var year = req.params.yearId || new Date().getFullYear();
     var month = req.params.monthId || new Date().getMonth();
     timesheetService.allUserHoursByMonth(month, year)
+        .then(function(result) {
+            res.send(result);
+        })
+        .catch(function(err) {
+            res.status(400).send(err);
+        });
+}
+
+function projectUserHoursByMonth(req, res) {
+    var year = req.params.yearId || new Date().getFullYear();
+    var month = req.params.monthId || new Date().getMonth();
+    timesheetService.allUserHoursByMonth(month, year, req.params.projectId)
         .then(function(result) {
             res.send(result);
         })

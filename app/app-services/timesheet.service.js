@@ -21,6 +21,7 @@
         service.projectUserHoursByWeek = projectUserHoursByWeek;
         service.clientUserHoursByWeek = clientUserHoursByWeek;
         service.allUserHoursByMonth = allUserHoursByMonth;
+        service.projectUserHoursByMonth = projectUserHoursByMonth;
 
         return service;
 
@@ -78,6 +79,10 @@
 
         function allUserHoursByMonth(month, year) {
             return $http.get('/api/timesheet/allUserHoursByMonth/' + month + '/' + year).then(handleSuccess, handleError);
+        }
+
+        function projectUserHoursByMonth(month, year, projectId) {
+            return $http.get('/api/timesheet/projectUserHoursByMonth/' + month + '/' + year + '/' + projectId).then(handleSuccess, handleError);
         }
 
         // private functions
