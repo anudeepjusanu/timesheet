@@ -376,6 +376,7 @@ function allUserHoursByMonth(month, year) {
                         }
                     });
                 });
+                report = _.sortBy(report, ['week']);
                 resultData.push(report);
                 if(resultData.length == weeks.length){
                     deferred.resolve(resultData);
@@ -438,6 +439,7 @@ function projectUserHoursByMonth(month, year, projectId) {
                         }
                     });
                 });
+                report = _.sortBy(report, ['week']);
                 resultData.push(report);
                 if(resultData.length == weeks.length){
                     deferred.resolve(resultData);
