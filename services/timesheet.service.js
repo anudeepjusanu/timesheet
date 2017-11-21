@@ -17,6 +17,9 @@ service.getByWeek = getByWeek;
 service.getByMonth = getByMonth;
 service.getMine = getMine;
 service.adminUpdate = adminUpdate;
+service.allUserHoursByWeek = allUserHoursByWeek;
+service.projectUserHoursByWeek = projectUserHoursByWeek;
+service.clientUserHoursByWeek = clientUserHoursByWeek;
 
 module.exports = service;
 
@@ -76,7 +79,6 @@ function createTimesheet(user, userParam) {
             }
         });
     });
-
 
     return deferred.promise;
 }
@@ -225,5 +227,73 @@ function adminUpdate(id, params) {
             });
     }
 
+    return deferred.promise;
+}
+
+var resourceTypes = ["shadow", "buffer", "billable", "other"];
+
+function allUserHoursByWeek(week) {
+    var deferred = Q.defer();
+    db.timesheets.find({ week: week }).toArray(function(err, sheets) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (sheets) {
+            var report = {
+                availableUserCount: 0,
+                availableHours: 0,
+                totalUserCount: 0,
+                totalHours: 0,
+                resourceTypes: []
+            };
+            _.each(resourceTypes, function (resourceType) {
+                report.resourceTypes.push({
+                    resourceType: resourceType,
+                    projectUserCount: 0,
+                    projectHours: 0
+                });
+            })
+            _.each(sheets, function (sheet) {
+                report.totalUserCount += 1;
+                report.totalHours += sheet.totalHours;
+                _.each(sheet.projects, function (project) {
+                    var resourceTypeId = (project.resourceType == "")?"other":project.resourceType;
+                    var resourceTypeObj = _.find(report.resourceTypes, {"resourceType": resourceTypeId});
+                    if(resourceTypeObj){
+                        resourceTypeObj.projectUserCount += 1;
+                        resourceTypeObj.projectHours += project.projectHours;
+                    }
+                });
+            });
+            deferred.resolve(report);
+        } else {
+            deferred.reject("Please select valid week");
+        }
+    });
+    return deferred.promise;
+}
+
+function projectUserHoursByWeek(week, projectId) {
+    var deferred = Q.defer();
+    db.timesheets.find({ week: week }).toArray(function(err, sheets) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (sheets) {
+            deferred.resolve(sheets);
+        } else {
+            deferred.reject("Please select valid week");
+        }
+    });
+    return deferred.promise;
+}
+
+function clientUserHoursByWeek(week, clientId) {
+    var deferred = Q.defer();
+    db.timesheets.find({ week: week }).toArray(function(err, sheets) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (sheets) {
+
+            deferred.resolve(sheets);
+        } else {
+            deferred.reject("Please select valid week");
+        }
+    });
     return deferred.promise;
 }

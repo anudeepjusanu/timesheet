@@ -24,7 +24,46 @@
             },
             "colors": ['#1caf9a', '#273541']
         };
+        vm.manpowerChart = {
+            week: "",
+            weekDate: new Date(),
+            options: {
+                legend: {
+                    display: true
+                }
+            },
+            colors: ['#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'],
+            data: [],
+            labels: []
+        };
+        if(vm.manpowerChart.weekDate.getDay() < 5){
+            vm.manpowerChart.weekDate.setDate(vm.manpowerChart.weekDate.getDate() - (vm.manpowerChart.weekDate.getDay() + 2));
+        }else if(vm.manpowerChart.weekDate.getDay() == 6){
+            vm.manpowerChart.weekDate.setDate(vm.manpowerChart.weekDate.getDate() - 1);
+        }
+
+        vm.projectManpowerChart = {
+            options: {
+                legend: {
+                    display: true
+                }
+            },
+            colors: ['#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'],
+            data: [],
+            labels: []
+        };
         vm.projects = [];
+
+        vm.dateOptions = {
+            dateDisabled: function (data) {
+                var date = data.date,
+                    mode = data.mode;
+                return mode === 'day' && (date.getDay() != 5);
+            },
+            formatYear: 'yy',
+            maxDate: new Date(2020, 5, 22),
+            startingDay: 1
+        };
 
         var currentDay = new Date().getDay();
         if (currentDay < 5) {
@@ -36,7 +75,6 @@
             vm.widgetDate = new Date();
             currentDate = $filter('date')(new Date(), "yyyy-Www").toString();
         }
-        
 
         var tick = function() {
             vm.date = new Date();
@@ -74,9 +112,22 @@
             });
         };
 
+        function getAllUserHoursByweek() {
+            var week = $filter('date')(new Date(vm.manpowerChart.weekDate), "yyyy-Www").toString();
+            TimesheetService.allUserHoursByWeek(week).then(function(manpowerData) {
+                vm.manpowerChart.labels = [];
+                vm.manpowerChart.data = [];
+                _.each(manpowerData.resourceTypes, function (resourceTypeObj) {
+                    vm.manpowerChart.labels.push(resourceTypeObj.resourceType);
+                    vm.manpowerChart.data.push(resourceTypeObj.projectHours);
+                });
+            });
+        };
+
         var init = function() {
             getUsers();
             getProjectsWithUserCount();
+            getAllUserHoursByweek(currentDate);
         };
 
         init();

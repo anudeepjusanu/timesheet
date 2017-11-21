@@ -60,7 +60,7 @@
                     </div>
                 </div>
                 <div class="panel-body padding-0">
-                    <canvas id="pie" class="chart chart-pie" chart-colors="vm.hoursChart.colors" chart-options="vm.hoursChart.options" chart-data="vm.hoursChart.data" chart-labels="vm.hoursChart.labels">
+                    <canvas class="chart chart-pie" chart-colors="vm.hoursChart.colors" chart-options="vm.hoursChart.options" chart-data="vm.hoursChart.data" chart-labels="vm.hoursChart.labels">
                     </canvas>
                 </div>
             </div>
@@ -95,6 +95,43 @@
                 </div>
             </div>
             <!-- END PROJECTS BLOCK -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title-box pull-left">
+                        <h3>Organization Man Power</h3>
+                        <span>Capacity</span>
+                    </div>
+                    <div class="panel-controls pull-right" style="width: 200px;">
+                        <p class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.manpowerChart.weekDate" is-open="vm.manpowerChart.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getAllUserHoursByweek();" readonly />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="vm.manpowerChart.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="panel-body padding-0">
+                    <canvas class="chart chart-pie" chart-colors="vm.manpowerChart.colors" chart-options="vm.manpowerChart.options" chart-data="vm.manpowerChart.data" chart-labels="vm.manpowerChart.labels">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title-box">
+                        <h3>Man Power Hours</h3>
+                        <span>Capacity</span>
+                    </div>
+                </div>
+                <div class="panel-body padding-0">
+
+                </div>
+            </div>
         </div>
     </div>
 </div>

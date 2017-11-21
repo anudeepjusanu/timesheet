@@ -20,6 +20,9 @@ router.get('/remind/:id/:week', remind);
 router.get('/remind/all', remindAll);
 router.put('/admin/:id', adminUpdate);
 router.post('/month/report', getReportbyMonth);
+router.get('/allUserHoursByWeek/:weekId', allUserHoursByWeek);
+router.get('/projectUserHoursByWeek/:weekId/:projectId', projectUserHoursByWeek);
+router.get('/clientUserHoursByWeek/:weekId/:clientId', clientUserHoursByWeek);
 
 module.exports = router;
 
@@ -40,15 +43,6 @@ function createTimesheet(req, res) {
         .catch(function(err) {
             res.status(400).send(err);
         });
-    /*function createTimeSheet(user) {
-        timesheetService.create(user, req.body)
-            .then(function() {
-                res.sendStatus(200);
-            })
-            .catch(function(err) {
-                res.status(400).send(err);
-            });
-    }*/
 }
 
 function updateTimesheet(req, res){
@@ -153,6 +147,36 @@ function getReportbyMonth(req, res){
             res.send(reports);
         })
         .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+
+function allUserHoursByWeek(req, res) {
+    timesheetService.allUserHoursByWeek(req.params.weekId)
+        .then(function(reports) {
+            res.send(reports);
+        })
+        .catch(function(err) {
+            res.status(400).send(err);
+        });
+}
+
+function projectUserHoursByWeek(req, res) {
+    timesheetService.projectUserHoursByWeek(req.params.weekId, req.params.projectId)
+        .then(function(reports) {
+            res.send(reports);
+        })
+        .catch(function(err) {
+            res.status(400).send(err);
+        });
+}
+
+function clientUserHoursByWeek(req, res) {
+    timesheetService.clientUserHoursByWeek(req.params.weekId, req.params.clientId)
+        .then(function(reports) {
+            res.send(reports);
+        })
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }

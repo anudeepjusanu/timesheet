@@ -17,6 +17,9 @@
         service.adminUpdate = adminUpdate;
         service.getReportByMonth = getReportByMonth;
         service.getProjectsWithUserCount = getProjectsWithUserCount;
+        service.allUserHoursByWeek = allUserHoursByWeek;
+        service.projectUserHoursByWeek = projectUserHoursByWeek;
+        service.clientUserHoursByWeek = clientUserHoursByWeek;
 
         return service;
 
@@ -58,6 +61,18 @@
 
         function getProjectsWithUserCount() {
             return $http.get('/api/projects/projectsWithUserCount').then(handleSuccess, handleError);
+        }
+
+        function allUserHoursByWeek(week) {
+            return $http.get('/api/timesheet/allUserHoursByWeek/' + week).then(handleSuccess, handleError);
+        }
+
+        function projectUserHoursByWeek(week, projectId) {
+            return $http.get('/api/timesheet/projectUserHoursByWeek/' + week + '/' + projectId).then(handleSuccess, handleError);
+        }
+
+        function clientUserHoursByWeek(week, clientId) {
+            return $http.get('/api/timesheet/clientUserHoursByWeek/' + week + '/' + clientId).then(handleSuccess, handleError);
         }
 
         // private functions
