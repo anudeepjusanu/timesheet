@@ -22,14 +22,7 @@ db.timesheet.find().toArray(function(err, timesheet) {
         db.users.findById(sheet.userId, function(err, user) {
             if (user && user.projects) {
                 _.each(user.projects, function (prjData) {
-                    userProjects.push({
-                        projectId: mongo.helper.toObjectID(prjData.projectId),
-                        projectName: prjData.projectName,
-                        projectHours: sheet.hours,
-                        projectComment: sheet.comments,
-                        isAssigned: true,
-                        resourceType: ''
-                    });
+                    sheet.resourceType = "";
                     if (prjData && prjData.billDates) {
                         var weekDate = new Date(sheet.cDate);
                         _.each(prjData.billDates, function (billDate) {
@@ -54,6 +47,14 @@ db.timesheet.find().toArray(function(err, timesheet) {
                             }
                         });
                     }
+                    userProjects.push({
+                        projectId: mongo.helper.toObjectID(prjData.projectId),
+                        projectName: prjData.projectName,
+                        projectHours: sheet.hours,
+                        projectComment: sheet.comments,
+                        isAssigned: true,
+                        resourceType: sheet.resourceType
+                    });
                     return false;
                 });
 
