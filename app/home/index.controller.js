@@ -132,7 +132,6 @@
 
         vm.getAllUserHoursByMonth = function() {
             TimesheetService.allUserHoursByMonth(vm.monthHoursChart.weekDate.getMonth(), vm.monthHoursChart.weekDate.getFullYear()).then(function(manpowerData) {
-                console.log(manpowerData);
                 vm.monthHoursChart.labels = [];
                 vm.monthHoursChart.data = [];
                 vm.monthHoursChart.series = [];
@@ -152,7 +151,6 @@
                     });
                     vm.monthHoursChart.data.push(dataObj);
                 });
-                console.log(vm.monthHoursChart);
             });
         };
 
