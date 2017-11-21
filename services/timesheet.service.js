@@ -230,7 +230,7 @@ function adminUpdate(id, params) {
     return deferred.promise;
 }
 
-var resourceTypes = ["shadow", "buffer", "billable", "other"];
+var resourceTypes = ["shadow", "buffer", "billable"];
 
 function allUserHoursByWeek(week) {
     var deferred = Q.defer();
@@ -255,7 +255,7 @@ function allUserHoursByWeek(week) {
                 report.totalUserCount += 1;
                 report.totalHours += sheet.totalHours;
                 _.each(sheet.projects, function (project) {
-                    var resourceTypeId = (project.resourceType == "")?"other":project.resourceType;
+                    var resourceTypeId = (project.resourceType == "")?"buffer":project.resourceType;
                     var resourceTypeObj = _.find(report.resourceTypes, {"resourceType": resourceTypeId});
                     if(resourceTypeObj){
                         resourceTypeObj.projectUserCount += 1;
