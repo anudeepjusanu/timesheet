@@ -114,6 +114,7 @@
 
         function getAllUserHoursByweek() {
             var week = $filter('date')(new Date(vm.manpowerChart.weekDate), "yyyy-Www").toString();
+            console.log(week);
             TimesheetService.allUserHoursByWeek(week).then(function(manpowerData) {
                 vm.manpowerChart.labels = [];
                 vm.manpowerChart.data = [];
@@ -127,7 +128,7 @@
         var init = function() {
             getUsers();
             getProjectsWithUserCount();
-            getAllUserHoursByweek(currentDate);
+            getAllUserHoursByweek();
         };
 
         init();

@@ -43,7 +43,9 @@
                             <div class="row" ng-repeat="project in row.projects">
                                 <div class="col-md-4">{{project.projectName}}</div>
                                 <div class="col-md-2">{{project.projectHours}}</div>
-                                <div class="col-md-6">{{project.projectComment}}</div>
+                                <div class="col-md-6">
+                                    <p style="max-width: 300px; margin: 0px!important;">{{project.projectComment}}</p>
+                                </div>
                             </div>
                         </td>
                         <td data-title="'Hours'">{{row.totalHours}}</td>
@@ -110,8 +112,10 @@
                     <td>
                         <div class="row" ng-repeat="project in sheet.projects">
                             <div class="col-md-4">{{project.projectName}}</div>
-                            <div class="col-md-4">{{project.projectHours}}</div>
-                            <div class="col-md-4">{{project.projectComment}}</div>
+                            <div class="col-md-2">{{project.projectHours}}</div>
+                            <div class="col-md-6">
+                                <p style="max-width: 400px;">{{project.projectComment}}</p>
+                            </div>
                         </div>
                     </td>
                     <th>{{sheet.totalHours}}</th>

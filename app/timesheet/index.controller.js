@@ -186,6 +186,9 @@
                             userObj.weekDate = timesheet.weekDate;
                             userObj.projects = timesheet.projects;
                             userObj.totalHours = timesheet.totalHours;
+                            if(timesheet.projects.length > 0){
+                                userObj.remind = false;
+                            }
                         }
                     });
                     vm.tableParams.settings({
