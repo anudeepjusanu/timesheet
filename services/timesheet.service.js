@@ -376,9 +376,9 @@ function allUserHoursByMonth(month, year) {
                         }
                     });
                 });
-                report = _.sortBy(report, ['week']);
                 resultData.push(report);
                 if(resultData.length == weeks.length){
+                    resultData = _.sortBy(resultData, ['week']);
                     deferred.resolve(resultData);
                 }
             } else {
@@ -439,9 +439,9 @@ function projectUserHoursByMonth(month, year, projectId) {
                         }
                     });
                 });
-                report = _.sortBy(report, ['week']);
                 resultData.push(report);
                 if(resultData.length == weeks.length){
+                    resultData = _.sortBy(resultData, ['week']);
                     deferred.resolve(resultData);
                 }
             } else {
