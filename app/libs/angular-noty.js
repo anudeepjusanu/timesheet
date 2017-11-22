@@ -10,19 +10,19 @@
 
 				return {
 					show: function (message, type) {
-						callNoty({text: message || provider.settings.text, type: type || provider.settings.type});
+						callNoty({text: message || provider.settings.text, type: type || provider.settings.type, timeout: 1000});
 					},
 
 					showAlert: function (message) {
-						callNoty({text: message || provider.settings.text, type: "warning"});
+						callNoty({text: message || provider.settings.text, type: "warning", timeout: 1000});
 					},
 
 					showSuccess: function (message) {
-						callNoty({text: message || provider.settings.text, type: "success"});
+						callNoty({text: message || provider.settings.text, type: "success", timeout: 1000});
 					},
 
 					showError: function (message) {
-						callNoty({text: message || provider.settings.text, type: "error"});
+						callNoty({text: message || provider.settings.text, type: "error", timeout: 1000});
 					},
 
 					closeAll: function () {
