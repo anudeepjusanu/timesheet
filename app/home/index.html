@@ -99,100 +99,102 @@
             <!-- END PROJECTS BLOCK -->
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="panel-title-box pull-left">
-                        <h3>Organization Manpower</h3>
-                        <span>Capacity</span>
+    <div ng-if="vm.user.admin">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title-box pull-left">
+                            <h3>Organization Manpower</h3>
+                            <span>Capacity</span>
+                        </div>
+                        <div class="panel-controls pull-right" style="width: 140px;">
+                            <p class="input-group">
+                                <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.manpowerChart.weekDate" is-open="vm.manpowerChart.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getAllUserHoursByWeek();" readonly />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="vm.manpowerChart.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                            </p>
+                        </div>
                     </div>
-                    <div class="panel-controls pull-right" style="width: 140px;">
-                        <p class="input-group">
-                            <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.manpowerChart.weekDate" is-open="vm.manpowerChart.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getAllUserHoursByWeek();" readonly />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="vm.manpowerChart.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
-                            </span>
-                        </p>
+                    <div class="panel-body padding-0">
+                        <canvas class="chart chart-pie" chart-colors="vm.manpowerChart.colors" chart-options="vm.manpowerChart.options" chart-data="vm.manpowerChart.data" chart-labels="vm.manpowerChart.labels">
+                        </canvas>
                     </div>
                 </div>
-                <div class="panel-body padding-0">
-                    <canvas class="chart chart-pie" chart-colors="vm.manpowerChart.colors" chart-options="vm.manpowerChart.options" chart-data="vm.manpowerChart.data" chart-labels="vm.manpowerChart.labels">
-                    </canvas>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title-box pull-left">
+                            <h3>Monthly Hours</h3>
+                            <span>Capacity</span>
+                        </div>
+                        <div class="panel-controls pull-right" style="width: 140px; margin-left: 10px;">
+                            <p class="input-group">
+                                <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.monthHoursChart.weekDate" is-open="vm.monthHoursChart.opened" datepicker-options="vm.monthOptions" ng-required="true" close-text="Close" ng-change="vm.getAllUserHoursByMonth();" readonly />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="vm.monthHoursChart.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="panel-body padding-0">
+                        <canvas class="chart chart-bar" chart-colors="vm.monthHoursChart.colors" chart-options="vm.monthHoursChart.options" chart-data="vm.monthHoursChart.data" chart-labels="vm.monthHoursChart.labels" chart-series="vm.monthHoursChart.series">
+                        </canvas>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="panel-title-box pull-left">
-                        <h3>Monthly Hours</h3>
-                        <span>Capacity</span>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title-box pull-left">
+                            <h3>Project Manpower</h3>
+                            <span>Capacity</span>
+                        </div>
+                        <div class="panel-controls pull-right" style="width: 140px; margin-left: 10px">
+                            <p class="input-group">
+                                <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.projectManpower.weekDate" is-open="vm.projectManpower.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getProjectUserHoursByWeek();" readonly />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="vm.projectManpower.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="panel-controls pull-right" style="width: 200px;">
+                            <select class="form-control" ng-model="vm.projectManpower.projectId" ng-options="project.projectId as project.projectName for project in vm.projects" ng-change="vm.getProjectUserHoursByWeek();" ></select>
+                        </div>
                     </div>
-                    <div class="panel-controls pull-right" style="width: 140px; margin-left: 10px;">
-                        <p class="input-group">
-                            <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.monthHoursChart.weekDate" is-open="vm.monthHoursChart.opened" datepicker-options="vm.monthOptions" ng-required="true" close-text="Close" ng-change="vm.getAllUserHoursByMonth();" readonly />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="vm.monthHoursChart.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
-                            </span>
-                        </p>
+                    <div class="panel-body padding-0">
+                        <canvas class="chart chart-pie" chart-colors="vm.projectManpower.colors" chart-options="vm.projectManpower.options" chart-data="vm.projectManpower.data" chart-labels="vm.projectManpower.labels">
+                        </canvas>
                     </div>
-                </div>
-                <div class="panel-body padding-0">
-                    <canvas class="chart chart-bar" chart-colors="vm.monthHoursChart.colors" chart-options="vm.monthHoursChart.options" chart-data="vm.monthHoursChart.data" chart-labels="vm.monthHoursChart.labels" chart-series="vm.monthHoursChart.series">
-                    </canvas>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="panel-title-box pull-left">
-                        <h3>Project Manpower</h3>
-                        <span>Capacity</span>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title-box pull-left">
+                            <h3>Project Monthly Hours</h3>
+                            <span>Capacity</span>
+                        </div>
+                        <div class="panel-controls pull-right" style="width: 140px; margin-left: 10px;">
+                            <p class="input-group">
+                                <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.projectMonthlyHours.weekDate" is-open="vm.projectMonthlyHours.opened" datepicker-options="vm.monthOptions" ng-required="true" close-text="Close" ng-change="vm.getProjectUserHoursByMonth();" readonly />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="vm.projectMonthlyHours.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="panel-controls pull-right" style="width: 200px;">
+                            <select class="form-control" ng-model="vm.projectMonthlyHours.projectId" ng-options="project.projectId as project.projectName for project in vm.projects" ng-change="vm.getProjectUserHoursByMonth();" ></select>
+                        </div>
                     </div>
-                    <div class="panel-controls pull-right" style="width: 140px; margin-left: 10px">
-                        <p class="input-group">
-                            <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.projectManpower.weekDate" is-open="vm.projectManpower.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getProjectUserHoursByWeek();" readonly />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="vm.projectManpower.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
-                            </span>
-                        </p>
+                    <div class="panel-body padding-0">
+                        <canvas class="chart chart-bar" chart-colors="vm.projectMonthlyHours.colors" chart-options="vm.projectMonthlyHours.options" chart-data="vm.projectMonthlyHours.data" chart-labels="vm.projectMonthlyHours.labels" chart-series="vm.projectMonthlyHours.series">
+                        </canvas>
                     </div>
-                    <div class="panel-controls pull-right" style="width: 200px;">
-                        <select class="form-control" ng-model="vm.projectManpower.projectId" ng-options="project.projectId as project.projectName for project in vm.projects" ng-change="vm.getProjectUserHoursByWeek();" ></select>
-                    </div>
-                </div>
-                <div class="panel-body padding-0">
-                    <canvas class="chart chart-pie" chart-colors="vm.projectManpower.colors" chart-options="vm.projectManpower.options" chart-data="vm.projectManpower.data" chart-labels="vm.projectManpower.labels">
-                    </canvas>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="panel-title-box pull-left">
-                        <h3>Project Monthly Hours</h3>
-                        <span>Capacity</span>
-                    </div>
-                    <div class="panel-controls pull-right" style="width: 140px; margin-left: 10px;">
-                        <p class="input-group">
-                            <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.projectMonthlyHours.weekDate" is-open="vm.projectMonthlyHours.opened" datepicker-options="vm.monthOptions" ng-required="true" close-text="Close" ng-change="vm.getProjectUserHoursByMonth();" readonly />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="vm.projectMonthlyHours.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
-                            </span>
-                        </p>
-                    </div>
-                    <div class="panel-controls pull-right" style="width: 200px;">
-                        <select class="form-control" ng-model="vm.projectMonthlyHours.projectId" ng-options="project.projectId as project.projectName for project in vm.projects" ng-change="vm.getProjectUserHoursByMonth();" ></select>
-                    </div>
-                </div>
-                <div class="panel-body padding-0">
-                    <canvas class="chart chart-bar" chart-colors="vm.projectMonthlyHours.colors" chart-options="vm.projectMonthlyHours.options" chart-data="vm.projectMonthlyHours.data" chart-labels="vm.projectMonthlyHours.labels" chart-series="vm.projectMonthlyHours.series">
-                    </canvas>
                 </div>
             </div>
         </div>

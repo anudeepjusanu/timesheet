@@ -156,10 +156,11 @@
         vm.getAllUserHoursByWeek = function() {
             var week = $filter('date')(new Date(vm.manpowerChart.weekDate), "yyyy-Www").toString();
             TimesheetService.allUserHoursByWeek(week).then(function(manpowerData) {
+                console.log(manpowerData);
                 vm.manpowerChart.labels = [];
                 vm.manpowerChart.data = [];
                 _.each(manpowerData.resourceTypes, function (resourceTypeObj) {
-                    vm.manpowerChart.labels.push(resourceTypeObj.resourceType);
+                    vm.manpowerChart.labels.push(resourceTypeObj.resourceType + ' ('+ resourceTypeObj.projectUserCount +')');
                     vm.manpowerChart.data.push(resourceTypeObj.projectHours);
                 });
             });
@@ -171,7 +172,7 @@
                 vm.monthHoursChart.data = [];
                 vm.monthHoursChart.series = [];
                 _.each(manpowerData[0].resourceTypes, function (resourceTypeObj) {
-                    vm.monthHoursChart.series.push(resourceTypeObj.resourceType);
+                    vm.monthHoursChart.series.push(resourceTypeObj.resourceType + ' ('+ resourceTypeObj.projectUserCount +')');
                 });
                 _.each(manpowerData, function (manpower) {
                     vm.monthHoursChart.labels.push(manpower.week);
@@ -196,7 +197,7 @@
                     vm.projectManpower.labels = [];
                     vm.projectManpower.data = [];
                     _.each(manpowerData.resourceTypes, function (resourceTypeObj) {
-                        vm.projectManpower.labels.push(resourceTypeObj.resourceType);
+                        vm.projectManpower.labels.push(resourceTypeObj.resourceType + ' ('+ resourceTypeObj.projectUserCount +')');
                         vm.projectManpower.data.push(resourceTypeObj.projectHours);
                     });
                 });
@@ -210,7 +211,7 @@
                     vm.projectMonthlyHours.data = [];
                     vm.projectMonthlyHours.series = [];
                     _.each(manpowerData[0].resourceTypes, function (resourceTypeObj) {
-                        vm.projectMonthlyHours.series.push(resourceTypeObj.resourceType);
+                        vm.projectMonthlyHours.series.push(resourceTypeObj.resourceType + ' ('+ resourceTypeObj.projectUserCount +')');
                     });
                     _.each(manpowerData, function (manpower) {
                         vm.projectMonthlyHours.labels.push(manpower.week);
@@ -232,10 +233,14 @@
         var init = function() {
             getUsers();
             getProjectsWithUserCount();
-            vm.getAllUserHoursByWeek();
-            vm.getAllUserHoursByMonth();
+            UserService.GetCurrent().then(function(user) {
+                vm.user = user;
+                if(vm.user.admin) {
+                    vm.getAllUserHoursByWeek();
+                    vm.getAllUserHoursByMonth();
+                }
+            });
         };
-
         init();
     }
 
