@@ -30,6 +30,7 @@
                         <table class="table">
                             <tr>
                                 <th>Project</th>
+                                <th>Allocated Hours</th>
                                 <th>Hours</th>
                                 <th>Comments</th>
                                 <!-- <th>
@@ -42,6 +43,9 @@
                                     <select ng-if="project.isAssigned!==true" class="form-control" ng-model="project.projectId" ng-options="project.projectId as project.projectName for project in vm.user.projects"></select>
                                 </td>
                                 <td>
+                                    <b>{{project.allocatedHours}}</b>
+                                </td>
+                                <td>
                                     <input type="number" min="0" max="70" placeholder="Your Hours" class="form-control" ng-model="project.projectHours" ng-required="true" ng-change="vm.calTotalHours();" />
                                 </td>
                                 <td>
@@ -49,7 +53,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>Total Hours :</th>
+                                <th colspan="2">Total Hours :</th>
                                 <th>{{vm.timesheet.totalHours}}</th>
                                 <th style="text-align: right;"><button type="button" class="btn btn-primary btn-lg" ng-click="vm.saveTimesheet(timesheetForm);">Submit</button></th>
                             </tr>

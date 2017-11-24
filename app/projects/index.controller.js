@@ -66,6 +66,12 @@
         };
         vm.obj = {};
         vm.isNew = true;
+        vm.projectTypes = [
+            { projectTypeId: "billed", projectTypeName: "Billed" },
+            { projectTypeId: "bizdev", projectTypeName: "Bizdev" },
+            { projectTypeId: "ops", projectTypeName: "ops" },
+            { projectTypeId: "sales", projectTypeName: "Sales" },
+        ];
         
         vm.getClients = function () {
             ProjectService.getClients().then(function(response) {

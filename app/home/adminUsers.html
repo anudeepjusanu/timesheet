@@ -42,15 +42,15 @@
                     </div>
                     <div class="profile-controls" ng-if="vm.isAdmin">
                         <a  ui-sref="userInfo({'id': user._id})" class="profile-control-left"><span class="fa fa-info"></span></a>
-                        <a ng-click="vm.deleteUser(user._id)" class="profile-control-right"><span class="fa fa-times"></span></a>
+                        
                     </div>
                 </div>
                 <div class="panel-body">
                     <div class="contact-info">
-                        <!--<p><small>Mobile</small>
-                            <br/>{{user.phone ? user.phone: "NA"}}</p>-->
-                        <p><small>Email</small>
-                            <br/>{{user.username ? user.username: "NA"}}</p>
+                        <p>
+                            <small>Email</small>
+                        <br/>{{user.username ? user.username: "NA"}}
+                        </p>
                     </div>
                 </div>
             </div>

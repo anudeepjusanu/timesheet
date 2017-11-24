@@ -31,6 +31,12 @@
                                 </div>
                             </div>
                             <div class="form-group required">
+                                <label class="col-md-3 control-label" for="projectType">Project Type</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" id="projectType" ng-model="vm.obj.projectType" ng-required="true" ng-options="prj.projectTypeId as prj.projectTypeName for prj in vm.projectTypes"></select>
+                                </div>
+                            </div>
+                            <div class="form-group required">
                                 <label class="col-md-3 control-label" for="startDate">Start Date</label>
                                 <div class="col-md-9">
                                     <p class="input-group">

@@ -382,6 +382,7 @@
                 vm.timesheet.projects.push({
                     projectId: project.projectId,
                     projectName: project.projectName,
+                    allocatedHours: project.allocatedHours,
                     projectHours: 0,
                     projectComment: "",
                     isAssigned: true

@@ -34,6 +34,7 @@ function create(projectParam) {
         clientId: mongo.helper.toObjectID(projectParam.clientId),
         projectName: projectParam.projectName,
         clientName: projectParam.clientName,
+        projectType: projectParam.projectType,
         startDate: projectParam.startDate,
         description: projectParam.description,
         createdOn: new Date(),
@@ -54,6 +55,7 @@ function update(_id, params) {
         clientId: mongo.helper.toObjectID(params.clientId),
         projectName: params.projectName,
         clientName: params.clientName,
+        projectType: params.projectType,
         startDate: params.startDate,
         description: params.description
     }
@@ -121,7 +123,7 @@ function getAssignedUsers(projectId){
                     userId: user._id,
                     userName: user.name,
                     startDate: userProject.startDate,
-                    isBillable: userProject.isBillable,
+                    allocatedHours: userProject.allocatedHours,
                     billDates: userProject.billDates
                 });
             });
@@ -155,6 +157,7 @@ function assignUsers(projectId, users) {
                             "projectName": projectRoc.projectName,
                             "clientName": projectRoc.clientName,
                             "startDate": user.startDate,
+                            "allocatedHours": user.allocatedHours,
                             "billDates": user.billDates
                         }
                         var projectIndex = _.findIndex(rowData.projects, {"projectId": projectId});
@@ -201,6 +204,7 @@ function assignUser(projectId, user) {
                         "projectName": projectRoc.projectName,
                         "clientName": projectRoc.clientName,
                         "startDate": user.startDate,
+                        "allocatedHours": user.allocatedHours,
                         "billDates": user.billDates
                     }
                     var projectIndex = _.findIndex(rowData.projects, {"projectId": projectId});
