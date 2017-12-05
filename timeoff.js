@@ -8,7 +8,7 @@ var db = mongo.db(config.connectionString, { native_parser: true });
 db.bind('projects');
 db.bind('users');
 
-db.projects.findOne({projectName: 'timeoff'}, function(err, projectObj) {
+db.projects.findOne({projectName: 'Timeoff'}, function(err, projectObj) {
     if (err) deferred.reject(err.name + ': ' + err.message);
     //console.log(projectObj);
     db.users.find().toArray(function(err, usersData) {
