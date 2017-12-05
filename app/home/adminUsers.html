@@ -41,7 +41,8 @@
                         <div class="profile-data-name">{{user.name}}</div>
                     </div>
                     <div class="profile-controls" ng-if="vm.isAdmin">
-                        <a  ui-sref="userInfo({'id': user._id})" class="profile-control-left"><span class="fa fa-info"></span></a>
+                        <a ui-sref="userInfo({'id': user._id})" class="profile-control-left"><span class="fa fa-info"></span></a>
+                        <a ng-click="vm.deleteUser(user._id)" class="profile-control-right"><span class="fa fa-info"></span></a>
                         
                     </div>
                 </div>

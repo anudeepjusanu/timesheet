@@ -282,9 +282,8 @@
                 vm.user = user;
                 if (vm.user.admin) {
                     getAllReports();
-                } else {
-                    getMyTimesheets();
                 }
+                getMyTimesheets(); 
                 getProjects();
             });
         }
