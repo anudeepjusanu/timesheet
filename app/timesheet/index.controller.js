@@ -261,6 +261,12 @@
             });
         }
 
+        vm.deleteTimesheet = function(timesheetId) {
+            TimesheetService.deleteTimesheet(timesheetId).then(function(response) {
+                getMyTimesheets();
+            });
+        }
+
         function getMyTimesheets() {
             TimesheetService.getMine().then(function(timesheets) {
                 vm.timesheets = timesheets;

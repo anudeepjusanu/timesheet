@@ -14,6 +14,7 @@ var bot = new builder.UniversalBot(connector);
 router.post('/', createTimesheet);
 router.put('/:id', updateTimesheet);
 router.get('/:id', getTimesheet);
+router.delete('/:id', deleteTimesheet);
 router.get('/week/mine', getMyReport);
 router.get('/week/:weekId', getReportbyWeek);
 router.get('/remind/:id/:week', remind);
@@ -61,6 +62,17 @@ function updateTimesheet(req, res){
 
 function getTimesheet(req, res){
     timesheetService.getTimesheet(req.params.id)
+        .then(function (response) {
+            res.send(response);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+
+function deleteTimesheet(req, res){
+    var userId = req.user.sub;
+    timesheetService.deleteTimesheet(req.params.id, userId)
         .then(function (response) {
             res.send(response);
         })

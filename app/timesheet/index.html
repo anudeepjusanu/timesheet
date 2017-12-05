@@ -157,7 +157,10 @@
                         </div>
                     </td>
                     <th>{{sheet.totalHours}}</th>
-                    <td><a class="btn btn-primary btn-xs" ui-sref="editTimesheet({id: sheet._id})">Update</a></td>
+                    <td>
+                        <a class="btn btn-primary btn-xs" ui-sref="editTimesheet({id: sheet._id})">Update</a>
+                        <a class="btn btn-primary btn-xs" ng-click="vm.deleteTimesheet(sheet._id)">Delete</a>
+                    </td>
                 </tr>
             </table>
         </div>
