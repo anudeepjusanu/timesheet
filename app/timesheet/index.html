@@ -145,7 +145,7 @@
                     <th>Total Hours</th>
                     <th>Action</th>
                 </tr>
-                <tr ng-repeat="sheet in vm.timesheets | orderBy: weekDate">
+                <tr ng-repeat="sheet in vm.timesheets | orderBy: '-weekDate'">
                     <td>{{sheet.weekDate | date: 'mediumDate'}}</td>
                     <td>
                         <div class="row" ng-repeat="project in sheet.projects">
