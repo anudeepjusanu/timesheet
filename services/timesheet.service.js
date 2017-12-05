@@ -22,6 +22,7 @@ service.projectUserHoursByWeek = projectUserHoursByWeek;
 service.clientUserHoursByWeek = clientUserHoursByWeek;
 service.allUserHoursByMonth = allUserHoursByMonth;
 service.projectUserHoursByMonth = projectUserHoursByMonth;
+service.timesheetBetweenDates = timesheetBetweenDates;
 
 module.exports = service;
 
@@ -446,6 +447,43 @@ function projectUserHoursByMonth(month, year, projectId) {
                 }
             } else {
                 deferred.reject("Please select valid week");
+            }
+        });
+    });
+    return deferred.promise;
+}
+
+function timesheetBetweenDates(params){
+    var deferred = Q.defer();
+    Date.prototype.getWeek = function() {
+        var onejan = new Date(this.getFullYear(), 0, 1);
+        return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+    }
+    var resultData = [];
+    var weeks = [];
+    var startDate = new Date(params.startDate);
+    var endDate = new Date(params.endDate);
+    var loop = 1;
+    while (startDate < endDate && loop++ < 50){
+        weeks.push(startDate.getFullYear()+"-W"+startDate.getWeek());
+        startDate.setDate(startDate.getDate() + 7);
+    }
+    _.each(weeks, function (weekVal) {
+        var report = {
+            week: weekVal,
+            sheets: []
+        } ;
+        db.timesheets.find({ week: weekVal }).toArray(function(err, sheets) {
+            var report = {
+                week: weekVal,
+                sheets: []
+            } ;
+            if (sheets) {
+                report.sheets = sheets;
+            }
+            resultData.push(report);
+            if(resultData.length == weeks.length){
+                deferred.resolve(resultData);
             }
         });
     });

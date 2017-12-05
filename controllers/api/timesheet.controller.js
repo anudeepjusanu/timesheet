@@ -25,6 +25,7 @@ router.get('/projectUserHoursByWeek/:weekId/:projectId', projectUserHoursByWeek)
 router.get('/clientUserHoursByWeek/:weekId/:clientId', clientUserHoursByWeek);
 router.get('/allUserHoursByMonth/:monthId/:yearId', allUserHoursByMonth);
 router.get('/projectUserHoursByMonth/:monthId/:yearId/:projectId', projectUserHoursByMonth);
+router.get('/timesheetBetweenDates/:startDate/:endDate', timesheetBetweenDates);
 
 module.exports = router;
 
@@ -203,6 +204,52 @@ function projectUserHoursByMonth(req, res) {
             res.send(result);
         })
         .catch(function(err) {
+            res.status(400).send(err);
+        });
+}
+
+function timesheetBetweenDates(req, res) {
+
+    Date.prototype.getWeek = function() {
+        var onejan = new Date(this.getFullYear(), 0, 1);
+        return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+    }
+    var resultData = [];
+    var weeks = [];
+    var startDate = new Date(params.startDate);
+    var endDate = new Date(params.endDate);
+    var loop = 1;
+    while (startDate < endDate && loop++ < 50){
+        weeks.push(startDate.getFullYear()+"-W"+startDate.getWeek());
+        startDate.setDate(startDate.getDate() + 7);
+    }
+    _.each(weeks, function (weekVal) {
+        var report = {
+            week: weekVal,
+            sheets: []
+        } ;
+        report.sheets = getByWeek(weekVal);;
+        resultData.push(report);
+        deferred.resolve(resultData);
+        /*db.timesheets.find({ week: weekVal }).toArray(function(err, sheets) {
+            var report = {
+                week: weekVal,
+                sheets: []
+            } ;
+            if (sheets) {
+                report.sheets = sheets;
+            }
+            resultData.push(report);
+            if(resultData.length == weeks.length){
+                deferred.resolve(resultData);
+            }
+        });*/
+    });
+    timesheetService.timesheetBetweenDates(req.params)
+        .then(function (result) {
+            res.send(result);
+        })
+        .catch(function (err) {
             res.status(400).send(err);
         });
 }
