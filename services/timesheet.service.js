@@ -36,7 +36,7 @@ function createTimesheet(user, userParam) {
     db.users.findById(user._id, function(err, user) {
         if (user && user.projects) {
             _.each(userParam.projects, function (projectObj) {
-                var prjData = _.find(user.projects, {projectId: projectObj.projectId});
+                var prjData = _.find(user.projects, {"projectId": projectObj.projectId+""});
                 if(prjData && prjData.billDates){
                     var weekDate = new Date(userParam.weekDate);
                     _.each(prjData.billDates, function (billDate) {

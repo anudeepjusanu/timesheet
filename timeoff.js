@@ -20,7 +20,7 @@ db.projects.findOne({projectName: 'Timeoff'}, function(err, projectObj) {
                 rowData.projects = userRoc.projects;
             }
             var projectData = {
-                "projectId": projectObj._id,
+                "projectId": projectObj._id+"",
                 "projectName": projectObj.projectName,
                 "clientName": projectObj.clientName,
                 "startDate": '2017-01-01T00:01:00.000Z',
