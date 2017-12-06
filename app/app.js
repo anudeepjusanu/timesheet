@@ -97,6 +97,13 @@
                 controller: 'Projects.AssignUsersController',
                 controllerAs: 'vm',
                 data: { activeTab: 'projects' }
+            })
+            .state('clients', {
+                url: '/clients',
+                templateUrl: 'projects/clients.html',
+                controller: 'Projects.ClientsController',
+                controllerAs: 'vm',
+                data: { activeTab: 'clients' }
             });
             ChartJsProvider.setOptions({ colors : [ '#1caf9a', '#273541'] });
     }

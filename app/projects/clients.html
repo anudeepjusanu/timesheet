@@ -1,0 +1,40 @@
+﻿<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+    {{alert.msg}}
+</div>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="">
+        <!-- START DEFAULT TABLE EXPORT -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Clients</h3>
+                <div class="clearfix row">
+                    <div class="col-sm-6">
+                        <a class="btn btn-primary" ng-click="vm.viewClientModel();" ng-if="vm.user.admin">Add Client</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body panel-body-table">
+                <table class="table table-condensed table-bordered table-striped" export-table>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Customer Name</th>
+                        <th>Created On</th>
+                        <th>Updated On</th>
+                        <th ng-if="vm.user.admin">Action</th>
+                    </tr>
+                    <tr ng-repeat="client in vm.clients | orderBy:'name'">
+                        <td>{{$index+1}}</td>
+                        <td>{{client.clientName}}</td>
+                        <td>{{client.createdOn}}</td>
+                        <td>{{client.updatedOn}}</td>
+                        <td ng-if="vm.user.admin">
+                            <a class="btn btn-primary btn-xs" ng-click="vm.viewClientModel(client)">Edit</a>
+                            <!--<a class="btn btn-primary btn-xs" ng-click="vm.delClient(client._id)">Delete</a>-->
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

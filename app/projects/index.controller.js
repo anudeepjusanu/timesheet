@@ -8,6 +8,7 @@
         .controller('Projects.AssignUsersController', AssignUsersController)
         .controller('Projects.AssignUserModel', AssignUserModel)
         .controller('Projects.ClientModel', ClientModel)
+        .controller('Projects.ClientsController', ClientsController)
 
     function Controller(UserService, ProjectService, $filter, _, FlashService, NgTableParams, noty) {
         var vm = this;
@@ -391,17 +392,31 @@
         vm.ok = function (form) {
             if (form.$valid) {
                 vm.enableSaveBtn = false;
-                ProjectService.createClient(vm.client).then(function(response) {
-                    noty.showSuccess("New Client Created successfully!");
-                    vm.enableSaveBtn = true;
-                    $uibModalInstance.close(vm.client);
-                }, function(error) {
-                    if (error) {
-                        vm.alerts.push({ msg: error, type: 'danger' });
-                    }
-                    vm.enableSaveBtn = true;
-                    $uibModalInstance.close(vm.client);
-                });
+                if(vm.client.isNew === true){
+                    ProjectService.createClient(vm.client).then(function(response) {
+                        noty.showSuccess("New Client has been created successfully!");
+                        vm.enableSaveBtn = true;
+                        $uibModalInstance.close(vm.client);
+                    }, function(error) {
+                        if (error) {
+                            vm.alerts.push({ msg: error, type: 'danger' });
+                        }
+                        vm.enableSaveBtn = true;
+                        $uibModalInstance.close(vm.client);
+                    });
+                }else{
+                    ProjectService.updateClient(vm.client).then(function(response) {
+                        noty.showSuccess("Client has been updated successfully!");
+                        vm.enableSaveBtn = true;
+                        $uibModalInstance.close(vm.client);
+                    }, function(error) {
+                        if (error) {
+                            vm.alerts.push({ msg: error, type: 'danger' });
+                        }
+                        vm.enableSaveBtn = true;
+                        $uibModalInstance.close(vm.client);
+                    });
+                }
             } else {
                 vm.enableSaveBtn = true;
                 vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
@@ -411,6 +426,72 @@
         vm.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
+    };
+    
+    function ClientsController(UserService, ProjectService, $uibModal, _, FlashService, NgTableParams, noty) {
+        var vm = this;
+        vm.user = {};
+        vm.clients = [];
+
+        function getClients(){
+            ProjectService.getClients().then(function(response) {
+                vm.clients = response;
+            }, function(error){
+                console.log(error);
+            });
+        }
+
+        vm.delClient = function (clientId) {
+            ProjectService.deleteClient(clientId).then(function(response) {
+                getClients();
+            }, function(error) {
+                if (error) {
+                    vm.alerts.push({ msg: error, type: 'danger' });
+                }
+            });
+        }
+
+        vm.viewClientModel = function (clientObj) {
+            var client = {};
+            if(clientObj){
+                client = clientObj;
+                client.isNew = false;
+            }else{
+                client.isNew = true;
+            }
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'projects/addClientModel.html',
+                controller: 'Projects.ClientModel',
+                controllerAs: 'vm',
+                size: 'md',
+                resolve: {
+                    client: function () {
+                        return client;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (clientObj) {
+                getClients();
+            }, function () {
+                getClients();
+            });
+        }
+
+        initController();
+        function initController() {
+            UserService.GetCurrent().then(function(user) {
+                vm.user = user;
+                if (vm.user.admin !== true) {
+
+                }
+            });
+            getClients();
+        }
+
     };
 
 })();
