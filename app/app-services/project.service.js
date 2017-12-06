@@ -21,6 +21,7 @@
         service.createClient = createClient;
         service.updateClient = updateClient;
         service.deleteClient = deleteClient;
+        service.getProjectUsers = getProjectUsers;
         service.getProjectsWithUserCount = getProjectsWithUserCount;
 
         return service;
@@ -75,6 +76,10 @@
 
         function deleteClient(_id) {
             return $http.delete('/api/projects/client/' + _id).then(handleSuccess, handleError);
+        }
+
+        function getProjectUsers() {
+            return $http.get('/api/projects/projectUsers').then(handleSuccess, handleError);
         }
 
         function getProjectsWithUserCount() {

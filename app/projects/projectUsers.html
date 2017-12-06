@@ -1,0 +1,55 @@
+﻿<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+    {{alert.msg}}
+</div>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="">
+        <!-- START DEFAULT TABLE EXPORT -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Clients</h3>
+                <div class="clearfix row">
+                    <div class="col-sm-6">
+                        <!--<a class="btn btn-primary" ng-click="vm.viewClientModel();" ng-if="vm.user.admin">Add Client</a>-->
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body panel-body-table">
+                <table class="table table-condensed table-bordered table-striped" export-table>
+                    <tr>
+                        <th width="80px">S.No</th>
+                        <th width="320px">Project Name</th>
+                        <th>
+                            <table class="table">
+                                <tr>
+                                    <td width="300px">Name</td>
+                                    <td>Allocated Hours</td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </th>
+                    </tr>
+                    <tr ng-repeat="project in vm.projects | orderBy:'name'">
+                        <td>{{$index+1}}</td>
+                        <td>{{project.projectName}}</td>
+                        <td>
+                            <table class="table">
+                                <tr ng-repeat="user in project.users">
+                                    <td width="300px">{{user.name}}</td>
+                                    <td>{{user.allocatedHours}}</td>
+                                    <td>
+                                        <div class="row" ng-repeat="billDate in user.billDates">
+                                            <div class="col-md-4">{{billDate.start}}</div>
+                                            <div class="col-md-4">{{billDate.end}}</div>
+                                            <div class="col-md-4">{{billDate.resourceType}}</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

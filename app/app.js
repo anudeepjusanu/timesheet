@@ -104,7 +104,14 @@
                 controller: 'Projects.ClientsController',
                 controllerAs: 'vm',
                 data: { activeTab: 'clients' }
-            });
+            })
+            .state('projectUsers', {
+                    url: '/projects/projectUsers',
+                    templateUrl: 'projects/projectUsers.html',
+                    controller: 'Projects.UsersController',
+                    controllerAs: 'vm',
+                    data: { activeTab: 'clients' }
+                });
             ChartJsProvider.setOptions({ colors : [ '#1caf9a', '#273541'] });
     }
 

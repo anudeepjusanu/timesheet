@@ -9,6 +9,7 @@
         .controller('Projects.AssignUserModel', AssignUserModel)
         .controller('Projects.ClientModel', ClientModel)
         .controller('Projects.ClientsController', ClientsController)
+        .controller('Projects.UsersController', UsersController)
 
     function Controller(UserService, ProjectService, $filter, _, FlashService, NgTableParams, noty) {
         var vm = this;
@@ -428,7 +429,7 @@
         };
     };
     
-    function ClientsController(UserService, ProjectService, $uibModal, _, FlashService, NgTableParams, noty) {
+    function ClientsController(UserService, ProjectService, $uibModal, _) {
         var vm = this;
         vm.user = {};
         vm.clients = [];
@@ -491,7 +492,32 @@
             });
             getClients();
         }
+    };
 
+    function UsersController(UserService, ProjectService, _) {
+        var vm = this;
+        vm.user = {};
+        vm.projects = [];
+
+        function getProjectUsers(){
+            ProjectService.getProjectUsers().then(function(response) {
+                console.log(response);
+                vm.projects = response;
+            }, function(error){
+                console.log(error);
+            });
+        }
+
+        initController();
+        function initController() {
+            UserService.GetCurrent().then(function(user) {
+                vm.user = user;
+                if (vm.user.admin !== true) {
+
+                }
+            });
+            getProjectUsers();
+        }
     };
 
 })();
