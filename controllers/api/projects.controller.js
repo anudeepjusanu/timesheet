@@ -198,7 +198,6 @@ function getProjectUsers(req, res) {
                         _.each(users, function (userObj) {
                             _.each(userObj.projects, function (assignPrj) {
                                 var projectObj = _.find(projects, {_id: assignPrj.projectId+""});
-                                console.log(projectObj);
                                 if(projectObj){
                                     projectObj.users.push({
                                         name: userObj.name,

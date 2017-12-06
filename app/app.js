@@ -110,7 +110,7 @@
                     templateUrl: 'projects/projectUsers.html',
                     controller: 'Projects.UsersController',
                     controllerAs: 'vm',
-                    data: { activeTab: 'clients' }
+                    data: { activeTab: 'projectUsers' }
                 });
             ChartJsProvider.setOptions({ colors : [ '#1caf9a', '#273541'] });
     }
