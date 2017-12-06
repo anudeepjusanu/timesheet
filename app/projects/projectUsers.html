@@ -7,24 +7,26 @@
         <!-- START DEFAULT TABLE EXPORT -->
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Clients</h3>
-                <div class="clearfix row">
-                    <div class="col-sm-6">
-                        <!--<a class="btn btn-primary" ng-click="vm.viewClientModel();" ng-if="vm.user.admin">Add Client</a>-->
-                    </div>
-                </div>
+                <h3 class="panel-title">Project Users</h3>
+                
             </div>
             <div class="panel-body panel-body-table">
                 <table class="table table-condensed table-bordered table-striped" export-table>
                     <tr>
                         <th width="80px">S.No</th>
-                        <th width="320px">Project Name</th>
+                        <th width="240px">Project Name</th>
                         <th>
                             <table class="table">
                                 <tr>
-                                    <td width="300px">Name</td>
-                                    <td>Allocated Hours</td>
-                                    <td></td>
+                                    <td width="320px">Name</td>
+                                    <td width="80px">Allocated Hours</td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-md-4">Start Date</div>
+                                            <div class="col-md-4">End Date</div>
+                                            <div class="col-md-4">Resource Type</div>
+                                        </div>
+                                    </td>
                                 </tr>
                             </table>
                         </th>
@@ -35,12 +37,12 @@
                         <td>
                             <table class="table">
                                 <tr ng-repeat="user in project.users">
-                                    <td width="300px">{{user.name}}</td>
-                                    <td>{{user.allocatedHours}}</td>
+                                    <td width="320px">{{user.name}}</td>
+                                    <td width="80px">{{user.allocatedHours}}</td>
                                     <td>
                                         <div class="row" ng-repeat="billDate in user.billDates">
-                                            <div class="col-md-4">{{billDate.start}}</div>
-                                            <div class="col-md-4">{{billDate.end}}</div>
+                                            <div class="col-md-4">{{billDate.start | date : 'mediumDate'}}</div>
+                                            <div class="col-md-4">{{billDate.end | date : 'mediumDate'}}</div>
                                             <div class="col-md-4">{{billDate.resourceType}}</div>
                                         </div>
                                     </td>
