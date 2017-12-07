@@ -70,7 +70,16 @@ function getTimesheet(req, res){
         });
 }
 
-
+function deleteTimesheet(req, res){
+    var userId = req.user.sub;
+    timesheetService.deleteTimesheet(req.params.id, userId)
+        .then(function (response) {
+            res.send(response);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
 
 function getMyReport(req, res) {
     timesheetService.getMine(req.user.sub)
