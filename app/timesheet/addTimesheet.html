@@ -39,8 +39,8 @@
                             </tr>
                             <tr ng-repeat="project in vm.timesheet.projects">
                                 <td>
-                                    <span ng-if="project.isAssigned">{{project.projectName}}</span>
-                                    <select ng-if="project.isAssigned!==true" class="form-control" ng-model="project.projectId" ng-options="project.projectId as project.projectName for project in vm.user.projects"></select>
+                                    {{project.projectName}}
+                                    <!--<select ng-if="project.isAssigned!==true" class="form-control" ng-model="project.projectId" ng-options="project.projectId as project.projectName for project in vm.user.projects"></select>-->
                                 </td>
                                 <td>
                                     <b>{{project.allocatedHours}}</b>

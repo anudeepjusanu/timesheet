@@ -15,18 +15,20 @@
                     <tr>
                         <th width="80px">S.No</th>
                         <th width="240px">Project Name</th>
+                        <th width="100px">Project Type</th>
                         <th>
                             <table class="table">
                                 <tr>
                                     <td width="320px">Name</td>
                                     <td width="80px">Allocated Hours</td>
-                                    <td>
+                                    <td width="420px">
                                         <div class="row">
                                             <div class="col-md-4">Start Date</div>
                                             <div class="col-md-4">End Date</div>
                                             <div class="col-md-4">Resource Type</div>
                                         </div>
                                     </td>
+                                    <td>Action</td>
                                 </tr>
                             </table>
                         </th>
@@ -34,18 +36,20 @@
                     <tr ng-repeat="project in vm.projects | orderBy:'name'">
                         <td>{{$index+1}}</td>
                         <td>{{project.projectName}}</td>
+                        <td>{{project.projectType}}</td>
                         <td>
                             <table class="table">
                                 <tr ng-repeat="user in project.users">
                                     <td width="320px">{{user.name}}</td>
                                     <td width="80px">{{user.allocatedHours}}</td>
-                                    <td>
+                                    <td width="420px">
                                         <div class="row" ng-repeat="billDate in user.billDates">
                                             <div class="col-md-4">{{billDate.start | date : 'mediumDate'}}</div>
                                             <div class="col-md-4">{{billDate.end | date : 'mediumDate'}}</div>
                                             <div class="col-md-4">{{billDate.resourceType}}</div>
                                         </div>
                                     </td>
+                                    <td><a class="btn btn-primary btn-xs" ng-click="vm.viewClientModel(client)">Edit</a></td>
                                 </tr>
                             </table>
                         </td>

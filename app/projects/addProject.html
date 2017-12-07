@@ -37,6 +37,12 @@
                                 </div>
                             </div>
                             <div class="form-group required">
+                                <label class="col-md-3 control-label" for="businessUnit">Business Unit</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" id="businessUnit" ng-model="vm.obj.businessUnit" ng-required="true" ng-options="option as option for option in ['Launchpad', 'Enterprise']"></select>
+                                </div>
+                            </div>
+                            <div class="form-group required">
                                 <label class="col-md-3 control-label" for="startDate">Start Date</label>
                                 <div class="col-md-9">
                                     <p class="input-group">
@@ -45,6 +51,12 @@
                                             <button type="button" class="btn btn-default" ng-click="vm.open2()"><i class="glyphicon glyphicon-calendar"></i></button>
                                         </span>
                                     </p>
+                                </div>
+                            </div>
+                            <div class="form-group required">
+                                <label class="col-md-3 control-label" for="visibility">Visibility</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" id="visibility" ng-model="vm.obj.visibility" ng-required="true" ng-options="option as option for option in ['Private', 'Public']"></select>
                                 </div>
                             </div>
                             <!-- Message body -->

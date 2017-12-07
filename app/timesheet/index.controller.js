@@ -393,6 +393,7 @@
                     isAssigned: true
                 });
             });
+
         }
 
 
@@ -437,6 +438,18 @@
         function getProjects(){
             ProjectService.getAll().then(function(response) {
                 vm.projects = response;
+                _.each(vm.projects, function (prjObj) {
+                    if(prjObj.visibility == 'Public'){
+                        vm.timesheet.projects.push({
+                            projectId: prjObj._id,
+                            projectName: prjObj.projectName,
+                            allocatedHours: prjObj.allocatedHours,
+                            projectHours: 0,
+                            projectComment: "",
+                            isAssigned: false
+                        });
+                    }
+                });
             }, function(error){
                 console.log(error);
             });
@@ -472,13 +485,13 @@
                     getTimesheet($stateParams.id);
                 } else {
                     vm.isNew = true;
+                    getProjects();
                 }
                 vm.projectUser.userId = vm.user._id;
                 if(vm.user.projects && vm.user.projects.length > 0){
                     vm.hasProjects = true;
                 }else{
                     getClients();
-                    getProjects();
                     vm.hasProjects = false;
                 }
             });

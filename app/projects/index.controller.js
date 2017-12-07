@@ -66,7 +66,9 @@
         vm.closeAlert = function (index) {
             vm.alerts.splice(index, 1);
         };
-        vm.obj = {};
+        vm.obj = {
+            visibility: 'Private'
+        };
         vm.isNew = true;
         vm.projectTypes = [
             { projectTypeId: "billed", projectTypeName: "Billed" },

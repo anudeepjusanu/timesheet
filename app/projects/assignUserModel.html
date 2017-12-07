@@ -31,21 +31,23 @@
                         </p>
                     </div>
                 </div>
-                <div class="form-group required">
+                <!--<div class="form-group required">
                     <label class="col-md-2 control-label" for="allocatedHours">Allocated Hours</label>
                     <div class="col-md-10">
                         <input type="number" id="allocatedHours" class="form-control" ng-model="vm.user.allocatedHours" max="80" style="width: 200px;" />
                     </div>
-                </div>
+                </div>-->
                 <div class="form-group">
                     <label class="col-md-2 control-label">Billable Dates</label>
-                    <div class="col-md-10">
+                    <div class="col-md-12">
                         <button type="button" class="btn btn-xs btn-primary pull-right" ng-click="vm.addBillDate(vm.user)">Add</button>
                         <!--hr/-->
                         <table id="" class="table">
                             <tr ng-if="vm.user.billDates.length > 0">
                                 <th>Start Date</th>
                                 <th>End Date</th>
+                                <th>Allocated Hours</th>
+                                <th>Billable Limit</th>
                                 <th>Resource Type</th>
                                 <th></th>
                             </tr>
@@ -66,6 +68,8 @@
                                         </span>
                                     </p>
                                 </td>
+                                <td><input type="number" class="form-control" ng-model="billDate.allocatedHours" max="80" style="width: 80px;" /></td>
+                                <td><input type="number" class="form-control" ng-model="billDate.billableMaxHours" max="80" style="width: 80px;" /></td>
                                 <td>
                                     <select class="form-control" ng-model="billDate.resourceType" ng-options="resourceType.resourceTypeId as resourceType.resourceTypeVal for resourceType in vm.resourceTypes">
                                     </select>
@@ -75,45 +79,6 @@
                                 </td>
                             </tr>
                         </table>
-                        <!--div-- ng-repeat="billDate in vm.user.billDates" class="row" ng-show="vm.user.isBillable">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="col-md-4 col-xs-12 control-label">Start Date</label>
-                                    <div class="col-md-8 col-xs-12">
-                                        <p class="input-group">
-                                            <input type="text" class="form-control" uib-datepicker-popup ng-model="billDate.start" is-open="billDate.startOpened" datepicker-options="vm.dateOptions" close-text="Close" />
-                                            <span class="input-group-btn">
-                                                <button type="button" class="btn btn-default" ng-click="billDate.startOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
-                                            </span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="col-md-4 col-xs-12 control-label">End Date</label>
-                                    <div class="col-md-8 col-xs-12">
-                                        <p class="input-group">
-                                            <input type="text" class="form-control" uib-datepicker-popup ng-model="billDate.end" is-open="billDate.endOpened" datepicker-options="vm.dateOptions" close-text="Close" />
-                                            <span class="input-group-btn">
-                                                <button type="button" class="btn btn-default" ng-click="billDate.endOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
-                                            </span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <div class="col-md-8 col-xs-12">
-                                        <select class="form-control" ng-model="billDate.resourceType" ng-options="resourceType.resourceTypeId as resourceType.resourceTypeVal for resourceType in vm.resourceTypes">
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-                                <a ng-click="vm.deleteBillDate(billDate, $index)"><span class="fa fa-times"></span></a>
-                            </div>
-                        </div-->
                     </div>
                 </div>
             </form>

@@ -43,6 +43,12 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="col-md-3 col-xs-12 control-label">Resource Type</label>
+                                <div class="col-md-6 col-xs-12">
+                                    <select class="form-control" ng-model="vm.employee.resourceType" ng-required="true" ng-options="option as option for option in ['Billable', 'Non-billable']"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Timesheet</label>
                                 <div class="col-md-6 col-xs-12">
                                     <label class="switch">
