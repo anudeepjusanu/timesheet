@@ -200,7 +200,8 @@ function getProjectUsers(req, res) {
                                 var projectObj = _.find(projects, {_id: assignPrj.projectId+""});
                                 if(projectObj){
                                     projectObj.users.push({
-                                        name: userObj.name,
+                                        userId: userObj._id,
+                                        userName: userObj.name,
                                         username: userObj.username,
                                         allocatedHours: assignPrj.allocatedHours,
                                         billDates: assignPrj.billDates

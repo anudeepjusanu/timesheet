@@ -308,18 +308,15 @@
         }
     }
 
-    function AssignUserModel($uibModalInstance, ProjectService, noty, user, project, parentAlerts) {
+    function AssignUserModel($uibModalInstance, ProjectService, noty, user, project) {
         var vm = this;
+        vm.alerts = [];
         vm.enableSaveBtn = true;
-        vm.alerts = parentAlerts;
         vm.resourceTypes = [
             {"resourceTypeId":"shadow", "resourceTypeVal":"Shadow"},
             {"resourceTypeId":"buffer", "resourceTypeVal":"Buffer"},
             {"resourceTypeId":"billable", "resourceTypeVal":"Billable"}
         ];
-        if(!vm.alerts){
-            vm.alerts = [];
-        }
         vm.user = user;
         if(vm.user.startDate){
             vm.user.startDate = new Date(vm.user.startDate);
@@ -496,17 +493,43 @@
         }
     };
 
-    function UsersController(UserService, ProjectService, _) {
+    function UsersController(UserService, ProjectService, _, $uibModal) {
         var vm = this;
         vm.user = {};
         vm.projects = [];
 
         function getProjectUsers(){
             ProjectService.getProjectUsers().then(function(response) {
-                console.log(response);
                 vm.projects = response;
             }, function(error){
                 console.log(error);
+            });
+        }
+
+        vm.viewAssignUser = function (user, project) {
+            user.isNew = false;
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'projects/assignUserModel.html',
+                controller: 'Projects.AssignUserModel',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    user: function () {
+                        return user;
+                    },
+                    project: function () {
+                        return project;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (userObj) {
+                getProjectUsers();
+            }, function () {
+                getProjectUsers();
             });
         }
 

@@ -8,7 +8,6 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Project Users</h3>
-
             </div>
             <div class="panel-body panel-body-table">
                 <table class="table table-condensed table-bordered table-striped" export-table>
@@ -20,12 +19,13 @@
                             <table class="table">
                                 <tr>
                                     <td width="320px">Name</td>
-                                    <td width="80px">Allocated Hours</td>
-                                    <td width="420px">
+                                    <td width="480px">
                                         <div class="row">
-                                            <div class="col-md-4">Start Date</div>
-                                            <div class="col-md-4">End Date</div>
-                                            <div class="col-md-4">Resource Type</div>
+                                            <div class="col-md-3">Start Date</div>
+                                            <div class="col-md-3">End Date</div>
+                                            <div class="col-md-2">Allocated Hours</div>
+                                            <div class="col-md-2">Billable Limit</div>
+                                            <div class="col-md-2">Resource Type</div>
                                         </div>
                                     </td>
                                     <td>Action</td>
@@ -40,16 +40,17 @@
                         <td>
                             <table class="table">
                                 <tr ng-repeat="user in project.users">
-                                    <td width="320px">{{user.name}}</td>
-                                    <td width="80px">{{user.allocatedHours}}</td>
-                                    <td width="420px">
+                                    <td width="320px">{{user.userName}}</td>
+                                    <td width="480px">
                                         <div class="row" ng-repeat="billDate in user.billDates">
-                                            <div class="col-md-4">{{billDate.start | date : 'mediumDate'}}</div>
-                                            <div class="col-md-4">{{billDate.end | date : 'mediumDate'}}</div>
-                                            <div class="col-md-4">{{billDate.resourceType}}</div>
+                                            <div class="col-md-3">{{billDate.start | date : 'mediumDate'}}</div>
+                                            <div class="col-md-3">{{billDate.end | date : 'mediumDate'}}</div>
+                                            <div class="col-md-2">{{billDate.allocatedHours}}</div>
+                                            <div class="col-md-2">{{billDate.billableMaxHours}}</div>
+                                            <div class="col-md-2">{{billDate.resourceType}}</div>
                                         </div>
                                     </td>
-                                    <td><a class="btn btn-primary btn-xs" ng-click="vm.viewClientModel(client)">Edit</a></td>
+                                    <td><a class="btn btn-primary btn-xs" ng-click="vm.viewAssignUser(user, project)">Edit</a></td>
                                 </tr>
                             </table>
                         </td>

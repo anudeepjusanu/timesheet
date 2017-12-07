@@ -42,7 +42,7 @@
             };
         })
 
-    function Controller(UserService, TimesheetService, ProjectService, $filter, _, $scope, FlashService, NgTableParams, noty) {
+    function Controller(UserService, TimesheetService, ProjectService, $filter, _, $scope, FlashService, NgTableParams, noty, $uibModal) {
         var vm = this;
 
         vm.user = null;
@@ -170,6 +170,7 @@
                     vm.users.push({
                         userId: userObj._id,
                         userName: userObj.name,
+                        timesheetId: "",
                         week: "",
                         weekDate: "",
                         projects: [],
@@ -182,6 +183,7 @@
                     _.each(timesheets, function (timesheet) {
                         var userObj = _.find(vm.users, {userId: timesheet.userId});
                         if(userObj){
+                            userObj.timesheetId = timesheet._id;
                             userObj.week = timesheet.week;
                             userObj.weekDate = timesheet.weekDate;
                             userObj.projects = timesheet.projects;
@@ -261,6 +263,29 @@
             });
         }
 
+        vm.viewUserTimesheet = function (userTimesheet) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'timesheet/addTimesheet.html',
+                controller: 'Timesheet.TimesheetController',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    userTimesheet: function () {
+                        return userTimesheet;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (userObj) {
+                vm.getAllReports(vm.currentWeek);
+            }, function () {
+                vm.getAllReports(vm.currentWeek);
+            });
+        }
+
         vm.deleteTimesheet = function(timesheetId) {
             TimesheetService.deleteTimesheet(timesheetId).then(function(response) {
                 getMyTimesheets();
@@ -295,9 +320,14 @@
         }
     }
 
-    function TimesheetController(UserService, TimesheetService, ProjectService, $filter, $state, $stateParams, noty) {
+    function TimesheetController(UserService, TimesheetService, ProjectService, $filter, $state, $stateParams, noty, $uibModalInstance, userTimesheet) {
         var vm = this;
         var currentDay = new Date().getDay();
+        vm.isPopupEdit = false;
+        if(userTimesheet && userTimesheet.timesheetId){
+            $stateParams.id = userTimesheet.timesheetId;
+            vm.isPopupEdit = true;
+        }
         vm.timesheet = {
             weekDate: new Date(),
             projects: [],
@@ -371,7 +401,11 @@
                 }else{
                     TimesheetService.updateTimesheet(vm.timesheet._id, vm.timesheet).then(function(response) {
                         noty.showSuccess("Thank you for the update!");
-                        $state.go('timesheet');
+                        if(vm.isPopupEdit){
+                            $uibModalInstance.close();
+                        }else{
+                            $state.go('timesheet');
+                        }
                     }, function(error) {
                         if (error) {
                             vm.alerts.push({ msg: error, type: 'danger' });
@@ -380,6 +414,10 @@
                 }
 
             }
+        }
+
+        vm.closeTimesheet = function () {
+            $uibModalInstance.close();
         }
 
         function setAssignedProjects() {

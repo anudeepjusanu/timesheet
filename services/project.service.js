@@ -126,8 +126,8 @@ function getAssignedUsers(projectId){
                 assignedUsers.push({
                     userId: user._id,
                     userName: user.name,
-                    startDate: userProject.startDate,
-                    allocatedHours: userProject.allocatedHours,
+                    //startDate: userProject.startDate,
+                    //allocatedHours: userProject.allocatedHours,
                     billDates: userProject.billDates
                 });
             });
@@ -160,8 +160,7 @@ function assignUsers(projectId, users) {
                             "projectId": projectId,
                             "projectName": projectRoc.projectName,
                             "clientName": projectRoc.clientName,
-                            "startDate": user.startDate,
-                            "allocatedHours": user.allocatedHours,
+                            //"startDate": user.startDate,
                             "billDates": user.billDates
                         }
                         var projectIndex = _.findIndex(rowData.projects, {"projectId": projectId});
@@ -208,7 +207,6 @@ function assignUser(projectId, user) {
                         "projectName": projectRoc.projectName,
                         "clientName": projectRoc.clientName,
                         "startDate": user.startDate,
-                        "allocatedHours": user.allocatedHours,
                         "billDates": user.billDates
                     }
                     var projectIndex = _.findIndex(rowData.projects, {"projectId": projectId});
