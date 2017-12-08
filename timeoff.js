@@ -33,7 +33,7 @@ db.bind('users');
 db.timesheets.find({week: '2017-W49'}).toArray(function(err, timesheets) {
     if (err) deferred.reject(err.name + ': ' + err.message);
     _.each(timesheets, function (timesheetObj) {
-        var rowData = {
+        /*var rowData = {
             projects: timesheetObj.projects
         }
         var projectIndex = _.findIndex(rowData.projects, {"projectName": 'Timeoff', "projectHours": 0});
@@ -47,12 +47,10 @@ db.timesheets.find({week: '2017-W49'}).toArray(function(err, timesheets) {
                     console.log(timesheetObj._id);
                 });
             }
-        }
-        //console.log(rowData);
-        /*db.users.findOne({_id: timesheetObj.userId}, function(err, userObj) {
-            //console.log(userObj);
-            /!*_.each(timesheetObj.projects, function (projectObj) {
-                var prjData = _.find(user.projects, {"projectId": projectObj.projectId+""});
+        }*/
+        db.users.findOne({_id: timesheetObj.userId}, function(err, userObj) {
+            _.each(timesheetObj.projects, function (projectObj) {
+                var prjData = _.find(userObj.projects, {"projectId": projectObj.projectId+""});
                 if(prjData && prjData.billDates){
                     var weekDate = new Date(userParam.weekDate);
                     _.each(prjData.billDates, function (billDate) {
@@ -77,8 +75,9 @@ db.timesheets.find({week: '2017-W49'}).toArray(function(err, timesheets) {
                         }
                     });
                 }
-            });*!/
-        });*/
+            });
+        });
+
     });
 });
 

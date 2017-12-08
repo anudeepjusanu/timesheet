@@ -315,7 +315,8 @@
         vm.resourceTypes = [
             {"resourceTypeId":"shadow", "resourceTypeVal":"Shadow"},
             {"resourceTypeId":"buffer", "resourceTypeVal":"Buffer"},
-            {"resourceTypeId":"billable", "resourceTypeVal":"Billable"}
+            {"resourceTypeId":"billable", "resourceTypeVal":"Billable"},
+            {"resourceTypeId":"bizdev", "resourceTypeVal":"Bizdev"}
         ];
         vm.user = user;
         if(vm.user.startDate){

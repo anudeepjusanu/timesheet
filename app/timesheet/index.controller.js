@@ -268,7 +268,7 @@
                 animation: true,
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
-                templateUrl: 'timesheet/addTimesheet.html',
+                templateUrl: 'timesheet/editTimesheet.html',
                 controller: 'Timesheet.TimesheetController',
                 controllerAs: 'vm',
                 size: 'lg',
@@ -323,11 +323,6 @@
     function TimesheetController(UserService, TimesheetService, ProjectService, $filter, $state, $stateParams, noty) {
         var vm = this;
         var currentDay = new Date().getDay();
-        /*vm.isPopupEdit = false;
-        if(userTimesheet && userTimesheet.timesheetId){
-            $stateParams.id = userTimesheet.timesheetId;
-            vm.isPopupEdit = true;
-        }*/
         vm.timesheet = {
             weekDate: new Date(),
             projects: [],
