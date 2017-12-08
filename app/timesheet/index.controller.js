@@ -320,14 +320,14 @@
         }
     }
 
-    function TimesheetController(UserService, TimesheetService, ProjectService, $filter, $state, $stateParams, noty, $uibModalInstance, userTimesheet) {
+    function TimesheetController(UserService, TimesheetService, ProjectService, $filter, $state, $stateParams, noty) {
         var vm = this;
         var currentDay = new Date().getDay();
-        vm.isPopupEdit = false;
+        /*vm.isPopupEdit = false;
         if(userTimesheet && userTimesheet.timesheetId){
             $stateParams.id = userTimesheet.timesheetId;
             vm.isPopupEdit = true;
-        }
+        }*/
         vm.timesheet = {
             weekDate: new Date(),
             projects: [],
