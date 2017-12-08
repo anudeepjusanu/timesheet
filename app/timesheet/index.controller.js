@@ -323,6 +323,7 @@
     function TimesheetController(UserService, TimesheetService, ProjectService, $filter, $state, $stateParams, noty) {
         var vm = this;
         var currentDay = new Date().getDay();
+
         vm.timesheet = {
             weekDate: new Date(),
             projects: [],
@@ -473,14 +474,17 @@
                 vm.projects = response;
                 _.each(vm.projects, function (prjObj) {
                     if(prjObj.visibility == 'Public'){
-                        vm.timesheet.projects.push({
-                            projectId: prjObj._id,
-                            projectName: prjObj.projectName,
-                            allocatedHours: prjObj.allocatedHours,
-                            projectHours: 0,
-                            projectComment: "",
-                            isAssigned: false
-                        });
+                        var prjIndex = _.findIndex(vm.timesheet.projects, {projectId: prjObj._id});
+                        if(!(prjIndex >= 0)) {
+                            vm.timesheet.projects.push({
+                                projectId: prjObj._id,
+                                projectName: prjObj.projectName,
+                                allocatedHours: prjObj.allocatedHours,
+                                projectHours: 0,
+                                projectComment: "",
+                                isAssigned: false
+                            });
+                        }
                     }
                 });
             }, function(error){
@@ -518,8 +522,8 @@
                     getTimesheet($stateParams.id);
                 } else {
                     vm.isNew = true;
-                    getProjects();
                 }
+                getProjects();
                 vm.projectUser.userId = vm.user._id;
                 if(vm.user.projects && vm.user.projects.length > 0){
                     vm.hasProjects = true;
