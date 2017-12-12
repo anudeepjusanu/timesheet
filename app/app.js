@@ -106,11 +106,18 @@
                 data: { activeTab: 'clients' }
             })
             .state('projectUsers', {
-                    url: '/projects/projectUsers',
-                    templateUrl: 'projects/projectUsers.html',
-                    controller: 'Projects.UsersController',
+                url: '/projects/projectUsers',
+                templateUrl: 'projects/projectUsers.html',
+                controller: 'Projects.UsersController',
+                controllerAs: 'vm',
+                data: { activeTab: 'projectUsers' }
+            })
+            .state('userProjects', {
+                    url: '/projects/userProjects',
+                    templateUrl: 'projects/userProjects.html',
+                    controller: 'Projects.UserProjectsController',
                     controllerAs: 'vm',
-                    data: { activeTab: 'projectUsers' }
+                    data: { activeTab: 'userProjects' }
                 });
             ChartJsProvider.setOptions({ colors : [ '#1caf9a', '#273541'] });
     }

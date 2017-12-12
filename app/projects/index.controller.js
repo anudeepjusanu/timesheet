@@ -10,6 +10,7 @@
         .controller('Projects.ClientModel', ClientModel)
         .controller('Projects.ClientsController', ClientsController)
         .controller('Projects.UsersController', UsersController)
+        .controller('Projects.UserProjectsController', UserProjectsController)
 
     function Controller(UserService, ProjectService, $filter, _, FlashService, NgTableParams, noty) {
         var vm = this;
@@ -543,6 +544,60 @@
                 }
             });
             getProjectUsers();
+        }
+    };
+
+    function UserProjectsController(UserService, ProjectService, _, $uibModal) {
+        var vm = this;
+        vm.user = {};
+        vm.users = [];
+
+        function getUserProjects(){
+            ProjectService.getUserProjects().then(function(response) {
+                vm.users = response;
+            }, function(error){
+                console.log(error);
+            });
+        }
+
+        vm.viewAssignUser = function (user, project) {
+            user.isNew = false;
+            user.billDates = project.billDates;
+            project._id = project.projectId;
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'projects/assignUserModel.html',
+                controller: 'Projects.AssignUserModel',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    user: function () {
+                        return user;
+                    },
+                    project: function () {
+                        return project;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (userObj) {
+                getUserProjects();
+            }, function () {
+                getUserProjects();
+            });
+        }
+
+        initController();
+        function initController() {
+            UserService.GetCurrent().then(function(user) {
+                vm.user = user;
+                if (vm.user.admin !== true) {
+
+                }
+            });
+            getUserProjects();
         }
     };
 

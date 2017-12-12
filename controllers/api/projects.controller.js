@@ -10,6 +10,7 @@ router.get('/all', getAllProjects);
 router.get('/clients', getClients);
 router.get('/projectsWithUserCount', getProjectsWithUserCount);
 router.get('/projectUsers', getProjectUsers);
+router.get('/userProjects', getUserProjects);
 router.get('/:_id', getProjectById);
 router.post('/', addProject);
 router.put('/:_id', updateProject);
@@ -221,6 +222,22 @@ function getProjectUsers(req, res) {
         .catch(function (err) {
             res.status(400).send(err);
         });
+}
+
+function getUserProjects(req, res) {
+    userService.getAll().then(function (users) {
+        var usersList = [];
+        _.each(users, function (userObj) {
+            usersList.push({
+                userId: userObj._id,
+                userName: userObj.name,
+                projects: userObj.projects,
+            });
+        });
+        res.send(usersList);
+    }).catch(function (err) {
+        res.status(400).send(err);
+    });
 }
 
 function getProjectsWithUserCount(req, res) {
