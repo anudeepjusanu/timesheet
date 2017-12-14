@@ -25,8 +25,8 @@
                 </li>
                 <li class="xn-profile">
                     <a href="#" class="profile-mini">
-                <img src="app-content/assets/user.jpg" alt="{{vm.user.name}}"/>
-            </a>
+                        <img src="app-content/assets/user.jpg" alt="{{vm.user.name}}"/>
+                    </a>
                     <div class="profile">
                         <div class="profile-image">
                             <img src="app-content/assets/user.jpg" alt="{{vm.user.name}}" />
@@ -53,8 +53,14 @@
                 <li class="" ng-class="{active: activeTab === 'timesheet'}">
                     <a ui-sref="timesheet"><span class="fa fa-calendar"></span> <span class="xn-text">Timesheet</span></a>
                 </li>
+                <li class="" ng-class="{active: activeTab === 'consolidatedTimesheet'}">
+                    <a ui-sref="consolidatedTimesheet"><span class="fa fa-calendar"></span> <span class="xn-text">Consolidated Timesheet</span></a>
+                </li>
                 <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'projectUsers'}">
                     <a ui-sref="projectUsers"><span class="fa fa-users"></span> <span class="xn-text">Project Users</span></a>
+                </li>
+                <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'userProjects'}">
+                    <a ui-sref="userProjects"><span class="fa fa-users"></span> <span class="xn-text">User Projects</span></a>
                 </li>
                 <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'projects'}">
                     <a ui-sref="projects"><span class="fa fa-tasks"></span> <span class="xn-text">Projects</span></a>

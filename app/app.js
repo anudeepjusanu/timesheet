@@ -42,6 +42,13 @@
                 controllerAs: 'vm',
                 data: { activeTab: 'timesheet' }
             })
+            .state('consolidatedTimesheet', {
+                url: '/consolidatedTimesheet',
+                templateUrl: 'timesheet/consolidatedTimesheet.html',
+                controller: 'Timesheet.ConsolidatedController',
+                controllerAs: 'vm',
+                data: { activeTab: 'consolidatedTimesheet' }
+            })
             .state('adminUpdate', {
                 url: '/adminUpdate/:id',
                 templateUrl: 'home/adminUpdate.html',

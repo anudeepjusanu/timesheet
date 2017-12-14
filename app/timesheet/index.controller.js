@@ -5,6 +5,7 @@
         .module('app')
         .controller('Timesheet.IndexController', Controller)
         .controller('Timesheet.TimesheetController', TimesheetController)
+        .controller('Timesheet.ConsolidatedController', ConsolidatedController)
 
         .directive('exportTable', function() {
             return {
@@ -534,5 +535,20 @@
             });
         }
     }
+
+    function ConsolidatedController(UserService, TimesheetService, ProjectService, $state, $stateParams, noty) {
+        var vm = this;
+        var currentDay = new Date().getDay();
+        vm.user = {};
+
+
+
+        init();
+        function init() {
+            UserService.GetCurrent().then(function(user) {
+                vm.user = user;
+            });
+        }
+    };
 
 })();

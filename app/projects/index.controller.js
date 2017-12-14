@@ -317,7 +317,8 @@
             {"resourceTypeId":"shadow", "resourceTypeVal":"Shadow"},
             {"resourceTypeId":"buffer", "resourceTypeVal":"Buffer"},
             {"resourceTypeId":"billable", "resourceTypeVal":"Billable"},
-            {"resourceTypeId":"bizdev", "resourceTypeVal":"Bizdev"}
+            {"resourceTypeId":"bizdev", "resourceTypeVal":"Bizdev"},
+            {"resourceTypeId":"internal", "resourceTypeVal":"Internal"}
         ];
         vm.user = user;
         if(vm.user.startDate){

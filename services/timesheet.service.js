@@ -247,7 +247,7 @@ function adminUpdate(id, params) {
     return deferred.promise;
 }
 
-var resourceTypes = ["shadow", "buffer", "billable", "bizdev"];
+var resourceTypes = ["shadow", "buffer", "billable", "bizdev", "internal"];
 
 function allUserHoursByWeek(week) {
     var deferred = Q.defer();
