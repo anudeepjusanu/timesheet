@@ -54,7 +54,7 @@ function createTimesheet(currentUser, userParam) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             if (!sheet) {
                 var sheetObj = {
-                    userId: userParam.userId,
+                    userId: mongo.helper.toObjectID(userParam.userId),
                     week: userParam.week,
                     weekDate: userParam.weekDate,
                     totalHours: userParam.totalHours,
