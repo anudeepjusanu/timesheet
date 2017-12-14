@@ -27,13 +27,20 @@ service.timesheetBetweenDates = timesheetBetweenDates;
 
 module.exports = service;
 
-function createTimesheet(user, userParam) {
+function createTimesheet(currentUser, userParam) {
     var deferred = Q.defer();
+    if(!userParam.userId){
+        userParam.userId = currentUser._id+"";
+    }
     _.each(userParam.projects, function (projectObj) {
         projectObj.projectId = mongo.helper.toObjectID(projectObj.projectId);
-        projectObj.resourceType = "";
     });
-    db.users.findById(user._id, function(err, user) {
+    var timeOffPrj = _.find(userParam.projects, {projectName: "Timeoff"});
+    if(timeOffPrj && timeOffPrj.projectHours == 0){
+        userParam.projects.splice(userParam.projects.indexOf(timeOffPrj), 1);
+    }
+    db.users.findById(userParam.userId, function(err, user) {
+        console.log(user);
         if (user && user.projects) {
             _.each(userParam.projects, function (projectObj) {
                 var billData = getProjectBillData(projectObj, userParam.weekDate, user);
@@ -41,40 +48,13 @@ function createTimesheet(user, userParam) {
                 projectObj.allocatedHours = billData.allocatedHours;
                 projectObj.billableMaxHours = billData.billableMaxHours;
             });
-            /*_.each(userParam.projects, function (projectObj) {
-                var prjData = _.find(user.projects, {"projectId": projectObj.projectId+""});
-                if(prjData && prjData.billDates){
-                    var weekDate = new Date(userParam.weekDate);
-                    _.each(prjData.billDates, function (billDate) {
-                        if(billDate.start && billDate.start != "" && billDate.end && billDate.end != ""){
-                            var startDate = new Date(billDate.start);
-                            var endDate = new Date(billDate.end);
-                            if(weekDate >= startDate && weekDate <= endDate){
-                                projectObj.resourceType = billDate.resourceType
-                            }
-                        }else if(billDate.start && billDate.start != ""){
-                            var startDate = new Date(billDate.start);
-                            if(weekDate >= startDate){
-                                projectObj.resourceType = billDate.resourceType
-                            }
-                        }else if(billDate.end && billDate.end != ""){
-                            var endDate = new Date(billDate.end);
-                            if(weekDate <= endDate){
-                                projectObj.resourceType = billDate.resourceType
-                            }
-                        }else if(billDate.start == "" && billDate.end == ""){
-                            projectObj.resourceType = billDate.resourceType
-                        }
-                    });
-                }
-            });*/
         }
 
         db.timesheets.findOne({ userId: user._id, week: userParam.week}, function(err, sheet) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             if (!sheet) {
                 var sheetObj = {
-                    userId: user._id,
+                    userId: userParam.userId,
                     week: userParam.week,
                     weekDate: userParam.weekDate,
                     totalHours: userParam.totalHours,
@@ -95,10 +75,14 @@ function createTimesheet(user, userParam) {
 
 function updateTimesheet(sheetId, userParam, currentUser) {
     var deferred = Q.defer();
-    var currentUserId = currentUser._id;
+    var currentUserId = currentUser._id+"";
     _.each(userParam.projects, function (projectObj) {
         projectObj.projectId = mongo.helper.toObjectID(projectObj.projectId);
     });
+    var timeOffPrj = _.find(userParam.projects, {projectName: "Timeoff"});
+    if(timeOffPrj && timeOffPrj.projectHours == 0){
+        userParam.projects.splice(userParam.projects.indexOf(timeOffPrj), 1);
+    }
     db.timesheets.findById(sheetId, function(err, sheetObj) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if(sheetObj.userId == currentUserId ||  currentUser.admin === true){
@@ -169,6 +153,12 @@ function getProjectBillData(projectObj, weekDateVal, sheetUserObj) {
                 }
             });
         }
+    }
+    if(!(BillData.allocatedHours >= 0)){
+        BillData.allocatedHours = 40;
+    }
+    if(!(BillData.billableMaxHours >= 0)){
+        BillData.billableMaxHours = 0;
     }
     return BillData;
 }
