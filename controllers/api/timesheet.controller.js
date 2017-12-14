@@ -31,33 +31,36 @@ router.get('/timesheetBetweenDates/:startDate/:endDate', timesheetBetweenDates);
 module.exports = router;
 
 function createTimesheet(req, res) {
-    userService.getById(req.user.sub)
-        .then(function(user) {
-            if (user) {
-                timesheetService.createTimesheet(user, req.body)
-                    .then(function() {
-                        res.sendStatus(200);
-                    }).catch(function(err) {
-                        res.status(400).send(err);
-                    });
-            } else {
-                res.sendStatus(404);
-            }
-        })
-        .catch(function(err) {
-            res.status(400).send(err);
-        });
+    userService.getById(req.user.sub).then(function(user) {
+        if (user) {
+            timesheetService.createTimesheet(user, req.body)
+                .then(function() {
+                    res.sendStatus(200);
+                }).catch(function(err) {
+                    res.status(400).send(err);
+                });
+        } else {
+            res.sendStatus(404);
+        }
+    }).catch(function(err) {
+        res.status(400).send(err);
+    });
 }
 
 function updateTimesheet(req, res){
-    var userId = req.user.sub;
-    timesheetService.updateTimesheet(userId, req.params.id, req.body)
-        .then(function () {
-            res.sendStatus(200);
-        })
-        .catch(function (err) {
-            res.status(400).send(err);
-        });
+    userService.getById(req.user.sub).then(function(currentUser) {
+        if (currentUser) {
+            timesheetService.updateTimesheet(req.params.id, req.body, currentUser).then(function () {
+                res.sendStatus(200);
+            }).catch(function (err) {
+                res.status(400).send(err);
+            });
+        } else {
+            res.sendStatus(404);
+        }
+    }).catch(function(err) {
+        res.status(400).send(err);
+    });
 }
 
 function getTimesheet(req, res){

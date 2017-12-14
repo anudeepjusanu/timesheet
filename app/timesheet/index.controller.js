@@ -5,6 +5,7 @@
         .module('app')
         .controller('Timesheet.IndexController', Controller)
         .controller('Timesheet.TimesheetController', TimesheetController)
+        .controller('Timesheet.TimesheetModelController', TimesheetModelController)
         .controller('Timesheet.ConsolidatedController', ConsolidatedController)
 
         .directive('exportTable', function() {
@@ -265,12 +266,13 @@
         }
 
         vm.viewUserTimesheet = function (userTimesheet) {
+            userTimesheet._id = userTimesheet.timesheetId;
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
                 templateUrl: 'timesheet/editTimesheet.html',
-                controller: 'Timesheet.TimesheetController',
+                controller: 'Timesheet.TimesheetModelController',
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
@@ -536,11 +538,146 @@
         }
     }
 
+    function TimesheetModelController(UserService, TimesheetService, ProjectService, $filter, noty, $uibModalInstance, userTimesheet) {
+        var vm = this;
+        vm.projects = [];
+        vm.alerts = [];
+        vm.timesheet = {
+            weekDate: new Date(),
+            projects: [],
+            totalHours: 0
+        }
+        if(vm.timesheet.weekDate.getDay() < 5){
+            vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() - (vm.timesheet.weekDate.getDay() + 2));
+        }else if(vm.timesheet.weekDate.getDay() == 6){
+            vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() - 1);
+        }
+        vm.enableSaveBtn = true;
+        vm.hasProjects = true;
+        vm.timesheetDateOpened = false;
+        vm.dateOptions = {
+            dateDisabled: function(data) {
+                var date = data.date,
+                    mode = data.mode;
+                return mode === 'day' && (date.getDay() != 5);
+            },
+            formatYear: 'yy',
+            maxDate: new Date(2020, 5, 22),
+            startingDay: 1
+        }
+
+        vm.closeAlert = function(index) {
+            vm.alerts.splice(index, 1);
+        }
+
+        vm.calTotalHours = function () {
+            vm.timesheet.totalHours = 0;
+            _.each(vm.timesheet.projects, function (project) {
+                vm.timesheet.totalHours += project.projectHours;
+            });
+        }
+
+        function getTimesheet(id) {
+            TimesheetService.getTimesheet(id).then(function(response) {
+                vm.timesheet = response;
+                vm.timesheet.weekDate = new Date(vm.timesheet.weekDate);
+            });
+        }
+
+        vm.saveTimesheet = function (timesheetForm) {
+            if(timesheetForm.$valid){
+                vm.timesheet.week = $filter('date')(vm.timesheet.weekDate, "yyyy-Www").toString();
+                if(vm.isNew){
+                    TimesheetService.createTimesheet(vm.timesheet).then(function(response) {
+                        noty.showSuccess("Thank you for the update!");
+                        $uibModalInstance.close();
+                    }, function(error) {
+                        if (error) {
+                            vm.alerts.push({ msg: error, type: 'danger' });
+                        }
+                    });
+                }else{
+                    TimesheetService.updateTimesheet(vm.timesheet._id, vm.timesheet).then(function(response) {
+                        noty.showSuccess("Thank you for the update!");
+                        $uibModalInstance.close();
+                    }, function(error) {
+                        if (error) {
+                            vm.alerts.push({ msg: error, type: 'danger' });
+                        }
+                    });
+                }
+
+            }
+        }
+
+        vm.closeTimesheet = function () {
+            $uibModalInstance.close();
+        }
+
+        function setAssignedProjects() {
+            _.each(vm.user.projects, function (project) {
+                vm.timesheet.projects.push({
+                    projectId: project.projectId,
+                    projectName: project.projectName,
+                    allocatedHours: project.allocatedHours,
+                    projectHours: 0,
+                    projectComment: "",
+                    isAssigned: true
+                });
+            });
+
+        }
+
+        function getProjects(){
+            ProjectService.getAll().then(function(response) {
+                vm.projects = response;
+                _.each(vm.projects, function (prjObj) {
+                    if(prjObj.visibility == 'Public'){
+                        var prjIndex = _.findIndex(vm.timesheet.projects, {projectId: prjObj._id});
+                        if(!(prjIndex >= 0)) {
+                            vm.timesheet.projects.push({
+                                projectId: prjObj._id,
+                                projectName: prjObj.projectName,
+                                allocatedHours: prjObj.allocatedHours,
+                                projectHours: 0,
+                                projectComment: "",
+                                isAssigned: false
+                            });
+                        }
+                    }
+                });
+            }, function(error){
+                console.log(error);
+            });
+        }
+
+        initController();
+        function initController() {
+            UserService.GetCurrent().then(function(user) {
+                vm.user = user;
+                setAssignedProjects();
+                if(userTimesheet && userTimesheet._id){
+                    vm.isNew = false;
+                    vm.timesheet = userTimesheet;
+                    vm.timesheet.weekDate = new Date(vm.timesheet.weekDate);
+                    //getTimesheet(userTimesheet._id);
+                } else {
+                    vm.isNew = true;
+                }
+                getProjects();
+                if(vm.user.projects && vm.user.projects.length > 0){
+                    vm.hasProjects = true;
+                }else{
+                    vm.hasProjects = false;
+                }
+            });
+        }
+    }
+
     function ConsolidatedController(UserService, TimesheetService, ProjectService, $state, $stateParams, noty) {
         var vm = this;
         var currentDay = new Date().getDay();
         vm.user = {};
-
 
 
         init();

@@ -1,13 +1,13 @@
 <div class="modal-header">
-    <h3 class="modal-title" id="modal-title">Assign Project</h3>
+    <h3 class="modal-title" id="modal-title">Edit Timesheet</h3>
 </div>
+<form class="form-horizontal" name="timesheetForm">
 <div class="modal-body" id="modal-body">
     <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
     <div class="page-content-wrap">
         <div class="row">
             <div class="col-md-12">
                 <div ng-if="vm.hasProjects" class="well well-sm">
-                    <form class="form-horizontal" name="timesheetForm">
                         <div class="row">
                             <div class="col-md-8"></div>
                             <div class="form-group required col-md-4">
@@ -16,7 +16,7 @@
                                     <p class="input-group">
                                         <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.timesheet.weekDate" is-open="vm.timesheetDateOpened" datepicker-options="vm.dateOptions" readonly ng-required="true" close-text="Close" ng-disabled="!vm.isNew" />
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default" ng-click="vm.timesheetDateOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                            <button type="button" class="btn btn-default" ng-click="vm.timesheetDateOpened=false;"><i class="glyphicon glyphicon-calendar"></i></button>
                                         </span>
                                     </p>
                                 </div>
@@ -46,13 +46,10 @@
                             <tr>
                                 <th colspan="2">Total Hours :</th>
                                 <th>{{vm.timesheet.totalHours}}</th>
-                                <th style="text-align: right;">
-                                    <button type="button" class="btn btn-primary btn-lg" ng-click="vm.saveTimesheet(timesheetForm);">Submit</button>
-                                    <button type="button" class="btn btn-primary btn-lg" ng-click="vm.closeTimesheet();" ng-if="vm.isPopupEdit">Close</button>
-                                </th>
+                                <th></th>
                             </tr>
                         </table>
-                    </form>
+
                 </div>
                 <div ng-if="vm.hasProjects===false;" class="well well-sm">
                     <h1>You don't have project(s). Please contact Admin</h1>
@@ -62,6 +59,7 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-disabled="!vm.enableSaveBtn" ng-click="vm.ok(vm.assignForm)">Save</button>
-    <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
+    <button class="btn btn-primary" type="button" ng-disabled="!vm.enableSaveBtn" ng-click="vm.saveTimesheet(timesheetForm);">Save</button>
+    <button class="btn btn-warning" type="button" ng-click="vm.closeTimesheet()">Cancel</button>
 </div>
+</form>

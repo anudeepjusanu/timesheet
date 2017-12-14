@@ -36,6 +36,12 @@ function createTimesheet(user, userParam) {
     db.users.findById(user._id, function(err, user) {
         if (user && user.projects) {
             _.each(userParam.projects, function (projectObj) {
+                var billData = getProjectBillData(projectObj, userParam.weekDate, user);
+                projectObj.resourceType = billData.resourceType;
+                projectObj.allocatedHours = billData.allocatedHours;
+                projectObj.billableMaxHours = billData.billableMaxHours;
+            });
+            /*_.each(userParam.projects, function (projectObj) {
                 var prjData = _.find(user.projects, {"projectId": projectObj.projectId+""});
                 if(prjData && prjData.billDates){
                     var weekDate = new Date(userParam.weekDate);
@@ -61,7 +67,7 @@ function createTimesheet(user, userParam) {
                         }
                     });
                 }
-            });
+            });*/
         }
 
         db.timesheets.findOne({ userId: user._id, week: userParam.week}, function(err, sheet) {
@@ -87,66 +93,84 @@ function createTimesheet(user, userParam) {
     return deferred.promise;
 }
 
-function updateTimesheet(userId, id, userParam) {
+function updateTimesheet(sheetId, userParam, currentUser) {
     var deferred = Q.defer();
-
+    var currentUserId = currentUser._id;
     _.each(userParam.projects, function (projectObj) {
         projectObj.projectId = mongo.helper.toObjectID(projectObj.projectId);
     });
-    db.users.findById(userId, function(err, user) {
-        if (user && user.projects) {
-            _.each(userParam.projects, function (projectObj) {
-                var prjData = _.find(user.projects, {"projectId": projectObj.projectId+""});
-                if (prjData && prjData.billDates) {
-                    var weekDate = new Date(userParam.weekDate);
-                    _.each(prjData.billDates, function (billDate) {
-                        if (billDate.start && billDate.start != "" && billDate.end && billDate.end != "") {
-                            var startDate = new Date(billDate.start);
-                            var endDate = new Date(billDate.end);
-                            if (weekDate >= startDate && weekDate <= endDate) {
-                                projectObj.resourceType = billDate.resourceType
-                            }
-                        } else if (billDate.start && billDate.start != "") {
-                            var startDate = new Date(billDate.start);
-                            if (weekDate >= startDate) {
-                                projectObj.resourceType = billDate.resourceType
-                            }
-                        } else if (billDate.end && billDate.end != "") {
-                            var endDate = new Date(billDate.end);
-                            if (weekDate <= endDate) {
-                                projectObj.resourceType = billDate.resourceType
-                            }
-                        } else if (billDate.start == "" && billDate.end == "") {
-                            projectObj.resourceType = billDate.resourceType
-                        }
-                    });
-                }
-            });
-        }
-
-
-        db.timesheets.findById(id, function(err, sheet) {
-            if (err) deferred.reject(err.name + ': ' + err.message);
-            if (sheet.userId == userId) {
-                var sheetObj = {
-                    userId: mongo.helper.toObjectID(userId),
+    db.timesheets.findById(sheetId, function(err, sheetObj) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if(sheetObj.userId == currentUserId ||  currentUser.admin === true){
+            db.users.findById(sheetObj.userId, function(err, sheetUserObj) {
+                _.each(userParam.projects, function (projectObj) {
+                    var billData = getProjectBillData(projectObj, userParam.weekDate, sheetUserObj);
+                    projectObj.resourceType = billData.resourceType;
+                    projectObj.allocatedHours = billData.allocatedHours;
+                    projectObj.billableMaxHours = billData.billableMaxHours;
+                });
+                var newSheetObj = {
+                    userId: mongo.helper.toObjectID(sheetObj.userId),
                     week: userParam.week,
                     weekDate: userParam.weekDate,
                     totalHours: userParam.totalHours,
                     projects: userParam.projects
                 }
-                db.timesheets.update({ _id: mongo.helper.toObjectID(id) }, { $set: sheetObj },
-                    function(err, sheet) {
-                        if (err) deferred.reject(err.name + ': ' + err.message);
-                        deferred.resolve(sheet);
-                    });
-            } else {
-                deferred.reject("You are not authorized");
-            }
-        });
+                db.timesheets.update({ _id: mongo.helper.toObjectID(sheetId) }, { $set: newSheetObj }, function(err, responseSheet) {
+                    if (err) deferred.reject(err.name + ': ' + err.message);
+                    deferred.resolve(responseSheet);
+                });
+            });
+        }else{
+            deferred.reject("You are not authorized");
+        }
     });
 
     return deferred.promise;
+}
+
+function getProjectBillData(projectObj, weekDateVal, sheetUserObj) {
+    var BillData = {
+        resourceType: "buffer",
+        allocatedHours: 40,
+        billableMaxHours: 0
+    };
+    if (sheetUserObj && sheetUserObj.projects) {
+        var prjData = _.find(sheetUserObj.projects, {"projectId": projectObj.projectId+""});
+        if (prjData && prjData.billDates) {
+            var weekDate = new Date(weekDateVal);
+            _.each(prjData.billDates, function (billDate) {
+                if (billDate.start && billDate.start != "" && billDate.end && billDate.end != "") {
+                    var startDate = new Date(billDate.start);
+                    var endDate = new Date(billDate.end);
+                    if (weekDate >= startDate && weekDate <= endDate) {
+                        BillData.resourceType = billDate.resourceType;
+                        BillData.allocatedHours = billDate.allocatedHours;
+                        BillData.billableMaxHours = billDate.billableMaxHours;
+                    }
+                } else if (billDate.start && billDate.start != "") {
+                    var startDate = new Date(billDate.start);
+                    if (weekDate >= startDate) {
+                        BillData.resourceType = billDate.resourceType;
+                        BillData.allocatedHours = billDate.allocatedHours;
+                        BillData.billableMaxHours = billDate.billableMaxHours;
+                    }
+                } else if (billDate.end && billDate.end != "") {
+                    var endDate = new Date(billDate.end);
+                    if (weekDate <= endDate) {
+                        BillData.resourceType = billDate.resourceType;
+                        BillData.allocatedHours = billDate.allocatedHours;
+                        BillData.billableMaxHours = billDate.billableMaxHours;
+                    }
+                } else if (billDate.start == "" && billDate.end == "") {
+                    BillData.resourceType = billDate.resourceType;
+                    BillData.allocatedHours = billDate.allocatedHours;
+                    BillData.billableMaxHours = billDate.billableMaxHours;
+                }
+            });
+        }
+    }
+    return BillData;
 }
 
 function getTimesheet(id){
