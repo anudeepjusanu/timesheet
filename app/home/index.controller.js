@@ -156,7 +156,6 @@
         vm.getAllUserHoursByWeek = function() {
             var week = $filter('date')(new Date(vm.manpowerChart.weekDate), "yyyy-Www").toString();
             TimesheetService.allUserHoursByWeek(week).then(function(manpowerData) {
-                console.log(manpowerData);
                 vm.manpowerChart.labels = [];
                 vm.manpowerChart.data = [];
                 _.each(manpowerData.resourceTypes, function (resourceTypeObj) {
@@ -557,6 +556,7 @@
                     "name": vm.employee.name,
                     "phone": vm.employee.phone,
                     "username": vm.employee.username,
+                    "employeeId": vm.employee.employeeId,
                     "designation": vm.employee.designation,
                     "userResourceType": vm.employee.userResourceType,
                     "isActive": vm.employee.isActive
