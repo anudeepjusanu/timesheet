@@ -558,7 +558,8 @@
                     "phone": vm.employee.phone,
                     "username": vm.employee.username,
                     "designation": vm.employee.designation,
-                    "notifications": vm.employee.notifications
+                    "userResourceType": vm.employee.userResourceType,
+                    "isActive": vm.employee.isActive
                 }
                 var projectObj = [];
                 _.each(vm.employee.project, function(project) {

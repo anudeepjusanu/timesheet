@@ -40,7 +40,6 @@ function createTimesheet(currentUser, userParam) {
         userParam.projects.splice(userParam.projects.indexOf(timeOffPrj), 1);
     }
     db.users.findById(userParam.userId, function(err, user) {
-        console.log(user);
         if (user && user.projects) {
             _.each(userParam.projects, function (projectObj) {
                 var billData = getProjectBillData(projectObj, userParam.weekDate, user);
@@ -261,7 +260,7 @@ function adminUpdate(id, params) {
     return deferred.promise;
 }
 
-var resourceTypes = ["shadow", "buffer", "billable", "bizdev", "internal"];
+var resourceTypes = ["shadow", "buffer", "billable", "bizdev", "internal", "operations", "trainee"];
 
 function allUserHoursByWeek(week) {
     var deferred = Q.defer();

@@ -75,8 +75,13 @@
             { projectTypeId: "billed", projectTypeName: "Billed" },
             { projectTypeId: "bizdev", projectTypeName: "Bizdev" },
             { projectTypeId: "ops", projectTypeName: "ops" },
-            { projectTypeId: "sales", projectTypeName: "Sales" },
+            { projectTypeId: "sales", projectTypeName: "Sales" }
         ];
+        vm.projectBillTypes = [
+            { projectBillId: "fixed-bid", projectBillName: "Fixed bid" },
+            { projectBillId: "time-material", projectBillName: "Time and material" }
+        ];
+
         
         vm.getClients = function () {
             ProjectService.getClients().then(function(response) {
@@ -105,6 +110,7 @@
                 if(clientObj){
                     vm.obj.clientName = clientObj.clientName;
                 }
+                console.log(vm.obj);
                 if (vm.isNew) {
                     ProjectService.create(vm.obj).then(function(response) {
                         noty.showSuccess("New Project has been added successfully!");
@@ -318,7 +324,9 @@
             {"resourceTypeId":"buffer", "resourceTypeVal":"Buffer"},
             {"resourceTypeId":"billable", "resourceTypeVal":"Billable"},
             {"resourceTypeId":"bizdev", "resourceTypeVal":"Bizdev"},
-            {"resourceTypeId":"internal", "resourceTypeVal":"Internal"}
+            {"resourceTypeId":"internal", "resourceTypeVal":"Internal"},
+            {"resourceTypeId":"operations", "resourceTypeVal":"Operations"},
+            {"resourceTypeId":"trainee", "resourceTypeVal":"Trainee"}
         ];
         vm.user = user;
         if(vm.user.startDate){

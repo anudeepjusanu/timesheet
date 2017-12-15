@@ -34,11 +34,13 @@ function create(projectParam) {
         clientId: mongo.helper.toObjectID(projectParam.clientId),
         projectName: projectParam.projectName,
         clientName: projectParam.clientName,
-        projectType: projectParam.projectType,
         startDate: projectParam.startDate,
-        description: projectParam.description,
+        projectBillType: projectParam.projectBillType,
+        projectType: projectParam.projectType,
         businessUnit: projectParam.businessUnit,
         visibility: projectParam.visibility,
+        isActive: projectParam.isActive,
+        description: projectParam.description,
         createdOn: new Date(),
         updatedOn: new Date()
     }
@@ -57,11 +59,13 @@ function update(_id, params) {
         clientId: mongo.helper.toObjectID(params.clientId),
         projectName: params.projectName,
         clientName: params.clientName,
-        projectType: params.projectType,
         startDate: params.startDate,
-        description: params.description,
+        projectBillType: params.projectBillType,
+        projectType: params.projectType,
         businessUnit: params.businessUnit,
-        visibility: params.visibility
+        visibility: params.visibility,
+        isActive: params.isActive,
+        description: params.description
     }
     projectObj.updatedOn = new Date();
     db.projects.update({ _id: mongo.helper.toObjectID(_id) }, { '$set': projectObj },

@@ -18,25 +18,17 @@
                         <button class="btn btn-primary" ng-show="vm.monthView" ng-click="vm.toggleView(false)">Week View</button>
                     </div>
                     <div class="form-group pull-right col-sm-6">
-                        <label class="col-md-3" ng-show="!vm.monthView">Filter By Week</label>
-                        <label class="col-md-3" ng-show="vm.monthView">Filter By Month</label>
+                        <label class="col-md-3">Start Date</label>
                         <div class="col-md-9">
-                            <p class="input-group" ng-show="!vm.monthView">
-                                <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.currentWeek" is-open="vm.popup2.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getAllReports(vm.currentWeek)" />
+                            <p class="input-group">
+                                <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.search.startDate" is-open="vm.search.startDateOpened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="" />
                                 <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default" ng-click="vm.open2()"><i class="glyphicon glyphicon-calendar"></i></button>
-                                </span>
-                            </p>
-                            <p class="input-group" ng-show="vm.monthView">
-                                <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.currentMonth" is-open="vm.popup2.opened" datepicker-options="vm.monthOptions" ng-required="true" close-text="Close" ng-change="vm.getMonthReport(vm.currentMonth)" />
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default" ng-click="vm.open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    <button type="button" class="btn btn-default" ng-click="vm.search.startDateOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
                                 </span>
                             </p>
                         </div>
                     </div>
                 </div>
-
                 <table class="table table-condensed table-bordered table-striped" export-table>
                     <tr>
                         <th width="80px">S.No</th>

@@ -456,11 +456,11 @@
             startingDay: 1
         };
         vm.enableSaveBtn = true;
-        vm.resourceTypes = [
+        /*vm.resourceTypes = [
             {"resourceTypeId":"shadow", "resourceTypeVal":"Shadow"},
             {"resourceTypeId":"buffer", "resourceTypeVal":"Buffer"},
             {"resourceTypeId":"billable", "resourceTypeVal":"Billable"}
-        ];
+        ];*/
 
         function getClients() {
             ProjectService.getClients().then(function(response) {
