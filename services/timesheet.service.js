@@ -262,12 +262,43 @@ function adminUpdate(id, params) {
 
 var resourceTypes = ["shadow", "buffer", "billable", "bizdev", "internal", "operations", "trainee"];
 
+function weekHoursCal(sheets, resourceTypes, weekVal) {
+    var report = {
+        week: weekVal,
+        availableUserCount: 0,
+        availableHours: 0,
+        totalUserCount: 0,
+        totalHours: 0,
+        resourceTypes: []
+    };
+    _.each(resourceTypes, function (resourceType) {
+        report.resourceTypes.push({
+            resourceType: resourceType,
+            projectUserCount: 0,
+            projectHours: 0
+        });
+    })
+    _.each(sheets, function (sheet) {
+        report.totalUserCount += 1;
+        report.totalHours += sheet.totalHours;
+        _.each(sheet.projects, function (project) {
+            var resourceTypeId = (project.resourceType == "")?"buffer":project.resourceType;
+            var resourceTypeObj = _.find(report.resourceTypes, {"resourceType": resourceTypeId});
+            if(resourceTypeObj){
+                resourceTypeObj.projectUserCount += 1;
+                resourceTypeObj.projectHours += project.projectHours;
+            }
+        });
+    });
+    return report;
+}
+
 function allUserHoursByWeek(week) {
     var deferred = Q.defer();
     db.timesheets.find({ week: week }).toArray(function(err, sheets) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (sheets) {
-            var report = {
+            /*var report = {
                 availableUserCount: 0,
                 availableHours: 0,
                 totalUserCount: 0,
@@ -292,8 +323,8 @@ function allUserHoursByWeek(week) {
                         resourceTypeObj.projectHours += project.projectHours;
                     }
                 });
-            });
-            deferred.resolve(report);
+            });*/
+            deferred.resolve(weekHoursCal(sheets, resourceTypes, week));
         } else {
             deferred.reject("Please select valid week");
         }
@@ -306,7 +337,7 @@ function projectUserHoursByWeek(week, projectId) {
     db.timesheets.find({ week: week, "projects.projectId": {"$in":[mongo.helper.toObjectID(projectId)]} }).toArray(function(err, sheets) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (sheets) {
-            var report = {
+            /*var report = {
                 availableUserCount: 0,
                 availableHours: 0,
                 totalUserCount: 0,
@@ -331,8 +362,8 @@ function projectUserHoursByWeek(week, projectId) {
                         resourceTypeObj.projectHours += project.projectHours;
                     }
                 });
-            });
-            deferred.resolve(report);
+            });*/
+            deferred.resolve(weekHoursCal(sheets, resourceTypes, week));
         } else {
             deferred.reject("Please select valid week");
         }
@@ -377,7 +408,7 @@ function allUserHoursByMonth(month, year) {
         db.timesheets.find({ week: weekVal }).toArray(function(err, sheets) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             if (sheets) {
-                var report = {
+                /*var report = {
                     week: weekVal,
                     availableUserCount: 0,
                     availableHours: 0,
@@ -403,8 +434,8 @@ function allUserHoursByMonth(month, year) {
                             resourceTypeObj.projectHours += project.projectHours;
                         }
                     });
-                });
-                resultData.push(report);
+                });*/
+                resultData.push(weekHoursCal(sheets, resourceTypes, weekVal));
                 if(resultData.length == weeks.length){
                     resultData = _.sortBy(resultData, ['week']);
                     deferred.resolve(resultData);
@@ -440,7 +471,7 @@ function projectUserHoursByMonth(month, year, projectId) {
         db.timesheets.find({ week: weekVal, "projects.projectId": {"$in":[mongo.helper.toObjectID(projectId)]} }).toArray(function(err, sheets) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             if (sheets) {
-                var report = {
+                /*var report = {
                     week: weekVal,
                     availableUserCount: 0,
                     availableHours: 0,
@@ -466,8 +497,8 @@ function projectUserHoursByMonth(month, year, projectId) {
                             resourceTypeObj.projectHours += project.projectHours;
                         }
                     });
-                });
-                resultData.push(report);
+                });*/
+                resultData.push(weekHoursCal(sheets, resourceTypes, weekVal));
                 if(resultData.length == weeks.length){
                     resultData = _.sortBy(resultData, ['week']);
                     deferred.resolve(resultData);

@@ -31,26 +31,18 @@
                             <tr>
                                 <th>Project</th>
                                 <th>Allocated Hours</th>
-                                <th>Hours</th>
+                                <th style="width: 120px;">Worked Hours</th>
+                                <th style="width: 100px;">Sick Leave</th>
+                                <th style="width: 100px;">Timeoff</th>
                                 <th>Comments</th>
-                                <!-- <th>
-                                    <button class="btn btn-primary">Add</button>
-                                </th> -->
                             </tr>
                             <tr ng-repeat="project in vm.timesheet.projects">
-                                <td>
-                                    {{project.projectName}}
-                                    <!--<select ng-if="project.isAssigned!==true" class="form-control" ng-model="project.projectId" ng-options="project.projectId as project.projectName for project in vm.user.projects"></select>-->
-                                </td>
-                                <td>
-                                    <b>{{project.allocatedHours}}</b>
-                                </td>
-                                <td>
-                                    <input type="number" min="0" max="70" placeholder="Your Hours" class="form-control" ng-model="project.projectHours" ng-required="true" ng-change="vm.calTotalHours();" />
-                                </td>
-                                <td>
-                                    <textarea class="form-control" placeholder="Please enter your comment" rows="2" ng-model="project.projectComment"></textarea>
-                                </td>
+                                <td>{{project.projectName}}</td>
+                                <td><b>{{project.allocatedHours}}</b></td>
+                                <td><input type="number" min="0" max="70" placeholder="Your Hours" class="form-control" ng-model="project.projectHours" ng-required="true" ng-change="vm.calTotalHours();" /></td>
+                                <td><input type="number" min="0" max="40" class="form-control" ng-model="project.sickLeaveHours" ng-required="true" ng-change="vm.calTotalHours();" /></td>
+                                <td><input type="number" min="0" max="40" class="form-control" ng-model="project.timeoffHours" ng-required="true" ng-change="vm.calTotalHours();" /></td>
+                                <td><textarea class="form-control" placeholder="Please enter your comment" rows="2" ng-model="project.projectComment"></textarea></td>
                             </tr>
                             <tr>
                                 <th colspan="2">Total Hours :</th>
@@ -65,77 +57,6 @@
                 </div>
                 <div ng-if="vm.hasProjects===false;" class="well well-sm">
                     <h1>You don't have project(s). Please contact Admin</h1>
-                    <!-- <form class="form-horizontal" name="assignForm">
-                        <div class="row">
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">Name</label>
-                                <div class="col-md-10">
-                                    {{vm.projectUser.userName}}
-                                </div>
-                            </div>
-                            <div class="form-group required">
-                                <label class="col-md-2 control-label">Project Name</label>
-                                <div class="col-md-10">
-                                    <select class="form-control" ng-model="vm.projectUser.projectId" ng-options="project._id as project.projectName for project in vm.projects" ng-required="true"></select>
-                                </div>
-                            </div>
-                            <div class="form-group required">
-                                <label class="col-md-2 control-label">Start Date</label>
-                                <div class="col-md-10">
-                                    <p class="input-group" style="width: 200px;">
-                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.projectUser.startDate" is-open="vm.timesheetDateOpened" datepicker-options="vm.projectDateOptions" ng-required="true" close-text="Close" />
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default" ng-click="vm.timesheetDateOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">Billable Dates</label>
-                                <div class="col-md-10">
-                                    <table id="" class="table">
-                                        <tr ng-if="vm.projectUser.billDates.length > 0">
-                                            <th>Start Date</th>
-                                            <th>End Date</th>
-                                            <th>Resource Type</th>
-                                            <th></th>
-                                        </tr>
-                                        <tr ng-repeat="billDate in vm.projectUser.billDates" class="">
-                                            <td>
-                                                <p class="input-group">
-                                                    <input type="text" class="form-control" uib-datepicker-popup ng-model="billDate.start" is-open="billDate.startOpened" datepicker-options="vm.dateOptions" close-text="Close" />
-                                                    <span class="input-group-btn">
-                                                        <button type="button" class="btn btn-default" ng-click="billDate.startOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
-                                                    </span>
-                                                </p>
-                                            </td>
-                                            <td>
-                                                <p class="input-group">
-                                                    <input type="text" class="form-control" uib-datepicker-popup ng-model="billDate.end" is-open="billDate.endOpened" datepicker-options="vm.dateOptions" close-text="Close" />
-                                                    <span class="input-group-btn">
-                                                        <button type="button" class="btn btn-default" ng-click="billDate.endOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
-                                                    </span>
-                                                </p>
-                                            </td>
-                                            <td>
-                                                <select class="form-control" ng-model="billDate.resourceType" ng-options="resourceType.resourceTypeId as resourceType.resourceTypeVal for resourceType in vm.resourceTypes">
-                                                </select>
-                                            </td>
-                                            <td>
-
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label"></label>
-                                <div class="col-md-10">
-                                    <button class="btn btn-primary" type="button" ng-disabled="!vm.enableSaveBtn" ng-click="vm.assignNewProject(assignForm)">Submit</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form-->
                 </div>
             </div>
         </div>

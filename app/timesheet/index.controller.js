@@ -426,6 +426,8 @@
                     projectName: project.projectName,
                     allocatedHours: project.allocatedHours,
                     projectHours: 0,
+                    sickLeaveHours: 0,
+                    timeoffHours: 0,
                     projectComment: "",
                     isAssigned: true
                 });
@@ -484,6 +486,8 @@
                                 projectName: prjObj.projectName,
                                 allocatedHours: prjObj.allocatedHours,
                                 projectHours: 0,
+                                sickLeaveHours: 0,
+                                timeoffHours: 0,
                                 projectComment: "",
                                 isAssigned: false
                             });
@@ -621,6 +625,8 @@
                     projectName: project.projectName,
                     allocatedHours: project.allocatedHours,
                     projectHours: 0,
+                    sickLeaveHours: 0,
+                    timeoffHours: 0,
                     projectComment: "",
                     isAssigned: true
                 });
@@ -640,6 +646,8 @@
                                 projectName: prjObj.projectName,
                                 allocatedHours: prjObj.allocatedHours,
                                 projectHours: 0,
+                                sickLeaveHours: 0,
+                                timeoffHours: 0,
                                 projectComment: "",
                                 isAssigned: false
                             });

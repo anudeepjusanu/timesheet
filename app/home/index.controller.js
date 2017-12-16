@@ -70,6 +70,19 @@
             series: [],
             labels: []
         };
+        vm.monthHeadCountChart = {
+            week: "",
+            weekDate: new Date(),
+            options: {
+                legend: {
+                    display: true
+                }
+            },
+            colors: vm.chartColors,
+            data: [],
+            series: [],
+            labels: []
+        };
 
         vm.projectManpower = {
             projectId: "",
@@ -165,30 +178,6 @@
             });
         };
 
-        vm.getAllUserHoursByMonth = function() {
-            TimesheetService.allUserHoursByMonth(vm.monthHoursChart.weekDate.getMonth(), vm.monthHoursChart.weekDate.getFullYear()).then(function(manpowerData) {
-                vm.monthHoursChart.labels = [];
-                vm.monthHoursChart.data = [];
-                vm.monthHoursChart.series = [];
-                _.each(manpowerData[0].resourceTypes, function (resourceTypeObj) {
-                    vm.monthHoursChart.series.push(resourceTypeObj.resourceType + ' ('+ resourceTypeObj.projectUserCount +')');
-                });
-                _.each(manpowerData, function (manpower) {
-                    vm.monthHoursChart.labels.push(manpower.week);
-                });
-                _.each(vm.monthHoursChart.series, function (resourceTypeVal) {
-                    var dataObj = [];
-                    _.each(manpowerData, function (manpowerObj) {
-                        var resourceTypeObj = _.find(manpowerObj.resourceTypes, {"resourceType": resourceTypeVal});
-                        if(resourceTypeObj){
-                            dataObj.push(resourceTypeObj.projectHours);
-                        }
-                    });
-                    vm.monthHoursChart.data.push(dataObj);
-                });
-            });
-        };
-
         vm.getProjectUserHoursByWeek = function() {
             if(vm.projectManpower.projectId) {
                 var week = $filter('date')(new Date(vm.projectManpower.weekDate), "yyyy-Www").toString();
@@ -203,14 +192,63 @@
             }
         };
 
+        vm.getAllUserHoursByMonth = function() {
+            TimesheetService.allUserHoursByMonth(vm.monthHoursChart.weekDate.getMonth(), vm.monthHoursChart.weekDate.getFullYear()).then(function(manpowerData) {
+                manpowerData = _.sortBy(manpowerData, 'week');
+                console.log(manpowerData);
+                vm.monthHoursChart.labels = [];
+                vm.monthHoursChart.data = [];
+                vm.monthHoursChart.series = [];
+                _.each(manpowerData[0].resourceTypes, function (resourceTypeObj) {
+                    //vm.monthHoursChart.series.push(resourceTypeObj.resourceType + '('+ resourceTypeObj.projectUserCount +')');
+                    vm.monthHoursChart.series.push(resourceTypeObj.resourceType);
+                });
+                _.each(manpowerData, function (manpower) {
+                    vm.monthHoursChart.labels.push(manpower.week);
+                });
+                _.each(vm.monthHoursChart.series, function (resourceTypeVal) {
+                    var dataObj = [];
+                    _.each(manpowerData, function (manpowerObj) {
+                        var resourceTypeObj = _.find(manpowerObj.resourceTypes, {"resourceType": resourceTypeVal});
+                        if(resourceTypeObj){
+                            dataObj.push(resourceTypeObj.projectHours);
+                        }
+                    });
+                    vm.monthHoursChart.data.push(dataObj);
+                });
+
+                vm.monthHeadCountChart.labels = [];
+                vm.monthHeadCountChart.data = [];
+                vm.monthHeadCountChart.series = [];
+                _.each(manpowerData[0].resourceTypes, function (resourceTypeObj) {
+                    vm.monthHeadCountChart.series.push(resourceTypeObj.resourceType);
+                });
+                _.each(manpowerData, function (manpower) {
+                    vm.monthHeadCountChart.labels.push(manpower.week);
+                });
+                _.each(vm.monthHeadCountChart.series, function (resourceTypeVal) {
+                    var dataObj = [];
+                    _.each(manpowerData, function (manpowerObj) {
+                        var resourceTypeObj = _.find(manpowerObj.resourceTypes, {"resourceType": resourceTypeVal});
+                        if(resourceTypeObj){
+                            dataObj.push(resourceTypeObj.projectUserCount);
+                        }
+                    });
+                    vm.monthHeadCountChart.data.push(dataObj);
+                });
+                console.log(vm.monthHeadCountChart);
+            });
+        };
+
         vm.getProjectUserHoursByMonth = function() {
             if(vm.projectMonthlyHours.projectId) {
                 TimesheetService.projectUserHoursByMonth(vm.projectMonthlyHours.weekDate.getMonth(), vm.projectMonthlyHours.weekDate.getFullYear(), vm.projectMonthlyHours.projectId).then(function (manpowerData) {
+                    manpowerData = _.sortBy(manpowerData, 'week');
                     vm.projectMonthlyHours.labels = [];
                     vm.projectMonthlyHours.data = [];
                     vm.projectMonthlyHours.series = [];
                     _.each(manpowerData[0].resourceTypes, function (resourceTypeObj) {
-                        vm.projectMonthlyHours.series.push(resourceTypeObj.resourceType + ' ('+ resourceTypeObj.projectUserCount +')');
+                        vm.projectMonthlyHours.series.push(resourceTypeObj.resourceType);
                     });
                     _.each(manpowerData, function (manpower) {
                         vm.projectMonthlyHours.labels.push(manpower.week);
