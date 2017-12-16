@@ -155,7 +155,7 @@
                     <div class="panel-heading">
                         <div class="panel-title-box pull-left">
                             <h3>Monthly Head Count</h3>
-                            <span>Capacity</span>
+                            <span>{{vm.monthHoursChart.monthName}}</span>
                         </div>
                         <div class="panel-controls pull-right" style="width: 140px; margin-left: 10px;">
                             <p class="input-group">
@@ -167,7 +167,7 @@
                         </div>
                     </div>
                     <div class="panel-body padding-0">
-                        <canvas class="chart chart-bar" chart-colors="vm.monthHeadCountChart.colors" chart-options="vm.monthHeadCountChart.options" chart-data="vm.monthHeadCountChart.data" chart-labels="vm.monthHoursChart.labels" chart-series="vm.monthHeadCountChart.series">
+                        <canvas class="chart chart-bar" chart-colors="vm.monthHeadCountChart.colors" chart-options="vm.monthHeadCountChart.options" chart-data="vm.monthHeadCountChart.data" chart-labels="vm.monthHeadCountChart.labels" chart-series="vm.monthHeadCountChart.series">
                         </canvas>
                     </div>
                 </div>
@@ -177,7 +177,7 @@
                     <div class="panel-heading">
                         <div class="panel-title-box pull-left">
                             <h3>Monthly Hours</h3>
-                            <span>Capacity</span>
+                            <span>{{vm.monthHoursChart.monthName}}</span>
                         </div>
                         <div class="panel-controls pull-right" style="width: 140px; margin-left: 10px;">
                             <p class="input-group">

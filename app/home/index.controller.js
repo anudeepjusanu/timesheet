@@ -16,6 +16,12 @@
         vm.users = null;
         vm.totalHours = null;
         vm.myHours = null;
+        vm.monthNames = [
+            "January", "February", "March",
+            "April", "May", "June",
+            "July", "August", "September",
+            "October", "November", "December"
+        ];
         vm.dateOptions = {
             dateDisabled: function (data) {
                 var date = data.date,
@@ -193,6 +199,7 @@
         };
 
         vm.getAllUserHoursByMonth = function() {
+            vm.monthHoursChart.monthName = vm.monthNames[vm.monthHoursChart.weekDate.getMonth()];
             TimesheetService.allUserHoursByMonth(vm.monthHoursChart.weekDate.getMonth(), vm.monthHoursChart.weekDate.getFullYear()).then(function(manpowerData) {
                 manpowerData = _.sortBy(manpowerData, 'week');
                 console.log(manpowerData);
@@ -204,7 +211,7 @@
                     vm.monthHoursChart.series.push(resourceTypeObj.resourceType);
                 });
                 _.each(manpowerData, function (manpower) {
-                    vm.monthHoursChart.labels.push(manpower.week);
+                    vm.monthHoursChart.labels.push(manpower.week+ "("+manpower.totalHours+")");
                 });
                 _.each(vm.monthHoursChart.series, function (resourceTypeVal) {
                     var dataObj = [];
@@ -224,7 +231,7 @@
                     vm.monthHeadCountChart.series.push(resourceTypeObj.resourceType);
                 });
                 _.each(manpowerData, function (manpower) {
-                    vm.monthHeadCountChart.labels.push(manpower.week);
+                    vm.monthHeadCountChart.labels.push(manpower.week+ "("+manpower.totalUserCount+")");
                 });
                 _.each(vm.monthHeadCountChart.series, function (resourceTypeVal) {
                     var dataObj = [];
