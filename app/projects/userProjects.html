@@ -14,6 +14,7 @@
                     <tr>
                         <th width="80px">S.No</th>
                         <th width="240px">User Name</th>
+                        <th width="80px">Type</th>
                         <th>
                             <table class="table">
                                 <tr>
@@ -36,6 +37,7 @@
                     <tr ng-repeat="user in vm.users | orderBy:'userName'">
                         <td>{{$index+1}}</td>
                         <td>{{user.userName}}</td>
+                        <td>{{user.userResourceType}}</td>
                         <td>
                             <table class="table">
                                 <tr ng-repeat="project in user.projects | orderBy:'projectName'">

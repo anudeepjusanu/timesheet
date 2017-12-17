@@ -20,6 +20,9 @@
                         <th>S.No</th>
                         <th>Customer Name</th>
                         <th>Project Name</th>
+                        <th>Project Bill Type</th>
+                        <th>Project Type</th>
+                        <th>Business Unit</th>
                         <th>Description</th>
                         <th>Start Date</th>
                         <th ng-if="vm.user.admin">Action</th>
@@ -28,8 +31,11 @@
                         <td>{{$index+1}}</td>
                         <td>{{project.clientName}}</td>
                         <td>{{project.projectName}}</td>
+                        <td>{{project.projectBillType}}</td>
+                        <td>{{project.projectType}}</td>
+                        <td>{{project.businessUnit}}</td>
                         <td>{{project.description}}</td>
-                        <td>{{project.startDate}}</td>
+                        <td>{{project.startDate | date: 'mediumDate'}}</td>
                         <td ng-if="vm.user.admin">
                             <a class="btn btn-primary btn-xs" ui-sref="assignUsers({id: project._id})">Assign Users</a>
                             <a class="btn btn-primary btn-xs" ui-sref="editProject({id: project._id})">Update</a>

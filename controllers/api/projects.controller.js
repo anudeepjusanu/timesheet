@@ -231,6 +231,7 @@ function getUserProjects(req, res) {
             usersList.push({
                 userId: userObj._id,
                 userName: userObj.name,
+                userResourceType: userObj.userResourceType,
                 projects: userObj.projects,
             });
         });
