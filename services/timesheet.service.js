@@ -7,6 +7,7 @@ var mongo = require('mongoskin');
 var db = mongo.db(config.connectionString, { native_parser: true });
 db.bind('timesheets');
 db.bind('users');
+db.bind('projects');
 
 var service = {};
 
@@ -24,6 +25,8 @@ service.clientUserHoursByWeek = clientUserHoursByWeek;
 service.allUserHoursByMonth = allUserHoursByMonth;
 service.projectUserHoursByMonth = projectUserHoursByMonth;
 service.timesheetBetweenDates = timesheetBetweenDates;
+service.getProjectInfoById = getProjectInfoById;
+service.utilizationByMonth = utilizationByMonth;
 
 module.exports = service;
 
@@ -46,9 +49,33 @@ function createTimesheet(currentUser, userParam) {
                 projectObj.resourceType = billData.resourceType;
                 projectObj.allocatedHours = billData.allocatedHours;
                 projectObj.billableMaxHours = billData.billableMaxHours;
+                if(projectObj.billableMaxHours > 0){
+                    if(projectObj.projectHours > projectObj.billableMaxHours){
+                        projectObj.billableHours = projectObj.billableMaxHours;
+                    }else{
+                        projectObj.billableHours = projectObj.projectHours;
+                    }
+                }else{
+                    projectObj.billableHours = projectObj.projectHours;
+                }
+            });
+            userParam.totalHours = 0;
+            userParam.timeoffHours = 0;
+            _.each(userParam.projects, function (projectObj) {
+                projectObj.businessUnit = "";
+                service.getProjectInfoById(projectObj.projectId).then(function(projectInfo) {
+                    if(projectInfo.businessUnit){
+                        projectObj.businessUnit = projectInfo.businessUnit;
+                    }
+                }).catch(function(err) {});
+                userParam.totalHours += projectObj.projectHours;
+                userParam.timeoffHours += projectObj.sickLeaveHours;
+                userParam.timeoffHours += projectObj.timeoffHours;
             });
         }
-
+        if(!user.userResourceType){
+            user.userResourceType = "";
+        }
         db.timesheets.findOne({ userId: user._id, week: userParam.week}, function(err, sheet) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             if (!sheet) {
@@ -56,8 +83,12 @@ function createTimesheet(currentUser, userParam) {
                     userId: mongo.helper.toObjectID(userParam.userId),
                     week: userParam.week,
                     weekDate: userParam.weekDate,
+                    userResourceType: user.userResourceType,
                     totalHours: userParam.totalHours,
-                    projects: userParam.projects
+                    timeoffHours: userParam.timeoffHours,
+                    projects: userParam.projects,
+                    createdOn: new Date(),
+                    updatedOn: new Date()
                 }
                 db.timesheets.insert(sheetObj, function(err, sheet) {
                     if (err) deferred.reject(err.name + ': ' + err.message);
@@ -91,14 +122,42 @@ function updateTimesheet(sheetId, userParam, currentUser) {
                     projectObj.resourceType = billData.resourceType;
                     projectObj.allocatedHours = billData.allocatedHours;
                     projectObj.billableMaxHours = billData.billableMaxHours;
+                    if(projectObj.billableMaxHours > 0){
+                        if(projectObj.projectHours > projectObj.billableMaxHours){
+                            projectObj.billableHours = projectObj.billableMaxHours;
+                        }else{
+                            projectObj.billableHours = projectObj.projectHours;
+                        }
+                    }else{
+                        projectObj.billableHours = projectObj.projectHours;
+                    }
                 });
+                userParam.totalHours = 0;
+                userParam.timeoffHours = 0;
+                _.each(userParam.projects, function (projectObj) {
+                    projectObj.businessUnit = "";
+                    service.getProjectInfoById(projectObj.projectId).then(function(projectInfo) {
+                        if(projectInfo.businessUnit){
+                            projectObj.businessUnit = projectInfo.businessUnit;
+                        }
+                    }).catch(function(err) {});
+                    userParam.totalHours += projectObj.projectHours;
+                    userParam.timeoffHours += projectObj.sickLeaveHours;
+                    userParam.timeoffHours += projectObj.timeoffHours;
+                });
+                if(!sheetUserObj.userResourceType){
+                    sheetUserObj.userResourceType = "";
+                }
                 var newSheetObj = {
                     userId: mongo.helper.toObjectID(sheetObj.userId),
                     week: userParam.week,
                     weekDate: userParam.weekDate,
+                    userResourceType: sheetUserObj.userResourceType,
                     totalHours: userParam.totalHours,
+                    timeoffHours: userParam.timeoffHours,
                     projects: userParam.projects
                 }
+                newSheetObj.updatedOn = new Date();
                 db.timesheets.update({ _id: mongo.helper.toObjectID(sheetId) }, { $set: newSheetObj }, function(err, responseSheet) {
                     if (err) deferred.reject(err.name + ': ' + err.message);
                     deferred.resolve(responseSheet);
@@ -160,6 +219,18 @@ function getProjectBillData(projectObj, weekDateVal, sheetUserObj) {
         BillData.billableMaxHours = 0;
     }
     return BillData;
+}
+
+function getProjectInfoById(projectId) {
+    var deferred = Q.defer();
+    db.projects.findById(projectId, function(err, projectInfo) {
+        if (projectInfo) {
+            deferred.resolve(projectInfo);
+        } else {
+            deferred.reject(false);
+        }
+    });
+    return deferred.promise;
 }
 
 function getTimesheet(id){
@@ -543,6 +614,36 @@ function timesheetBetweenDates(params){
             if(resultData.length == weeks.length){
                 deferred.resolve(resultData);
             }
+        });
+    });
+    return deferred.promise;
+}
+
+function utilizationByMonth(monthId, yearId, params) {
+    var deferred = Q.defer();
+    Date.prototype.getWeek = function() {
+        var onejan = new Date(this.getFullYear(), 0, 1);
+        return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+    }
+    var resultData = [];
+    var weeks = [];
+    var startDate = new Date(year, month, 1);
+    if(month >= 11){
+        var endDate = new Date(year+1, 0, 0);
+    }else{
+        var endDate = new Date(year, month + 1, 0);
+    }
+    var loop = 1;
+    while (startDate < endDate && loop++ < 6){
+        weeks.push(startDate.getFullYear()+"-W"+startDate.getWeek());
+        startDate.setDate(startDate.getDate() + 7);
+    }
+    _.each(weeks, function (weekVal) {
+        db.timesheets.find({ week: weekVal }).toArray(function(err, sheets) {
+            if (sheets) {
+
+            }
+            deferred.resolve();
         });
     });
     return deferred.promise;

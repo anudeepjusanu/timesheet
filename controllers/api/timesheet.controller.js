@@ -21,6 +21,7 @@ router.get('/remind/:id/:week', remind);
 router.get('/remind/all', remindAll);
 router.put('/admin/:id', adminUpdate);
 router.post('/month/report', getReportbyMonth);
+router.get('/utilizationByMonth/:monthId/:yearId', utilizationByMonth);
 router.get('/allUserHoursByWeek/:weekId', allUserHoursByWeek);
 router.get('/projectUserHoursByWeek/:weekId/:projectId', projectUserHoursByWeek);
 router.get('/clientUserHoursByWeek/:weekId/:clientId', clientUserHoursByWeek);
@@ -171,6 +172,16 @@ function getReportbyMonth(req, res){
 
 function allUserHoursByWeek(req, res) {
     timesheetService.allUserHoursByWeek(req.params.weekId)
+        .then(function(reports) {
+            res.send(reports);
+        })
+        .catch(function(err) {
+            res.status(400).send(err);
+        });
+}
+
+function utilizationByMonth(req, res) {
+    timesheetService.utilizationByMonth(req.params.monthId, req.params.yearId, req.body)
         .then(function(reports) {
             res.send(reports);
         })

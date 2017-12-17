@@ -2,19 +2,20 @@
     <h3 class="modal-title" id="modal-title">Edit Timesheet</h3>
 </div>
 <form class="form-horizontal" name="timesheetForm">
-<div class="modal-body" id="modal-body">
-    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
-    <div class="page-content-wrap">
-        <div class="row">
-            <div class="col-md-12">
-                <div ng-if="vm.hasProjects" class="well well-sm">
+    <div class="modal-body" id="modal-body">
+        <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
+        <div class="page-content-wrap">
+            <div class="row">
+                <div class="col-md-12">
+                    <div ng-if="vm.hasProjects" class="well well-sm">
                         <div class="row">
                             <div class="col-md-8"></div>
                             <div class="form-group required col-md-4">
                                 <label class="col-md-2 control-label">Week</label>
                                 <div class="col-md-8">
                                     <p class="input-group">
-                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.timesheet.weekDate" is-open="vm.timesheetDateOpened" datepicker-options="vm.dateOptions" readonly ng-required="true" close-text="Close" ng-disabled="!vm.isNew" />
+                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.timesheet.weekDate" is-open="vm.timesheetDateOpened" datepicker-options="vm.dateOptions" readonly ng-required="true"
+                                               close-text="Close" ng-disabled="!vm.isNew"/>
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default" ng-click="vm.timesheetDateOpened=false;"><i class="glyphicon glyphicon-calendar"></i></button>
                                         </span>
@@ -26,40 +27,37 @@
                             <tr>
                                 <th>Project</th>
                                 <th>Allocated Hours</th>
-                                <th>Hours</th>
+                                <th>Worked Hours</th>
+                                <th>Sick Leave</th>
+                                <th>Timeoff</th>
                                 <th>Comments</th>
                             </tr>
                             <tr ng-repeat="project in vm.timesheet.projects">
-                                <td>
-                                    {{project.projectName}}
-                                </td>
-                                <td>
-                                    <b>{{project.allocatedHours}}</b>
-                                </td>
-                                <td>
-                                    <input type="number" min="0" max="70" placeholder="Your Hours" class="form-control" ng-model="project.projectHours" ng-required="true" ng-change="vm.calTotalHours();" />
-                                </td>
-                                <td>
-                                    <textarea class="form-control" placeholder="Please enter your comment" rows="2" ng-model="project.projectComment"></textarea>
-                                </td>
+                                <td>{{project.projectName}}</td>
+                                <td><b>{{project.allocatedHours}}</b></td>
+                                <td><input type="number" min="0" max="70" class="form-control" ng-model="project.projectHours" ng-required="true" ng-change="vm.calTotalHours();"/></td>
+                                <td><input type="number" min="0" max="40" class="form-control" ng-model="project.sickLeaveHours" ng-required="true" ng-change="vm.calTotalHours();"/></td>
+                                <td><input type="number" min="0" max="40" class="form-control" ng-model="project.timeoffHours" ng-required="true" ng-change="vm.calTotalHours();"/></td>
+                                <td><textarea class="form-control" placeholder="Please enter your comment" rows="2" ng-model="project.projectComment"></textarea></td>
                             </tr>
                             <tr>
                                 <th colspan="2">Total Hours :</th>
                                 <th>{{vm.timesheet.totalHours}}</th>
                                 <th></th>
+                                <th>{{vm.timesheet.timeoffHours}}</th>
+                                <th></th>
                             </tr>
                         </table>
-
-                </div>
-                <div ng-if="vm.hasProjects===false;" class="well well-sm">
-                    <h1>You don't have project(s). Please contact Admin</h1>
+                    </div>
+                    <div ng-if="vm.hasProjects===false;" class="well well-sm">
+                        <h1>You don't have project(s). Please contact Admin</h1>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-disabled="!vm.enableSaveBtn" ng-click="vm.saveTimesheet(timesheetForm);">Save</button>
-    <button class="btn btn-warning" type="button" ng-click="vm.closeTimesheet()">Cancel</button>
-</div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-disabled="!vm.enableSaveBtn" ng-click="vm.saveTimesheet(timesheetForm);">Save</button>
+        <button class="btn btn-warning" type="button" ng-click="vm.closeTimesheet()">Cancel</button>
+    </div>
 </form>

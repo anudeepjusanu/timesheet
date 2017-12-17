@@ -66,33 +66,15 @@
         };
 
         vm.alerts = [];
-        var currentDate = $filter('date')(new Date(), "yyyy-Www").toString();
         vm.currentWeek = new Date();
         vm.currentMonth = new Date();
         vm.monthView = false;
-
-        switch (currentDay) {
-            case 0:
-                vm.currentWeek.setDate(vm.currentWeek.getDate() + 5);
-            case 1:
-                vm.currentWeek.setDate(vm.currentWeek.getDate() + 4);
-                break;
-            case 2:
-                vm.currentWeek.setDate(vm.currentWeek.getDate() + 3);
-                break;
-            case 3:
-                vm.currentWeek.setDate(vm.currentWeek.getDate() + 2);
-                break;
-            case 4:
-                vm.currentWeek.setDate(vm.currentWeek.getDate() + 1);
-                break;
-            case 6:
-                vm.currentWeek.setDate(vm.currentWeek.getDate() - 1);
-                break;
-            case 7:
-                vm.currentWeek.setDate(vm.currentWeek.getDate() - 2);
-                break;
+        if(vm.currentWeek.getDay() < 5){
+            vm.currentWeek.setDate(vm.currentWeek.getDate() - (vm.currentWeek.getDay() + 2));
+        }else if(vm.currentWeek.getDay() == 6){
+            vm.currentWeek.setDate(vm.currentWeek.getDate() - 1);
         }
+        var currentDate = $filter('date')(vm.currentWeek, "yyyy-Www").toString();
 
         vm.open2 = open2;
         vm.popup2 = {
@@ -176,7 +158,8 @@
                         week: "",
                         weekDate: "",
                         projects: [],
-                        totalHours: "",
+                        totalHours: 0,
+                        timeoffHours: 0,
                         remind: true
                     });
                 });
@@ -190,6 +173,7 @@
                             userObj.weekDate = timesheet.weekDate;
                             userObj.projects = timesheet.projects;
                             userObj.totalHours = timesheet.totalHours;
+                            userObj.timeoffHours = timesheet.timeoffHours;
                             if(timesheet.projects.length > 0){
                                 userObj.remind = false;
                             }
@@ -330,30 +314,14 @@
         vm.timesheet = {
             weekDate: new Date(),
             projects: [],
-            totalHours: 0
+            totalHours: 0,
+            timeoffHours: 0
         };
         vm.hasProjects = true;
-        switch (currentDay) {
-            case 0:
-                vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() + 5);
-            case 1:
-                vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() + 4);
-                break;
-            case 2:
-                vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() + 3);
-                break;
-            case 3:
-                vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() + 2);
-                break;
-            case 4:
-                vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() + 1);
-                break;
-            case 6:
-                vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() - 1);
-                break;
-            case 7:
-                vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() - 2);
-                break;
+        if(vm.timesheet.weekDate.getDay() < 5){
+            vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() - (vm.timesheet.weekDate.getDay() + 2));
+        }else if(vm.timesheet.weekDate.getDay() == 6){
+            vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() - 1);
         }
         vm.timesheetDateOpened = false;
         vm.dateOptions = {
@@ -373,8 +341,11 @@
         };
        vm.calTotalHours = function () {
            vm.timesheet.totalHours = 0;
+           vm.timesheet.timeoffHours = 0;
            _.each(vm.timesheet.projects, function (project) {
                vm.timesheet.totalHours += project.projectHours;
+               vm.timesheet.timeoffHours += project.sickLeaveHours;
+               vm.timesheet.timeoffHours += project.timeoffHours;
            });
        }
 
@@ -432,9 +403,7 @@
                     isAssigned: true
                 });
             });
-
         }
-
 
         // Assign New Project
         vm.clients = [];
@@ -458,11 +427,6 @@
             startingDay: 1
         };
         vm.enableSaveBtn = true;
-        /*vm.resourceTypes = [
-            {"resourceTypeId":"shadow", "resourceTypeVal":"Shadow"},
-            {"resourceTypeId":"buffer", "resourceTypeVal":"Buffer"},
-            {"resourceTypeId":"billable", "resourceTypeVal":"Billable"}
-        ];*/
 
         function getClients() {
             ProjectService.getClients().then(function(response) {
@@ -549,7 +513,8 @@
         vm.timesheet = {
             weekDate: new Date(),
             projects: [],
-            totalHours: 0
+            totalHours: 0,
+            timeoffHours: 0
         }
         if(vm.timesheet.weekDate.getDay() < 5){
             vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() - (vm.timesheet.weekDate.getDay() + 2));
@@ -576,8 +541,11 @@
 
         vm.calTotalHours = function () {
             vm.timesheet.totalHours = 0;
+            vm.timesheet.timeoffHours = 0;
             _.each(vm.timesheet.projects, function (project) {
                 vm.timesheet.totalHours += project.projectHours;
+                vm.timesheet.timeoffHours += project.sickLeaveHours;
+                vm.timesheet.timeoffHours += project.timeoffHours;
             });
         }
 
