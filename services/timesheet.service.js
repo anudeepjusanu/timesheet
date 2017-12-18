@@ -652,8 +652,6 @@ function utilizationByMonth(month, year, params) {
         db.timesheets.find({ week: weekVal }).toArray(function(err, sheets) {
             var report = {
                 week: weekVal,
-                totalHeadCount: 0,
-                totalBillableHours: 0,
                 weekHeadCount: 0,
                 weekBillableHours: 0,
                 businessUnits: [
