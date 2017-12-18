@@ -667,21 +667,22 @@ function utilizationByMonth(month, year, params) {
             };
             if (sheets) {
                 _.each(sheets, function(sheetObj){
-                    //console.log(sheetObj);
-                    if(sheetObj.userResourceType == ""){
-                        report.weekHeadCount += 1;
-                        _.each(sheetObj.projects, function(projectObj){
-                            if(projectObj.resourceType == "billable"){
-                                report.weekBillableHours += projectObj.billableHours;
-                                if(projectObj.businessUnit == "Launchpad"){
-                                    report.launchpadHeadCount += 1;
-                                    report.launchpadBillableHours += projectObj.billableHours;
-                                } else if(projectObj.businessUnit == "Enterprise"){
-                                    report.enterpriseHeadCount += 1;
-                                    report.enterpriseBillableHours += projectObj.billableHours;
-                                }
+                    var isBillableResource = false;
+                    _.each(sheetObj.projects, function(projectObj){
+                        if(projectObj.resourceType == "billable"){
+                            isBillableResource = true;
+                            report.weekBillableHours += projectObj.billableHours;
+                            if(projectObj.businessUnit == "Launchpad"){
+                                report.launchpadHeadCount += 1;
+                                report.launchpadBillableHours += projectObj.billableHours;
+                            } else if(projectObj.businessUnit == "Enterprise"){
+                                report.enterpriseHeadCount += 1;
+                                report.enterpriseBillableHours += projectObj.billableHours;
                             }
-                        });
+                        }
+                    });
+                    if(isBillableResource){
+                        report.weekHeadCount += 1;
                     }
                 });
             }
