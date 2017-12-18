@@ -154,6 +154,7 @@
                     vm.users.push({
                         userId: userObj._id,
                         userName: userObj.name,
+                        userResourceType: userObj.userResourceType,
                         timesheetId: "",
                         week: "",
                         weekDate: "",

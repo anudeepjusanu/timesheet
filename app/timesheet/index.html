@@ -26,8 +26,8 @@
                                 <p class="input-group" ng-show="!vm.monthView">
                                     <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.currentWeek" is-open="vm.popup2.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getAllReports(vm.currentWeek)" />
                                     <span class="input-group-btn">
-                            <button type="button" class="btn btn-default" ng-click="vm.open2()"><i class="glyphicon glyphicon-calendar"></i></button>
-                        </span>
+                                        <button type="button" class="btn btn-default" ng-click="vm.open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
                                 </p>
                                 <p class="input-group" ng-show="vm.monthView">
                                     <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.currentMonth" is-open="vm.popup2.opened" datepicker-options="vm.monthOptions" ng-required="true" close-text="Close" ng-change="vm.getMonthReport(vm.currentMonth)" />
@@ -42,7 +42,20 @@
                         <tr ng-repeat="row in $data | orderBy:'name'">
                             <td data-title="'#'">{{$index + 1}}</td>
                             <td data-title="'Name'" filter="{userName: 'text'}">{{row.userName}}</td>
+                            <td data-title="'Type'">{{row.userResourceType}}</td>
                             <td data-title="'Project(s)'">
+                                <!--<div class="row">
+                                    <table>
+                                        <tbody>
+                                        <tr class="" ng-repeat="project in row.projects">
+                                            <td width="200px;">{{project.projectName}}</td>
+                                            <td width="80px;">{{project.resourceType}}</td>
+                                            <td width="60px">{{project.projectHours}}</td>
+                                            <td width=""><p style="max-width: 300px; margin: 0px!important;">{{project.projectComment}}</p></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>-->
                                 <div class="row" ng-repeat="project in row.projects">
                                     <div class="col-md-4">{{project.projectName}}</div>
                                     <div class="col-md-2">{{project.resourceType}}</div>

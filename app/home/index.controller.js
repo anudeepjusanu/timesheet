@@ -372,8 +372,7 @@
                 var utilizationData = [];
                 _.each(resultData, function (weekData) {
                     vm.utilizationHeadCountChart.labels.push(weekData.week);
-                    //var utilizationVal = (weekData.enterpriseHeadCount/weekData.weekHeadCount)*100;
-                    var utilizationVal = (weekData.enterpriseHeadCount/(weekData.enterpriseHeadCount+weekData.launchpadHeadCount))*100;
+                    var utilizationVal = (weekData.enterpriseHeadCount/weekData.weekHeadCount)*100;
                     if(isNaN(utilizationVal)){
                         utilizationVal = 0;
                     }
@@ -387,8 +386,7 @@
                 var utilizationData = [];
                 _.each(resultData, function (weekData) {
                     vm.utilizationHoursChart.labels.push(weekData.week);
-                    //var utilizationVal = (weekData.enterpriseBillableHours/weekData.weekBillableHours)*100;
-                    var utilizationVal = (weekData.enterpriseBillableHours/(weekData.enterpriseBillableHours+weekData.launchpadBillableHours))*100;
+                    var utilizationVal = (weekData.enterpriseBillableHours/weekData.weekBillableHours)*100;
                     if(isNaN(utilizationVal)){
                         utilizationVal = 0;
                     }
