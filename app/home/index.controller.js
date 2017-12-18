@@ -108,7 +108,7 @@
         }else if(vm.projectManpower.weekDate.getDay() == 6){
             vm.projectManpower.weekDate.setDate(vm.projectManpower.weekDate.getDate() - 1);
         }
-        vm.projectMonthlyHours = {
+        /*vm.projectMonthlyHours = {
             projectId: "",
             week: "",
             weekDate: new Date(),
@@ -120,6 +120,59 @@
             colors: vm.chartColors,
             data: [],
             series: [],
+            labels: []
+        };*/
+
+        vm.utzHeadCountChart = {
+            week: "",
+            options: {
+                legend: {
+                    display: true
+                },
+                scales: {
+                    xAxes: [{
+                        stacked: true,
+                    }],
+                    yAxes: [{
+                        stacked: true
+                    }]
+                }
+            },
+            colors: vm.chartColors,
+            data: [],
+            series: ["Enterprise", "Launchpad"],
+            labels: [],
+            datasetOverride: [
+                {
+                    label: "Bar chart",
+                    borderWidth: 1,
+                    type: 'bar'
+                },
+                {
+                    label: "Line chart",
+                    borderWidth: 1,
+                    type: 'bar'
+                }
+            ]
+        };
+        vm.utzHoursChart = {
+            week: "",
+            options: {
+                legend: {
+                    display: true
+                },
+                scales: {
+                    xAxes: [{
+                        stacked: true,
+                    }],
+                    yAxes: [{
+                        stacked: true
+                    }]
+                }
+            },
+            colors: vm.chartColors,
+            data: [],
+            series: ["Enterprise", "Launchpad"],
             labels: []
         };
 
@@ -202,7 +255,6 @@
             vm.monthHoursChart.monthName = vm.monthNames[vm.monthHoursChart.weekDate.getMonth()];
             TimesheetService.allUserHoursByMonth(vm.monthHoursChart.weekDate.getMonth(), vm.monthHoursChart.weekDate.getFullYear()).then(function(manpowerData) {
                 manpowerData = _.sortBy(manpowerData, 'week');
-                console.log(manpowerData);
                 vm.monthHoursChart.labels = [];
                 vm.monthHoursChart.data = [];
                 vm.monthHoursChart.series = [];
@@ -243,11 +295,10 @@
                     });
                     vm.monthHeadCountChart.data.push(dataObj);
                 });
-                console.log(vm.monthHeadCountChart);
             });
         };
 
-        vm.getProjectUserHoursByMonth = function() {
+        /*vm.getProjectUserHoursByMonth = function() {
             if(vm.projectMonthlyHours.projectId) {
                 TimesheetService.projectUserHoursByMonth(vm.projectMonthlyHours.weekDate.getMonth(), vm.projectMonthlyHours.weekDate.getFullYear(), vm.projectMonthlyHours.projectId).then(function (manpowerData) {
                     manpowerData = _.sortBy(manpowerData, 'week');
@@ -272,6 +323,39 @@
                     });
                 });
             }
+        };*/
+
+        vm.utilizationByMonth = function() {
+            vm.monthHoursChart.monthName = vm.monthNames[vm.monthHoursChart.weekDate.getMonth()];
+            TimesheetService.utilizationByMonth(vm.monthHoursChart.weekDate.getMonth(), vm.monthHoursChart.weekDate.getFullYear()).then(function(resultData) {
+                resultData = _.sortBy(resultData, 'week');
+                console.log(resultData);
+                vm.utzHeadCountChart.labels = [];
+                vm.utzHeadCountChart.data = [];
+                var enterpriseData = [];
+                var lanchpadData = [];
+                _.each(resultData, function (weekData) {
+                    vm.utzHeadCountChart.labels.push(weekData.week);
+                    enterpriseData.push(weekData.weekHeadCount);
+                    //enterpriseData.push(weekData.enterpriseHeadCount);
+                    //lanchpadData.push(weekData.launchpadHeadCount);
+                });
+                vm.utzHeadCountChart.data.push(enterpriseData);
+                //vm.utzHeadCountChart.data.push(lanchpadData);
+
+                vm.utzHoursChart.labels = [];
+                vm.utzHoursChart.data = [];
+                var enterpriseData = [];
+                var lanchpadData = [];
+                _.each(resultData, function (weekData) {
+                    vm.utzHoursChart.labels.push(weekData.week);
+                    enterpriseData.push(weekData.weekBillableHours);
+                    //enterpriseData.push(weekData.enterpriseBillableHours);
+                    //lanchpadData.push(weekData.launchpadBillableHours);
+                });
+                vm.utzHoursChart.data.push(enterpriseData);
+                //vm.utzHoursChart.data.push(lanchpadData);
+            });
         };
 
         var init = function() {
@@ -282,6 +366,7 @@
                 if(vm.user.admin) {
                     vm.getAllUserHoursByWeek();
                     vm.getAllUserHoursByMonth();
+                    vm.utilizationByMonth();
                 }
             });
         };

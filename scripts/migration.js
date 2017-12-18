@@ -53,11 +53,10 @@ db.timesheets.find({}).sort({createdOn: 1}).toArray(function(err, timesheets) {
             timesheetObj.totalHours = 0;
             _.each(timesheetObj.projects, function (projectObj) {
                 projectObj.businessUnit = "";
-                service.getProjectInfoById(projectObj.projectId).then(function(projectInfo) {
-                    if(projectInfo.businessUnit){
-                        projectObj.businessUnit = projectInfo.businessUnit;
-                    }
-                }).catch(function(err) {});
+                var projectInfo = getProjectInfoById(projectObj.projectId, timesheetObj._id);
+                if(projectInfo.businessUnit){
+                    projectObj.businessUnit = projectInfo.businessUnit;
+                }
                 timesheetObj.totalHours += projectObj.projectHours;
                 timesheetObj.timeoffHours += projectObj.sickLeaveHours;
                 timesheetObj.timeoffHours += projectObj.timeoffHours;
@@ -120,13 +119,14 @@ function getProjectBillData(projectObj, weekDateVal, sheetUserObj) {
     return BillData;
 }
 
-function getProjectInfoById(projectId) {
+function getProjectInfoById(projectId, timesheetId) {
     var deferred = Q.defer();
     db.projects.findById(projectId, function(err, projectInfo) {
+        console.log("Project Info " + timesheetId);
         if (projectInfo) {
             deferred.resolve(projectInfo);
         } else {
-            deferred.reject(false);
+            deferred.resolve([])
         }
     });
     return deferred.promise;

@@ -619,7 +619,7 @@ function timesheetBetweenDates(params){
     return deferred.promise;
 }
 
-function utilizationByMonth(monthId, yearId, params) {
+function utilizationByMonth(month, year, params) {
     var deferred = Q.defer();
     Date.prototype.getWeek = function() {
         var onejan = new Date(this.getFullYear(), 0, 1);
@@ -640,10 +640,46 @@ function utilizationByMonth(monthId, yearId, params) {
     }
     _.each(weeks, function (weekVal) {
         db.timesheets.find({ week: weekVal }).toArray(function(err, sheets) {
+            var report = {
+                week: weekVal,
+                totalHeadCount: 0,
+                totalBillableHours: 0,
+                weekHeadCount: 0,
+                weekBillableHours: 0,
+                businessUnits: [
+                    {businessUnit: 'Launchpad'},
+                    {businessUnit: 'Enterprise'}
+                ],
+                launchpadHeadCount: 0,
+                launchpadBillableHours: 0,
+                enterpriseHeadCount: 0,
+                enterpriseBillableHours: 0
+            };
             if (sheets) {
-
+                _.each(sheets, function(sheetObj){
+                    //console.log(sheetObj);
+                    if(sheetObj.userResourceType == ""){
+                        report.weekHeadCount += 1;
+                        _.each(sheetObj.projects, function(projectObj){
+                            if(projectObj.resourceType == "billable"){
+                                report.weekBillableHours += projectObj.billableHours;
+                                if(projectObj.businessUnit == "Launchpad"){
+                                    report.launchpadHeadCount += 1;
+                                    report.launchpadBillableHours += projectObj.billableHours;
+                                } else if(projectObj.businessUnit == "Enterprise"){
+                                    report.enterpriseHeadCount += 1;
+                                    report.enterpriseBillableHours += projectObj.billableHours;
+                                }
+                            }
+                        });
+                    }
+                });
             }
-            deferred.resolve();
+            resultData.push(report);
+            if(resultData.length == weeks.length){
+                resultData = _.sortBy(resultData, ['week']);
+                deferred.resolve(resultData);
+            }
         });
     });
     return deferred.promise;

@@ -220,5 +220,51 @@
                 </div>
             </div>-->
         </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title-box pull-left">
+                            <h3>Utilization Monthly Head Count</h3>
+                            <span>{{vm.monthHoursChart.monthName}}</span>
+                        </div>
+                        <!--<div class="panel-controls pull-right" style="width: 140px; margin-left: 10px;">
+                            <p class="input-group">
+                                <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.monthHoursChart.weekDate" is-open="vm.monthHoursChart.opened" datepicker-options="vm.monthOptions" ng-required="true" close-text="Close" ng-change="vm.getAllUserHoursByMonth();" readonly />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="vm.monthHoursChart.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                            </p>
+                        </div>-->
+                    </div>
+                    <div class="panel-body padding-0">
+                        <canvas class="chart chart-bar" chart-colors="vm.utzHeadCountChart.colors" chart-options="vm.utzHeadCountChart.options" chart-data="vm.utzHeadCountChart.data" chart-labels="vm.utzHeadCountChart.labels" chart-series="vm.utzHeadCountChart.series">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title-box pull-left">
+                            <h3>Utilization Monthly Hours</h3>
+                            <span>{{vm.monthHoursChart.monthName}}</span>
+                        </div>
+                        <!--<div class="panel-controls pull-right" style="width: 140px; margin-left: 10px;">
+                            <p class="input-group">
+                                <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.monthHoursChart.weekDate" is-open="vm.monthHoursChart.opened" datepicker-options="vm.monthOptions" ng-required="true" close-text="Close" ng-change="vm.getAllUserHoursByMonth();" readonly />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="vm.monthHoursChart.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                            </p>
+                        </div>-->
+                    </div>
+                    <div class="panel-body padding-0">
+                        <canvas class="chart chart-bar" chart-colors="vm.utzHoursChart.colors" chart-options="vm.utzHoursChart.options" chart-data="vm.utzHoursChart.data" chart-labels="vm.utzHoursChart.labels" chart-series="vm.utzHoursChart.series">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
