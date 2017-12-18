@@ -661,15 +661,18 @@ function utilizationByMonth(month, year, params) {
                 launchpadHeadCount: 0,
                 launchpadBillableHours: 0,
                 enterpriseHeadCount: 0,
-                enterpriseBillableHours: 0
+                enterpriseBillableHours: 0,
+                haveNoBillableProjectHeadCount: 0,
+                haveBillableProjectHeadCount: 0
             };
             if (sheets) {
                 _.each(sheets, function(sheetObj){
-                    var isBillableResource = false;
+                    var hasBillableProject = false;
                     if(sheetObj.userResourceType == "Billable"){
                         report.weekHeadCount += 1;
                         _.each(sheetObj.projects, function(projectObj){
                             if(projectObj.resourceType == "billable"){
+                                hasBillableProject = true;
                                 report.weekBillableHours += projectObj.billableHours;
                                 if(projectObj.businessUnit == "Launchpad"){
                                     report.launchpadHeadCount += 1;
@@ -680,6 +683,11 @@ function utilizationByMonth(month, year, params) {
                                 }
                             }
                         });
+                        if(hasBillableProject===true){
+                            report.haveBillableProjectHeadCount += 1;
+                        }else{
+                            report.haveNoBillableProjectHeadCount += 1;
+                        }
                     }
                 });
             }

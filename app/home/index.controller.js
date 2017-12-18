@@ -140,7 +140,7 @@
             },
             colors: vm.chartColors,
             data: [],
-            series: ["Enterprise", "Launchpad"],
+            series: ["Enterprise", "Launchpad", "NonBillableProject"],
             labels: []
         };
         vm.utzHoursChart = {
@@ -347,13 +347,16 @@
                 vm.utzHeadCountChart.data = [];
                 var enterpriseData = [];
                 var lanchpadData = [];
+                var noBillableProjectData = [];
                 _.each(resultData, function (weekData) {
                     vm.utzHeadCountChart.labels.push(weekData.week+"("+weekData.weekHeadCount+")");
                     enterpriseData.push(weekData.enterpriseHeadCount);
                     lanchpadData.push(weekData.launchpadHeadCount);
+                    noBillableProjectData.push(weekData.haveNoBillableProjectHeadCount);
                 });
                 vm.utzHeadCountChart.data.push(enterpriseData);
                 vm.utzHeadCountChart.data.push(lanchpadData);
+                vm.utzHeadCountChart.data.push(noBillableProjectData);
 
                 vm.utzHoursChart.labels = [];
                 vm.utzHoursChart.data = [];
@@ -394,8 +397,7 @@
                     utilizationData.push(utilizationVal);
                 });
                 vm.utilizationHoursChart.data.push(utilizationData);
-		console.log(resultData);
-		console.log(vm.utilizationHeadCountChart);	
+		        	
             });
         };
 
