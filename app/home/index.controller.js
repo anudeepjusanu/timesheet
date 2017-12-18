@@ -372,8 +372,12 @@
                 var utilizationData = [];
                 _.each(resultData, function (weekData) {
                     vm.utilizationHeadCountChart.labels.push(weekData.week);
-                    //var utilizationVal = parseInt((weekData.enterpriseHeadCount/weekData.weekHeadCount)*100);
-                    var utilizationVal = parseInt((weekData.enterpriseHeadCount/(weekData.enterpriseHeadCount+weekData.launchpadHeadCount))*100, 10);
+                    //var utilizationVal = (weekData.enterpriseHeadCount/weekData.weekHeadCount)*100;
+                    var utilizationVal = (weekData.enterpriseHeadCount/(weekData.enterpriseHeadCount+weekData.launchpadHeadCount))*100;
+                    if(isNaN(utilizationVal)){
+                        utilizationVal = 0;
+                    }
+                    utilizationVal = parseInt(utilizationVal);
                     utilizationData.push(utilizationVal);
                 });
                 vm.utilizationHeadCountChart.data.push(utilizationData);
@@ -383,8 +387,12 @@
                 var utilizationData = [];
                 _.each(resultData, function (weekData) {
                     vm.utilizationHoursChart.labels.push(weekData.week);
-                    //var utilizationVal = parseInt((weekData.enterpriseBillableHours/weekData.weekBillableHours)*100);
-                    var utilizationVal = parseInt((weekData.enterpriseBillableHours/(weekData.enterpriseBillableHours+weekData.launchpadBillableHours))*100, 10);
+                    //var utilizationVal = (weekData.enterpriseBillableHours/weekData.weekBillableHours)*100;
+                    var utilizationVal = (weekData.enterpriseBillableHours/(weekData.enterpriseBillableHours+weekData.launchpadBillableHours))*100;
+                    if(isNaN(utilizationVal)){
+                        utilizationVal = 0;
+                    }
+                    utilizationVal = parseInt(utilizationVal);
                     utilizationData.push(utilizationVal);
                 });
                 vm.utilizationHoursChart.data.push(utilizationData);
