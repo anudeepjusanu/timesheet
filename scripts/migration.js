@@ -11,7 +11,7 @@ db.bind('projects');
 
 var service = {};
 service.getProjectInfoById = getProjectInfoById;
-
+var rowCnt = 0;
 var allProjects = [];
 db.projects.find({}).toArray(function(err, projects) {
     allProjects = projects;
@@ -66,7 +66,8 @@ db.projects.find({}).toArray(function(err, projects) {
                 });
                 db.timesheets.update({ _id: mongo.helper.toObjectID(timesheetObj._id) }, { $set: timesheetObj }, function(err, responseSheet) {
                     if (err) console.log(err.name + ': ' + err.message);
-                    console.log(timesheetObj._id+" Updated");
+                    rowCnt++;
+                    console.log(timesheetObj._id+" Updated "+rowCnt);
                 });
             });
         });
