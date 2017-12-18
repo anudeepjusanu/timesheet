@@ -141,19 +141,7 @@
             colors: vm.chartColors,
             data: [],
             series: ["Enterprise", "Launchpad"],
-            labels: [],
-            datasetOverride: [
-                {
-                    label: "Bar chart",
-                    borderWidth: 1,
-                    type: 'bar'
-                },
-                {
-                    label: "Line chart",
-                    borderWidth: 1,
-                    type: 'bar'
-                }
-            ]
+            labels: []
         };
         vm.utzHoursChart = {
             week: "",
@@ -173,6 +161,31 @@
             colors: vm.chartColors,
             data: [],
             series: ["Enterprise", "Launchpad"],
+            labels: []
+        };
+
+        vm.utilizationHeadCountChart = {
+            week: "",
+            options: {
+                legend: {
+                    display: true
+                }
+            },
+            colors: vm.chartColors,
+            data: [],
+            series: ["Utilization"],
+            labels: []
+        };
+        vm.utilizationHoursChart = {
+            week: "",
+            options: {
+                legend: {
+                    display: true
+                }
+            },
+            colors: vm.chartColors,
+            data: [],
+            series: ["Utilization"],
             labels: []
         };
 
@@ -329,32 +342,52 @@
             vm.monthHoursChart.monthName = vm.monthNames[vm.monthHoursChart.weekDate.getMonth()];
             TimesheetService.utilizationByMonth(vm.monthHoursChart.weekDate.getMonth(), vm.monthHoursChart.weekDate.getFullYear()).then(function(resultData) {
                 resultData = _.sortBy(resultData, 'week');
-                console.log(resultData);
+
                 vm.utzHeadCountChart.labels = [];
                 vm.utzHeadCountChart.data = [];
                 var enterpriseData = [];
                 var lanchpadData = [];
                 _.each(resultData, function (weekData) {
-                    vm.utzHeadCountChart.labels.push(weekData.week);
-                    enterpriseData.push(weekData.weekHeadCount);
-                    //enterpriseData.push(weekData.enterpriseHeadCount);
-                    //lanchpadData.push(weekData.launchpadHeadCount);
+                    vm.utzHeadCountChart.labels.push(weekData.week+"("+weekData.weekHeadCount+")");
+                    enterpriseData.push(weekData.enterpriseHeadCount);
+                    lanchpadData.push(weekData.launchpadHeadCount);
                 });
                 vm.utzHeadCountChart.data.push(enterpriseData);
-                //vm.utzHeadCountChart.data.push(lanchpadData);
+                vm.utzHeadCountChart.data.push(lanchpadData);
 
                 vm.utzHoursChart.labels = [];
                 vm.utzHoursChart.data = [];
                 var enterpriseData = [];
                 var lanchpadData = [];
                 _.each(resultData, function (weekData) {
-                    vm.utzHoursChart.labels.push(weekData.week);
-                    enterpriseData.push(weekData.weekBillableHours);
-                    //enterpriseData.push(weekData.enterpriseBillableHours);
-                    //lanchpadData.push(weekData.launchpadBillableHours);
+                    vm.utzHoursChart.labels.push(weekData.week+"("+weekData.weekBillableHours+")");
+                    enterpriseData.push(weekData.enterpriseBillableHours);
+                    lanchpadData.push(weekData.launchpadBillableHours);
                 });
                 vm.utzHoursChart.data.push(enterpriseData);
-                //vm.utzHoursChart.data.push(lanchpadData);
+                vm.utzHoursChart.data.push(lanchpadData);
+
+                vm.utilizationHeadCountChart.labels = [];
+                vm.utilizationHeadCountChart.data = [];
+                var utilizationData = [];
+                _.each(resultData, function (weekData) {
+                    vm.utilizationHeadCountChart.labels.push(weekData.week);
+                    //var utilizationVal = parseInt((weekData.enterpriseHeadCount/weekData.weekHeadCount)*100);
+                    var utilizationVal = parseInt((weekData.enterpriseHeadCount/(weekData.enterpriseHeadCount+weekData.launchpadHeadCount))*100);
+                    utilizationData.push(utilizationVal);
+                });
+                vm.utilizationHeadCountChart.data.push(utilizationData);
+
+                vm.utilizationHoursChart.labels = [];
+                vm.utilizationHoursChart.data = [];
+                var utilizationData = [];
+                _.each(resultData, function (weekData) {
+                    vm.utilizationHoursChart.labels.push(weekData.week);
+                    //var utilizationVal = parseInt((weekData.enterpriseBillableHours/weekData.weekBillableHours)*100);
+                    var utilizationVal = parseInt((weekData.enterpriseBillableHours/(weekData.enterpriseBillableHours+weekData.launchpadBillableHours))*100);
+                    utilizationData.push(utilizationVal);
+                });
+                vm.utilizationHoursChart.data.push(utilizationData);
             });
         };
 

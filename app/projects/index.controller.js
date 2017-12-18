@@ -110,7 +110,6 @@
                 if(clientObj){
                     vm.obj.clientName = clientObj.clientName;
                 }
-                console.log(vm.obj);
                 if (vm.isNew) {
                     ProjectService.create(vm.obj).then(function(response) {
                         noty.showSuccess("New Project has been added successfully!");

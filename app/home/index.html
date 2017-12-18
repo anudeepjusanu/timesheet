@@ -266,5 +266,38 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title-box pull-left">
+                            <h3>Utilization Monthly Head Count</h3>
+                            <span>{{vm.monthHoursChart.monthName}}</span>
+                        </div>
+                    </div>
+                    <div class="panel-body padding-0">
+                        <canvas class="chart chart-bar" chart-colors="vm.utilizationHeadCountChart.colors" chart-options="vm.utilizationHeadCountChart.options" chart-data="vm.utilizationHeadCountChart.data" chart-labels="vm.utilizationHeadCountChart.labels" chart-series="vm.utilizationHeadCountChart.series">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title-box pull-left">
+                            <h3>Utilization Monthly Hours</h3>
+                            <span>{{vm.monthHoursChart.monthName}}</span>
+                        </div>
+                    </div>
+                    <div class="panel-body padding-0">
+                        <canvas class="chart chart-bar" chart-colors="vm.utilizationHoursChart.colors" chart-options="vm.utilizationHoursChart.options" chart-data="vm.utilizationHoursChart.data" chart-labels="vm.utilizationHoursChart.labels" chart-series="vm.utilizationHoursChart.series">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+        </div>
     </div>
 </div>

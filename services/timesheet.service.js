@@ -60,15 +60,19 @@ function createTimesheet(currentUser, userParam) {
                 }
             });
             userParam.totalHours = 0;
+            userParam.totalBillableHours = 0;
             userParam.timeoffHours = 0;
             _.each(userParam.projects, function (projectObj) {
-                projectObj.businessUnit = "";
+                if(!projectObj.businessUnit){
+                    projectObj.businessUnit = "";
+                }
                 service.getProjectInfoById(projectObj.projectId).then(function(projectInfo) {
                     if(projectInfo.businessUnit){
                         projectObj.businessUnit = projectInfo.businessUnit;
                     }
                 }).catch(function(err) {});
                 userParam.totalHours += projectObj.projectHours;
+                userParam.totalBillableHours += projectObj.billableHours;
                 userParam.timeoffHours += projectObj.sickLeaveHours;
                 userParam.timeoffHours += projectObj.timeoffHours;
             });
@@ -85,6 +89,7 @@ function createTimesheet(currentUser, userParam) {
                     weekDate: userParam.weekDate,
                     userResourceType: user.userResourceType,
                     totalHours: userParam.totalHours,
+                    totalBillableHours: userParam.totalBillableHours,
                     timeoffHours: userParam.timeoffHours,
                     projects: userParam.projects,
                     createdOn: new Date(),
@@ -133,15 +138,19 @@ function updateTimesheet(sheetId, userParam, currentUser) {
                     }
                 });
                 userParam.totalHours = 0;
+                userParam.totalBillableHours = 0;
                 userParam.timeoffHours = 0;
                 _.each(userParam.projects, function (projectObj) {
-                    projectObj.businessUnit = "";
+                    if(!projectObj.businessUnit){
+                        projectObj.businessUnit = "";
+                    }
                     service.getProjectInfoById(projectObj.projectId).then(function(projectInfo) {
                         if(projectInfo.businessUnit){
                             projectObj.businessUnit = projectInfo.businessUnit;
                         }
                     }).catch(function(err) {});
                     userParam.totalHours += projectObj.projectHours;
+                    userParam.totalBillableHours += projectObj.billableHours;
                     userParam.timeoffHours += projectObj.sickLeaveHours;
                     userParam.timeoffHours += projectObj.timeoffHours;
                 });
@@ -154,6 +163,7 @@ function updateTimesheet(sheetId, userParam, currentUser) {
                     weekDate: userParam.weekDate,
                     userResourceType: sheetUserObj.userResourceType,
                     totalHours: userParam.totalHours,
+                    totalBillableHours: userParam.totalBillableHours,
                     timeoffHours: userParam.timeoffHours,
                     projects: userParam.projects
                 }
