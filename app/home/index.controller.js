@@ -265,6 +265,7 @@
         };
 
         vm.getAllUserHoursByMonth = function() {
+            vm.utilizationByMonth();
             vm.monthHoursChart.monthName = vm.monthNames[vm.monthHoursChart.weekDate.getMonth()];
             TimesheetService.allUserHoursByMonth(vm.monthHoursChart.weekDate.getMonth(), vm.monthHoursChart.weekDate.getFullYear()).then(function(manpowerData) {
                 manpowerData = _.sortBy(manpowerData, 'week');
@@ -397,7 +398,7 @@
                     utilizationData.push(utilizationVal);
                 });
                 vm.utilizationHoursChart.data.push(utilizationData);
-		        	
+
             });
         };
 
