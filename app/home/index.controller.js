@@ -131,10 +131,11 @@
                 },
                 scales: {
                     xAxes: [{
-                        stacked: true,
+                        stacked: true
                     }],
                     yAxes: [{
-                        stacked: true
+                        stacked: true,
+                        ticks: {beginAtZero:true}
                     }]
                 }
             },
@@ -154,7 +155,8 @@
                         stacked: true,
                     }],
                     yAxes: [{
-                        stacked: true
+                        stacked: true,
+                        ticks: {beginAtZero:true}
                     }]
                 }
             },
@@ -169,6 +171,11 @@
             options: {
                 legend: {
                     display: true
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {beginAtZero:true}
+                    }]
                 }
             },
             colors: vm.chartColors,
@@ -199,7 +206,8 @@
                         stacked: true,
                     }],
                     yAxes: [{
-                        stacked: true
+                        stacked: true,
+                        ticks: {beginAtZero:true}
                     }]
                 }
             },
