@@ -16,11 +16,12 @@
                         <form class="form-inline" method="post">
                             <div class="form-group">
                                 <label class="" for="clientId">Client :</label>
-                                <select id="clientId" class="form-control" ng-model="vm.search.clientId" ng-options="client._id as client.clientName for client in vm.clients"></select>
+                                <select id="clientId" class="form-control" ng-model="vm.search.clientId" ng-options="client._id as client.clientName for client in vm.clients" ng-change="vm.search.projectId=''"></select>
                             </div>
+                            <strong>OR</strong>
                             <div class="form-group">
                                 <label class="" for="projectId">Project :</label>
-                                <select id="projectId" class="form-control" ng-model="vm.search.projectId" ng-options="project._id as project.projectName for project in vm.projects"></select>
+                                <select id="projectId" class="form-control" ng-model="vm.search.projectId" ng-options="project._id as project.projectName for project in vm.projects"  ng-change="vm.search.clientId=''"></select>
                             </div>
                             <div class="form-group">
                                 <label class="" for="startDate">Start Date :</label>
@@ -50,8 +51,8 @@
                     <tr>
                         <th width="80px">S.No</th>
                         <th width="240px">User Name</th>
-                        <td width="80px">Week</td>
-                        <td width="120px">Week Date</td>
+                        <th width="80px">Week</th>
+                        <th width="120px">Week Date</th>
                         <th>
                             <table>
                                 <tr>

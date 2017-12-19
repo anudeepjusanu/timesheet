@@ -657,9 +657,10 @@
         vm.users = [];
         vm.projects = [];
         vm.timesheets = [];
+        vm.currentDate = new Date();
         vm.search = {
             projectId: null,
-            startDate: new Date(),
+            startDate: new Date(vm.currentDate.getFullYear(), vm.currentDate.getMonth(), 1),
             endDate: new Date()
         };
         vm.dateOptions = {
