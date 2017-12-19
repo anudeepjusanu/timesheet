@@ -185,7 +185,7 @@
             },
             colors: vm.chartColors,
             data: [],
-            series: ["Utilization "],
+            series: ["Utilization"],
             labels: []
         };
         vm.utzOrganizationHeadCountChart = {
@@ -424,7 +424,7 @@
                 var utilizationData = [];
                 _.each(resultData, function (weekData) {
                     vm.utzOrganizationHeadCountChart.labels.push(weekData.week);
-                    var utilizationVal = (weekData.haveBillableProjectHeadCount/weekData.weekBillableHours)*100;
+                    var utilizationVal = (weekData.haveBillableProjectHeadCount/weekData.weekHeadCount)*100;
                     if(isNaN(utilizationVal)){
                         utilizationVal = 0;
                     }
