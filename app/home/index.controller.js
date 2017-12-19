@@ -188,6 +188,15 @@
             options: {
                 legend: {
                     display: true
+                },
+                scales: {
+                    xAxes: [{
+                        stacked: true,
+                    }],
+                    yAxes: [{
+                        stacked: true,
+                        ticks: {beginAtZero:true, max: 100}
+                    }]
                 }
             },
             colors: vm.chartColors,

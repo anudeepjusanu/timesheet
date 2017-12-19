@@ -9,17 +9,20 @@
             </div>
             <div class="panel-body ">
                 <div class="clearfix row">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <button class="btn btn-primary" ng-click="vm.exportTable()">Export</button>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-10">
                         <form class="form-inline" method="post">
-                            <div class="form-group col-md-4">
-                                <label class="" for="projectId">Project :</label>
-                                <select id="projectId" class="form-control" ng-model="vm.search.projectId" ng-options="project._id as project.projectName for project in vm.projects">
-                                </select>
+                            <div class="form-group">
+                                <label class="" for="clientId">Client :</label>
+                                <select id="clientId" class="form-control" ng-model="vm.search.clientId" ng-options="client._id as client.clientName for client in vm.clients"></select>
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group">
+                                <label class="" for="projectId">Project :</label>
+                                <select id="projectId" class="form-control" ng-model="vm.search.projectId" ng-options="project._id as project.projectName for project in vm.projects"></select>
+                            </div>
+                            <div class="form-group">
                                 <label class="" for="startDate">Start Date :</label>
                                 <p class="input-group" style="width: 140px;">
                                     <input type="text" id="startDate" class="form-control" uib-datepicker-popup ng-model="vm.search.startDate" is-open="vm.search.startDateOpened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="" />
@@ -28,7 +31,7 @@
                                     </span>
                                 </p>
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group">
                                 <label class="" for="endDate">End Date :</label>
                                 <p class="input-group" style="width: 140px;">
                                     <input type="text" id="endDate" class="form-control" uib-datepicker-popup ng-model="vm.search.endDate" is-open="vm.search.endDateOpened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="" />
@@ -37,6 +40,9 @@
                                     </span>
                                 </p>
                             </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary" ng-click="vm.getConsolidatedProjects()">Search</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -44,43 +50,33 @@
                     <tr>
                         <th width="80px">S.No</th>
                         <th width="240px">User Name</th>
+                        <td width="80px">Week</td>
+                        <td width="120px">Week Date</td>
                         <th>
-                            <table class="table">
+                            <table>
                                 <tr>
-                                    <th width="60px">P.No</th>
-                                    <td width="320px">Name</td>
-                                    <td width="480px">
-                                        <div class="row">
-                                            <div class="col-md-3">Start Date</div>
-                                            <div class="col-md-3">End Date</div>
-                                            <div class="col-md-2">Allocated Hours</div>
-                                            <div class="col-md-2">Billable Limit</div>
-                                            <div class="col-md-2">Resource Type</div>
-                                        </div>
-                                    </td>
-                                    <td>Action</td>
+                                    <td width="120px;">Resource Type</td>
+                                    <td width="180px;">Project Name</td>
+                                    <td width="80px;">Project Hours</td>
+                                    <td width="80px;">Sick Leaves</td>
+                                    <td width="80px;">Timeoff</td>
                                 </tr>
                             </table>
                         </th>
                     </tr>
-                    <tr ng-repeat="user in vm.users | orderBy:'userName'">
+                    <tr ng-repeat="sheet in vm.timesheets | orderBy:['userName', 'week']">
                         <td>{{$index+1}}</td>
-                        <td>{{user.userName}}</td>
+                        <td>{{sheet.userName}}</td>
+                        <td>{{sheet.week}}</td>
+                        <td>{{sheet.weekDate|date: 'mediumDate'}}</td>
                         <td>
-                            <table class="table">
-                                <tr ng-repeat="project in user.projects | orderBy:'projectName'">
-                                    <td width="60px">{{$index+1}}</td>
-                                    <td width="320px">{{project.projectName}}</td>
-                                    <td width="480px">
-                                        <div class="row" ng-repeat="billDate in project.billDates">
-                                            <div class="col-md-3">{{billDate.start | date : 'mediumDate'}}</div>
-                                            <div class="col-md-3">{{billDate.end | date : 'mediumDate'}}</div>
-                                            <div class="col-md-2">{{billDate.allocatedHours}}</div>
-                                            <div class="col-md-2">{{billDate.billableMaxHours}}</div>
-                                            <div class="col-md-2">{{billDate.resourceType}}</div>
-                                        </div>
-                                    </td>
-                                    <td><a class="btn btn-primary btn-xs" ng-click="vm.viewAssignUser(user, project)">Edit</a></td>
+                            <table>
+                                <tr class="" ng-repeat="project in sheet.projects">
+                                    <td width="120px;">{{project.resourceType}}</td>
+                                    <td width="180px;">{{project.projectName}}</td>
+                                    <td width="80px;">{{project.projectHours}}</td>
+                                    <td width="80px;">{{project.sickLeaveHours}}</td>
+                                    <td width="80px;">{{project.timeoffHours}}</td>
                                 </tr>
                             </table>
                         </td>

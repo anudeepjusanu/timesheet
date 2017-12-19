@@ -592,40 +592,63 @@ function projectUserHoursByMonth(month, year, projectId) {
     return deferred.promise;
 }
 
-function timesheetBetweenDates(params){
+function timesheetBetweenDates(startDateVal, endDateVal, params){
     var deferred = Q.defer();
     Date.prototype.getWeek = function() {
         var onejan = new Date(this.getFullYear(), 0, 1);
         return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
     }
-    var resultData = [];
     var weeks = [];
-    var startDate = new Date(params.startDate);
-    var endDate = new Date(params.endDate);
+    var startDate = new Date(startDateVal);
+    var endDate = new Date(endDateVal);
     var loop = 1;
     while (startDate < endDate && loop++ < 50){
         weeks.push(startDate.getFullYear()+"-W"+startDate.getWeek());
         startDate.setDate(startDate.getDate() + 7);
     }
-    _.each(weeks, function (weekVal) {
-        var report = {
-            week: weekVal,
-            sheets: []
-        } ;
-        db.timesheets.find({ week: weekVal }).toArray(function(err, sheets) {
-            var report = {
-                week: weekVal,
-                sheets: []
-            } ;
-            if (sheets) {
-                report.sheets = sheets;
-            }
-            resultData.push(report);
-            if(resultData.length == weeks.length){
-                deferred.resolve(resultData);
-            }
+    if(weeks.length > 0 ){
+        var queryStr = {};
+        var projectList = [];
+        if(params.projectIds && params.projectIds.length > 0){
+            _.each(params.projectIds, function (projectId) {
+                projectList.push(mongo.helper.toObjectID(projectId));
+            });
+            queryStr = {
+                "projects.projectId": {"$in": projectList}
+            };
+        }
+        var timesheets = [];
+        var loopCount = 0;
+        _.each(weeks, function (weekVal) {
+            queryStr.week = weekVal;
+            db.timesheets.find(queryStr).toArray(function(err, sheets) {
+                _.each(sheets, function (sheetObj) {
+                    var timesheetObj = {
+                        _id: sheetObj._id,
+                        userId: sheetObj.userId,
+                        week: sheetObj.week,
+                        weekDate: sheetObj.weekDate,
+                        projects: []
+                    };
+                    _.each(projectList, function (projectIdVal) {
+                        var projectObj = _.find(sheetObj.projects, {projectId: projectIdVal});
+                        if(projectObj){
+                            timesheetObj.projects.push(projectObj);
+                        }
+                    });
+                    timesheets.push(timesheetObj);
+                });
+                loopCount++;
+                if(loopCount >= weeks.length){
+                    //timesheets = _.groupBy(timesheets, 'userId');
+                    deferred.resolve(timesheets);
+                }
+            });
         });
-    });
+    }else{
+        deferred.reject("Please enetr valid date range");
+    }
+
     return deferred.promise;
 }
 

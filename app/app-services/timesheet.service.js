@@ -24,6 +24,7 @@
         service.allUserHoursByMonth = allUserHoursByMonth;
         service.projectUserHoursByMonth = projectUserHoursByMonth;
         service.utilizationByMonth = utilizationByMonth;
+        service.timesheetBetweenDates = timesheetBetweenDates;
 
         return service;
 
@@ -93,6 +94,10 @@
 
         function utilizationByMonth(month, year) {
             return $http.get('/api/timesheet/utilizationByMonth/' + month + '/' + year ).then(handleSuccess, handleError);
+        }
+
+        function timesheetBetweenDates(startDate, endDate, paramObj) {
+            return $http.post('/api/timesheet/timesheetBetweenDates/' + startDate + '/' + endDate, paramObj).then(handleSuccess, handleError);
         }
 
         // private functions

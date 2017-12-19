@@ -651,10 +651,12 @@
         }
     }
 
-    function ConsolidatedController(UserService, TimesheetService, ProjectService, $state, $stateParams, noty) {
+    function ConsolidatedController(UserService, TimesheetService, ProjectService, $state, $stateParams, noty, $filter) {
         var vm = this;
         vm.user = {};
+        vm.users = [];
         vm.projects = [];
+        vm.timesheets = [];
         vm.search = {
             projectId: null,
             startDate: new Date(),
@@ -664,9 +666,30 @@
             startingDay: 1
         };
 
-        function getProjects(){
-            ProjectService.getAll().then(function(response) {
-                vm.projects = response;
+        vm.getConsolidatedProjects = function(){
+            var paramObj = {projectIds: []};
+            paramObj.startDate = $filter('date')(vm.search.startDate, "yyyy-M-dd").toString();
+            paramObj.endDate = $filter('date')(vm.search.endDate, "yyyy-M-dd").toString();
+            if(vm.search.clientId && vm.search.clientId.length>0){
+                paramObj.projectIds = [];
+                _.each(vm.projects, function (prjObj) {
+                    if(prjObj.clientId == vm.search.clientId){
+                        paramObj.projectIds.push(prjObj._id);
+                    }
+                });
+                console.log(paramObj.projectIds);
+            }else{
+                paramObj.projectIds.push(vm.search.projectId);
+            }
+            TimesheetService.timesheetBetweenDates(paramObj.startDate, paramObj.endDate, paramObj).then(function(response) {
+                vm.timesheets = response;
+                _.each(vm.timesheets, function (sheetObj) {
+                    sheetObj.userName = "";
+                    var userObj = _.find(vm.users, {_id: sheetObj.userId});
+                    if(userObj){
+                        sheetObj.userName = userObj.name;
+                    }
+                })
             }, function(error){
                 console.log(error);
             });
@@ -675,6 +698,22 @@
         function getProjects(){
             ProjectService.getAll().then(function(response) {
                 vm.projects = response;
+            }, function(error){
+                console.log(error);
+            });
+        }
+
+        function getClients(){
+            ProjectService.getClients().then(function(response) {
+                vm.clients = response;
+            }, function(error){
+                console.log(error);
+            });
+        }
+
+        function getUsers(){
+            UserService.GetAll().then(function(response) {
+                vm.users = response;
             }, function(error){
                 console.log(error);
             });
@@ -684,10 +723,12 @@
         function init() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
+                getUsers();
                 if(vm.user.admin !== true){
 
                 }
                 getProjects();
+                getClients();
             });
         }
     };
