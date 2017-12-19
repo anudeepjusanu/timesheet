@@ -174,7 +174,7 @@
                 },
                 scales: {
                     yAxes: [{
-                        ticks: {beginAtZero:true}
+                        ticks: {beginAtZero:true, max: 100}
                     }]
                 }
             },
@@ -207,7 +207,7 @@
                     }],
                     yAxes: [{
                         stacked: true,
-                        ticks: {beginAtZero:true}
+                        ticks: {beginAtZero:true, max: 100}
                     }]
                 }
             },
