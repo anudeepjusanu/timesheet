@@ -653,14 +653,41 @@
 
     function ConsolidatedController(UserService, TimesheetService, ProjectService, $state, $stateParams, noty) {
         var vm = this;
-        var currentDay = new Date().getDay();
         vm.user = {};
+        vm.projects = [];
+        vm.search = {
+            projectId: null,
+            startDate: new Date(),
+            endDate: new Date()
+        };
+        vm.dateOptions = {
+            startingDay: 1
+        };
 
+        function getProjects(){
+            ProjectService.getAll().then(function(response) {
+                vm.projects = response;
+            }, function(error){
+                console.log(error);
+            });
+        }
+
+        function getProjects(){
+            ProjectService.getAll().then(function(response) {
+                vm.projects = response;
+            }, function(error){
+                console.log(error);
+            });
+        }
 
         init();
         function init() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
+                if(vm.user.admin !== true){
+
+                }
+                getProjects();
             });
         }
     };

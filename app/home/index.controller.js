@@ -185,7 +185,27 @@
             },
             colors: vm.chartColors,
             data: [],
-            series: ["Utilization"],
+            series: ["Utilization "],
+            labels: []
+        };
+        vm.utzOrganizationHeadCountChart = {
+            week: "",
+            options: {
+                legend: {
+                    display: true
+                },
+                scales: {
+                    xAxes: [{
+                        stacked: true,
+                    }],
+                    yAxes: [{
+                        stacked: true
+                    }]
+                }
+            },
+            colors: vm.chartColors,
+            data: [],
+            series: ["Utilization", "NonBillableProject"],
             labels: []
         };
 
@@ -398,6 +418,20 @@
                     utilizationData.push(utilizationVal);
                 });
                 vm.utilizationHoursChart.data.push(utilizationData);
+
+                vm.utzOrganizationHeadCountChart.labels = [];
+                vm.utzOrganizationHeadCountChart.data = [];
+                var utilizationData = [];
+                _.each(resultData, function (weekData) {
+                    vm.utzOrganizationHeadCountChart.labels.push(weekData.week);
+                    var utilizationVal = (weekData.haveBillableProjectHeadCount/weekData.weekBillableHours)*100;
+                    if(isNaN(utilizationVal)){
+                        utilizationVal = 0;
+                    }
+                    utilizationVal = parseInt(utilizationVal);
+                    utilizationData.push(utilizationVal);
+                });
+                vm.utzOrganizationHeadCountChart.data.push(utilizationData);
 
             });
         };

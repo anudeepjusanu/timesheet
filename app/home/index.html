@@ -271,7 +271,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="panel-title-box pull-left">
-                            <h3>Utilization Monthly Head Count</h3>
+                            <h3>Utilization Enterprise Monthly Head Count</h3>
                             <span>{{vm.monthHoursChart.monthName}}</span>
                         </div>
                     </div>
@@ -285,7 +285,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="panel-title-box pull-left">
-                            <h3>Utilization Monthly Hours</h3>
+                            <h3>Utilization Enterprise Monthly Hours</h3>
                             <span>{{vm.monthHoursChart.monthName}}</span>
                         </div>
                     </div>
@@ -294,6 +294,25 @@
                         </canvas>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title-box pull-left">
+                            <h3>Utilization Organization Monthly Head Count</h3>
+                            <span>{{vm.monthHoursChart.monthName}}</span>
+                        </div>
+                    </div>
+                    <div class="panel-body padding-0">
+                        <canvas class="chart chart-bar" chart-colors="vm.utzOrganizationHeadCountChart.colors" chart-options="vm.utzOrganizationHeadCountChart.options" chart-data="vm.utzOrganizationHeadCountChart.data" chart-labels="vm.utilizationHeadCountChart.labels" chart-series="vm.utzOrganizationHeadCountChart.series">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+
             </div>
         </div>
         <div class="row">
