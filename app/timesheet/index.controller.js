@@ -42,11 +42,10 @@
                     });
                 }
             };
-        })
+        });
 
     function Controller(UserService, TimesheetService, ProjectService, $filter, _, $scope, FlashService, NgTableParams, noty, $uibModal) {
         var vm = this;
-
         vm.user = null;
         vm.timesheets = [];
         vm.projects = [];
@@ -64,6 +63,26 @@
         vm.obj = {
             question: new Date()
         };
+        vm.search = {
+            userName: "",
+            userResourceType: "",
+            projectId: "",
+            resourceType: "",
+            isFilled: "",
+            timesheetResult: {
+                headCount: 0
+            }
+        };
+        vm.resourceTypes = [
+            {"resourceTypeId":"", "resourceTypeVal":"All"},
+            {"resourceTypeId":"shadow", "resourceTypeVal":"Shadow"},
+            {"resourceTypeId":"buffer", "resourceTypeVal":"Buffer"},
+            {"resourceTypeId":"billable", "resourceTypeVal":"Billable"},
+            {"resourceTypeId":"bizdev", "resourceTypeVal":"Bizdev"},
+            {"resourceTypeId":"internal", "resourceTypeVal":"Internal"},
+            {"resourceTypeId":"operations", "resourceTypeVal":"Operations"},
+            {"resourceTypeId":"trainee", "resourceTypeVal":"Trainee"}
+        ];
 
         vm.alerts = [];
         vm.currentWeek = new Date();
@@ -140,6 +159,72 @@
 
         });
 
+        $scope.$watch('vm.search.userName', function (newVal) {
+            vm.tblUsers = timesheetFilter();
+        });
+
+        $scope.$watch('vm.search.userResourceType', function (newVal) {
+            vm.tblUsers = timesheetFilter();
+        });
+
+        $scope.$watch('vm.search.projectId', function (newVal) {
+            vm.tblUsers = timesheetFilter();
+        });
+
+        $scope.$watch('vm.search.resourceType', function (newVal) {
+            vm.tblUsers = timesheetFilter();
+        });
+
+        $scope.$watch('vm.search.isFilled', function (newVal) {
+            vm.tblUsers = timesheetFilter();
+        });
+
+        function timesheetFilter() {
+            var output = angular.copy(vm.users);
+            var searchObj = vm.search;
+            if (searchObj.userName) {
+                output = $filter('filter')(output, {userName: searchObj.userName});
+            }
+            if (searchObj.userResourceType && searchObj.userResourceType.length > 0) {
+                output = $filter('filter')(output, {userResourceType: searchObj.userResourceType});
+            }
+            if (searchObj.projectId && searchObj.projectId.length > 0) {
+                output = $filter('filter')(output, function (item, index, items) {
+                    output[index].projects = $filter('filter')(output[index].projects, {projectId: searchObj.projectId});
+                    return (output[index].projects.length > 0);
+                });
+            }
+            if (searchObj.isFilled && searchObj.isFilled.length > 0) {
+                if (searchObj.isFilled == "filled") {
+                    output = $filter('filter')(output, function (item, index) {
+                        return (item.timesheetId != '');
+                    });
+                } else if (searchObj.isFilled == "notfilled") {
+                    output = $filter('filter')(output, function (item, index) {
+                        return (item.timesheetId == '');
+                    });
+                }
+            }
+            if (output) {
+                searchObj.timesheetResult.headCount = output.length;
+                searchObj.timesheetResult.totalHours = 0;
+                searchObj.timesheetResult.timeoffHours = 0;
+                _.each(output, function (sheet) {
+                    /*sheet.totalHours = 0;
+                    sheet.timeoffHours = 0;
+                    _.each(sheet.projectHours, function (prj) {
+                        sheet.totalHours += prj.projectHours;
+                        sheet.timeoffHours += (prj.sickLeaveHours + prj.timeoffHours);
+                    });*/
+                    searchObj.timesheetResult.totalHours += sheet.totalHours;
+                    searchObj.timesheetResult.timeoffHours += sheet.timeoffHours;
+                });
+            }
+            return output;
+        }
+
+
+
         function getAllReports(week) {
             var filterDate = "";
             if (week) {
@@ -180,9 +265,10 @@
                             }
                         }
                     });
-                    vm.tableParams.settings({
+                    /*vm.tableParams.settings({
                         dataset: vm.users
-                    });
+                    });*/
+                    vm.tblUsers = angular.copy(vm.users);
                 });
             });
         };
@@ -288,6 +374,7 @@
         
         function getProjects() {
             ProjectService.getAll().then(function(projects) {
+                vm.projects.push({id: '', title:'All'});
                 _.each(projects, function (project) {
                     vm.projects.push({id: project._id, title:project.projectName});
                 });

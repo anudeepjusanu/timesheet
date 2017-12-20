@@ -3,7 +3,6 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="" ng-if="vm.user.admin">
-        <!-- START DEFAULT TABLE EXPORT -->
         <div class="panel panel-default tabs">
             <ul class="nav nav-tabs" role="tablist">
                 <li class="active"><a href="#tab-first" role="tab" data-toggle="tab">All Users</a></li>
@@ -62,16 +61,30 @@
                         </tr>
                         <tr>
                             <td></td>
-                            <td><input type="text" class="form-control"/></td>
+                            <td><input class="form-control" type="text" ng-model="vm.search.userName" /></td>
+                            <td><select class="form-control" ng-model="vm.search.userResourceType" ng-options="opt as opt for opt in ['', 'Billable', 'Non-billable']"></select></td>
+                            <td class="row">
+                                <table>
+                                    <tr>
+                                        <td width="200px;">
+                                            <select class="form-control" ng-model="vm.search.projectId" ng-options="project.id as project.title for project in vm.projects"></select>
+                                        </td>
+                                        <td width="80px;"><select class="form-control" ng-model="vm.search.resourceType" ng-options="resourceType.resourceTypeId as resourceType.resourceTypeVal for resourceType in vm.resourceTypes"></select></td>
+                                        <td width="60px;"></td>
+                                        <td width="60px;"></td>
+                                        <td width="60px;"></td>
+                                        <td width="300px;"></td>
+                                    </tr>
+                                </table>
+                            </td>
                             <td></td>
                             <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td><select class="form-control" ng-model="vm.search.isFilled" ng-options="opt.id as opt.label for opt in [{id:'', label:'All'}, {id:'filled', label:'Filled'}, {id:'notfilled', label:'Not Filled'}]"></select></td>
+
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="row in vm.users | orderBy:'name'">
+                        <tr ng-repeat="row in vm.tblUsers | orderBy:'name'">
                             <td>{{$index + 1}}</td>
                             <td>{{row.userName}}</td>
                             <td>{{row.userResourceType}}</td>
@@ -95,6 +108,17 @@
                             </td>
                         </tr>
                         </tbody>
+                        <tfoot>
+                        <tr>
+                            <th></th>
+                            <th>Head count: {{vm.search.timesheetResult.headCount}}</th>
+                            <th></th>
+                            <th></th>
+                            <th>{{vm.search.timesheetResult.totalHours}}</th>
+                            <th>{{vm.search.timesheetResult.timeoffHours}}</th>
+                            <th></th>
+                        </tr>
+                        </tfoot>
                     </table>
                 </div>
                 <div class="tab-pane" id="tab-second">
