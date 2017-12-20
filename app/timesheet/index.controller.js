@@ -651,7 +651,7 @@
         }
     }
 
-    function ConsolidatedController(UserService, TimesheetService, ProjectService, $state, $stateParams, noty, $filter) {
+    function ConsolidatedController(UserService, TimesheetService, ProjectService, $state, $stateParams, noty, $filter, $scope) {
         var vm = this;
         vm.user = {};
         vm.users = [];
@@ -666,6 +666,11 @@
         vm.dateOptions = {
             startingDay: 1
         };
+        vm.exportTable = exportTable;
+
+        function exportTable() {
+            $scope.$broadcast('export-excl', { "date": vm.filterDate });
+        }
 
         vm.getConsolidatedProjects = function(){
             var paramObj = {projectIds: []};
