@@ -186,12 +186,20 @@
                 output = $filter('filter')(output, {userName: searchObj.userName});
             }
             if (searchObj.userResourceType && searchObj.userResourceType.length > 0) {
-                output = $filter('filter')(output, {userResourceType: searchObj.userResourceType});
+                output = $filter('filter')(output, function(item){
+                    return (searchObj.userResourceType == item.userResourceType);
+                });
             }
             if (searchObj.projectId && searchObj.projectId.length > 0) {
-                output = $filter('filter')(output, function (item, index, items) {
-                    output[index].projects = $filter('filter')(output[index].projects, {projectId: searchObj.projectId});
-                    return (output[index].projects.length > 0);
+                output = $filter('filter')(output, function (item) {
+                    item.projects = $filter('filter')(item.projects, {projectId: searchObj.projectId});
+                    return (item.projects.length > 0);
+                });
+            }
+            if (searchObj.resourceType && searchObj.resourceType.length > 0) {
+                output = $filter('filter')(output, function (item) {
+                    item.projects = $filter('filter')(item.projects, {resourceType: searchObj.resourceType});
+                    return (item.projects.length > 0);
                 });
             }
             if (searchObj.isFilled && searchObj.isFilled.length > 0) {
@@ -210,12 +218,12 @@
                 searchObj.timesheetResult.totalHours = 0;
                 searchObj.timesheetResult.timeoffHours = 0;
                 _.each(output, function (sheet) {
-                    /*sheet.totalHours = 0;
+                    sheet.totalHours = 0;
                     sheet.timeoffHours = 0;
-                    _.each(sheet.projectHours, function (prj) {
+                    _.each(sheet.projects, function (prj) {
                         sheet.totalHours += prj.projectHours;
                         sheet.timeoffHours += (prj.sickLeaveHours + prj.timeoffHours);
-                    });*/
+                    });
                     searchObj.timesheetResult.totalHours += sheet.totalHours;
                     searchObj.timesheetResult.timeoffHours += sheet.timeoffHours;
                 });
@@ -269,6 +277,31 @@
                         dataset: vm.users
                     });*/
                     vm.tblUsers = angular.copy(vm.users);
+                    vm.search = {
+                        userName: "",
+                        userResourceType: "",
+                        projectId: "",
+                        resourceType: "",
+                        isFilled: "",
+                        timesheetResult: {
+                            headCount: 0
+                        }
+                    };
+                    if (vm.tblUsers) {
+                        vm.search.timesheetResult.headCount = vm.tblUsers.length;
+                        vm.search.timesheetResult.totalHours = 0;
+                        vm.search.timesheetResult.timeoffHours = 0;
+                        _.each(vm.tblUsers, function (sheet) {
+                            sheet.totalHours = 0;
+                            sheet.timeoffHours = 0;
+                            _.each(sheet.projects, function (prj) {
+                                sheet.totalHours += prj.projectHours;
+                                sheet.timeoffHours += (prj.sickLeaveHours + prj.timeoffHours);
+                            });
+                            vm.search.timesheetResult.totalHours += sheet.totalHours;
+                            vm.search.timesheetResult.timeoffHours += sheet.timeoffHours;
+                        });
+                    }
                 });
             });
         };
@@ -750,10 +783,12 @@
             startDate: new Date(vm.currentDate.getFullYear(), vm.currentDate.getMonth(), 1),
             endDate: new Date()
         };
+        vm.weeks = [];
         vm.dateOptions = {
             startingDay: 1
         };
         vm.exportTable = exportTable;
+        calWeeks();
 
         function exportTable() {
             $scope.$broadcast('export-excl', { "date": vm.filterDate });
@@ -770,22 +805,59 @@
                         paramObj.projectIds.push(prjObj._id);
                     }
                 });
-                console.log(paramObj.projectIds);
             }else{
                 paramObj.projectIds.push(vm.search.projectId);
             }
+            calWeeks();
             TimesheetService.timesheetBetweenDates(paramObj.startDate, paramObj.endDate, paramObj).then(function(response) {
-                vm.timesheets = response;
-                _.each(vm.timesheets, function (sheetObj) {
+                var rawData = response;
+                rawData = _.groupBy(rawData, 'userId');
+                vm.timesheets = [];
+                _.each(rawData, function (userSheets, userId) {
+                    var userObj = _.find(vm.users, {_id: userId});
+                    var userName = (userObj)?userObj = userObj.name:"";
+                    vm.timesheets.push({
+                        userId: userId,
+                        userName: userName,
+                        weeks: []
+                    });
+                    userSheets = _.sortBy(userSheets, 'week');
+                    //console.log(userSheets);
+                });
+                /*_.each(vm.timesheets, function (sheetObj) {
                     sheetObj.userName = "";
                     var userObj = _.find(vm.users, {_id: sheetObj.userId});
                     if(userObj){
                         sheetObj.userName = userObj.name;
                     }
-                })
+                });*/
             }, function(error){
                 console.log(error);
             });
+        }
+
+        function calWeeks(){
+            Date.prototype.getWeek = function() {
+                var onejan = new Date(this.getFullYear(), 0, 1);
+                return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+            }
+            vm.weeks = [];
+            var startDate = new Date(vm.search.startDate);
+            var endDate = new Date(vm.search.endDate);
+            var loop = 0;
+            while (startDate < endDate && loop++ < 50){
+                var weekStartDate = new Date(startDate.getTime());
+                weekStartDate.setDate(weekStartDate.getDate() - weekStartDate.getDay() + 1);
+                var weekEndDate = new Date(startDate.getTime());
+                weekEndDate.setDate(weekEndDate.getDate() + (7 - weekEndDate.getDay()));
+                var weekName = $filter('date')(weekStartDate, "mediumDate").toString() + " - " + $filter('date')(weekEndDate, "mediumDate").toString();
+                vm.weeks.push({
+                    week: startDate.getFullYear()+"-W"+startDate.getWeek(),
+                    weekName: weekName
+                });
+                startDate.setDate(startDate.getDate() + 7);
+            }
+            console.log(vm.weeks);
         }
 
         function getProjects(){

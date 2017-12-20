@@ -62,7 +62,7 @@
                         <tr>
                             <td></td>
                             <td><input class="form-control" type="text" ng-model="vm.search.userName" /></td>
-                            <td><select class="form-control" ng-model="vm.search.userResourceType" ng-options="opt as opt for opt in ['', 'Billable', 'Non-billable']"></select></td>
+                            <td><select class="form-control" ng-model="vm.search.userResourceType" ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'Billable',label:'Billable'}, {id:'Non-billable',label:'Non-billable'}]"></select></td>
                             <td class="row">
                                 <table>
                                     <tr>

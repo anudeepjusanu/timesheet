@@ -51,16 +51,11 @@
                     <tr>
                         <th width="80px">S.No</th>
                         <th width="240px">User Name</th>
-                        <th width="80px">Week</th>
-                        <th width="120px">Week Date</th>
                         <th>
                             <table>
                                 <tr>
-                                    <td width="120px;">Resource Type</td>
-                                    <td width="180px;">Project Name</td>
-                                    <td width="80px;">Project Hours</td>
-                                    <td width="80px;">Sick Leaves</td>
-                                    <td width="80px;">Timeoff</td>
+                                    <th width="180px;">Project Name</th>
+                                    <th colspan="2"  width="160px;" ng-repeat="week in vm.weeks">{{week.weekName}}</th>
                                 </tr>
                             </table>
                         </th>
@@ -68,15 +63,11 @@
                     <tr ng-repeat="sheet in vm.timesheets | orderBy:['userName', 'week']">
                         <td>{{$index+1}}</td>
                         <td>{{sheet.userName}}</td>
-                        <td>{{sheet.week}}</td>
-                        <td>{{sheet.weekDate|date: 'mediumDate'}}</td>
                         <td>
-                            <table>
+                            <table class="table">
                                 <tr class="" ng-repeat="project in sheet.projects">
-                                    <td width="120px;">{{project.resourceType}}</td>
                                     <td width="180px;">{{project.projectName}}</td>
                                     <td width="80px;">{{project.projectHours}}</td>
-                                    <td width="80px;">{{project.sickLeaveHours}}</td>
                                     <td width="80px;">{{project.timeoffHours}}</td>
                                 </tr>
                             </table>
