@@ -67,6 +67,7 @@
             userName: "",
             userResourceType: "",
             projectId: "",
+            businessUnit: "",
             resourceType: "",
             isFilled: "",
             timesheetResult: {
@@ -171,6 +172,10 @@
             vm.tblUsers = timesheetFilter();
         });
 
+        $scope.$watch('vm.search.businessUnit', function (newVal) {
+            vm.tblUsers = timesheetFilter();
+        });
+
         $scope.$watch('vm.search.resourceType', function (newVal) {
             vm.tblUsers = timesheetFilter();
         });
@@ -193,6 +198,12 @@
             if (searchObj.projectId && searchObj.projectId.length > 0) {
                 output = $filter('filter')(output, function (item) {
                     item.projects = $filter('filter')(item.projects, {projectId: searchObj.projectId});
+                    return (item.projects.length > 0);
+                });
+            }
+            if (searchObj.businessUnit && searchObj.businessUnit.length > 0) {
+                output = $filter('filter')(output, function (item) {
+                    item.projects = $filter('filter')(item.projects, {businessUnit: searchObj.businessUnit});
                     return (item.projects.length > 0);
                 });
             }
@@ -281,6 +292,7 @@
                         userName: "",
                         userResourceType: "",
                         projectId: "",
+                        businessUnit: "",
                         resourceType: "",
                         isFilled: "",
                         timesheetResult: {
