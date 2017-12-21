@@ -48,31 +48,37 @@
                     </div>
                 </div>
                 <table class="table table-condensed table-bordered table-striped" export-table>
+                    <thead>
                     <tr>
                         <th width="80px">S.No</th>
                         <th width="240px">User Name</th>
-                        <th>
-                            <table>
-                                <tr>
-                                    <th width="180px;">Project Name</th>
-                                    <th colspan="2"  width="160px;" ng-repeat="week in vm.weeks">{{week.weekName}}</th>
-                                </tr>
-                            </table>
-                        </th>
+                        <th width="180px">Project Name</th>
+                        <th width="160px" colspan="2" ng-repeat="week in vm.weeks">{{week.weekName}}</th>
+                        <th width="160px" colspan="2" class="text-center">Total</th>
                     </tr>
-                    <tr ng-repeat="sheet in vm.timesheets | orderBy:['userName', 'week']">
-                        <td>{{$index+1}}</td>
-                        <td>{{sheet.userName}}</td>
-                        <td>
-                            <table class="table">
-                                <tr class="" ng-repeat="project in sheet.projects">
-                                    <td width="180px;">{{project.projectName}}</td>
-                                    <td width="80px;">{{project.projectHours}}</td>
-                                    <td width="80px;">{{project.timeoffHours}}</td>
-                                </tr>
-                            </table>
+                    <tr>
+                        <th width="80px"></th>
+                        <th width="240px"></th>
+                        <th width="180px"></th>
+                        <th width="80px" ng-repeat-start="week in vm.weeks">Hours</th>
+                        <th width="80px" ng-repeat-end>Timeoff</th>
+                        <th width="80px">Hours</th>
+                        <th width="80px">Timeoff</th>
+                    </tr>
+                    </thead>
+                    <tbody ng-repeat="sheet in vm.timesheets">
+                    <tr ng-repeat="project in sheet.projects">
+                        <td ng-if="$index==0" rowspan="{{sheet.projects.length}}">{{sheet.sno}}</td>
+                        <td ng-if="$index==0" rowspan="{{sheet.projects.length}}">{{sheet.userName}}</td>
+                        <td>{{project.projectName}}</td>
+                        <td width="80px" ng-repeat-start="week in vm.weeks" class="row">
+                            {{project[week.week].billableHours}}
                         </td>
+                        <td width="80px" ng-repeat-end>{{project[week.week].timeoffHours}}</td>
+                        <td width="80px">{{project.totalBillableHours}}</td>
+                        <td width="80px">{{project.totalTimeoffHours}}</td>
                     </tr>
+                    </tbody>
                 </table>
             </div>
         </div>

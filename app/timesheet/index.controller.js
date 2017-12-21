@@ -828,21 +828,63 @@
                 _.each(rawData, function (userSheets, userId) {
                     var userObj = _.find(vm.users, {_id: userId});
                     var userName = (userObj)?userObj = userObj.name:"";
+                    var projects = [];
+                    _.each(userSheets, function (sheetObj) {
+                        _.each(sheetObj.projects, function (projectObj) {
+                            var projectItem = _.find(projects, {projectId: projectObj.projectId});
+                            if(projectItem){
+                                projectItem[sheetObj.week] = {
+                                    allocatedHours: projectObj.allocatedHours,
+                                    billableHours: projectObj.billableHours,
+                                    timeoffHours: projectObj.sickLeaveHours + projectObj.timeoffHours,
+                                    resourceType: projectObj.resourceType
+                                };
+                            }else{
+                                var newProjectObj = {
+                                    projectId: projectObj.projectId,
+                                    projectName: projectObj.projectName
+                                };
+                                var projectInfo = _.find(vm.projects, {_id: projectObj.projectId});
+                                if(projectInfo){
+                                    newProjectObj.projectName = projectInfo.projectName;
+                                }
+                                _.each(vm.weeks, function (weekObj) {
+                                    newProjectObj[weekObj.week] = {};
+                                });
+                                newProjectObj[sheetObj.week] = {
+                                    allocatedHours: projectObj.allocatedHours,
+                                    billableHours: projectObj.billableHours,
+                                    timeoffHours: projectObj.sickLeaveHours + projectObj.timeoffHours,
+                                    resourceType: projectObj.resourceType
+                                };
+                                projects.push(newProjectObj);
+                            }
+                        });
+                    });
                     vm.timesheets.push({
                         userId: userId,
                         userName: userName,
-                        weeks: []
+                        projects: projects,
+                        weeks: userSheets
                     });
-                    userSheets = _.sortBy(userSheets, 'week');
-                    //console.log(userSheets);
                 });
-                /*_.each(vm.timesheets, function (sheetObj) {
-                    sheetObj.userName = "";
-                    var userObj = _.find(vm.users, {_id: sheetObj.userId});
-                    if(userObj){
-                        sheetObj.userName = userObj.name;
-                    }
-                });*/
+                var sno = 1;
+                vm.timesheets = _.sortBy(vm.timesheets, 'userName');
+                _.each(vm.timesheets, function (sheetObj) {
+                    _.each(sheetObj.projects, function (projectObj) {
+                        projectObj.totalBillableHours = 0;
+                        projectObj.totalTimeoffHours = 0;
+                        _.each(vm.weeks, function (weekObj) {
+                            if(projectObj[weekObj.week].billableHours){
+                                projectObj.totalBillableHours += projectObj[weekObj.week].billableHours;
+                            }
+                            if(projectObj[weekObj.week].timeoffHours){
+                                projectObj.totalTimeoffHours += projectObj[weekObj.week].timeoffHours;
+                            }
+                        });
+                    });
+                    sheetObj.sno = sno++;
+                });
             }, function(error){
                 console.log(error);
             });
@@ -869,7 +911,6 @@
                 });
                 startDate.setDate(startDate.getDate() + 7);
             }
-            console.log(vm.weeks);
         }
 
         function getProjects(){
