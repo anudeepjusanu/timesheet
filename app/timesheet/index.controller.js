@@ -904,7 +904,8 @@
                 weekStartDate.setDate(weekStartDate.getDate() - weekStartDate.getDay() + 1);
                 var weekEndDate = new Date(startDate.getTime());
                 weekEndDate.setDate(weekEndDate.getDate() + (7 - weekEndDate.getDay()));
-                var weekName = $filter('date')(weekStartDate, "mediumDate").toString() + " - " + $filter('date')(weekEndDate, "mediumDate").toString();
+                //var weekName = $filter('date')(weekStartDate, "mediumDate").toString() + " - " + $filter('date')(weekEndDate, "mediumDate").toString();
+                var weekName = $filter('date')(weekEndDate, "mediumDate").toString();
                 vm.weeks.push({
                     week: startDate.getFullYear()+"-W"+startDate.getWeek(),
                     weekName: weekName

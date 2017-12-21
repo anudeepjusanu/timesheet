@@ -16,17 +16,17 @@
                         <form class="form-inline" method="post">
                             <div class="form-group">
                                 <label class="" for="clientId">Client :</label>
-                                <select id="clientId" class="form-control" ng-model="vm.search.clientId" ng-options="client._id as client.clientName for client in vm.clients" ng-change="vm.search.projectId=''"></select>
+                                <select id="clientId" class="form-control" ng-model="vm.search.clientId" ng-options="client._id as client.clientName for client in vm.clients" ng-change="vm.search.projectId=''; vm.getConsolidatedProjects();"></select>
                             </div>
                             <strong>OR</strong>
                             <div class="form-group">
                                 <label class="" for="projectId">Project :</label>
-                                <select id="projectId" class="form-control" ng-model="vm.search.projectId" ng-options="project._id as project.projectName for project in vm.projects"  ng-change="vm.search.clientId=''"></select>
+                                <select id="projectId" class="form-control" ng-model="vm.search.projectId" ng-options="project._id as project.projectName for project in vm.projects"  ng-change="vm.search.clientId=''; vm.getConsolidatedProjects();"></select>
                             </div>
                             <div class="form-group">
                                 <label class="" for="startDate">Start Date :</label>
                                 <p class="input-group" style="width: 140px;">
-                                    <input type="text" id="startDate" class="form-control" uib-datepicker-popup ng-model="vm.search.startDate" is-open="vm.search.startDateOpened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="" />
+                                    <input type="text" id="startDate" class="form-control" uib-datepicker-popup ng-model="vm.search.startDate" is-open="vm.search.startDateOpened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getConsolidatedProjects();" />
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-default" ng-click="vm.search.startDateOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
                                     </span>
@@ -35,7 +35,7 @@
                             <div class="form-group">
                                 <label class="" for="endDate">End Date :</label>
                                 <p class="input-group" style="width: 140px;">
-                                    <input type="text" id="endDate" class="form-control" uib-datepicker-popup ng-model="vm.search.endDate" is-open="vm.search.endDateOpened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="" />
+                                    <input type="text" id="endDate" class="form-control" uib-datepicker-popup ng-model="vm.search.endDate" is-open="vm.search.endDateOpened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getConsolidatedProjects();" />
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-default" ng-click="vm.search.endDateOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
                                     </span>
