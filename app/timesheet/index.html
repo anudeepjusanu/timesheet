@@ -85,6 +85,15 @@
                                 <select class="form-control" ng-model="vm.search.isFilled" ng-options="opt.id as opt.label for opt in [{id:'', label:'All'}, {id:'filled', label:'Filled'}, {id:'notfilled', label:'Not Filled'}]"></select>
                             </td>
                         </tr>
+                        <tr>
+                            <th></th>
+                            <th>Head count: {{vm.search.timesheetResult.headCount}}</th>
+                            <th></th>
+                            <th></th>
+                            <th>{{vm.search.timesheetResult.totalHours}}</th>
+                            <th>{{vm.search.timesheetResult.timeoffHours}}</th>
+                            <th></th>
+                        </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="row in vm.tblUsers | orderBy:'name'">
