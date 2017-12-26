@@ -824,6 +824,12 @@
             TimesheetService.timesheetBetweenDates(paramObj.startDate, paramObj.endDate, paramObj).then(function(response) {
                 var rawData = response;
                 rawData = _.groupBy(rawData, 'userId');
+                vm.resourceTypes = {
+                    billable: 0,
+                    shadow: 0,
+                    bizdev: 0,
+                    buffer: 0
+                };
                 vm.timesheets = [];
                 _.each(rawData, function (userSheets, userId) {
                     var userObj = _.find(vm.users, {_id: userId});
@@ -858,6 +864,15 @@
                                     resourceType: projectObj.resourceType
                                 };
                                 projects.push(newProjectObj);
+                            }
+                            if(projectObj.resourceType == 'billable'){
+                                vm.resourceTypes.billable += projectObj.billableHours;
+                            }else if(projectObj.resourceType == 'shadow'){
+                                vm.resourceTypes.shadow += projectObj.projectHours;
+                            }else if(projectObj.resourceType == 'bizdev'){
+                                vm.resourceTypes.bizdev += projectObj.projectHours;
+                            }else if(projectObj.resourceType == 'buffer'){
+                                vm.resourceTypes.buffer += projectObj.projectHours;
                             }
                         });
                     });

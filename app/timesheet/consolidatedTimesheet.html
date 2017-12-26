@@ -80,6 +80,28 @@
                     </tr>
                     </tbody>
                 </table>
+                <div ng-if="vm.timesheets.length > 0" class="pull-right" style="width: 220px;">
+                    <div class="row">
+                        <div class="col-md-6"><strong>Resource Type</strong></div>
+                        <div class="col-md-6"><strong>Total Hours</strong></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"><strong>Billable</strong></div>
+                        <div class="col-md-6">{{vm.resourceTypes.billable}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"><strong>Shadow</strong></div>
+                        <div class="col-md-6">{{vm.resourceTypes.shadow}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"><strong>Bizdev</strong></div>
+                        <div class="col-md-6">{{vm.resourceTypes.bizdev}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"><strong>Buffer</strong></div>
+                        <div class="col-md-6">{{vm.resourceTypes.buffer}}</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
