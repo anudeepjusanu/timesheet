@@ -833,7 +833,7 @@
                 vm.timesheets = [];
                 _.each(rawData, function (userSheets, userId) {
                     var userObj = _.find(vm.users, {_id: userId});
-                    var userName = (userObj)?userObj = userObj.name:"";
+                    var userName = (userObj)?userObj.name:"";
                     var projects = [];
                     _.each(userSheets, function (sheetObj) {
                         _.each(sheetObj.projects, function (projectObj) {
@@ -875,6 +875,23 @@
                                 vm.resourceTypes.buffer += projectObj.projectHours;
                             }
                         });
+                    });
+                    var startDateObj = new Date(paramObj.startDate);
+                    _.each(projects, function (projectObj) {
+                        var userProjectObj = _.find(userObj.projects, {projectId: projectObj.projectId});
+                        projectObj.expDays = -1;
+                        if(userProjectObj.billDates){
+                            userProjectObj.billDates = _.sortBy(userProjectObj.billDates, 'start');
+                            _.each(userProjectObj.billDates, function (billDateObj) {
+                                if(billDateObj.start){
+                                    var billStartDateObj = new Date(billDateObj.start);
+                                    if(startDateObj > billStartDateObj){
+                                        projectObj.expDays = startDateObj - billStartDateObj;
+                                        projectObj.expDays = parseInt(projectObj.expDays/(1000*60*60*24));
+                                    }
+                                }
+                            });
+                        }
                     });
                     vm.timesheets.push({
                         userId: userId,

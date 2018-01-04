@@ -70,7 +70,7 @@
                     <tbody ng-repeat="sheet in vm.timesheets">
                     <tr ng-repeat="project in sheet.projects">
                         <td ng-if="$index==0" rowspan="{{sheet.projects.length}}">{{sheet.sno}}</td>
-                        <td ng-if="$index==0" rowspan="{{sheet.projects.length}}">{{sheet.userName}}</td>
+                        <td ng-if="$index==0" rowspan="{{sheet.projects.length}}">{{sheet.userName}} <span ng-if="project.expDays>0 && project.expDays<31" class="glyphicon glyphicon-flag" style="color: green;"></span></td>
                         <td>{{project.projectName}}</td>
                         <td width="80px" ng-repeat-start="week in vm.weeks" ng-init="bgColor=(project[week.week].resourceType=='billable')?'':'background-color:#ffa500b8;';" style="{{bgColor}}">{{project[week.week].resourceType}}</td>
                         <td width="80px" style="{{bgColor}}">{{project[week.week].billableHours}}</td>
@@ -80,26 +80,32 @@
                     </tr>
                     </tbody>
                 </table>
-                <div ng-if="vm.timesheets.length > 0" class="pull-right" style="width: 220px;">
-                    <div class="row">
-                        <div class="col-md-6"><strong>Resource Type</strong></div>
-                        <div class="col-md-6"><strong>Total Hours</strong></div>
+                <div class="row">
+                    <div class="pull-left">
+                        <p><span class="glyphicon glyphicon-flag" style="color: green;"></span> : Who assigned project past 30days.</p>
+                        <p><span style="background-color:#ffa500b8;"> &nbsp; &nbsp; </span> : Non-billable resource.</p>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6"><strong>Billable</strong></div>
-                        <div class="col-md-6">{{vm.resourceTypes.billable}}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6"><strong>Shadow</strong></div>
-                        <div class="col-md-6">{{vm.resourceTypes.shadow}}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6"><strong>Bizdev</strong></div>
-                        <div class="col-md-6">{{vm.resourceTypes.bizdev}}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6"><strong>Buffer</strong></div>
-                        <div class="col-md-6">{{vm.resourceTypes.buffer}}</div>
+                    <div ng-if="vm.timesheets.length > 0" class="pull-right" style="width: 220px;">
+                        <div class="row">
+                            <div class="col-md-6"><strong>Resource Type</strong></div>
+                            <div class="col-md-6"><strong>Total Hours</strong></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6"><strong>Billable</strong></div>
+                            <div class="col-md-6">{{vm.resourceTypes.billable}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6"><strong>Shadow</strong></div>
+                            <div class="col-md-6">{{vm.resourceTypes.shadow}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6"><strong>Bizdev</strong></div>
+                            <div class="col-md-6">{{vm.resourceTypes.bizdev}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6"><strong>Buffer</strong></div>
+                            <div class="col-md-6">{{vm.resourceTypes.buffer}}</div>
+                        </div>
                     </div>
                 </div>
             </div>
