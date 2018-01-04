@@ -879,16 +879,18 @@
                     var startDateObj = new Date(paramObj.startDate);
                     _.each(projects, function (projectObj) {
                         var userProjectObj = _.find(userObj.projects, {projectId: projectObj.projectId});
-                        projectObj.expDays = -1;
+                        projectObj.expDays = 90;
+                        projectObj.assignDate = "";
                         if(userProjectObj.billDates){
                             userProjectObj.billDates = _.sortBy(userProjectObj.billDates, 'start');
                             _.each(userProjectObj.billDates, function (billDateObj) {
                                 if(billDateObj.start){
                                     var billStartDateObj = new Date(billDateObj.start);
-                                    if(startDateObj > billStartDateObj){
+                                    projectObj.assignDate = $filter('date')(billStartDateObj, "mediumDate").toString();
+                                    //if(startDateObj > billStartDateObj){
                                         projectObj.expDays = startDateObj - billStartDateObj;
                                         projectObj.expDays = parseInt(projectObj.expDays/(1000*60*60*24));
-                                    }
+                                    //}
                                 }
                             });
                         }
