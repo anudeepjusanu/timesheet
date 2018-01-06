@@ -501,7 +501,11 @@ function allUserHoursByMonth(month, year) {
     }
     var loop = 1;
     while (startDate < endDate && loop++ < 6){
-        weeks.push(startDate.getFullYear()+"-W"+startDate.getWeek());
+        if(startDate.getWeek() <= 9){
+            weeks.push(startDate.getFullYear()+"-W0"+startDate.getWeek());
+        }else{
+            weeks.push(startDate.getFullYear()+"-W"+startDate.getWeek());
+        }
         startDate.setDate(startDate.getDate() + 7);
     }
     _.each(weeks, function (weekVal) {
@@ -564,7 +568,11 @@ function projectUserHoursByMonth(month, year, projectId) {
     }
     var loop = 1;
     while (startDate < endDate && loop++ < 6){
-        weeks.push(startDate.getFullYear()+"-W"+startDate.getWeek());
+        if(startDate.getWeek() <= 9){
+            weeks.push(startDate.getFullYear()+"-W0"+startDate.getWeek());
+        }else{
+            weeks.push(startDate.getFullYear()+"-W"+startDate.getWeek());
+        }
         startDate.setDate(startDate.getDate() + 7);
     }
     _.each(weeks, function (weekVal) {
@@ -622,7 +630,11 @@ function timesheetBetweenDates(startDateVal, endDateVal, params){
     var endDate = new Date(endDateVal);
     var loop = 1;
     while (startDate < endDate && loop++ < 50){
-        weeks.push(startDate.getFullYear()+"-W"+startDate.getWeek());
+        if(startDate.getWeek() <= 9){
+            weeks.push(startDate.getFullYear()+"-W0"+startDate.getWeek());
+        }else{
+            weeks.push(startDate.getFullYear()+"-W"+startDate.getWeek());
+        }
         startDate.setDate(startDate.getDate() + 7);
     }
     if(weeks.length > 0 ){
@@ -687,7 +699,11 @@ function utilizationByMonth(month, year, params) {
     }
     var loop = 1;
     while (startDate < endDate && loop++ < 6){
-        weeks.push(startDate.getFullYear()+"-W"+startDate.getWeek());
+        if(startDate.getWeek() <= 9){
+            weeks.push(startDate.getFullYear()+"-W0"+startDate.getWeek());
+        }else{
+            weeks.push(startDate.getFullYear()+"-W"+startDate.getWeek());
+        }
         startDate.setDate(startDate.getDate() + 7);
     }
     _.each(weeks, function (weekVal) {
