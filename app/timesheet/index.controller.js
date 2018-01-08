@@ -821,6 +821,7 @@
                 paramObj.projectIds.push(vm.search.projectId);
             }
             calWeeks();
+            console.log(vm.weeks);
             TimesheetService.timesheetBetweenDates(paramObj.startDate, paramObj.endDate, paramObj).then(function(response) {
                 var rawData = response;
                 rawData = _.groupBy(rawData, 'userId');
@@ -940,8 +941,14 @@
                 weekEndDate.setDate(weekEndDate.getDate() + (7 - weekEndDate.getDay()));
                 //var weekName = $filter('date')(weekStartDate, "mediumDate").toString() + " - " + $filter('date')(weekEndDate, "mediumDate").toString();
                 var weekName = $filter('date')(weekEndDate, "mediumDate").toString();
+                var weekNumber = "-W";
+                if(startDate.getWeek() <= 9){
+                    weekNumber = "-W0"+startDate.getWeek();
+                }else{
+                    weekNumber = "-W"+startDate.getWeek();
+                }
                 vm.weeks.push({
-                    week: startDate.getFullYear()+"-W"+startDate.getWeek(),
+                    week: startDate.getFullYear()+weekNumber,
                     weekName: weekName
                 });
                 startDate.setDate(startDate.getDate() + 7);
