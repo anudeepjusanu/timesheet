@@ -12,6 +12,7 @@ router.put('/:_id', updateUser);
 router.delete('/:_id', deleteUser);
 router.put('/grantAdmin/:_id', adminAccess);
 router.get('/all', getAllUsers);
+router.get('/getUsers', getUsers);
 router.put('/adminUpdate/:_id', adminUpdate);
 
 module.exports = router;
@@ -109,6 +110,20 @@ function adminAccess(req, res) {
 
 function getAllUsers(req, res) {
     userService.getAll()
+        .then(function (user) {
+            if (user) {
+                res.send(user);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+
+function getUsers(req, res) {
+    userService.getUsers()
         .then(function (user) {
             if (user) {
                 res.send(user);

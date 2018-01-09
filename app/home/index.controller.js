@@ -6,6 +6,7 @@
         .controller('Home.IndexController', Controller)
         .controller('Home.SidebarController', SidebarController)
         .controller('Home.AdminUsersController', AdminUsersController)
+        .controller('Home.AllUsersController', AllUsersController)
         .controller('Home.AdminController', AdminController)
         .controller('Home.UserInfoController', UserInfoController)
 
@@ -506,6 +507,38 @@
 
         initController();
 
+        function initController() {
+            UserService.GetCurrent().then(function(user) {
+                vm.user = user;
+                getAllUsers();
+                if (vm.user.admin) {
+                    vm.isAdmin = true;
+                } else {
+                    vm.isAdmin = false;
+                }
+            });
+        }
+    }
+
+    function AllUsersController(UserService, _) {
+        var vm = this;
+        vm.user = null;
+        vm.users = [];
+
+        function deleteUser(id) {
+            UserService.Delete(id).then(function(users) {
+                getAllUsers();
+            });
+        }
+
+        function getAllUsers(week) {
+            UserService.GetAll().then(function(users) {
+                vm.users = users;
+                console.log(vm.users);
+            });
+        }
+
+        initController();
         function initController() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;

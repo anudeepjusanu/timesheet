@@ -252,7 +252,8 @@
                 filterDate = currentDate;
             }
             vm.filterDate = filterDate;
-            UserService.GetAll().then(function(users) {
+            UserService.getUsers().then(function(users) {
+                console.log(users);
                 vm.users = [];
                 _.each(users, function (userObj) {
                     vm.users.push({
@@ -821,7 +822,6 @@
                 paramObj.projectIds.push(vm.search.projectId);
             }
             calWeeks();
-            console.log(vm.weeks);
             TimesheetService.timesheetBetweenDates(paramObj.startDate, paramObj.endDate, paramObj).then(function(response) {
                 var rawData = response;
                 rawData = _.groupBy(rawData, 'userId');
@@ -972,7 +972,7 @@
         }
 
         function getUsers(){
-            UserService.GetAll().then(function(response) {
+            UserService.getUsers().then(function(response) {
                 vm.users = response;
             }, function(error){
                 console.log(error);

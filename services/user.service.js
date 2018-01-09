@@ -13,6 +13,7 @@ service.authenticate = authenticate;
 service.getById = getById;
 service.getUserById = getUserById;
 service.getAll = getAll;
+service.getUsers = getUsers;
 service.createUser = createUser;
 service.update = update;
 service.updateEmail = updateEmail;
@@ -80,6 +81,27 @@ function getAll() {
     var deferred = Q.defer();
 
     db.users.find().toArray(function(err, users) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+
+        if (users) {
+            var usersList = _.map(users, function(e) {
+                return _.omit(e, 'hash');
+            });
+            // return user (without hashed password)
+            deferred.resolve(usersList);
+        } else {
+            // user not found
+            deferred.resolve();
+        }
+    });
+
+    return deferred.promise;
+}
+
+function getUsers() {
+    var deferred = Q.defer();
+
+    db.users.find({"isActive": true}).toArray(function(err, users) {
         if (err) deferred.reject(err.name + ': ' + err.message);
 
         if (users) {

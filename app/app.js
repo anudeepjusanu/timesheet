@@ -63,6 +63,13 @@
                 controllerAs: 'vm',
                 data: { activeTab: 'home' }
             })
+            .state('allUsers', {
+                url: '/allUsers',
+                templateUrl: 'home/allUsers.html',
+                controller: 'Home.AllUsersController',
+                controllerAs: 'vm',
+                data: { activeTab: 'home' }
+            })
             .state('userInfo', {
                 url: '/users/:id',
                 templateUrl: 'home/userInfo.html',

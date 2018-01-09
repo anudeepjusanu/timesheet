@@ -10,6 +10,7 @@
 
         service.GetCurrent = GetCurrent;
         service.GetAll = GetAll;
+        service.getUsers = getUsers;
         service.GetById = GetById;
         service.GetByUsername = GetByUsername;
         service.Create = Create;
@@ -26,6 +27,10 @@
 
         function GetAll() {
             return $http.get('/api/users/all').then(handleSuccess, handleError);
+        }
+
+        function getUsers() {
+            return $http.get('/api/users/getUsers').then(handleSuccess, handleError);
         }
 
         function GetById(_id) {

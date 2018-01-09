@@ -1,0 +1,50 @@
+<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+    {{alert.msg}}</div>
+<div class="content-wrapper">
+    <div class="" ng-if="vm.user.admin">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">All Employees</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-condensed table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>designation</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input class="form-control" type="text" ng-model="vm.search.userName" /></td>
+                        <td><select class="form-control" ng-model="vm.search.userResourceType" ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'Billable',label:'Billable'}, {id:'Non-billable',label:'Non-billable'}]"></select></td>
+                        <td></td>
+                        <td>
+                            <select class="form-control" ng-model="vm.search.isActive" ng-options="opt.id as opt.label for opt in [{id:'', label:'All'}, {id:'true', label:'Active'}, {id:'false', label:'Inactive'}]"></select>
+                        </td>
+                        <td></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="user in vm.users | orderBy:'name'">
+                        <td>{{$index + 1}}</td>
+                        <td>{{user.name}}</td>
+                        <td>{{user.userResourceType}}</td>
+                        <td>{{user.designation}}</td>
+                        <td>
+                            <span ng-if="user.isActive==true">Active</span>
+                            <span ng-if="user.isActive==false">Inactive</span>
+                        </td>
+                        <td>
+                            <!--<a class="btn btn-primary btn-xs" ng-click="vm.viewUserTimesheet(row)" ng-show="row.timesheetId != '' && vm.user.admin">Edit</a>-->
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
