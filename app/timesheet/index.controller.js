@@ -834,74 +834,76 @@
                 vm.timesheets = [];
                 _.each(rawData, function (userSheets, userId) {
                     var userObj = _.find(vm.users, {_id: userId});
-                    var userName = (userObj)?userObj.name:"";
-                    var projects = [];
-                    _.each(userSheets, function (sheetObj) {
-                        _.each(sheetObj.projects, function (projectObj) {
-                            var projectItem = _.find(projects, {projectId: projectObj.projectId});
-                            if(projectItem){
-                                projectItem[sheetObj.week] = {
-                                    allocatedHours: projectObj.allocatedHours,
-                                    billableHours: projectObj.billableHours,
-                                    timeoffHours: projectObj.sickLeaveHours + projectObj.timeoffHours,
-                                    resourceType: projectObj.resourceType
-                                };
-                            }else{
-                                var newProjectObj = {
-                                    projectId: projectObj.projectId,
-                                    projectName: projectObj.projectName
-                                };
-                                var projectInfo = _.find(vm.projects, {_id: projectObj.projectId});
-                                if(projectInfo){
-                                    newProjectObj.projectName = projectInfo.projectName;
+                    if(userObj) {
+                        var userName = (userObj) ? userObj.name : "";
+                        var projects = [];
+                        _.each(userSheets, function (sheetObj) {
+                            _.each(sheetObj.projects, function (projectObj) {
+                                var projectItem = _.find(projects, {projectId: projectObj.projectId});
+                                if (projectItem) {
+                                    projectItem[sheetObj.week] = {
+                                        allocatedHours: projectObj.allocatedHours,
+                                        billableHours: projectObj.billableHours,
+                                        timeoffHours: projectObj.sickLeaveHours + projectObj.timeoffHours,
+                                        resourceType: projectObj.resourceType
+                                    };
+                                } else {
+                                    var newProjectObj = {
+                                        projectId: projectObj.projectId,
+                                        projectName: projectObj.projectName
+                                    };
+                                    var projectInfo = _.find(vm.projects, {_id: projectObj.projectId});
+                                    if (projectInfo) {
+                                        newProjectObj.projectName = projectInfo.projectName;
+                                    }
+                                    _.each(vm.weeks, function (weekObj) {
+                                        newProjectObj[weekObj.week] = {};
+                                    });
+                                    newProjectObj[sheetObj.week] = {
+                                        allocatedHours: projectObj.allocatedHours,
+                                        billableHours: projectObj.billableHours,
+                                        timeoffHours: projectObj.sickLeaveHours + projectObj.timeoffHours,
+                                        resourceType: projectObj.resourceType
+                                    };
+                                    projects.push(newProjectObj);
                                 }
-                                _.each(vm.weeks, function (weekObj) {
-                                    newProjectObj[weekObj.week] = {};
-                                });
-                                newProjectObj[sheetObj.week] = {
-                                    allocatedHours: projectObj.allocatedHours,
-                                    billableHours: projectObj.billableHours,
-                                    timeoffHours: projectObj.sickLeaveHours + projectObj.timeoffHours,
-                                    resourceType: projectObj.resourceType
-                                };
-                                projects.push(newProjectObj);
-                            }
-                            if(projectObj.resourceType == 'billable'){
-                                vm.resourceTypes.billable += projectObj.billableHours;
-                            }else if(projectObj.resourceType == 'shadow'){
-                                vm.resourceTypes.shadow += projectObj.projectHours;
-                            }else if(projectObj.resourceType == 'bizdev'){
-                                vm.resourceTypes.bizdev += projectObj.projectHours;
-                            }else if(projectObj.resourceType == 'buffer'){
-                                vm.resourceTypes.buffer += projectObj.projectHours;
-                            }
-                        });
-                    });
-                    var startDateObj = new Date(paramObj.startDate);
-                    _.each(projects, function (projectObj) {
-                        var userProjectObj = _.find(userObj.projects, {projectId: projectObj.projectId});
-                        projectObj.expDays = 90;
-                        projectObj.assignDate = "";
-                        if(userProjectObj.billDates){
-                            userProjectObj.billDates = _.sortBy(userProjectObj.billDates, 'start');
-                            _.each(userProjectObj.billDates, function (billDateObj) {
-                                if(billDateObj.start){
-                                    var billStartDateObj = new Date(billDateObj.start);
-                                    projectObj.assignDate = $filter('date')(billStartDateObj, "mediumDate").toString();
-                                    //if(startDateObj > billStartDateObj){
-                                        projectObj.expDays = startDateObj - billStartDateObj;
-                                        projectObj.expDays = parseInt(projectObj.expDays/(1000*60*60*24));
-                                    //}
+                                if (projectObj.resourceType == 'billable') {
+                                    vm.resourceTypes.billable += projectObj.billableHours;
+                                } else if (projectObj.resourceType == 'shadow') {
+                                    vm.resourceTypes.shadow += projectObj.projectHours;
+                                } else if (projectObj.resourceType == 'bizdev') {
+                                    vm.resourceTypes.bizdev += projectObj.projectHours;
+                                } else if (projectObj.resourceType == 'buffer') {
+                                    vm.resourceTypes.buffer += projectObj.projectHours;
                                 }
                             });
-                        }
-                    });
-                    vm.timesheets.push({
-                        userId: userId,
-                        userName: userName,
-                        projects: projects,
-                        weeks: userSheets
-                    });
+                        });
+                        var startDateObj = new Date(paramObj.startDate);
+                        _.each(projects, function (projectObj) {
+                            var userProjectObj = _.find(userObj.projects, {projectId: projectObj.projectId});
+                            projectObj.expDays = 90;
+                            projectObj.assignDate = "";
+                            if (userProjectObj.billDates) {
+                                userProjectObj.billDates = _.sortBy(userProjectObj.billDates, 'start');
+                                _.each(userProjectObj.billDates, function (billDateObj) {
+                                    if (billDateObj.start) {
+                                        var billStartDateObj = new Date(billDateObj.start);
+                                        projectObj.assignDate = $filter('date')(billStartDateObj, "mediumDate").toString();
+                                        //if(startDateObj > billStartDateObj){
+                                        projectObj.expDays = startDateObj - billStartDateObj;
+                                        projectObj.expDays = parseInt(projectObj.expDays / (1000 * 60 * 60 * 24));
+                                        //}
+                                    }
+                                });
+                            }
+                        });
+                        vm.timesheets.push({
+                            userId: userId,
+                            userName: userName,
+                            projects: projects,
+                            weeks: userSheets
+                        });
+                    }
                 });
                 var sno = 1;
                 vm.timesheets = _.sortBy(vm.timesheets, 'userName');
