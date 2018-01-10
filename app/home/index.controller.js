@@ -9,6 +9,32 @@
         .controller('Home.AllUsersController', AllUsersController)
         .controller('Home.AdminController', AdminController)
         .controller('Home.UserInfoController', UserInfoController)
+        .filter('allUserSearch', function ($filter) {
+            return function(input, searchObj) {
+                var output = input;
+                if(searchObj.userName && searchObj.userName.length > 0){
+                    output = $filter('filter')(output, {name: searchObj.userName});
+                }
+                if (searchObj.userResourceType && searchObj.userResourceType.length > 0) {
+                    output = $filter('filter')(output, function(item){
+                        return (searchObj.userResourceType == item.userResourceType);
+                    });
+                }
+                if (searchObj.isActive == 'true' || searchObj.isActive == 'false') {
+                    output = $filter('filter')(output, function (item, index) {
+                        if(searchObj.isActive == 'true'){
+                            return (item.isActive === true);
+                        }else if(searchObj.isActive == 'false'){
+                            return (item.isActive === false);
+                        }else{
+                            return true;
+                        }
+
+                    });
+                }
+                return output;
+            }
+        })
 
     function Controller(UserService, TimesheetService, ProjectService, $filter, _, $interval) {
         var vm = this;
@@ -524,6 +550,11 @@
         var vm = this;
         vm.user = null;
         vm.users = [];
+        vm.search = {
+            userName: "",
+            userResourceType: "",
+            isActive: ""
+        };
 
         function deleteUser(id) {
             UserService.Delete(id).then(function(users) {
@@ -534,7 +565,6 @@
         function getAllUsers(week) {
             UserService.GetAll().then(function(users) {
                 vm.users = users;
-                console.log(vm.users);
             });
         }
 
