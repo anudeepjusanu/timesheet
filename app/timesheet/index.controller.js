@@ -228,15 +228,21 @@
                 searchObj.timesheetResult.headCount = output.length;
                 searchObj.timesheetResult.totalHours = 0;
                 searchObj.timesheetResult.timeoffHours = 0;
+                searchObj.timesheetResult.overtimeHours = 0;
                 _.each(output, function (sheet) {
                     sheet.totalHours = 0;
                     sheet.timeoffHours = 0;
+                    sheet.overtimeHours = 0;
                     _.each(sheet.projects, function (prj) {
                         sheet.totalHours += prj.projectHours;
                         sheet.timeoffHours += (prj.sickLeaveHours + prj.timeoffHours);
+                        if(prj.timeoffHours){
+                            sheet.timeoffHours += prj.timeoffHours;
+                        }
                     });
                     searchObj.timesheetResult.totalHours += sheet.totalHours;
                     searchObj.timesheetResult.timeoffHours += sheet.timeoffHours;
+                    searchObj.timesheetResult.overtimeHours += sheet.overtimeHours;
                 });
             }
             return output;
@@ -253,7 +259,6 @@
             }
             vm.filterDate = filterDate;
             UserService.getUsers().then(function(users) {
-                console.log(users);
                 vm.users = [];
                 _.each(users, function (userObj) {
                     vm.users.push({
@@ -304,15 +309,21 @@
                         vm.search.timesheetResult.headCount = vm.tblUsers.length;
                         vm.search.timesheetResult.totalHours = 0;
                         vm.search.timesheetResult.timeoffHours = 0;
+                        vm.search.timesheetResult.overtimeHours = 0;
                         _.each(vm.tblUsers, function (sheet) {
                             sheet.totalHours = 0;
                             sheet.timeoffHours = 0;
+                            sheet.overtimeHours = 0;
                             _.each(sheet.projects, function (prj) {
                                 sheet.totalHours += prj.projectHours;
                                 sheet.timeoffHours += (prj.sickLeaveHours + prj.timeoffHours);
+                                if(prj.overtimeHours){
+                                    sheet.overtimeHours += prj.overtimeHours;
+                                }
                             });
                             vm.search.timesheetResult.totalHours += sheet.totalHours;
                             vm.search.timesheetResult.timeoffHours += sheet.timeoffHours;
+                            vm.search.timesheetResult.overtimeHours += sheet.overtimeHours;
                         });
                     }
                 });
@@ -449,7 +460,8 @@
             weekDate: new Date(),
             projects: [],
             totalHours: 0,
-            timeoffHours: 0
+            timeoffHours: 0,
+            overtimeHours: 0
         };
         vm.hasProjects = true;
         if(vm.timesheet.weekDate.getDay() < 5){
@@ -476,10 +488,16 @@
        vm.calTotalHours = function () {
            vm.timesheet.totalHours = 0;
            vm.timesheet.timeoffHours = 0;
+           vm.timesheet.overtimeHours = 0;
            _.each(vm.timesheet.projects, function (project) {
+               project.overtimeHours = 0;
+               if(project.billableMaxHours > 0 && project.projectHours > project.billableMaxHours){
+                   project.overtimeHours = project.projectHours - project.billableMaxHours;
+               }
                vm.timesheet.totalHours += project.projectHours;
                vm.timesheet.timeoffHours += project.sickLeaveHours;
                vm.timesheet.timeoffHours += project.timeoffHours;
+               vm.timesheet.overtimeHours += project.overtimeHours;
            });
        }
 
@@ -487,6 +505,7 @@
             TimesheetService.getTimesheet(id).then(function(response) {
                 vm.timesheet = response;
                 vm.timesheet.weekDate = new Date(vm.timesheet.weekDate);
+                vm.calTotalHours();
             });
         }
         
@@ -524,15 +543,59 @@
             $uibModalInstance.close();
         }
 
-        function setAssignedProjects() {
+        vm.setAssignedProjects = function() {
+            vm.timesheet.projects = [];
+            vm.timesheet.totalHours = 0;
+            vm.timesheet.timeoffHours = 0;
+            vm.timesheet.overtimeHours = 0;
             _.each(vm.user.projects, function (project) {
+                var BillData = {
+                    resourceType: "buffer",
+                    allocatedHours: 40,
+                    billableMaxHours: 0
+                };
+                var weekDate = new Date(vm.timesheet.weekDate);
+                _.each(project.billDates, function (billDate) {
+                    if (billDate.start && billDate.start != "" && billDate.end && billDate.end != "") {
+                        var startDate = new Date(billDate.start);
+                        var endDate = new Date(billDate.end);
+                        if (weekDate >= startDate && weekDate <= endDate) {
+                            BillData.resourceType = billDate.resourceType;
+                            BillData.allocatedHours = billDate.allocatedHours;
+                            BillData.billableMaxHours = billDate.billableMaxHours;
+                        }
+                    } else if (billDate.start && billDate.start != "") {
+                        var startDate = new Date(billDate.start);
+                        if (weekDate >= startDate) {
+                            BillData.resourceType = billDate.resourceType;
+                            BillData.allocatedHours = billDate.allocatedHours;
+                            BillData.billableMaxHours = billDate.billableMaxHours;
+                        }
+                    } else if (billDate.end && billDate.end != "") {
+                        var endDate = new Date(billDate.end);
+                        if (weekDate <= endDate) {
+                            BillData.resourceType = billDate.resourceType;
+                            BillData.allocatedHours = billDate.allocatedHours;
+                            BillData.billableMaxHours = billDate.billableMaxHours;
+                        }
+                    } else if (billDate.start == "" && billDate.end == "") {
+                        BillData.resourceType = billDate.resourceType;
+                        BillData.allocatedHours = billDate.allocatedHours;
+                        BillData.billableMaxHours = billDate.billableMaxHours;
+                    }
+                });
+                BillData.allocatedHours = (!BillData.allocatedHours)?0:BillData.allocatedHours;
+                BillData.billableMaxHours = (!BillData.billableMaxHours)?0:BillData.billableMaxHours;
+
                 vm.timesheet.projects.push({
                     projectId: project.projectId,
                     projectName: project.projectName,
-                    allocatedHours: project.allocatedHours,
+                    allocatedHours: BillData.allocatedHours,
+                    billableMaxHours: BillData.billableMaxHours,
                     projectHours: 0,
                     sickLeaveHours: 0,
                     timeoffHours: 0,
+                    overtimeHours: 0,
                     projectComment: "",
                     isAssigned: true
                 });
@@ -575,7 +638,7 @@
         function getProjects(){
             ProjectService.getAll().then(function(response) {
                 vm.projects = response;
-                _.each(vm.projects, function (prjObj) {
+                /*_.each(vm.projects, function (prjObj) {
                     if(prjObj.visibility == 'Public'){
                         var prjIndex = _.findIndex(vm.timesheet.projects, {projectId: prjObj._id});
                         if(!(prjIndex >= 0)) {
@@ -591,7 +654,7 @@
                             });
                         }
                     }
-                });
+                });*/
             }, function(error){
                 console.log(error);
             });
@@ -621,7 +684,7 @@
         function initController() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
-                setAssignedProjects();
+                vm.setAssignedProjects();
                 if ($stateParams.id) {
                     vm.isNew = false;
                     getTimesheet($stateParams.id);
@@ -648,7 +711,8 @@
             weekDate: new Date(),
             projects: [],
             totalHours: 0,
-            timeoffHours: 0
+            timeoffHours: 0,
+            overtimeHours: 0
         }
         if(vm.timesheet.weekDate.getDay() < 5){
             vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() - (vm.timesheet.weekDate.getDay() + 2));
@@ -676,10 +740,16 @@
         vm.calTotalHours = function () {
             vm.timesheet.totalHours = 0;
             vm.timesheet.timeoffHours = 0;
+            vm.timesheet.overtimeHours = 0;
             _.each(vm.timesheet.projects, function (project) {
+                project.overtimeHours = 0;
+                if(project.billableMaxHours > 0 && project.projectHours > project.billableMaxHours){
+                    project.overtimeHours = project.projectHours - project.billableMaxHours;
+                }
                 vm.timesheet.totalHours += project.projectHours;
                 vm.timesheet.timeoffHours += project.sickLeaveHours;
                 vm.timesheet.timeoffHours += project.timeoffHours;
+                vm.timesheet.overtimeHours += project.overtimeHours;
             });
         }
 
@@ -687,6 +757,7 @@
             TimesheetService.getTimesheet(id).then(function(response) {
                 vm.timesheet = response;
                 vm.timesheet.weekDate = new Date(vm.timesheet.weekDate);
+                vm.calTotalHours();
             });
         }
 
@@ -720,15 +791,59 @@
             $uibModalInstance.close();
         }
 
-        function setAssignedProjects() {
+        vm.setAssignedProjects = function() {
+            vm.timesheet.projects = [];
+            vm.timesheet.totalHours = 0;
+            vm.timesheet.timeoffHours = 0;
+            vm.timesheet.overtimeHours = 0;
             _.each(vm.user.projects, function (project) {
+                var BillData = {
+                    resourceType: "buffer",
+                    allocatedHours: 40,
+                    billableMaxHours: 0
+                };
+                var weekDate = new Date(vm.timesheet.weekDate);
+                _.each(project.billDates, function (billDate) {
+                    if (billDate.start && billDate.start != "" && billDate.end && billDate.end != "") {
+                        var startDate = new Date(billDate.start);
+                        var endDate = new Date(billDate.end);
+                        if (weekDate >= startDate && weekDate <= endDate) {
+                            BillData.resourceType = billDate.resourceType;
+                            BillData.allocatedHours = billDate.allocatedHours;
+                            BillData.billableMaxHours = billDate.billableMaxHours;
+                        }
+                    } else if (billDate.start && billDate.start != "") {
+                        var startDate = new Date(billDate.start);
+                        if (weekDate >= startDate) {
+                            BillData.resourceType = billDate.resourceType;
+                            BillData.allocatedHours = billDate.allocatedHours;
+                            BillData.billableMaxHours = billDate.billableMaxHours;
+                        }
+                    } else if (billDate.end && billDate.end != "") {
+                        var endDate = new Date(billDate.end);
+                        if (weekDate <= endDate) {
+                            BillData.resourceType = billDate.resourceType;
+                            BillData.allocatedHours = billDate.allocatedHours;
+                            BillData.billableMaxHours = billDate.billableMaxHours;
+                        }
+                    } else if (billDate.start == "" && billDate.end == "") {
+                        BillData.resourceType = billDate.resourceType;
+                        BillData.allocatedHours = billDate.allocatedHours;
+                        BillData.billableMaxHours = billDate.billableMaxHours;
+                    }
+                });
+                BillData.allocatedHours = (!BillData.allocatedHours)?0:BillData.allocatedHours;
+                BillData.billableMaxHours = (!BillData.billableMaxHours)?0:BillData.billableMaxHours;
+
                 vm.timesheet.projects.push({
                     projectId: project.projectId,
                     projectName: project.projectName,
-                    allocatedHours: project.allocatedHours,
+                    allocatedHours: BillData.allocatedHours,
+                    billableMaxHours: BillData.billableMaxHours,
                     projectHours: 0,
                     sickLeaveHours: 0,
                     timeoffHours: 0,
+                    overtimeHours: 0,
                     projectComment: "",
                     isAssigned: true
                 });
@@ -739,7 +854,7 @@
         function getProjects(){
             ProjectService.getAll().then(function(response) {
                 vm.projects = response;
-                _.each(vm.projects, function (prjObj) {
+                /*_.each(vm.projects, function (prjObj) {
                     if(prjObj.visibility == 'Public'){
                         var prjIndex = _.findIndex(vm.timesheet.projects, {projectId: prjObj._id});
                         if(!(prjIndex >= 0)) {
@@ -750,12 +865,13 @@
                                 projectHours: 0,
                                 sickLeaveHours: 0,
                                 timeoffHours: 0,
+                                overtimeHours: 0,
                                 projectComment: "",
                                 isAssigned: false
                             });
                         }
                     }
-                });
+                });*/
             }, function(error){
                 console.log(error);
             });
@@ -765,7 +881,7 @@
         function initController() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
-                setAssignedProjects();
+                vm.setAssignedProjects();
                 if(userTimesheet && userTimesheet._id){
                     vm.isNew = false;
                     vm.timesheet = userTimesheet;
@@ -845,6 +961,7 @@
                                         allocatedHours: projectObj.allocatedHours,
                                         billableHours: projectObj.billableHours,
                                         timeoffHours: projectObj.sickLeaveHours + projectObj.timeoffHours,
+                                        overtimeHours: projectObj.overtimeHours,
                                         resourceType: projectObj.resourceType
                                     };
                                 } else {
@@ -863,6 +980,7 @@
                                         allocatedHours: projectObj.allocatedHours,
                                         billableHours: projectObj.billableHours,
                                         timeoffHours: projectObj.sickLeaveHours + projectObj.timeoffHours,
+                                        overtimeHours: projectObj.overtimeHours,
                                         resourceType: projectObj.resourceType
                                     };
                                     projects.push(newProjectObj);
@@ -911,12 +1029,16 @@
                     _.each(sheetObj.projects, function (projectObj) {
                         projectObj.totalBillableHours = 0;
                         projectObj.totalTimeoffHours = 0;
+                        projectObj.totalOvertimeHours = 0;
                         _.each(vm.weeks, function (weekObj) {
                             if(projectObj[weekObj.week].billableHours){
                                 projectObj.totalBillableHours += projectObj[weekObj.week].billableHours;
                             }
                             if(projectObj[weekObj.week].timeoffHours){
                                 projectObj.totalTimeoffHours += projectObj[weekObj.week].timeoffHours;
+                            }
+                            if(projectObj[weekObj.week].overtimeHours){
+                                projectObj.totalOvertimeHours += projectObj[weekObj.week].overtimeHours;
                             }
                         });
                     });

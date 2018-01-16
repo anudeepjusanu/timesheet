@@ -54,8 +54,8 @@
                         <th width="240px">User Name</th>
                         <th width="180px">Project Name</th>
                         <th width="80px">Assign Date</th>
-                        <th width="240px" colspan="3" class="text-center" ng-repeat="week in vm.weeks">{{week.weekName}}</th>
-                        <th width="160px" colspan="2" class="text-center">Total</th>
+                        <th width="320px" colspan="4" class="text-center" ng-repeat="week in vm.weeks">{{week.weekName}}</th>
+                        <th width="240px" colspan="3" class="text-center">Total</th>
                     </tr>
                     <tr>
                         <th width="80px"></th>
@@ -64,9 +64,11 @@
                         <th width="80px"></th>
                         <th width="80px" ng-repeat-start="week in vm.weeks">Resource</th>
                         <th width="80px">Hours</th>
-                        <th width="80px" ng-repeat-end>Timeoff</th>
+                        <th width="80px">Timeoff</th>
+                        <th width="80px" ng-repeat-end>Overtime</th>
                         <th width="80px">Hours</th>
                         <th width="80px">Timeoff</th>
+                        <th width="80px">Overtime</th>
                     </tr>
                     </thead>
                     <tbody ng-repeat="sheet in vm.timesheets">
@@ -77,9 +79,11 @@
                         <td>{{project.assignDate}}</td>
                         <td width="80px" ng-repeat-start="week in vm.weeks" ng-init="bgColor=(project[week.week].resourceType=='billable')?'':'background-color:#ffa500b8;';" style="{{bgColor}}">{{project[week.week].resourceType}}</td>
                         <td width="80px" style="{{bgColor}}">{{project[week.week].billableHours}}</td>
-                        <td width="80px" style="{{bgColor}}" ng-repeat-end>{{project[week.week].timeoffHours}}</td>
+                        <td width="80px" style="{{bgColor}}">{{project[week.week].timeoffHours}}</td>
+                        <td width="80px" style="{{bgColor}}" ng-repeat-end>{{project[week.week].overtimeHours}}</td>
                         <td width="80px">{{project.totalBillableHours}}</td>
                         <td width="80px">{{project.totalTimeoffHours}}</td>
+                        <td width="80px">{{project.totalOvertimeHours}}</td>
                     </tr>
                     </tbody>
                 </table>

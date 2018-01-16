@@ -52,11 +52,13 @@
                                         <td width="60px;">Project Hours</td>
                                         <td width="60px;">Sick Leaves</td>
                                         <td width="60px;">Timeoff</td>
+                                        <td width="60px;">Overtime</td>
                                     </tr>
                                 </table>
                             </th>
                             <th>Total Hours</th>
                             <th>Total Timeoff</th>
+                            <th>Total Overtime</th>
                             <th>Action</th>
                         </tr>
                         <tr>
@@ -74,9 +76,11 @@
                                         <td width="60px;"></td>
                                         <td width="60px;"></td>
                                         <td width="60px;"></td>
+                                        <td width="60px;"></td>
                                     </tr>
                                 </table>
                             </td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td>
@@ -90,6 +94,7 @@
                             <th></th>
                             <th>{{vm.search.timesheetResult.totalHours}}</th>
                             <th>{{vm.search.timesheetResult.timeoffHours}}</th>
+                            <th>{{vm.search.timesheetResult.overtimeHours}}</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -107,11 +112,13 @@
                                         <td width="60px;">{{project.projectHours}}</td>
                                         <td width="60px;">{{project.sickLeaveHours}}</td>
                                         <td width="60px;">{{project.timeoffHours}}</td>
+                                        <td width="60px;">{{project.overtimeHours}}</td>
                                     </tr>
                                 </table>
                             </td>
                             <td>{{row.totalHours}}</td>
                             <td>{{row.timeoffHours}}</td>
+                            <td>{{row.overtimeHours}}</td>
                             <td>
                                 <button class="btn btn-primary btn-xs" ng-click="vm.remind(row.userId)" ng-show="row.remind">Remind</button>
                                 <a class="btn btn-primary btn-xs" ng-click="vm.viewUserTimesheet(row)" ng-show="row.timesheetId != '' && vm.user.admin">Edit</a>
@@ -126,6 +133,7 @@
                             <th></th>
                             <th>{{vm.search.timesheetResult.totalHours}}</th>
                             <th>{{vm.search.timesheetResult.timeoffHours}}</th>
+                            <th>{{vm.search.timesheetResult.overtimeHours}}</th>
                             <th></th>
                         </tr>
                         </tfoot>
@@ -141,33 +149,37 @@
                                 <th class="row">
                                     <table>
                                         <tr>
-                                            <td width="280px;">Project Name</td>
+                                            <td width="240px;">Project Name</td>
                                             <td width="80px;">Project Hours</td>
                                             <td width="80px;">Sick Leaves</td>
                                             <td width="80px;">Timeoff</td>
+                                            <td width="80px;">Overtime</td>
                                             <td width="300px;">Project Comment</td>
                                         </tr>
                                     </table>
                                 </th>
-                                <th width="100px;">Total Working Hours</th>
-                                <th width="100px;">Total Timeoff Hours</th>
-                                <th>Action</th>
+                                <th width="80px;">Total Working Hours</th>
+                                <th width="80px;">Total Timeoff Hours</th>
+                                <th width="80px;">Total Overtime Hours</th>
+                                <th width="120px;">Action</th>
                             </tr>
                             <tr ng-repeat="sheet in vm.timesheets | orderBy: '-weekDate'">
                                 <td>{{sheet.weekDate | date: 'mediumDate'}}</td>
                                 <td class="row">
                                     <table>
                                         <tr class="" ng-repeat="project in sheet.projects">
-                                            <td width="200px;">{{project.projectName}}</td>
+                                            <td width="240px;">{{project.projectName}}</td>
                                             <td width="80px;">{{project.projectHours}}</td>
                                             <td width="80px;">{{project.sickLeaveHours}}</td>
                                             <td width="80px;">{{project.timeoffHours}}</td>
+                                            <td width="80px;">{{project.overtimeHours}}</td>
                                             <td width="300px;"><p style="max-width: 300px; margin: 0px!important;">{{project.projectComment}}</p></td>
                                         </tr>
                                     </table>
                                 </td>
                                 <th>{{sheet.totalHours}}</th>
                                 <th>{{sheet.timeoffHours}}</th>
+                                <th>{{sheet.overtimeHours}}</th>
                                 <td>
                                     <a class="btn btn-primary btn-xs" ui-sref="editTimesheet({id: sheet._id})">Update</a>
                                     <a class="btn btn-primary btn-xs" ng-click="vm.deleteTimesheet(sheet._id)">Delete</a>
@@ -189,33 +201,37 @@
                     <th class="row">
                         <table>
                             <tr>
-                                <td width="200px;">Project Name</td>
+                                <td width="240px;">Project Name</td>
                                 <td width="80px;">Project Hours</td>
                                 <td width="80px;">Sick Leaves</td>
                                 <td width="80px;">Timeoff</td>
+                                <td width="80px;">Overtime</td>
                                 <td width="300px;">Project Comment</td>
                             </tr>
                         </table>
                     </th>
-                    <th width="100px;">Total Working Hours</th>
-                    <th width="100px;">Total Timeoff Hours</th>
-                    <th>Action</th>
+                    <th width="80px;">Total Working Hours</th>
+                    <th width="80px;">Total Timeoff Hours</th>
+                    <th width="80px;">Total Overtime Hours</th>
+                    <th width="120px;">Action</th>
                 </tr>
                 <tr ng-repeat="sheet in vm.timesheets | orderBy: '-weekDate'">
                     <td>{{sheet.weekDate | date: 'mediumDate'}}</td>
                     <td class="row">
                         <table>
                             <tr class="" ng-repeat="project in sheet.projects">
-                                <td width="280px;">{{project.projectName}}</td>
+                                <td width="240px;">{{project.projectName}}</td>
                                 <td width="80px;">{{project.projectHours}}</td>
                                 <td width="80px;">{{project.sickLeaveHours}}</td>
                                 <td width="80px;">{{project.timeoffHours}}</td>
+                                <td width="80px;">{{project.overtimeHours}}</td>
                                 <td width="300px;"><p style="max-width: 300px; margin: 0px!important;">{{project.projectComment}}</p></td>
                             </tr>
                         </table>
                     </td>
                     <th>{{sheet.totalHours}}</th>
                     <th>{{sheet.timeoffHours}}</th>
+                    <th>{{sheet.overtimeHours}}</th>
                     <td>
                         <a class="btn btn-primary btn-xs" ui-sref="editTimesheet({id: sheet._id})">Edit</a>
                         <a class="btn btn-primary btn-xs" ng-click="vm.deleteTimesheet(sheet._id)">Delete</a>

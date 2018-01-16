@@ -53,12 +53,10 @@ function createTimesheet(currentUser, userParam) {
                     projectObj.resourceType = billData.resourceType;
                     projectObj.allocatedHours = billData.allocatedHours;
                     projectObj.billableMaxHours = billData.billableMaxHours;
-                    if(projectObj.billableMaxHours > 0){
-                        if(projectObj.projectHours > projectObj.billableMaxHours){
-                            projectObj.billableHours = projectObj.billableMaxHours;
-                        }else{
-                            projectObj.billableHours = projectObj.projectHours;
-                        }
+                    projectObj.overtimeHours = 0;
+                    if(projectObj.billableMaxHours > 0 && projectObj.projectHours > projectObj.billableMaxHours){
+                        projectObj.billableHours = projectObj.billableMaxHours;
+                        projectObj.overtimeHours = projectObj.projectHours - projectObj.billableMaxHours;
                     }else{
                         projectObj.billableHours = projectObj.projectHours;
                     }
@@ -66,6 +64,7 @@ function createTimesheet(currentUser, userParam) {
                 userParam.totalHours = 0;
                 userParam.totalBillableHours = 0;
                 userParam.timeoffHours = 0;
+                userParam.overtimeHours = 0;
                 _.each(userParam.projects, function (projectObj) {
                     if(!projectObj.businessUnit){
                         projectObj.businessUnit = "";
@@ -74,15 +73,11 @@ function createTimesheet(currentUser, userParam) {
                     if(projectInfo && projectInfo.businessUnit){
                         projectObj.businessUnit = projectInfo.businessUnit;
                     }
-                    /*service.getProjectInfoById(projectObj.projectId).then(function(projectInfo) {
-                        if(projectInfo.businessUnit){
-                            projectObj.businessUnit = projectInfo.businessUnit;
-                        }
-                    }).catch(function(err) {});*/
                     userParam.totalHours += projectObj.projectHours;
                     userParam.totalBillableHours += projectObj.billableHours;
                     userParam.timeoffHours += projectObj.sickLeaveHours;
                     userParam.timeoffHours += projectObj.timeoffHours;
+                    userParam.overtimeHours += projectObj.overtimeHours;
                 });
             }
             if(!user.userResourceType){
@@ -99,6 +94,7 @@ function createTimesheet(currentUser, userParam) {
                         totalHours: userParam.totalHours,
                         totalBillableHours: userParam.totalBillableHours,
                         timeoffHours: userParam.timeoffHours,
+                        overtimeHours: userParam.overtimeHours,
                         projects: userParam.projects,
                         createdOn: new Date(),
                         updatedOn: new Date()
@@ -140,12 +136,10 @@ function updateTimesheet(sheetId, userParam, currentUser) {
                         projectObj.resourceType = billData.resourceType;
                         projectObj.allocatedHours = billData.allocatedHours;
                         projectObj.billableMaxHours = billData.billableMaxHours;
-                        if(projectObj.billableMaxHours > 0){
-                            if(projectObj.projectHours > projectObj.billableMaxHours){
-                                projectObj.billableHours = projectObj.billableMaxHours;
-                            }else{
-                                projectObj.billableHours = projectObj.projectHours;
-                            }
+                        projectObj.overtimeHours = 0;
+                        if(projectObj.billableMaxHours > 0 && projectObj.projectHours > projectObj.billableMaxHours){
+                            projectObj.billableHours = projectObj.billableMaxHours;
+                            projectObj.overtimeHours = projectObj.projectHours - projectObj.billableMaxHours;
                         }else{
                             projectObj.billableHours = projectObj.projectHours;
                         }
@@ -153,6 +147,7 @@ function updateTimesheet(sheetId, userParam, currentUser) {
                     userParam.totalHours = 0;
                     userParam.totalBillableHours = 0;
                     userParam.timeoffHours = 0;
+                    userParam.overtimeHours = 0;
                     _.each(userParam.projects, function (projectObj) {
                         if(!projectObj.businessUnit){
                             projectObj.businessUnit = "";
@@ -161,15 +156,11 @@ function updateTimesheet(sheetId, userParam, currentUser) {
                         if(projectInfo && projectInfo.businessUnit){
                             projectObj.businessUnit = projectInfo.businessUnit;
                         }
-                        /*service.getProjectInfoById(projectObj.projectId).then(function(projectInfo) {
-                            if(projectInfo.businessUnit){
-                                projectObj.businessUnit = projectInfo.businessUnit;
-                            }
-                        }).catch(function(err) {});*/
                         userParam.totalHours += projectObj.projectHours;
                         userParam.totalBillableHours += projectObj.billableHours;
                         userParam.timeoffHours += projectObj.sickLeaveHours;
                         userParam.timeoffHours += projectObj.timeoffHours;
+                        userParam.overtimeHours += projectObj.overtimeHours;
                     });
                     if(!sheetUserObj.userResourceType){
                         sheetUserObj.userResourceType = "";
@@ -182,6 +173,7 @@ function updateTimesheet(sheetId, userParam, currentUser) {
                         totalHours: userParam.totalHours,
                         totalBillableHours: userParam.totalBillableHours,
                         timeoffHours: userParam.timeoffHours,
+                        overtimeHours: userParam.overtimeHours,
                         projects: userParam.projects
                     }
                     newSheetObj.updatedOn = new Date();
