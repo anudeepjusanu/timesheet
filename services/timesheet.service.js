@@ -653,12 +653,18 @@ function timesheetBetweenDates(startDateVal, endDateVal, params){
                         weekDate: sheetObj.weekDate,
                         projects: []
                     };
-                    _.each(projectList, function (projectIdVal) {
-                        var projectObj = _.find(sheetObj.projects, {projectId: projectIdVal});
-                        if(projectObj){
+                    if(projectList.length === 0){
+                        _.each(sheetObj.projects, function (projectObj) {
                             timesheetObj.projects.push(projectObj);
-                        }
-                    });
+                        });
+                    }else{
+                        _.each(projectList, function (projectIdVal) {
+                            var projectObj = _.find(sheetObj.projects, {projectId: projectIdVal});
+                            if(projectObj){
+                                timesheetObj.projects.push(projectObj);
+                            }
+                        });
+                    }
                     timesheets.push(timesheetObj);
                 });
                 loopCount++;

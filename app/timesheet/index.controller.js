@@ -904,10 +904,13 @@
         var vm = this;
         vm.user = {};
         vm.users = [];
+        vm.clients = [];
         vm.projects = [];
         vm.timesheets = [];
         vm.currentDate = new Date();
+        vm.resourceTypes = ['billable', 'shadow', 'bizdev', 'buffer'];
         vm.search = {
+            clientId: null,
             projectId: null,
             startDate: new Date(vm.currentDate.getFullYear(), vm.currentDate.getMonth(), 1),
             endDate: new Date()
@@ -927,7 +930,9 @@
             var paramObj = {projectIds: []};
             paramObj.startDate = $filter('date')(vm.search.startDate, "yyyy-M-dd").toString();
             paramObj.endDate = $filter('date')(vm.search.endDate, "yyyy-M-dd").toString();
-            if(vm.search.clientId && vm.search.clientId.length>0){
+            if(vm.search.clientId === 'all' || vm.search.projectId === 'all'){
+                paramObj.projectIds = [];
+            }else if(vm.search.clientId.length > 0){
                 paramObj.projectIds = [];
                 _.each(vm.projects, function (prjObj) {
                     if(prjObj.clientId == vm.search.clientId){
@@ -941,12 +946,10 @@
             TimesheetService.timesheetBetweenDates(paramObj.startDate, paramObj.endDate, paramObj).then(function(response) {
                 var rawData = response;
                 rawData = _.groupBy(rawData, 'userId');
-                vm.resourceTypes = {
-                    billable: 0,
-                    shadow: 0,
-                    bizdev: 0,
-                    buffer: 0
-                };
+                vm.totalResourceTypes = {};
+                _.each(vm.resourceTypes, function (resourceType) {
+                    vm.totalResourceTypes[resourceType] = 0;
+                });
                 vm.timesheets = [];
                 _.each(rawData, function (userSheets, userId) {
                     var userObj = _.find(vm.users, {_id: userId});
@@ -985,14 +988,8 @@
                                     };
                                     projects.push(newProjectObj);
                                 }
-                                if (projectObj.resourceType == 'billable') {
-                                    vm.resourceTypes.billable += projectObj.billableHours;
-                                } else if (projectObj.resourceType == 'shadow') {
-                                    vm.resourceTypes.shadow += projectObj.projectHours;
-                                } else if (projectObj.resourceType == 'bizdev') {
-                                    vm.resourceTypes.bizdev += projectObj.projectHours;
-                                } else if (projectObj.resourceType == 'buffer') {
-                                    vm.resourceTypes.buffer += projectObj.projectHours;
+                                if(vm.totalResourceTypes[projectObj.resourceType] >= 0){
+                                    vm.totalResourceTypes[projectObj.resourceType] += projectObj.billableHours;
                                 }
                             });
                         });
@@ -1044,6 +1041,21 @@
                     });
                     sheetObj.sno = sno++;
                 });
+                _.each(vm.weeks, function (weekObj) {
+                    weekObj.resourceTypes = {};
+                    _.each(vm.resourceTypes, function (resourceType) {
+                        weekObj.resourceTypes[resourceType] = {hours: 0, headCount: 0};
+                    });
+                    _.each(vm.timesheets, function (sheetObj) {
+                        _.each(sheetObj.projects, function (projectObj) {
+                            var prjWeek = projectObj[weekObj.week];
+                            if(weekObj.resourceTypes[prjWeek.resourceType]){
+                                weekObj.resourceTypes[prjWeek.resourceType].hours += prjWeek.billableHours;
+                                weekObj.resourceTypes[prjWeek.resourceType].headCount += 1;
+                            }
+                        });
+                    });
+                });
             }, function(error){
                 console.log(error);
             });
@@ -1081,7 +1093,19 @@
 
         function getProjects(){
             ProjectService.getAll().then(function(response) {
-                vm.projects = response;
+                vm.projects = [];
+                vm.projects.push({
+                    _id: 'all',
+                    projectName: 'All'
+                });
+                response = _.sortBy(response, 'projectName');
+                _.each(response, function (projectObj) {
+                    vm.projects.push({
+                        _id: projectObj._id,
+                        clientId: projectObj.clientId,
+                        projectName: projectObj.projectName
+                    });
+                });
             }, function(error){
                 console.log(error);
             });
@@ -1089,7 +1113,18 @@
 
         function getClients(){
             ProjectService.getClients().then(function(response) {
-                vm.clients = response;
+                vm.clients = [];
+                vm.clients.push({
+                    _id: 'all',
+                    clientName: 'All'
+                });
+                response = _.sortBy(response, 'clientName');
+                _.each(response, function (clientObj) {
+                    vm.clients.push({
+                        _id: clientObj._id,
+                        clientName: clientObj.clientName
+                    });
+                });
             }, function(error){
                 console.log(error);
             });
