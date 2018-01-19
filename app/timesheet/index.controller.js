@@ -7,6 +7,7 @@
         .controller('Timesheet.TimesheetController', TimesheetController)
         .controller('Timesheet.TimesheetModelController', TimesheetModelController)
         .controller('Timesheet.ConsolidatedController', ConsolidatedController)
+        .controller('Timesheet.PoolController', PoolController)
 
         .directive('exportTable', function() {
             return {
@@ -1148,6 +1149,106 @@
                 }
                 getProjects();
                 getClients();
+            });
+        }
+    };
+
+    function PoolController(UserService, $filter, $scope) {
+        var vm = this;
+        vm.user = {};
+        vm.users = [];
+        vm.currentDate = new Date();
+        vm.search = {
+            startDate: new Date(vm.currentDate.getFullYear(), vm.currentDate.getMonth(), 1),
+            endDate: new Date()
+        };
+        vm.weeks = [];
+        vm.dateOptions = {
+            startingDay: 1
+        };
+        vm.exportTable = exportTable;
+        //calWeeks();
+
+        function exportTable() {
+            $scope.$broadcast('export-excl', { "date": vm.filterDate });
+        }
+
+        vm.getPoolUsers = function(){
+            var paramObj = {};
+            paramObj.startDate = $filter('date')(vm.search.startDate, "yyyy-M-dd").toString();
+            paramObj.endDate = $filter('date')(vm.search.endDate, "yyyy-M-dd").toString();
+            calWeeks();
+            _.each(vm.weeks, function (weekObj) {
+                console.log(weekObj);
+                weekObj.users = [];
+                _.each(vm.users, function (userObj) {
+                    var isFree = false;
+                    _.each(userObj.projects, function (projectObj) {
+                        _.each(projectObj.billDates, function (billDateObj) {
+                            if(billDateObj.end && billDateObj.end.length > 0){
+                                var billEndDate = new Date(billDateObj.end);
+                                //console.log(billDateObj.end);
+                            }
+                        });
+                    });
+                    if(isFree){
+                        weekObj.users.push({
+                            userId: userObj._id,
+                            userName: userObj.name
+                        });
+                    }
+                });
+            });
+        }
+
+        function calWeeks(){
+            Date.prototype.getWeek = function() {
+                var onejan = new Date(this.getFullYear(), 0, 1);
+                return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+            }
+            vm.weeks = [];
+            var startDate = new Date(vm.search.startDate);
+            var endDate = new Date(vm.search.endDate);
+            var loop = 0;
+            while (startDate < endDate && loop++ < 50){
+                var weekStartDate = new Date(startDate.getTime());
+                weekStartDate.setDate(weekStartDate.getDate() - weekStartDate.getDay() + 1);
+                var weekEndDate = new Date(startDate.getTime());
+                weekEndDate.setDate(weekEndDate.getDate() + (7 - weekEndDate.getDay()));
+                //var weekName = $filter('date')(weekStartDate, "mediumDate").toString() + " - " + $filter('date')(weekEndDate, "mediumDate").toString();
+                var weekName = $filter('date')(weekEndDate, "mediumDate").toString();
+                var weekNumber = "-W";
+                if(startDate.getWeek() <= 9){
+                    weekNumber = "-W0"+startDate.getWeek();
+                }else{
+                    weekNumber = "-W"+startDate.getWeek();
+                }
+                vm.weeks.push({
+                    week: startDate.getFullYear()+weekNumber,
+                    weekStartDate: weekStartDate,
+                    weekName: weekName
+                });
+                startDate.setDate(startDate.getDate() + 7);
+            }
+        }
+
+        function getUsers(){
+            UserService.getUsers().then(function(response) {
+                vm.users = response;
+                vm.getPoolUsers();
+            }, function(error){
+                console.log(error);
+            });
+        }
+
+        init();
+        function init() {
+            UserService.GetCurrent().then(function(user) {
+                vm.user = user;
+                getUsers();
+                if(vm.user.admin !== true){
+
+                }
             });
         }
     };

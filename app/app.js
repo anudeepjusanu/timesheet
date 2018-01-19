@@ -49,6 +49,13 @@
                 controllerAs: 'vm',
                 data: { activeTab: 'consolidatedTimesheet' }
             })
+            .state('poolUsers', {
+                url: '/poolUsers',
+                templateUrl: 'timesheet/poolUsers.html',
+                controller: 'Timesheet.PoolController',
+                controllerAs: 'vm',
+                data: { activeTab: 'poolUsers' }
+            })
             .state('adminUpdate', {
                 url: '/adminUpdate/:id',
                 templateUrl: 'home/adminUpdate.html',
