@@ -123,17 +123,12 @@ bot.dialog('/registerEmail', [function(session) {
 }, function(session, results) {
     if (results.response) {
         var addressObj = session.message.address;
-        var regex = />\s*(.*?)\s*<\/a>/g;
-        var matches = [];
-        while (m = regex.exec(results.response)) {
-            matches.push(m[1]);
-        }
-        if (matches && matches.length) {
+        var regex = /\S+@\S+\.\S+/;
+        if (regex.exec(results.response) && regex.exec(results.response)[0]) {
             var obj = {
-                "username": matches[0]
+                "username": results.response
             }
             obj.password = Math.random().toString(36).substring(7);
-
             userService.updateEmail(addressObj.user.id, obj)
                 .then(function() {
                     session.send("Email Registered Successfully, \n\n Here are your login details \n\n username:" + obj.username + "\n\n Password:" + obj.password + "\n\n login at http://timesheet.wavelabs.in You can change your password under my account tab");
@@ -144,8 +139,8 @@ bot.dialog('/registerEmail', [function(session) {
                     session.endDialog();
                 });
         } else {
+            session.send("This is not a valid email id try again by giving the command email");
             session.endDialog();
-            session.beginDialog('/registerEmail');
         }
     } else {
         session.send("Thank you!!");
