@@ -1179,15 +1179,25 @@
             paramObj.endDate = $filter('date')(vm.search.endDate, "yyyy-M-dd").toString();
             calWeeks();
             _.each(vm.weeks, function (weekObj) {
-                console.log(weekObj);
                 weekObj.users = [];
                 _.each(vm.users, function (userObj) {
                     var isFree = false;
                     _.each(userObj.projects, function (projectObj) {
-                        _.each(projectObj.billDates, function (billDateObj) {
+                        projectObj.billDates = _.sortBy(projectObj.billDates, 'start');
+                        _.each(projectObj.billDates, function (billDateObj, index) {
                             if(billDateObj.end && billDateObj.end.length > 0){
                                 var billEndDate = new Date(billDateObj.end);
-                                //console.log(billDateObj.end);
+                                var nextIndex = index + 1;
+                                var hasNoNextPrj = true;
+                                if(projectObj.billDates.length > index && projectObj.billDates[nextIndex] && projectObj.billDates[nextIndex].start){
+                                    var nextBillStartDate = new Date(projectObj.billDates[nextIndex].start);
+                                    if(nextBillStartDate >= weekObj.weekStartDate){
+                                        hasNoNextPrj = false;
+                                    }
+                                }
+                                if(weekObj.weekStartDate >= billEndDate && hasNoNextPrj){
+                                    isFree = true;
+                                }
                             }
                         });
                     });
@@ -1226,6 +1236,7 @@
                 vm.weeks.push({
                     week: startDate.getFullYear()+weekNumber,
                     weekStartDate: weekStartDate,
+                    weekEndDate: weekEndDate,
                     weekName: weekName
                 });
                 startDate.setDate(startDate.getDate() + 7);

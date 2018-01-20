@@ -19,8 +19,8 @@
                             <table class="table">
                                 <tr>
                                     <th width="60px">P.No</th>
-                                    <td width="320px">Name</td>
-                                    <td width="480px">
+                                    <td width="280px">Name</td>
+                                    <td width="520px">
                                         <div class="row">
                                             <div class="col-md-3">Start Date</div>
                                             <div class="col-md-3">End Date</div>
@@ -42,8 +42,8 @@
                             <table class="table">
                                 <tr ng-repeat="project in user.projects | orderBy:'projectName'">
                                     <td width="60px">{{$index+1}}</td>
-                                    <td width="320px">{{project.projectName}}</td>
-                                    <td width="480px">
+                                    <td width="280px">{{project.projectName}}</td>
+                                    <td width="520px">
                                         <div class="row" ng-repeat="billDate in project.billDates">
                                             <div class="col-md-3">{{billDate.start | date : 'mediumDate'}}</div>
                                             <div class="col-md-3">{{billDate.end | date : 'mediumDate'}}</div>

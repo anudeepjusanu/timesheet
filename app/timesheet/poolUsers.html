@@ -43,7 +43,14 @@
                         <th width="320px" class="text-center" ng-repeat="week in vm.weeks">{{week.weekName}}</th>
                     </tr>
                     <tr>
-                        <td width="320px" ng-repeat="week in vm.weeks">{{week.weekName}}</td>
+                        <td width="320px" ng-repeat="week in vm.weeks">
+                            <!--<div class="list-group" ng-repeat="user in week.users">
+                                <div class="list-group-item">{{user.userName}}</div>
+                            </div>-->
+                            <table class="table">
+                                <tr ng-repeat="user in week.users |orderBy:'userName'"><td>{{user.userName}}</td></tr>
+                            </table>
+                        </td>
                     </tr>
                 </table>
             </div>
