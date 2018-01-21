@@ -1,3 +1,4 @@
+<script type='text/javascript' src='libs/js/jquery.doubleScroll.js'></script>
 <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="1000">
     {{alert.msg}}
 </div>
@@ -47,21 +48,22 @@
                         </form>
                     </div>
                 </div>
-                <table class="table table-condensed table-bordered table-striped" export-table>
-                    <thead>
+                <div id="double-scroll" class="">
+                    <table class="table table-condensed table-bordered table-striped" export-table>
+
                     <tr>
                         <th width="80px">S.No</th>
-                        <th width="240px">User Name</th>
-                        <th width="180px">Project Name</th>
-                        <th width="80px">Assign Date</th>
+                        <th style="min-width: 240px;">User Name</th>
+                        <th style="min-width: 140px;">Project Name</th>
+                        <th style="min-width: 90px;">Assign Date</th>
                         <th width="320px" colspan="4" class="text-center" ng-repeat="week in vm.weeks">{{week.weekName}}</th>
                         <th width="240px" colspan="3" class="text-center">Total</th>
                     </tr>
                     <tr>
                         <th width="80px"></th>
-                        <th width="240px"></th>
-                        <th width="180px"></th>
-                        <th width="80px"></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                         <th width="80px" ng-repeat-start="week in vm.weeks">Resource</th>
                         <th width="80px">Hours</th>
                         <th width="80px">Timeoff</th>
@@ -70,7 +72,7 @@
                         <th width="80px">Timeoff</th>
                         <th width="80px">Overtime</th>
                     </tr>
-                    </thead>
+
                     <tbody ng-repeat="sheet in vm.timesheets">
                     <tr ng-repeat="project in sheet.projects">
                         <td ng-if="$index==0" rowspan="{{sheet.projects.length}}">{{sheet.sno}}</td>
@@ -86,8 +88,7 @@
                         <td width="80px">{{project.totalOvertimeHours}}</td>
                     </tr>
                     </tbody>
-                    <tfoot ng-if="vm.timesheets.length > 0">
-                    <tr>
+                    <tr ng-if="vm.timesheets.length > 0">
                         <th></th>
                         <th></th>
                         <th></th>
@@ -113,8 +114,8 @@
                             </div>
                         </th>
                     </tr>
-                    </tfoot>
-                </table>
+                    </table>
+                </div>
                 <div class="row">
                     <div class="pull-left">
                         <p><span class="glyphicon glyphicon-flag" style="color: green;"></span> : Who assigned project past 30days.</p>
@@ -125,3 +126,8 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function(){
+        $('#double-scroll').doubleScroll();
+    });
+</script>
