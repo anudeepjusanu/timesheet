@@ -273,7 +273,7 @@
         $interval(tick, 1000);
 
         function getUsers() {
-            UserService.GetAll().then(function(users) {
+            UserService.getUsers().then(function(users) {
                 vm.users = users;
                 getAllReports();
                 getMyReport();
