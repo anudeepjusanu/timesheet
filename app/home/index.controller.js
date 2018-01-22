@@ -9,6 +9,7 @@
         .controller('Home.AllUsersController', AllUsersController)
         .controller('Home.AdminController', AdminController)
         .controller('Home.UserInfoController', UserInfoController)
+        .controller('Home.UserModelController', UserModelController)
         .filter('allUserSearch', function ($filter) {
             return function(input, searchObj) {
                 var output = input;
@@ -546,7 +547,7 @@
         }
     }
 
-    function AllUsersController(UserService, _) {
+    function AllUsersController(UserService, _, $uibModal) {
         var vm = this;
         vm.user = null;
         vm.users = [];
@@ -568,6 +569,29 @@
             });
         }
 
+        vm.viewUser = function (user) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'home/editUser.html',
+                controller: 'Home.UserModelController',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    user: function () {
+                        return user;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (userObj) {
+                getAllUsers();
+            }, function () {
+                getAllUsers();
+            });
+        }
+
         initController();
         function initController() {
             UserService.GetCurrent().then(function(user) {
@@ -579,6 +603,47 @@
                     vm.isAdmin = false;
                 }
             });
+        }
+    }
+
+    function UserModelController(UserService, $filter, noty, $uibModalInstance, user) {
+        var vm = this;
+        vm.userObj = user;
+        vm.alerts = [];
+        vm.enableSaveBtn = true;
+        vm.closeAlert = function(index) {
+            vm.alerts.splice(index, 1);
+        }
+
+        vm.saveUser = function (userForm) {
+            if(userForm.$valid){
+                var obj = {
+                    "name": vm.userObj.name,
+                    "phone": vm.userObj.phone,
+                    //"username": vm.userObj.username,
+                    "employeeId": vm.userObj.employeeId,
+                    "designation": vm.userObj.designation,
+                    "userResourceType": vm.userObj.userResourceType,
+                    "isActive": vm.userObj.isActive
+                }
+                UserService.UpdateEmployeeInfo(vm.userObj._id, obj).then(function(response) {
+                    noty.showSuccess("User has been updated successfully!");
+                    $uibModalInstance.close();
+                }, function(error) {
+                    if (error) {
+                        vm.alerts.push({ msg: error, type: 'danger' });
+                    }
+                });
+            }
+        }
+
+        vm.closeUser = function () {
+            $uibModalInstance.close();
+        }
+
+        init();
+        function init() {
+
         }
     }
 
