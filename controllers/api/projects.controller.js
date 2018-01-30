@@ -225,7 +225,7 @@ function getProjectUsers(req, res) {
 }
 
 function getUserProjects(req, res) {
-    userService.getAll().then(function (users) {
+    userService.getUsers().then(function (users) {
         var usersList = [];
         _.each(users, function (userObj) {
             usersList.push({
