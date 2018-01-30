@@ -927,11 +927,22 @@
             $scope.$broadcast('export-excl', { "date": vm.filterDate });
         }
 
+        vm.changeBusinessUnit = function () {
+
+        }
+
         vm.getConsolidatedProjects = function(){
             var paramObj = {projectIds: []};
             paramObj.startDate = $filter('date')(vm.search.startDate, "yyyy-M-dd").toString();
             paramObj.endDate = $filter('date')(vm.search.endDate, "yyyy-M-dd").toString();
-            if(vm.search.clientId === 'all' || vm.search.projectId === 'all'){
+            if(vm.search.businessUnit == 'Launchpad' || vm.search.businessUnit == 'Enterprise'){
+                paramObj.projectIds = [];
+                _.each(vm.projects, function (prjObj) {
+                    if(prjObj.businessUnit == vm.search.businessUnit){
+                        paramObj.projectIds.push(prjObj._id);
+                    }
+                });
+            }else if(vm.search.businessUnit === 'All' || vm.search.clientId === 'all' || vm.search.projectId === 'all'){
                 paramObj.projectIds = [];
             }else if(vm.search.clientId && vm.search.clientId.length > 0){
                 paramObj.projectIds = [];
@@ -944,7 +955,7 @@
                 paramObj.projectIds.push(vm.search.projectId);
             }
             calWeeks();
-            if((vm.search.clientId === 'all' || vm.search.projectId === 'all') || paramObj.projectIds.length > 0) {
+            if((vm.search.businessUnit === 'All' || vm.search.clientId === 'all' || vm.search.projectId === 'all') || paramObj.projectIds.length > 0) {
 
                 TimesheetService.timesheetBetweenDates(paramObj.startDate, paramObj.endDate, paramObj).then(function (response) {
                     var rawData = response;
@@ -1109,6 +1120,7 @@
                     vm.projects.push({
                         _id: projectObj._id,
                         clientId: projectObj.clientId,
+                        businessUnit: projectObj.businessUnit,
                         projectName: projectObj.projectName
                     });
                 });

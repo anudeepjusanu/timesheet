@@ -196,8 +196,8 @@
             });
         }
 
-        vm.getAllUsers = function () {
-            UserService.GetAll().then(function(response) {
+        vm.getUsers = function () {
+            UserService.getUsers().then(function(response) {
                 vm.users = [];
                 _.each(response, function (userObj) {
                     vm.users.push({
@@ -310,11 +310,11 @@
             } else {
                 vm.isNew = true;
             }
-            vm.getAllUsers();
+            vm.getUsers();
         }
     }
 
-    function AssignUserModel($uibModalInstance, ProjectService, noty, user, project) {
+    function AssignUserModel($uibModalInstance, ProjectService, UserService, noty, user, project) {
         var vm = this;
         vm.alerts = [];
         vm.enableSaveBtn = true;
@@ -327,9 +327,14 @@
             {"resourceTypeId":"operations", "resourceTypeVal":"Operations"},
             {"resourceTypeId":"trainee", "resourceTypeVal":"Trainee"}
         ];
+
+        vm.users = [];
+        vm.projects = [];
         vm.user = user;
-        if(vm.user.startDate){
-            vm.user.startDate = new Date(vm.user.startDate);
+        vm.user.chooseUser = false;
+        if(!user.userId){
+            getUsers();
+            vm.user.chooseUser = true;
         }
         if(vm.user.billDates){
             _.each(vm.user.billDates, function (billDate) {
@@ -342,6 +347,11 @@
             });
         }
         vm.project = project;
+        vm.project.chooseProject = false;
+        if(!vm.project._id){
+            getProjects();
+            vm.project.chooseProject = true;
+        }
         var currentDay = new Date().getDay();
         vm.open2 = function () {
             vm.popup2.opened = true;
@@ -391,6 +401,39 @@
         vm.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
+
+        function getUsers() {
+            UserService.getUsers().then(function(response) {
+                vm.users = [];
+                _.each(response, function (userObj) {
+                    vm.users.push({
+                        userName: userObj.name,
+                        userId: userObj._id
+                    });
+                });
+                vm.users = _.sortBy(vm.users, 'userName');
+            }, function(error) {
+                if (error) {
+                    vm.alerts.push({ msg: error, type: 'danger' });
+                }
+            });
+        }
+
+        function getProjects(){
+            ProjectService.getAll().then(function(response) {
+                vm.projects = response;
+                if(vm.user.projects && vm.user.projects.length > 0){
+                    _.each(vm.user.projects, function (projectObj) {
+                        var prjIndex = _.findIndex(vm.projects, {_id: projectObj.projectId});
+                        if(prjIndex>=0){
+                            vm.projects.splice(prjIndex, 1);
+                        }
+                    });
+                }
+            }, function(error){
+                console.log(error);
+            });
+        }
     };
 
     function ClientModel($uibModalInstance, ProjectService, noty, client) {
@@ -516,8 +559,13 @@
             });
         }
 
-        vm.viewAssignUser = function (user, project) {
-            user.isNew = false;
+        vm.viewAssignUser = function (project, user) {
+            if(!user){
+                var user = {};
+                user.isNew = true;
+            }else {
+                user.isNew = false;
+            }
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -570,8 +618,12 @@
 
         vm.viewAssignUser = function (user, project) {
             user.isNew = false;
-            user.billDates = project.billDates;
-            project._id = project.projectId;
+            if(project){
+                user.billDates = project.billDates;
+                project._id = project.projectId;
+            }else{
+                project = {};
+            }
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',

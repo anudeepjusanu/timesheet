@@ -11,13 +11,19 @@
             <form class="form-horizontal" name="vm.assignForm">
                 <div class="form-group">
                     <label class="col-md-2 control-label">Name</label>
-                    <div class="col-md-10">
+                    <div ng-if="vm.user.chooseUser" class="col-md-10">
+                        <select class="form-control" ng-model="vm.user.userId" ng-options="userObj.userId as userObj.userName for userObj in vm.users" ng-required="true"></select>
+                    </div>
+                    <div ng-if="vm.user.chooseUser===false" class="col-md-10">
                         {{vm.user.userName}}
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 control-label">Project Name</label>
-                    <div class="col-md-10">
+                    <div ng-if="vm.project.chooseProject" class="col-md-10">
+                        <select class="form-control" ng-model="vm.project._id" ng-options="prjObj._id as prjObj.projectName for prjObj in vm.projects" ng-required="true"></select>
+                    </div>
+                    <div ng-if="vm.project.chooseProject===false" class="col-md-10">
                         {{vm.project.projectName}}
                     </div>
                 </div>
@@ -25,7 +31,6 @@
                     <label class="col-md-2 control-label">Billable Dates</label>
                     <div class="col-md-12">
                         <button type="button" class="btn btn-xs btn-primary pull-right" ng-click="vm.addBillDate(vm.user)">Add</button>
-                        <!--hr/-->
                         <table id="" class="table">
                             <tr ng-if="vm.user.billDates.length > 0">
                                 <th>Start Date</th>

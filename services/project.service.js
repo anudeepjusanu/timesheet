@@ -164,7 +164,6 @@ function assignUsers(projectId, users) {
                             "projectId": projectId,
                             "projectName": projectRoc.projectName,
                             "clientName": projectRoc.clientName,
-                            //"startDate": user.startDate,
                             "billDates": user.billDates
                         }
                         var projectIndex = _.findIndex(rowData.projects, {"projectId": projectId});
