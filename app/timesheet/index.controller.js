@@ -1059,6 +1059,9 @@
                         weekObj.resourceTypes = {};
                         _.each(vm.resourceTypes, function (resourceType) {
                             weekObj.resourceTypes[resourceType] = {hours: 0, headCount: 0};
+                            weekObj.weekBillableHours = 0;
+                            weekObj.weekTimeoffHours = 0;
+                            weekObj.weekOvertimeHours = 0;
                         });
                         _.each(vm.timesheets, function (sheetObj) {
                             _.each(sheetObj.projects, function (projectObj) {
@@ -1067,6 +1070,9 @@
                                     weekObj.resourceTypes[prjWeek.resourceType].hours += prjWeek.billableHours;
                                     weekObj.resourceTypes[prjWeek.resourceType].headCount += 1;
                                 }
+                                if(prjWeek.billableHours>0) weekObj.weekBillableHours += prjWeek.billableHours;
+                                if(prjWeek.timeoffHours>0) weekObj.weekTimeoffHours += prjWeek.timeoffHours;
+                                if(prjWeek.overtimeHours>0) weekObj.weekOvertimeHours += prjWeek.overtimeHours;
                             });
                         });
                     });

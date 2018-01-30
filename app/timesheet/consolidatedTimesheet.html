@@ -100,6 +100,14 @@
                         <td width="80px">{{project.totalOvertimeHours}}</td>
                     </tr>
                     </tbody>
+                    <tr>
+                        <td colspan="4"></td>
+                        <td width="80px" ng-repeat-start="week in vm.weeks"></td>
+                        <td width="80px" style="{{bgColor}}">{{week.weekBillableHours}}</td>
+                        <td width="80px" style="{{bgColor}}">{{week.weekTimeoffHours}}</td>
+                        <td width="80px" style="{{bgColor}}" ng-repeat-end>{{week.weekOvertimeHours}}</td>
+                        <td colspan="3"></td>
+                    </tr>
                     <tr ng-if="vm.timesheets.length > 0">
                         <th></th>
                         <th></th>
