@@ -11,6 +11,8 @@
         .controller('Projects.ClientsController', ClientsController)
         .controller('Projects.UsersController', UsersController)
         .controller('Projects.UserProjectsController', UserProjectsController)
+        .filter('searchProjectUser', searchProjectUser)
+        .filter('searchUserProject', searchUserProject)
 
     function Controller(UserService, ProjectService, $filter, _, FlashService, NgTableParams, noty) {
         var vm = this;
@@ -550,6 +552,17 @@
         var vm = this;
         vm.user = {};
         vm.projects = [];
+        vm.projectTypes = [
+            { projectTypeId: "all", projectTypeName: "All" },
+            { projectTypeId: "billed", projectTypeName: "Billed" },
+            { projectTypeId: "bizdev", projectTypeName: "Bizdev" },
+            { projectTypeId: "ops", projectTypeName: "ops" },
+            { projectTypeId: "sales", projectTypeName: "Sales" }
+        ];
+        vm.search = {
+            projectName: "",
+            projectType: "all"
+        };
 
         function getProjectUsers(){
             ProjectService.getProjectUsers().then(function(response) {
@@ -602,11 +615,30 @@
             getProjectUsers();
         }
     };
+    
+    function searchProjectUser($filter) {
+        return function(input, searchObj) {
+            var output = input;
+            if(searchObj.projectName && searchObj.projectName.length > 0){
+                output = $filter('filter')(output, {projectName: searchObj.projectName});
+            }
+            if (searchObj.projectType && searchObj.projectType.length > 0 && searchObj.projectType != 'all') {
+                output = $filter('filter')(output, function(item){
+                    return (searchObj.projectType == item.projectType);
+                });
+            }
+            return output;
+        }
+    }
 
     function UserProjectsController(UserService, ProjectService, _, $uibModal) {
         var vm = this;
         vm.user = {};
         vm.users = [];
+        vm.search = {
+            userName: "",
+            userResourceType: ""
+        };
 
         function getUserProjects(){
             ProjectService.getUserProjects().then(function(response) {
@@ -660,5 +692,21 @@
             getUserProjects();
         }
     };
+
+    function searchUserProject($filter) {
+        return function(input, searchObj) {
+            var output = input;
+            if(searchObj.userName && searchObj.userName.length > 0){
+                output = $filter('filter')(output, {userName: searchObj.userName});
+            }
+            if (searchObj.userResourceType && searchObj.userResourceType.length > 0) {
+                console.log(searchObj.userResourceType);
+                output = $filter('filter')(output, function(item){
+                    return (searchObj.userResourceType == item.userResourceType);
+                });
+            }
+            return output;
+        }
+    }
 
 })();

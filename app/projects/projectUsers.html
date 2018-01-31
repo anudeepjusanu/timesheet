@@ -13,8 +13,14 @@
                 <table class="table table-condensed table-bordered table-striped" export-table>
                     <tr>
                         <th width="80px">S.No</th>
-                        <th width="240px">Project Name</th>
-                        <th width="100px">Project Type</th>
+                        <th width="240px">
+                            Project Name <br/>
+                            <input type="text" style="margin-top: 4px;" ng-model="vm.search.projectName" class="form-control" />
+                        </th>
+                        <th width="100px">
+                            Project Type <br/>
+                            <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.projectType" ng-options="prj.projectTypeId as prj.projectTypeName for prj in vm.projectTypes"></select>
+                        </th>
                         <th>
                             <table class="table">
                                 <tr>
@@ -34,7 +40,7 @@
                             </table>
                         </th>
                     </tr>
-                    <tr ng-repeat="project in vm.projects | orderBy:'name'">
+                    <tr ng-repeat="project in vm.projects | searchProjectUser:vm.search | orderBy:'name'">
                         <td>{{$index+1}}</td>
                         <td>{{project.projectName}}</td>
                         <td>{{project.projectType}}</td>

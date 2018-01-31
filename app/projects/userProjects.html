@@ -13,8 +13,14 @@
                 <table class="table table-condensed table-bordered table-striped" export-table>
                     <tr>
                         <th width="80px">S.No</th>
-                        <th width="240px">User Name</th>
-                        <th width="80px">Type</th>
+                        <th width="240px">
+                            User Name <br/>
+                            <input type="text" style="margin-top: 4px;" ng-model="vm.search.userName" class="form-control" />
+                        </th>
+                        <th width="80px">
+                            Type <br/>
+                            <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.userResourceType" ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'Billable',label:'Billable'}, {id:'Non-billable',label:'Non-billable'}]"></select>
+                        </th>
                         <th>
                             <table class="table">
                                 <tr>
@@ -34,7 +40,7 @@
                             </table>
                         </th>
                     </tr>
-                    <tr ng-repeat="user in vm.users | orderBy:'userName'">
+                    <tr ng-repeat="user in vm.users | searchUserProject:vm.search | orderBy:'userName'">
                         <td>{{$index+1}}</td>
                         <td>{{user.userName}}</td>
                         <td>{{user.userResourceType}}</td>
