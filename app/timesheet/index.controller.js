@@ -904,6 +904,7 @@
     function ConsolidatedController(UserService, TimesheetService, ProjectService, $state, $stateParams, noty, $filter, $scope) {
         var vm = this;
         vm.user = {};
+        vm.allUsers = [];
         vm.users = [];
         vm.clients = [];
         vm.projects = [];
@@ -911,6 +912,7 @@
         vm.currentDate = new Date();
         vm.resourceTypes = ['billable', 'shadow', 'bizdev', 'buffer'];
         vm.search = {
+            userResourceType: "",
             clientId: null,
             projectId: null,
             startDate: new Date(vm.currentDate.getFullYear(), vm.currentDate.getMonth(), 1),
@@ -937,11 +939,9 @@
             paramObj.endDate = $filter('date')(vm.search.endDate, "yyyy-M-dd").toString();
             if(vm.search.businessUnit == 'Launchpad' || vm.search.businessUnit == 'Enterprise'){
                 paramObj.projectIds = [];
-                console.log(vm.projects);
                 _.each(vm.projects, function (prjObj) {
                     if(prjObj.businessUnit == vm.search.businessUnit){
                         paramObj.projectIds.push(prjObj._id);
-                        console.log(prjObj._id +" "+prjObj.projectName);
                     }
                 });
             }else if(vm.search.businessUnit === 'All' || vm.search.clientId === 'all' || vm.search.projectId === 'all'){
@@ -966,6 +966,16 @@
                     _.each(vm.resourceTypes, function (resourceType) {
                         vm.totalResourceTypes[resourceType] = 0;
                     });
+                    vm.users = [];
+                    if(vm.search.userResourceType && vm.search.userResourceType.length > 0){
+                        _.each(vm.allUsers, function (userObj) {
+                            if(vm.search.userResourceType == userObj.userResourceType){
+                                vm.users.push(userObj);
+                            }
+                        });
+                    }else{
+                        vm.users = vm.allUsers;
+                    }
                     vm.timesheets = [];
                     _.each(rawData, function (userSheets, userId) {
                         var userObj = _.find(vm.users, {_id: userId});
@@ -1160,7 +1170,7 @@
 
         function getUsers(){
             UserService.getUsers().then(function(response) {
-                vm.users = response;
+                vm.allUsers = response;
             }, function(error){
                 console.log(error);
             });
