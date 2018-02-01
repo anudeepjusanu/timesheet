@@ -8,6 +8,12 @@ var db = mongo.db(config.connectionString, { native_parser: true });
 db.bind('projects');
 db.bind('users');
 db.bind('clients');
+db.bind('timesheets');
+
+//var mongoose = require('mongoose');
+//mongoose.connect(config.connectionString);
+
+
 
 var service = {};
 
@@ -175,7 +181,70 @@ function assignUsers(projectId, users) {
                         db.users.update({ _id: mongo.helper.toObjectID(userRoc._id) }, { '$set': rowData },
                             function(err, project) {
                                 if (err) deferred.reject(err.name + ': ' + err.message);
-                                deferred.resolve(project);
+                                //deferred.resolve(project);
+                                // update user timesheets as per new changes
+                                db.users.findById(userRoc._id, function(err, userObj) {
+                                    var userSheetCnt = 0;
+                                    var userSheetTotalCnt = 0;
+                                    db.timesheets.find({userId: userObj._id}).toArray(function(err, sheetObjs) {
+                                        if (err) deferred.reject(err.name + ': ' + err.message);
+                                        userSheetTotalCnt = sheetObjs.length;
+                                        _.each(sheetObjs, function (sheetObj) {
+                                            console.log("------------------------------------------------------");
+                                            _.each(sheetObj.projects, function (projectObj) {
+                                                var billData = getProjectBillData(projectObj, sheetObj.weekDate, userObj);
+                                                projectObj.resourceType = billData.resourceType;
+                                                projectObj.allocatedHours = billData.allocatedHours;
+                                                projectObj.billableMaxHours = billData.billableMaxHours;
+                                                projectObj.overtimeHours = 0;
+                                                if(projectObj.billableMaxHours > 0 && projectObj.projectHours > projectObj.billableMaxHours){
+                                                    projectObj.billableHours = projectObj.billableMaxHours;
+                                                    projectObj.overtimeHours = projectObj.projectHours - projectObj.billableMaxHours;
+                                                }else{
+                                                    projectObj.billableHours = projectObj.projectHours;
+                                                }
+                                            });
+                                            sheetObj.totalHours = 0;
+                                            sheetObj.totalBillableHours = 0;
+                                            sheetObj.timeoffHours = 0;
+                                            sheetObj.overtimeHours = 0;
+                                            _.each(sheetObj.projects, function (projectObj) {
+                                                /*if(!projectObj.businessUnit){
+                                                    projectObj.businessUnit = "";
+                                                }
+                                                var projectInfo = _.find(allProjects, {_id: projectObj.projectId});
+                                                if(projectInfo && projectInfo.businessUnit){
+                                                    projectObj.businessUnit = projectInfo.businessUnit;
+                                                }*/
+                                                sheetObj.totalHours += projectObj.projectHours;
+                                                sheetObj.totalBillableHours += projectObj.billableHours;
+                                                sheetObj.timeoffHours += projectObj.sickLeaveHours;
+                                                sheetObj.timeoffHours += projectObj.timeoffHours;
+                                                sheetObj.overtimeHours += projectObj.overtimeHours;
+                                            });
+                                            var newSheetObj = {
+                                                userId: mongo.helper.toObjectID(sheetObj.userId),
+                                                week: sheetObj.week,
+                                                weekDate: sheetObj.weekDate,
+                                                userResourceType: userObj.userResourceType,
+                                                totalHours: sheetObj.totalHours,
+                                                totalBillableHours: sheetObj.totalBillableHours,
+                                                timeoffHours: sheetObj.timeoffHours,
+                                                overtimeHours: sheetObj.overtimeHours,
+                                                projects: sheetObj.projects
+                                            }
+                                            console.log(sheetObj.projects);
+                                            newSheetObj.updatedOn = new Date();
+                                            db.timesheets.update({ _id: mongo.helper.toObjectID(sheetObj._id) }, { $set: newSheetObj }, function(err, responseSheet) {
+                                                userSheetCnt++;
+                                                if(userSheetCnt >= userSheetTotalCnt){
+                                                    deferred.resolve();
+                                                }
+                                            });
+                                        });
+                                    });
+                                });
+                                // end of update user timesheets as per new changes
                             });
 
                     }
@@ -188,6 +257,56 @@ function assignUsers(projectId, users) {
     });
 
     return deferred.promise;
+}
+
+function getProjectBillData(projectObj, weekDateVal, sheetUserObj) {
+    var BillData = {
+        resourceType: "buffer",
+        allocatedHours: 40,
+        billableMaxHours: 0
+    };
+    if (sheetUserObj && sheetUserObj.projects) {
+        var prjData = _.find(sheetUserObj.projects, {"projectId": projectObj.projectId+""});
+        if (prjData && prjData.billDates) {
+            var weekDate = new Date(weekDateVal);
+            _.each(prjData.billDates, function (billDate) {
+                if (billDate.start && billDate.start != "" && billDate.end && billDate.end != "") {
+                    var startDate = new Date(billDate.start);
+                    var endDate = new Date(billDate.end);
+                    if (weekDate >= startDate && weekDate <= endDate) {
+                        BillData.resourceType = billDate.resourceType;
+                        BillData.allocatedHours = billDate.allocatedHours;
+                        BillData.billableMaxHours = billDate.billableMaxHours;
+                    }
+                } else if (billDate.start && billDate.start != "") {
+                    var startDate = new Date(billDate.start);
+                    if (weekDate >= startDate) {
+                        BillData.resourceType = billDate.resourceType;
+                        BillData.allocatedHours = billDate.allocatedHours;
+                        BillData.billableMaxHours = billDate.billableMaxHours;
+                    }
+                } else if (billDate.end && billDate.end != "") {
+                    var endDate = new Date(billDate.end);
+                    if (weekDate <= endDate) {
+                        BillData.resourceType = billDate.resourceType;
+                        BillData.allocatedHours = billDate.allocatedHours;
+                        BillData.billableMaxHours = billDate.billableMaxHours;
+                    }
+                } else if (billDate.start == "" && billDate.end == "") {
+                    BillData.resourceType = billDate.resourceType;
+                    BillData.allocatedHours = billDate.allocatedHours;
+                    BillData.billableMaxHours = billDate.billableMaxHours;
+                }
+            });
+        }
+    }
+    if(!(BillData.allocatedHours >= 0)){
+        BillData.allocatedHours = 40;
+    }
+    if(!(BillData.billableMaxHours >= 0)){
+        BillData.billableMaxHours = 0;
+    }
+    return BillData;
 }
 
 function assignUser(projectId, user) {

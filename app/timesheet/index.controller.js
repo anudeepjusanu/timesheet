@@ -228,20 +228,24 @@
             if (output) {
                 searchObj.timesheetResult.headCount = output.length;
                 searchObj.timesheetResult.totalHours = 0;
+                searchObj.timesheetResult.totalBillableHours = 0;
                 searchObj.timesheetResult.timeoffHours = 0;
                 searchObj.timesheetResult.overtimeHours = 0;
                 _.each(output, function (sheet) {
                     sheet.totalHours = 0;
+                    sheet.totalBillableHours = 0;
                     sheet.timeoffHours = 0;
                     sheet.overtimeHours = 0;
                     _.each(sheet.projects, function (prj) {
                         sheet.totalHours += prj.projectHours;
+                        sheet.totalBillableHours += prj.billableHours;
                         sheet.timeoffHours += (prj.sickLeaveHours + prj.timeoffHours);
-                        if(prj.timeoffHours){
-                            sheet.timeoffHours += prj.timeoffHours;
+                        if(prj.overtimeHours){
+                            sheet.overtimeHours += prj.overtimeHours;
                         }
                     });
                     searchObj.timesheetResult.totalHours += sheet.totalHours;
+                    searchObj.timesheetResult.totalBillableHours += sheet.totalBillableHours;
                     searchObj.timesheetResult.timeoffHours += sheet.timeoffHours;
                     searchObj.timesheetResult.overtimeHours += sheet.overtimeHours;
                 });
@@ -309,20 +313,24 @@
                     if (vm.tblUsers) {
                         vm.search.timesheetResult.headCount = vm.tblUsers.length;
                         vm.search.timesheetResult.totalHours = 0;
+                        vm.search.timesheetResult.totalBillableHours = 0;
                         vm.search.timesheetResult.timeoffHours = 0;
                         vm.search.timesheetResult.overtimeHours = 0;
                         _.each(vm.tblUsers, function (sheet) {
                             sheet.totalHours = 0;
+                            sheet.totalBillableHours = 0;
                             sheet.timeoffHours = 0;
                             sheet.overtimeHours = 0;
                             _.each(sheet.projects, function (prj) {
                                 sheet.totalHours += prj.projectHours;
+                                sheet.totalBillableHours += prj.billableHours;
                                 sheet.timeoffHours += (prj.sickLeaveHours + prj.timeoffHours);
                                 if(prj.overtimeHours){
                                     sheet.overtimeHours += prj.overtimeHours;
                                 }
                             });
                             vm.search.timesheetResult.totalHours += sheet.totalHours;
+                            vm.search.timesheetResult.totalBillableHours += sheet.totalBillableHours;
                             vm.search.timesheetResult.timeoffHours += sheet.timeoffHours;
                             vm.search.timesheetResult.overtimeHours += sheet.overtimeHours;
                         });
