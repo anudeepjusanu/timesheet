@@ -190,7 +190,6 @@ function assignUsers(projectId, users) {
                                         if (err) deferred.reject(err.name + ': ' + err.message);
                                         userSheetTotalCnt = sheetObjs.length;
                                         _.each(sheetObjs, function (sheetObj) {
-                                            console.log("------------------------------------------------------");
                                             _.each(sheetObj.projects, function (projectObj) {
                                                 var billData = getProjectBillData(projectObj, sheetObj.weekDate, userObj);
                                                 projectObj.resourceType = billData.resourceType;
@@ -233,7 +232,6 @@ function assignUsers(projectId, users) {
                                                 overtimeHours: sheetObj.overtimeHours,
                                                 projects: sheetObj.projects
                                             }
-                                            console.log(sheetObj.projects);
                                             newSheetObj.updatedOn = new Date();
                                             db.timesheets.update({ _id: mongo.helper.toObjectID(sheetObj._id) }, { $set: newSheetObj }, function(err, responseSheet) {
                                                 userSheetCnt++;
