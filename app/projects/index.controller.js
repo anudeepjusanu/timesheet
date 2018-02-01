@@ -614,7 +614,8 @@
         ];
         vm.search = {
             projectName: "",
-            projectType: "all"
+            projectType: "all",
+            businessUnit: "All"
         };
 
         function getProjectUsers(){
@@ -679,6 +680,9 @@
                 output = $filter('filter')(output, function(item){
                     return (searchObj.projectType == item.projectType);
                 });
+            }
+            if(searchObj.businessUnit && searchObj.businessUnit.length > 0 && searchObj.businessUnit != "All"){
+                output = $filter('filter')(output, {businessUnit: searchObj.businessUnit});
             }
             return output;
         }

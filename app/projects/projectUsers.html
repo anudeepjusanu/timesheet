@@ -17,6 +17,10 @@
                             Project Name <br/>
                             <input type="text" style="margin-top: 4px;" ng-model="vm.search.projectName" class="form-control" />
                         </th>
+                        <th width="120px">
+                            Business Unit <br/>
+                            <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.businessUnit" ng-options="option as option for option in ['All', 'Launchpad', 'Enterprise']"></select>
+                        </th>
                         <th width="100px">
                             Project Type <br/>
                             <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.projectType" ng-options="prj.projectTypeId as prj.projectTypeName for prj in vm.projectTypes"></select>
@@ -43,6 +47,7 @@
                     <tr ng-repeat="project in vm.projects | searchProjectUser:vm.search | orderBy:'name'">
                         <td>{{$index+1}}</td>
                         <td>{{project.projectName}}</td>
+                        <td>{{project.businessUnit}}</td>
                         <td>{{project.projectType}}</td>
                         <td>
                             <table class="table">
