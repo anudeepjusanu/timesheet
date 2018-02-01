@@ -984,11 +984,13 @@
                                     } else {
                                         var newProjectObj = {
                                             projectId: projectObj.projectId,
-                                            projectName: projectObj.projectName
+                                            projectName: projectObj.projectName,
+                                            businessUnit: projectObj.businessUnit
                                         };
                                         var projectInfo = _.find(vm.projects, {_id: projectObj.projectId});
                                         if (projectInfo) {
                                             newProjectObj.projectName = projectInfo.projectName;
+                                            newProjectObj.businessUnit = projectInfo.businessUnit;
                                         }
                                         _.each(vm.weeks, function (weekObj) {
                                             newProjectObj[weekObj.week] = {};
