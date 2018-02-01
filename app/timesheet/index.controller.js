@@ -937,9 +937,11 @@
             paramObj.endDate = $filter('date')(vm.search.endDate, "yyyy-M-dd").toString();
             if(vm.search.businessUnit == 'Launchpad' || vm.search.businessUnit == 'Enterprise'){
                 paramObj.projectIds = [];
+                console.log(vm.projects);
                 _.each(vm.projects, function (prjObj) {
                     if(prjObj.businessUnit == vm.search.businessUnit){
                         paramObj.projectIds.push(prjObj._id);
+                        console.log(prjObj._id +" "+prjObj.projectName);
                     }
                 });
             }else if(vm.search.businessUnit === 'All' || vm.search.clientId === 'all' || vm.search.projectId === 'all'){

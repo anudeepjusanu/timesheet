@@ -659,10 +659,17 @@ function timesheetBetweenDates(startDateVal, endDateVal, params){
                         });
                     }else{
                         _.each(projectList, function (projectIdVal) {
-                            var projectObj = _.find(sheetObj.projects, {projectId: projectIdVal});
+                            projectIdVal = projectIdVal + "";
+                            _.each(sheetObj.projects, function (sheetPrj) {
+                                sheetPrj.projectId = sheetPrj.projectId + "";
+                                if(sheetPrj.projectId == projectIdVal){
+                                    timesheetObj.projects.push(sheetPrj);
+                                }
+                            });
+                            /*var projectObj = _.find(sheetObj.projects, {projectId: projectIdVal});
                             if(projectObj){
                                 timesheetObj.projects.push(projectObj);
-                            }
+                            }*/
                         });
                     }
                     timesheets.push(timesheetObj);
