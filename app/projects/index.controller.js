@@ -13,15 +13,45 @@
         .controller('Projects.UserProjectsController', UserProjectsController)
         .filter('searchProjectUser', searchProjectUser)
         .filter('searchUserProject', searchUserProject)
+        .filter('searchProject', searchProject)
 
     function Controller(UserService, ProjectService, $filter, _, FlashService, NgTableParams, noty) {
         var vm = this;
         vm.user = {};
+        vm.clients = [];
         vm.projects = [];
+        vm.projectTypes = [
+            { projectTypeId: "", projectTypeName: "All" },
+            { projectTypeId: "billed", projectTypeName: "Billed" },
+            { projectTypeId: "bizdev", projectTypeName: "Bizdev" },
+            { projectTypeId: "ops", projectTypeName: "ops" },
+            { projectTypeId: "sales", projectTypeName: "Sales" }
+        ];
+        vm.projectBillTypes = [
+            { projectBillId: "", projectBillName: "All" },
+            { projectBillId: "fixed-bid", projectBillName: "Fixed bid" },
+            { projectBillId: "time-material", projectBillName: "Time and material" }
+        ];
 
         function getProjects(){
             ProjectService.getAll().then(function(response) {
                 vm.projects = response;
+            }, function(error){
+                console.log(error);
+            });
+        }
+        vm.search = {
+            clientId: "",
+            projectName: "",
+            projectBillType: "",
+            projectType: "",
+            businessUnit: "All"
+        };
+
+        function getClients(){
+            ProjectService.getClients().then(function(response) {
+                vm.clients = response;
+                vm.clients.unshift({_id: "", "clientName": "All"});
             }, function(error){
                 console.log(error);
             });
@@ -45,7 +75,30 @@
 
                 }
             });
+            getClients();
             getProjects();
+        }
+    }
+    
+    function searchProject($filter) {
+        return function(input, searchObj) {
+            var output = input;
+            if(searchObj.clientId && searchObj.clientId.length > 0){
+                output = $filter('filter')(output, {clientId: searchObj.clientId});
+            }
+            if(searchObj.projectName && searchObj.projectName.length > 0){
+                output = $filter('filter')(output, {projectName: searchObj.projectName});
+            }
+            if(searchObj.projectBillType && searchObj.projectBillType.length > 0){
+                output = $filter('filter')(output, {projectBillType: searchObj.projectBillType});
+            }
+            if(searchObj.projectType && searchObj.projectType.length > 0){
+                output = $filter('filter')(output, {projectType: searchObj.projectType});
+            }
+            if(searchObj.businessUnit && searchObj.businessUnit.length > 0 && searchObj.businessUnit != "All"){
+                output = $filter('filter')(output, {businessUnit: searchObj.businessUnit});
+            }
+            return output;
         }
     }
 
