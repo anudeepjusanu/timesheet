@@ -558,6 +558,7 @@
             vm.timesheet.timeoffHours = 0;
             vm.timesheet.overtimeHours = 0;
             _.each(vm.user.projects, function (project) {
+                var isValidProject = false;
                 var BillData = {
                     resourceType: "buffer",
                     allocatedHours: 40,
@@ -572,6 +573,7 @@
                             BillData.resourceType = billDate.resourceType;
                             BillData.allocatedHours = billDate.allocatedHours;
                             BillData.billableMaxHours = billDate.billableMaxHours;
+                            isValidProject = true;
                         }
                     } else if (billDate.start && billDate.start != "") {
                         var startDate = new Date(billDate.start);
@@ -579,6 +581,7 @@
                             BillData.resourceType = billDate.resourceType;
                             BillData.allocatedHours = billDate.allocatedHours;
                             BillData.billableMaxHours = billDate.billableMaxHours;
+                            isValidProject = true;
                         }
                     } else if (billDate.end && billDate.end != "") {
                         var endDate = new Date(billDate.end);
@@ -586,28 +589,32 @@
                             BillData.resourceType = billDate.resourceType;
                             BillData.allocatedHours = billDate.allocatedHours;
                             BillData.billableMaxHours = billDate.billableMaxHours;
+                            isValidProject = true;
                         }
                     } else if (billDate.start == "" && billDate.end == "") {
                         BillData.resourceType = billDate.resourceType;
                         BillData.allocatedHours = billDate.allocatedHours;
                         BillData.billableMaxHours = billDate.billableMaxHours;
+                        isValidProject = true;
                     }
                 });
                 BillData.allocatedHours = (!BillData.allocatedHours)?0:BillData.allocatedHours;
                 BillData.billableMaxHours = (!BillData.billableMaxHours)?0:BillData.billableMaxHours;
 
-                vm.timesheet.projects.push({
-                    projectId: project.projectId,
-                    projectName: project.projectName,
-                    allocatedHours: BillData.allocatedHours,
-                    billableMaxHours: BillData.billableMaxHours,
-                    projectHours: 0,
-                    sickLeaveHours: 0,
-                    timeoffHours: 0,
-                    overtimeHours: 0,
-                    projectComment: "",
-                    isAssigned: true
-                });
+                if(isValidProject===true) {
+                    vm.timesheet.projects.push({
+                        projectId: project.projectId,
+                        projectName: project.projectName,
+                        allocatedHours: BillData.allocatedHours,
+                        billableMaxHours: BillData.billableMaxHours,
+                        projectHours: 0,
+                        sickLeaveHours: 0,
+                        timeoffHours: 0,
+                        overtimeHours: 0,
+                        projectComment: "",
+                        isAssigned: true
+                    });
+                }
             });
         }
 
