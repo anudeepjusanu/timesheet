@@ -74,11 +74,14 @@ function update(_id, params) {
         description: params.description
     }
     projectObj.updatedOn = new Date();
-    db.projects.update({ _id: mongo.helper.toObjectID(_id) }, { '$set': projectObj },
-        function(err, project) {
-            if (err) deferred.reject(err.name + ': ' + err.message);
-            deferred.resolve(project);
+    db.projects.update({ _id: mongo.helper.toObjectID(_id) }, {'$set': projectObj}, function(err, project) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        db.users.update({"projects.projectId": _id}, {'$set': {"projects.$.projectName": params.projectName}}, {upsert:true, multi:true}, function(err, respone) {
+            db.timesheets.update({"projects.projectId": mongo.helper.toObjectID(_id)}, {'$set': {"projects.$.projectName": params.projectName}}, {upsert:true, multi:true}, function(err, respone) {
+                deferred.resolve(project);
+            });
         });
+    });
 
     return deferred.promise;
 }
@@ -426,11 +429,12 @@ function updateClient(_id, clientParam) {
         clientName: clientParam.clientName
     }
     clientObj.updatedOn = new Date();
-    db.clients.update({ _id: mongo.helper.toObjectID(_id) }, { '$set': clientObj },
-        function(err, client) {
-            if (err) deferred.reject(err.name + ': ' + err.message);
+    db.clients.update({ _id: mongo.helper.toObjectID(_id) }, { '$set': clientObj },true, function(err, client) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        db.projects.update({ clientId: mongo.helper.toObjectID(_id) }, {'$set': {clientName: clientParam.clientName}}, {upsert:true, multi:true}, function(err, respone) {
             deferred.resolve(client);
         });
+    });
 
     return deferred.promise;
 }
