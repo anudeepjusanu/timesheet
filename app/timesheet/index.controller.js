@@ -1087,7 +1087,7 @@
                     _.each(vm.weeks, function (weekObj) {
                         weekObj.resourceTypes = {};
                         _.each(vm.resourceTypes, function (resourceType) {
-                            weekObj.resourceTypes[resourceType] = {hours: 0, headCount: 0};
+                            weekObj.resourceTypes[resourceType] = {hours: 0, headCount: 0, userIds: []};
                             weekObj.weekBillableHours = 0;
                             weekObj.weekTimeoffHours = 0;
                             weekObj.weekOvertimeHours = 0;
@@ -1098,11 +1098,17 @@
                                 if (weekObj.resourceTypes[prjWeek.resourceType]) {
                                     weekObj.resourceTypes[prjWeek.resourceType].hours += prjWeek.billableHours;
                                     weekObj.resourceTypes[prjWeek.resourceType].headCount += 1;
+                                    if(weekObj.resourceTypes[prjWeek.resourceType].userIds.indexOf(sheetObj.userId) == -1){
+                                        weekObj.resourceTypes[prjWeek.resourceType].userIds.push(sheetObj.userId);
+                                    }
                                 }
                                 if(prjWeek.billableHours>0) weekObj.weekBillableHours += prjWeek.billableHours;
                                 if(prjWeek.timeoffHours>0) weekObj.weekTimeoffHours += prjWeek.timeoffHours;
                                 if(prjWeek.overtimeHours>0) weekObj.weekOvertimeHours += prjWeek.overtimeHours;
                             });
+                        });
+                        _.each(vm.resourceTypes, function (resourceType) {
+                            weekObj.resourceTypes[resourceType].headCount = weekObj.resourceTypes[resourceType].userIds.length;
                         });
                     });
                 }, function (error) {
