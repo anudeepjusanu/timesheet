@@ -68,7 +68,7 @@
             userName: "",
             userResourceType: "",
             projectId: "",
-            businessUnit: "",
+            businessUnit: "All",
             resourceType: "",
             isFilled: "",
             timesheetResult: {
@@ -85,7 +85,7 @@
             {"resourceTypeId":"operations", "resourceTypeVal":"Operations"},
             {"resourceTypeId":"trainee", "resourceTypeVal":"Trainee"}
         ];
-
+        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing"];
         vm.alerts = [];
         vm.currentWeek = new Date();
         vm.currentMonth = new Date();
@@ -202,7 +202,7 @@
                     return (item.projects.length > 0);
                 });
             }
-            if (searchObj.businessUnit && searchObj.businessUnit.length > 0) {
+            if (searchObj.businessUnit && searchObj.businessUnit.length > 0 && searchObj.businessUnit != "All") {
                 output = $filter('filter')(output, function (item) {
                     item.projects = $filter('filter')(item.projects, {businessUnit: searchObj.businessUnit});
                     return (item.projects.length > 0);
@@ -303,7 +303,7 @@
                         userName: "",
                         userResourceType: "",
                         projectId: "",
-                        businessUnit: "",
+                        businessUnit: "All",
                         resourceType: "",
                         isFilled: "",
                         timesheetResult: {

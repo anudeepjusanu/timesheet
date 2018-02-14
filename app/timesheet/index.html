@@ -71,7 +71,7 @@
                                         <td width="200px;">
                                             <select class="form-control" ng-model="vm.search.projectId" ng-options="project.id as project.title for project in vm.projects"></select>
                                         </td>
-                                        <td width="100px;"><select class="form-control" ng-model="vm.search.businessUnit" ng-options="opt.id as opt.label for opt in [{id:'', label:'All'}, {id:'Enterprise', label:'Enterprise'}, {id:'Launchpad', label:'Launchpad'}]"></select></td>
+                                        <td width="100px;"><select class="form-control" ng-model="vm.search.businessUnit" ng-options="opt as opt for opt in vm.projectBusinessUnits"></select></td>
                                         <td width="100px;"><select class="form-control" ng-model="vm.search.resourceType" ng-options="resourceType.resourceTypeId as resourceType.resourceTypeVal for resourceType in vm.resourceTypes"></select></td>
                                         <td width="60px;"></td>
                                         <td width="60px;"></td>
