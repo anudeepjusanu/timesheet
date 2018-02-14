@@ -77,7 +77,7 @@ function update(_id, params) {
     db.projects.update({ _id: mongo.helper.toObjectID(_id) }, {'$set': projectObj}, function(err, project) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         db.users.update({"projects.projectId": _id}, {'$set': {"projects.$.projectName": params.projectName}}, {upsert:true, multi:true}, function(err, respone) {
-            db.timesheets.update({"projects.projectId": mongo.helper.toObjectID(_id)}, {'$set': {"projects.$.projectName": params.projectName}}, {upsert:true, multi:true}, function(err, respone) {
+            db.timesheets.update({"projects.projectId": mongo.helper.toObjectID(_id)}, {'$set': {"projects.$.projectName": params.projectName, "projects.$.businessUnit": params.businessUnit}}, {upsert:true, multi:true}, function(err, respone) {
                 deferred.resolve(project);
             });
         });

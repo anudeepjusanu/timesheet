@@ -926,6 +926,7 @@
         vm.timesheets = [];
         vm.currentDate = new Date();
         vm.resourceTypes = ['billable', 'shadow', 'bizdev', 'buffer'];
+        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing"];
         vm.search = {
             userResourceType: "",
             clientId: null,
@@ -952,7 +953,7 @@
             var paramObj = {projectIds: []};
             paramObj.startDate = $filter('date')(vm.search.startDate, "yyyy-M-dd").toString();
             paramObj.endDate = $filter('date')(vm.search.endDate, "yyyy-M-dd").toString();
-            if(vm.search.businessUnit == 'Launchpad' || vm.search.businessUnit == 'Enterprise'){
+            if(vm.search.businessUnit.length > 0 && vm.search.businessUnit != 'All'){
                 paramObj.projectIds = [];
                 _.each(vm.projects, function (prjObj) {
                     if(prjObj.businessUnit == vm.search.businessUnit){

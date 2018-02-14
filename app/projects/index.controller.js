@@ -136,7 +136,11 @@
             { projectBillId: "fixed-bid", projectBillName: "Fixed bid" },
             { projectBillId: "time-material", projectBillName: "Time and material" }
         ];
-
+        vm.projectBillTypes = [
+            { projectBillId: "fixed-bid", projectBillName: "Fixed bid" },
+            { projectBillId: "time-material", projectBillName: "Time and material" }
+        ];
+        vm.projectBusinessUnits = ["Launchpad", "Enterprise", "Operations", "Sales&Marketing"];
         
         vm.getClients = function () {
             ProjectService.getClients().then(function(response) {
@@ -612,6 +616,7 @@
             { projectTypeId: "ops", projectTypeName: "ops" },
             { projectTypeId: "sales", projectTypeName: "Sales" }
         ];
+        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing"];
         vm.search = {
             projectName: "",
             projectType: "all",

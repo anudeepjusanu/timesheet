@@ -19,7 +19,7 @@
                         </th>
                         <th width="120px">
                             Business Unit <br/>
-                            <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.businessUnit" ng-options="option as option for option in ['All', 'Launchpad', 'Enterprise']"></select>
+                            <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.businessUnit" ng-options="option as option for option in vm.projectBusinessUnits"></select>
                         </th>
                         <th width="100px">
                             Project Type <br/>
