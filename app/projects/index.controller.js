@@ -32,6 +32,7 @@
             { projectBillId: "fixed-bid", projectBillName: "Fixed bid" },
             { projectBillId: "time-material", projectBillName: "Time and material" }
         ];
+        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products"];
 
         function getProjects(){
             ProjectService.getAll().then(function(response) {
