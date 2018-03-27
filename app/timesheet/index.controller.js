@@ -85,7 +85,7 @@
             {"resourceTypeId":"operations", "resourceTypeVal":"Operations"},
             {"resourceTypeId":"trainee", "resourceTypeVal":"Trainee"}
         ];
-        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products"];
+        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "Skill up", "R&D"];
         vm.alerts = [];
         vm.currentWeek = new Date();
         vm.currentMonth = new Date();
@@ -926,7 +926,7 @@
         vm.timesheets = [];
         vm.currentDate = new Date();
         vm.resourceTypes = ['billable', 'shadow', 'bizdev', 'buffer'];
-        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products"];
+        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "Skill up", "R&D"];
         vm.search = {
             userResourceType: "",
             clientId: null,
