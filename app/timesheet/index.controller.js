@@ -9,41 +9,41 @@
         .controller('Timesheet.ConsolidatedController', ConsolidatedController)
         .controller('Timesheet.PoolController', PoolController)
 
-        .directive('exportTable', function() {
-            return {
-                restrict: 'A',
-                link: function(scope, elem, attr) {
-                    scope.$on('export-pdf',
-                        function(e, d) {
-                            elem.tableExport({
-                                type: 'pdf',
-                                escape: false
-                            });
+    .directive('exportTable', function() {
+        return {
+            restrict: 'A',
+            link: function(scope, elem, attr) {
+                scope.$on('export-pdf',
+                    function(e, d) {
+                        elem.tableExport({
+                            type: 'pdf',
+                            escape: false
                         });
-                    var excel = scope.$on('export-excl',
-                        function(e, d) {
-                            elem.tableExport({
-                                type: 'excel',
-                                escape: 'false',
-                                ignoreColumn: [4],
-                                ignoreRow: [1],
-                                worksheetName: d.date
-                            });
-                        });
-                    scope.$on('export-doc',
-                        function(e, d) {
-                            elem.tableExport({
-                                type: 'doc',
-                                escape: false
-                            });
-                        });
-
-                    scope.$on('$destroy', function() {
-                        excel();
                     });
-                }
-            };
-        });
+                var excel = scope.$on('export-excl',
+                    function(e, d) {
+                        elem.tableExport({
+                            type: 'excel',
+                            escape: 'false',
+                            ignoreColumn: [4],
+                            ignoreRow: [1],
+                            worksheetName: d.date
+                        });
+                    });
+                scope.$on('export-doc',
+                    function(e, d) {
+                        elem.tableExport({
+                            type: 'doc',
+                            escape: false
+                        });
+                    });
+
+                scope.$on('$destroy', function() {
+                    excel();
+                });
+            }
+        };
+    });
 
     function Controller(UserService, TimesheetService, ProjectService, $filter, _, $scope, FlashService, NgTableParams, noty, $uibModal) {
         var vm = this;
@@ -76,23 +76,23 @@
             }
         };
         vm.resourceTypes = [
-            {"resourceTypeId":"", "resourceTypeVal":"All"},
-            {"resourceTypeId":"shadow", "resourceTypeVal":"Shadow"},
-            {"resourceTypeId":"buffer", "resourceTypeVal":"Buffer"},
-            {"resourceTypeId":"billable", "resourceTypeVal":"Billable"},
-            {"resourceTypeId":"bizdev", "resourceTypeVal":"Bizdev"},
-            {"resourceTypeId":"internal", "resourceTypeVal":"Internal"},
-            {"resourceTypeId":"operations", "resourceTypeVal":"Operations"},
-            {"resourceTypeId":"trainee", "resourceTypeVal":"Trainee"}
+            { "resourceTypeId": "", "resourceTypeVal": "All" },
+            { "resourceTypeId": "shadow", "resourceTypeVal": "Shadow" },
+            { "resourceTypeId": "buffer", "resourceTypeVal": "Buffer" },
+            { "resourceTypeId": "billable", "resourceTypeVal": "Billable" },
+            { "resourceTypeId": "bizdev", "resourceTypeVal": "Bizdev" },
+            { "resourceTypeId": "internal", "resourceTypeVal": "Internal" },
+            { "resourceTypeId": "operations", "resourceTypeVal": "Operations" },
+            { "resourceTypeId": "trainee", "resourceTypeVal": "Trainee" }
         ];
-        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "Skill up", "R&D"];
+        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training"];
         vm.alerts = [];
         vm.currentWeek = new Date();
         vm.currentMonth = new Date();
         vm.monthView = false;
-        if(vm.currentWeek.getDay() < 5){
+        if (vm.currentWeek.getDay() < 5) {
             vm.currentWeek.setDate(vm.currentWeek.getDate() - (vm.currentWeek.getDay() + 2));
-        }else if(vm.currentWeek.getDay() == 6){
+        } else if (vm.currentWeek.getDay() == 6) {
             vm.currentWeek.setDate(vm.currentWeek.getDate() - 1);
         }
         var currentDate = $filter('date')(vm.currentWeek, "yyyy-Www").toString();
@@ -161,27 +161,27 @@
 
         });
 
-        $scope.$watch('vm.search.userName', function (newVal) {
+        $scope.$watch('vm.search.userName', function(newVal) {
             vm.tblUsers = timesheetFilter();
         });
 
-        $scope.$watch('vm.search.userResourceType', function (newVal) {
+        $scope.$watch('vm.search.userResourceType', function(newVal) {
             vm.tblUsers = timesheetFilter();
         });
 
-        $scope.$watch('vm.search.projectId', function (newVal) {
+        $scope.$watch('vm.search.projectId', function(newVal) {
             vm.tblUsers = timesheetFilter();
         });
 
-        $scope.$watch('vm.search.businessUnit', function (newVal) {
+        $scope.$watch('vm.search.businessUnit', function(newVal) {
             vm.tblUsers = timesheetFilter();
         });
 
-        $scope.$watch('vm.search.resourceType', function (newVal) {
+        $scope.$watch('vm.search.resourceType', function(newVal) {
             vm.tblUsers = timesheetFilter();
         });
 
-        $scope.$watch('vm.search.isFilled', function (newVal) {
+        $scope.$watch('vm.search.isFilled', function(newVal) {
             vm.tblUsers = timesheetFilter();
         });
 
@@ -189,38 +189,38 @@
             var output = angular.copy(vm.users);
             var searchObj = vm.search;
             if (searchObj.userName) {
-                output = $filter('filter')(output, {userName: searchObj.userName});
+                output = $filter('filter')(output, { userName: searchObj.userName });
             }
             if (searchObj.userResourceType && searchObj.userResourceType.length > 0) {
-                output = $filter('filter')(output, function(item){
+                output = $filter('filter')(output, function(item) {
                     return (searchObj.userResourceType == item.userResourceType);
                 });
             }
             if (searchObj.projectId && searchObj.projectId.length > 0) {
-                output = $filter('filter')(output, function (item) {
-                    item.projects = $filter('filter')(item.projects, {projectId: searchObj.projectId});
+                output = $filter('filter')(output, function(item) {
+                    item.projects = $filter('filter')(item.projects, { projectId: searchObj.projectId });
                     return (item.projects.length > 0);
                 });
             }
             if (searchObj.businessUnit && searchObj.businessUnit.length > 0 && searchObj.businessUnit != "All") {
-                output = $filter('filter')(output, function (item) {
-                    item.projects = $filter('filter')(item.projects, {businessUnit: searchObj.businessUnit});
+                output = $filter('filter')(output, function(item) {
+                    item.projects = $filter('filter')(item.projects, { businessUnit: searchObj.businessUnit });
                     return (item.projects.length > 0);
                 });
             }
             if (searchObj.resourceType && searchObj.resourceType.length > 0) {
-                output = $filter('filter')(output, function (item) {
-                    item.projects = $filter('filter')(item.projects, {resourceType: searchObj.resourceType});
+                output = $filter('filter')(output, function(item) {
+                    item.projects = $filter('filter')(item.projects, { resourceType: searchObj.resourceType });
                     return (item.projects.length > 0);
                 });
             }
             if (searchObj.isFilled && searchObj.isFilled.length > 0) {
                 if (searchObj.isFilled == "filled") {
-                    output = $filter('filter')(output, function (item, index) {
+                    output = $filter('filter')(output, function(item, index) {
                         return (item.timesheetId != '');
                     });
                 } else if (searchObj.isFilled == "notfilled") {
-                    output = $filter('filter')(output, function (item, index) {
+                    output = $filter('filter')(output, function(item, index) {
                         return (item.timesheetId == '');
                     });
                 }
@@ -231,16 +231,16 @@
                 searchObj.timesheetResult.totalBillableHours = 0;
                 searchObj.timesheetResult.timeoffHours = 0;
                 searchObj.timesheetResult.overtimeHours = 0;
-                _.each(output, function (sheet) {
+                _.each(output, function(sheet) {
                     sheet.totalHours = 0;
                     sheet.totalBillableHours = 0;
                     sheet.timeoffHours = 0;
                     sheet.overtimeHours = 0;
-                    _.each(sheet.projects, function (prj) {
+                    _.each(sheet.projects, function(prj) {
                         sheet.totalHours += prj.projectHours;
                         sheet.totalBillableHours += prj.billableHours;
                         sheet.timeoffHours += (prj.sickLeaveHours + prj.timeoffHours);
-                        if(prj.overtimeHours){
+                        if (prj.overtimeHours) {
                             sheet.overtimeHours += prj.overtimeHours;
                         }
                     });
@@ -265,7 +265,7 @@
             vm.filterDate = filterDate;
             UserService.getUsers().then(function(users) {
                 vm.users = [];
-                _.each(users, function (userObj) {
+                _.each(users, function(userObj) {
                     vm.users.push({
                         userId: userObj._id,
                         userName: userObj.name,
@@ -281,16 +281,16 @@
                 });
                 vm.users = _.sortBy(vm.users, ['userName']);
                 TimesheetService.getReportByWeek(filterDate).then(function(timesheets) {
-                    _.each(timesheets, function (timesheet) {
-                        var userObj = _.find(vm.users, {userId: timesheet.userId});
-                        if(userObj){
+                    _.each(timesheets, function(timesheet) {
+                        var userObj = _.find(vm.users, { userId: timesheet.userId });
+                        if (userObj) {
                             userObj.timesheetId = timesheet._id;
                             userObj.week = timesheet.week;
                             userObj.weekDate = timesheet.weekDate;
                             userObj.projects = timesheet.projects;
                             userObj.totalHours = timesheet.totalHours;
                             userObj.timeoffHours = timesheet.timeoffHours;
-                            if(timesheet.projects.length > 0){
+                            if (timesheet.projects.length > 0) {
                                 userObj.remind = false;
                             }
                         }
@@ -316,16 +316,16 @@
                         vm.search.timesheetResult.totalBillableHours = 0;
                         vm.search.timesheetResult.timeoffHours = 0;
                         vm.search.timesheetResult.overtimeHours = 0;
-                        _.each(vm.tblUsers, function (sheet) {
+                        _.each(vm.tblUsers, function(sheet) {
                             sheet.totalHours = 0;
                             sheet.totalBillableHours = 0;
                             sheet.timeoffHours = 0;
                             sheet.overtimeHours = 0;
-                            _.each(sheet.projects, function (prj) {
+                            _.each(sheet.projects, function(prj) {
                                 sheet.totalHours += prj.projectHours;
                                 sheet.totalBillableHours += prj.billableHours;
                                 sheet.timeoffHours += (prj.sickLeaveHours + prj.timeoffHours);
-                                if(prj.overtimeHours){
+                                if (prj.overtimeHours) {
                                     sheet.overtimeHours += prj.overtimeHours;
                                 }
                             });
@@ -402,7 +402,7 @@
             });
         }
 
-        vm.viewUserTimesheet = function (userTimesheet) {
+        vm.viewUserTimesheet = function(userTimesheet) {
             userTimesheet._id = userTimesheet.timesheetId;
             var modalInstance = $uibModal.open({
                 animation: true,
@@ -413,15 +413,15 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    userTimesheet: function () {
+                    userTimesheet: function() {
                         return userTimesheet;
                     }
                 }
             });
 
-            modalInstance.result.then(function (userObj) {
+            modalInstance.result.then(function(userObj) {
                 vm.getAllReports(vm.currentWeek);
-            }, function () {
+            }, function() {
                 vm.getAllReports(vm.currentWeek);
             });
         }
@@ -437,17 +437,18 @@
                 vm.timesheets = timesheets;
             });
         }
-        
+
         function getProjects() {
             ProjectService.getAll().then(function(projects) {
-                vm.projects.push({id: '', title:'All'});
-                _.each(projects, function (project) {
-                    vm.projects.push({id: project._id, title:project.projectName});
+                vm.projects.push({ id: '', title: 'All' });
+                _.each(projects, function(project) {
+                    vm.projects.push({ id: project._id, title: project.projectName });
                 });
             });
         }
 
         initController();
+
         function initController() {
             // get current user
             UserService.GetCurrent().then(function(user) {
@@ -455,7 +456,7 @@
                 if (vm.user.admin) {
                     getAllReports();
                 }
-                getMyTimesheets(); 
+                getMyTimesheets();
                 getProjects();
             });
         }
@@ -473,9 +474,9 @@
             overtimeHours: 0
         };
         vm.hasProjects = true;
-        if(vm.timesheet.weekDate.getDay() < 5){
+        if (vm.timesheet.weekDate.getDay() < 5) {
             vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() - (vm.timesheet.weekDate.getDay() + 2));
-        }else if(vm.timesheet.weekDate.getDay() == 6){
+        } else if (vm.timesheet.weekDate.getDay() == 6) {
             vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() - 1);
         }
         vm.timesheetDateOpened = false;
@@ -494,21 +495,21 @@
         vm.closeAlert = function(index) {
             vm.alerts.splice(index, 1);
         };
-       vm.calTotalHours = function () {
-           vm.timesheet.totalHours = 0;
-           vm.timesheet.timeoffHours = 0;
-           vm.timesheet.overtimeHours = 0;
-           _.each(vm.timesheet.projects, function (project) {
-               project.overtimeHours = 0;
-               if(project.billableMaxHours > 0 && project.projectHours > project.billableMaxHours){
-                   project.overtimeHours = project.projectHours - project.billableMaxHours;
-               }
-               vm.timesheet.totalHours += project.projectHours;
-               vm.timesheet.timeoffHours += project.sickLeaveHours;
-               vm.timesheet.timeoffHours += project.timeoffHours;
-               vm.timesheet.overtimeHours += project.overtimeHours;
-           });
-       }
+        vm.calTotalHours = function() {
+            vm.timesheet.totalHours = 0;
+            vm.timesheet.timeoffHours = 0;
+            vm.timesheet.overtimeHours = 0;
+            _.each(vm.timesheet.projects, function(project) {
+                project.overtimeHours = 0;
+                if (project.billableMaxHours > 0 && project.projectHours > project.billableMaxHours) {
+                    project.overtimeHours = project.projectHours - project.billableMaxHours;
+                }
+                vm.timesheet.totalHours += project.projectHours;
+                vm.timesheet.timeoffHours += project.sickLeaveHours;
+                vm.timesheet.timeoffHours += project.timeoffHours;
+                vm.timesheet.overtimeHours += project.overtimeHours;
+            });
+        }
 
         function getTimesheet(id) {
             TimesheetService.getTimesheet(id).then(function(response) {
@@ -517,11 +518,11 @@
                 vm.calTotalHours();
             });
         }
-        
-        vm.saveTimesheet = function (timesheetForm) {
-            if(timesheetForm.$valid){
+
+        vm.saveTimesheet = function(timesheetForm) {
+            if (timesheetForm.$valid) {
                 vm.timesheet.week = $filter('date')(vm.timesheet.weekDate, "yyyy-Www").toString();
-                if(vm.isNew){
+                if (vm.isNew) {
                     TimesheetService.createTimesheet(vm.timesheet).then(function(response) {
                         noty.showSuccess("Thank you for the update!");
                         $state.go('timesheet');
@@ -530,12 +531,12 @@
                             vm.alerts.push({ msg: error, type: 'danger' });
                         }
                     });
-                }else{
+                } else {
                     TimesheetService.updateTimesheet(vm.timesheet._id, vm.timesheet).then(function(response) {
                         noty.showSuccess("Thank you for the update!");
-                        if(vm.isPopupEdit){
+                        if (vm.isPopupEdit) {
                             $uibModalInstance.close();
-                        }else{
+                        } else {
                             $state.go('timesheet');
                         }
                     }, function(error) {
@@ -548,7 +549,7 @@
             }
         }
 
-        vm.closeTimesheet = function () {
+        vm.closeTimesheet = function() {
             $uibModalInstance.close();
         }
 
@@ -557,7 +558,7 @@
             vm.timesheet.totalHours = 0;
             vm.timesheet.timeoffHours = 0;
             vm.timesheet.overtimeHours = 0;
-            _.each(vm.user.projects, function (project) {
+            _.each(vm.user.projects, function(project) {
                 var isValidProject = false;
                 var BillData = {
                     resourceType: "buffer",
@@ -565,7 +566,7 @@
                     billableMaxHours: 0
                 };
                 var weekDate = new Date(vm.timesheet.weekDate);
-                _.each(project.billDates, function (billDate) {
+                _.each(project.billDates, function(billDate) {
                     if (billDate.start && billDate.start != "" && billDate.end && billDate.end != "") {
                         var startDate = new Date(billDate.start);
                         var endDate = new Date(billDate.end);
@@ -598,10 +599,10 @@
                         isValidProject = true;
                     }
                 });
-                BillData.allocatedHours = (!BillData.allocatedHours)?0:BillData.allocatedHours;
-                BillData.billableMaxHours = (!BillData.billableMaxHours)?0:BillData.billableMaxHours;
+                BillData.allocatedHours = (!BillData.allocatedHours) ? 0 : BillData.allocatedHours;
+                BillData.billableMaxHours = (!BillData.billableMaxHours) ? 0 : BillData.billableMaxHours;
 
-                if(isValidProject===true) {
+                if (isValidProject === true) {
                     vm.timesheet.projects.push({
                         projectId: project.projectId,
                         projectName: project.projectName,
@@ -624,15 +625,13 @@
         vm.projectUser = {
             userId: null,
             startDate: new Date(2017, 0, 1),
-            billDates: [
-                {
-                    start: new Date(2017, 0, 1),
-                    end: "",
-                    resourceType: "billable",
-                    startOpened: false,
-                    endOpened: false
-                }
-            ]
+            billDates: [{
+                start: new Date(2017, 0, 1),
+                end: "",
+                resourceType: "billable",
+                startOpened: false,
+                endOpened: false
+            }]
         };
         vm.projectDateOptions = {
             formatYear: 'yy',
@@ -651,7 +650,7 @@
             });
         }
 
-        function getProjects(){
+        function getProjects() {
             ProjectService.getAll().then(function(response) {
                 vm.projects = response;
                 /*_.each(vm.projects, function (prjObj) {
@@ -671,12 +670,12 @@
                         }
                     }
                 });*/
-            }, function(error){
+            }, function(error) {
                 console.log(error);
             });
         }
 
-        vm.assignNewProject = function (form) {
+        vm.assignNewProject = function(form) {
             if (form.$valid) {
                 vm.enableSaveBtn = false;
                 ProjectService.assignUser(vm.projectUser.projectId, vm.projectUser).then(function(response) {
@@ -697,6 +696,7 @@
         }
 
         initController();
+
         function initController() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
@@ -709,9 +709,9 @@
                 }
                 getProjects();
                 vm.projectUser.userId = vm.user._id;
-                if(vm.user.projects && vm.user.projects.length > 0){
+                if (vm.user.projects && vm.user.projects.length > 0) {
                     vm.hasProjects = true;
-                }else{
+                } else {
                     getClients();
                     vm.hasProjects = false;
                 }
@@ -730,9 +730,9 @@
             timeoffHours: 0,
             overtimeHours: 0
         }
-        if(vm.timesheet.weekDate.getDay() < 5){
+        if (vm.timesheet.weekDate.getDay() < 5) {
             vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() - (vm.timesheet.weekDate.getDay() + 2));
-        }else if(vm.timesheet.weekDate.getDay() == 6){
+        } else if (vm.timesheet.weekDate.getDay() == 6) {
             vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() - 1);
         }
         vm.enableSaveBtn = true;
@@ -753,13 +753,13 @@
             vm.alerts.splice(index, 1);
         }
 
-        vm.calTotalHours = function () {
+        vm.calTotalHours = function() {
             vm.timesheet.totalHours = 0;
             vm.timesheet.timeoffHours = 0;
             vm.timesheet.overtimeHours = 0;
-            _.each(vm.timesheet.projects, function (project) {
+            _.each(vm.timesheet.projects, function(project) {
                 project.overtimeHours = 0;
-                if(project.billableMaxHours > 0 && project.projectHours > project.billableMaxHours){
+                if (project.billableMaxHours > 0 && project.projectHours > project.billableMaxHours) {
                     project.overtimeHours = project.projectHours - project.billableMaxHours;
                 }
                 vm.timesheet.totalHours += project.projectHours;
@@ -777,10 +777,10 @@
             });
         }
 
-        vm.saveTimesheet = function (timesheetForm) {
-            if(timesheetForm.$valid){
+        vm.saveTimesheet = function(timesheetForm) {
+            if (timesheetForm.$valid) {
                 vm.timesheet.week = $filter('date')(vm.timesheet.weekDate, "yyyy-Www").toString();
-                if(vm.isNew){
+                if (vm.isNew) {
                     TimesheetService.createTimesheet(vm.timesheet).then(function(response) {
                         noty.showSuccess("Thank you for the update!");
                         $uibModalInstance.close();
@@ -789,7 +789,7 @@
                             vm.alerts.push({ msg: error, type: 'danger' });
                         }
                     });
-                }else{
+                } else {
                     TimesheetService.updateTimesheet(vm.timesheet._id, vm.timesheet).then(function(response) {
                         noty.showSuccess("Thank you for the update!");
                         $uibModalInstance.close();
@@ -803,7 +803,7 @@
             }
         }
 
-        vm.closeTimesheet = function () {
+        vm.closeTimesheet = function() {
             $uibModalInstance.close();
         }
 
@@ -812,14 +812,14 @@
             vm.timesheet.totalHours = 0;
             vm.timesheet.timeoffHours = 0;
             vm.timesheet.overtimeHours = 0;
-            _.each(vm.user.projects, function (project) {
+            _.each(vm.user.projects, function(project) {
                 var BillData = {
                     resourceType: "buffer",
                     allocatedHours: 40,
                     billableMaxHours: 0
                 };
                 var weekDate = new Date(vm.timesheet.weekDate);
-                _.each(project.billDates, function (billDate) {
+                _.each(project.billDates, function(billDate) {
                     if (billDate.start && billDate.start != "" && billDate.end && billDate.end != "") {
                         var startDate = new Date(billDate.start);
                         var endDate = new Date(billDate.end);
@@ -848,8 +848,8 @@
                         BillData.billableMaxHours = billDate.billableMaxHours;
                     }
                 });
-                BillData.allocatedHours = (!BillData.allocatedHours)?0:BillData.allocatedHours;
-                BillData.billableMaxHours = (!BillData.billableMaxHours)?0:BillData.billableMaxHours;
+                BillData.allocatedHours = (!BillData.allocatedHours) ? 0 : BillData.allocatedHours;
+                BillData.billableMaxHours = (!BillData.billableMaxHours) ? 0 : BillData.billableMaxHours;
 
                 vm.timesheet.projects.push({
                     projectId: project.projectId,
@@ -867,7 +867,7 @@
 
         }
 
-        function getProjects(){
+        function getProjects() {
             ProjectService.getAll().then(function(response) {
                 vm.projects = response;
                 /*_.each(vm.projects, function (prjObj) {
@@ -888,17 +888,18 @@
                         }
                     }
                 });*/
-            }, function(error){
+            }, function(error) {
                 console.log(error);
             });
         }
 
         initController();
+
         function initController() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
                 vm.setAssignedProjects();
-                if(userTimesheet && userTimesheet._id){
+                if (userTimesheet && userTimesheet._id) {
                     vm.isNew = false;
                     vm.timesheet = userTimesheet;
                     vm.timesheet.weekDate = new Date(vm.timesheet.weekDate);
@@ -907,9 +908,9 @@
                     vm.isNew = true;
                 }
                 getProjects();
-                if(vm.user.projects && vm.user.projects.length > 0){
+                if (vm.user.projects && vm.user.projects.length > 0) {
                     vm.hasProjects = true;
-                }else{
+                } else {
                     vm.hasProjects = false;
                 }
             });
@@ -926,7 +927,7 @@
         vm.timesheets = [];
         vm.currentDate = new Date();
         vm.resourceTypes = ['billable', 'shadow', 'bizdev', 'buffer'];
-        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "Skill up", "R&D"];
+        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training"];
         vm.search = {
             userResourceType: "",
             clientId: null,
@@ -945,62 +946,62 @@
             $scope.$broadcast('export-excl', { "date": vm.filterDate });
         }
 
-        vm.changeBusinessUnit = function () {
+        vm.changeBusinessUnit = function() {
 
         }
 
-        vm.getConsolidatedProjects = function(){
-            var paramObj = {projectIds: []};
+        vm.getConsolidatedProjects = function() {
+            var paramObj = { projectIds: [] };
             paramObj.startDate = $filter('date')(vm.search.startDate, "yyyy-M-dd").toString();
             paramObj.endDate = $filter('date')(vm.search.endDate, "yyyy-M-dd").toString();
-            if(vm.search.businessUnit.length > 0 && vm.search.businessUnit != 'All'){
+            if (vm.search.businessUnit.length > 0 && vm.search.businessUnit != 'All') {
                 paramObj.projectIds = [];
-                _.each(vm.projects, function (prjObj) {
-                    if(prjObj.businessUnit == vm.search.businessUnit){
+                _.each(vm.projects, function(prjObj) {
+                    if (prjObj.businessUnit == vm.search.businessUnit) {
                         paramObj.projectIds.push(prjObj._id);
                     }
                 });
-            }else if(vm.search.businessUnit === 'All' || vm.search.clientId === 'all' || vm.search.projectId === 'all'){
+            } else if (vm.search.businessUnit === 'All' || vm.search.clientId === 'all' || vm.search.projectId === 'all') {
                 paramObj.projectIds = [];
-            }else if(vm.search.clientId && vm.search.clientId.length > 0){
+            } else if (vm.search.clientId && vm.search.clientId.length > 0) {
                 paramObj.projectIds = [];
-                _.each(vm.projects, function (prjObj) {
-                    if(prjObj.clientId == vm.search.clientId){
+                _.each(vm.projects, function(prjObj) {
+                    if (prjObj.clientId == vm.search.clientId) {
                         paramObj.projectIds.push(prjObj._id);
                     }
                 });
-            }else{
+            } else {
                 paramObj.projectIds.push(vm.search.projectId);
             }
             calWeeks();
-            if((vm.search.businessUnit === 'All' || vm.search.clientId === 'all' || vm.search.projectId === 'all') || paramObj.projectIds.length > 0) {
+            if ((vm.search.businessUnit === 'All' || vm.search.clientId === 'all' || vm.search.projectId === 'all') || paramObj.projectIds.length > 0) {
 
-                TimesheetService.timesheetBetweenDates(paramObj.startDate, paramObj.endDate, paramObj).then(function (response) {
+                TimesheetService.timesheetBetweenDates(paramObj.startDate, paramObj.endDate, paramObj).then(function(response) {
                     var rawData = response;
                     rawData = _.groupBy(rawData, 'userId');
                     vm.totalResourceTypes = {};
-                    _.each(vm.resourceTypes, function (resourceType) {
+                    _.each(vm.resourceTypes, function(resourceType) {
                         vm.totalResourceTypes[resourceType] = 0;
                     });
                     vm.users = [];
-                    if(vm.search.userResourceType && vm.search.userResourceType.length > 0){
-                        _.each(vm.allUsers, function (userObj) {
-                            if(vm.search.userResourceType == userObj.userResourceType){
+                    if (vm.search.userResourceType && vm.search.userResourceType.length > 0) {
+                        _.each(vm.allUsers, function(userObj) {
+                            if (vm.search.userResourceType == userObj.userResourceType) {
                                 vm.users.push(userObj);
                             }
                         });
-                    }else{
+                    } else {
                         vm.users = vm.allUsers;
                     }
                     vm.timesheets = [];
-                    _.each(rawData, function (userSheets, userId) {
-                        var userObj = _.find(vm.users, {_id: userId});
+                    _.each(rawData, function(userSheets, userId) {
+                        var userObj = _.find(vm.users, { _id: userId });
                         if (userObj) {
                             var userName = (userObj) ? userObj.name : "";
                             var projects = [];
-                            _.each(userSheets, function (sheetObj) {
-                                _.each(sheetObj.projects, function (projectObj) {
-                                    var projectItem = _.find(projects, {projectId: projectObj.projectId});
+                            _.each(userSheets, function(sheetObj) {
+                                _.each(sheetObj.projects, function(projectObj) {
+                                    var projectItem = _.find(projects, { projectId: projectObj.projectId });
                                     if (projectItem) {
                                         projectItem[sheetObj.week] = {
                                             allocatedHours: projectObj.allocatedHours,
@@ -1015,12 +1016,12 @@
                                             projectName: projectObj.projectName,
                                             businessUnit: projectObj.businessUnit
                                         };
-                                        var projectInfo = _.find(vm.projects, {_id: projectObj.projectId});
+                                        var projectInfo = _.find(vm.projects, { _id: projectObj.projectId });
                                         if (projectInfo) {
                                             newProjectObj.projectName = projectInfo.projectName;
                                             newProjectObj.businessUnit = projectInfo.businessUnit;
                                         }
-                                        _.each(vm.weeks, function (weekObj) {
+                                        _.each(vm.weeks, function(weekObj) {
                                             newProjectObj[weekObj.week] = {};
                                         });
                                         newProjectObj[sheetObj.week] = {
@@ -1038,13 +1039,13 @@
                                 });
                             });
                             var startDateObj = new Date(paramObj.startDate);
-                            _.each(projects, function (projectObj) {
-                                var userProjectObj = _.find(userObj.projects, {projectId: projectObj.projectId});
+                            _.each(projects, function(projectObj) {
+                                var userProjectObj = _.find(userObj.projects, { projectId: projectObj.projectId });
                                 projectObj.expDays = 90;
                                 projectObj.assignDate = "";
                                 if (userProjectObj && userProjectObj.billDates) {
                                     userProjectObj.billDates = _.sortBy(userProjectObj.billDates, 'start');
-                                    _.each(userProjectObj.billDates, function (billDateObj) {
+                                    _.each(userProjectObj.billDates, function(billDateObj) {
                                         if (billDateObj.start) {
                                             var billStartDateObj = new Date(billDateObj.start);
                                             projectObj.assignDate = $filter('date')(billStartDateObj, "mediumDate").toString();
@@ -1066,12 +1067,12 @@
                     });
                     var sno = 1;
                     vm.timesheets = _.sortBy(vm.timesheets, 'userName');
-                    _.each(vm.timesheets, function (sheetObj) {
-                        _.each(sheetObj.projects, function (projectObj) {
+                    _.each(vm.timesheets, function(sheetObj) {
+                        _.each(sheetObj.projects, function(projectObj) {
                             projectObj.totalBillableHours = 0;
                             projectObj.totalTimeoffHours = 0;
                             projectObj.totalOvertimeHours = 0;
-                            _.each(vm.weeks, function (weekObj) {
+                            _.each(vm.weeks, function(weekObj) {
                                 if (projectObj[weekObj.week].billableHours) {
                                     projectObj.totalBillableHours += projectObj[weekObj.week].billableHours;
                                 }
@@ -1085,42 +1086,42 @@
                         });
                         sheetObj.sno = sno++;
                     });
-                    _.each(vm.weeks, function (weekObj) {
+                    _.each(vm.weeks, function(weekObj) {
                         weekObj.resourceTypes = {};
-                        _.each(vm.resourceTypes, function (resourceType) {
-                            weekObj.resourceTypes[resourceType] = {hours: 0, headCount: 0, userIds: []};
+                        _.each(vm.resourceTypes, function(resourceType) {
+                            weekObj.resourceTypes[resourceType] = { hours: 0, headCount: 0, userIds: [] };
                             weekObj.weekBillableHours = 0;
                             weekObj.weekTimeoffHours = 0;
                             weekObj.weekOvertimeHours = 0;
                         });
-                        _.each(vm.timesheets, function (sheetObj) {
-                            _.each(sheetObj.projects, function (projectObj) {
+                        _.each(vm.timesheets, function(sheetObj) {
+                            _.each(sheetObj.projects, function(projectObj) {
                                 var prjWeek = projectObj[weekObj.week];
                                 if (weekObj.resourceTypes[prjWeek.resourceType]) {
                                     weekObj.resourceTypes[prjWeek.resourceType].hours += prjWeek.billableHours;
                                     weekObj.resourceTypes[prjWeek.resourceType].headCount += 1;
-                                    if(weekObj.resourceTypes[prjWeek.resourceType].userIds.indexOf(sheetObj.userId) == -1){
+                                    if (weekObj.resourceTypes[prjWeek.resourceType].userIds.indexOf(sheetObj.userId) == -1) {
                                         weekObj.resourceTypes[prjWeek.resourceType].userIds.push(sheetObj.userId);
                                     }
                                 }
-                                if(prjWeek.billableHours>0) weekObj.weekBillableHours += prjWeek.billableHours;
-                                if(prjWeek.timeoffHours>0) weekObj.weekTimeoffHours += prjWeek.timeoffHours;
-                                if(prjWeek.overtimeHours>0) weekObj.weekOvertimeHours += prjWeek.overtimeHours;
+                                if (prjWeek.billableHours > 0) weekObj.weekBillableHours += prjWeek.billableHours;
+                                if (prjWeek.timeoffHours > 0) weekObj.weekTimeoffHours += prjWeek.timeoffHours;
+                                if (prjWeek.overtimeHours > 0) weekObj.weekOvertimeHours += prjWeek.overtimeHours;
                             });
                         });
-                        _.each(vm.resourceTypes, function (resourceType) {
+                        _.each(vm.resourceTypes, function(resourceType) {
                             weekObj.resourceTypes[resourceType].headCount = weekObj.resourceTypes[resourceType].userIds.length;
                         });
                     });
-                }, function (error) {
+                }, function(error) {
                     console.log(error);
                 });
-            }else {
+            } else {
                 vm.timesheets = [];
             }
         }
 
-        function calWeeks(){
+        function calWeeks() {
             Date.prototype.getWeek = function() {
                 var onejan = new Date(this.getFullYear(), 0, 1);
                 return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
@@ -1129,7 +1130,7 @@
             var startDate = new Date(vm.search.startDate);
             var endDate = new Date(vm.search.endDate);
             var loop = 0;
-            while (startDate < endDate && loop++ < 50){
+            while (startDate < endDate && loop++ < 50) {
                 var weekStartDate = new Date(startDate.getTime());
                 weekStartDate.setDate(weekStartDate.getDate() - weekStartDate.getDay() + 1);
                 var weekEndDate = new Date(startDate.getTime());
@@ -1137,20 +1138,20 @@
                 //var weekName = $filter('date')(weekStartDate, "mediumDate").toString() + " - " + $filter('date')(weekEndDate, "mediumDate").toString();
                 var weekName = $filter('date')(weekEndDate, "mediumDate").toString();
                 var weekNumber = "-W";
-                if(startDate.getWeek() <= 9){
-                    weekNumber = "-W0"+startDate.getWeek();
-                }else{
-                    weekNumber = "-W"+startDate.getWeek();
+                if (startDate.getWeek() <= 9) {
+                    weekNumber = "-W0" + startDate.getWeek();
+                } else {
+                    weekNumber = "-W" + startDate.getWeek();
                 }
                 vm.weeks.push({
-                    week: startDate.getFullYear()+weekNumber,
+                    week: startDate.getFullYear() + weekNumber,
                     weekName: weekName
                 });
                 startDate.setDate(startDate.getDate() + 7);
             }
         }
 
-        function getProjects(){
+        function getProjects() {
             ProjectService.getAll().then(function(response) {
                 vm.projects = [];
                 vm.projects.push({
@@ -1158,7 +1159,7 @@
                     projectName: 'All'
                 });
                 response = _.sortBy(response, 'projectName');
-                _.each(response, function (projectObj) {
+                _.each(response, function(projectObj) {
                     vm.projects.push({
                         _id: projectObj._id,
                         clientId: projectObj.clientId,
@@ -1166,12 +1167,12 @@
                         projectName: projectObj.projectName
                     });
                 });
-            }, function(error){
+            }, function(error) {
                 console.log(error);
             });
         }
 
-        function getClients(){
+        function getClients() {
             ProjectService.getClients().then(function(response) {
                 vm.clients = [];
                 vm.clients.push({
@@ -1179,31 +1180,32 @@
                     clientName: 'All'
                 });
                 response = _.sortBy(response, 'clientName');
-                _.each(response, function (clientObj) {
+                _.each(response, function(clientObj) {
                     vm.clients.push({
                         _id: clientObj._id,
                         clientName: clientObj.clientName
                     });
                 });
-            }, function(error){
+            }, function(error) {
                 console.log(error);
             });
         }
 
-        function getUsers(){
+        function getUsers() {
             UserService.getUsers().then(function(response) {
                 vm.allUsers = response;
-            }, function(error){
+            }, function(error) {
                 console.log(error);
             });
         }
 
         init();
+
         function init() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
                 getUsers();
-                if(vm.user.admin !== true){
+                if (vm.user.admin !== true) {
 
                 }
                 getProjects();
@@ -1232,35 +1234,35 @@
             $scope.$broadcast('export-excl', { "date": vm.filterDate });
         }
 
-        vm.getPoolUsers = function(){
+        vm.getPoolUsers = function() {
             var paramObj = {};
             paramObj.startDate = $filter('date')(vm.search.startDate, "yyyy-M-dd").toString();
             paramObj.endDate = $filter('date')(vm.search.endDate, "yyyy-M-dd").toString();
             calWeeks();
-            _.each(vm.weeks, function (weekObj) {
+            _.each(vm.weeks, function(weekObj) {
                 weekObj.users = [];
-                _.each(vm.users, function (userObj) {
+                _.each(vm.users, function(userObj) {
                     var isFree = false;
-                    _.each(userObj.projects, function (projectObj) {
+                    _.each(userObj.projects, function(projectObj) {
                         projectObj.billDates = _.sortBy(projectObj.billDates, 'start');
-                        _.each(projectObj.billDates, function (billDateObj, index) {
-                            if(billDateObj.end && billDateObj.end.length > 0){
+                        _.each(projectObj.billDates, function(billDateObj, index) {
+                            if (billDateObj.end && billDateObj.end.length > 0) {
                                 var billEndDate = new Date(billDateObj.end);
                                 var nextIndex = index + 1;
                                 var hasNoNextPrj = true;
-                                if(projectObj.billDates.length > index && projectObj.billDates[nextIndex] && projectObj.billDates[nextIndex].start){
+                                if (projectObj.billDates.length > index && projectObj.billDates[nextIndex] && projectObj.billDates[nextIndex].start) {
                                     var nextBillStartDate = new Date(projectObj.billDates[nextIndex].start);
-                                    if(nextBillStartDate >= weekObj.weekStartDate){
+                                    if (nextBillStartDate >= weekObj.weekStartDate) {
                                         hasNoNextPrj = false;
                                     }
                                 }
-                                if(weekObj.weekStartDate >= billEndDate && hasNoNextPrj){
+                                if (weekObj.weekStartDate >= billEndDate && hasNoNextPrj) {
                                     isFree = true;
                                 }
                             }
                         });
                     });
-                    if(isFree){
+                    if (isFree) {
                         weekObj.users.push({
                             userId: userObj._id,
                             userName: userObj.name
@@ -1270,7 +1272,7 @@
             });
         }
 
-        function calWeeks(){
+        function calWeeks() {
             Date.prototype.getWeek = function() {
                 var onejan = new Date(this.getFullYear(), 0, 1);
                 return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
@@ -1279,7 +1281,7 @@
             var startDate = new Date(vm.search.startDate);
             var endDate = new Date(vm.search.endDate);
             var loop = 0;
-            while (startDate < endDate && loop++ < 50){
+            while (startDate < endDate && loop++ < 50) {
                 var weekStartDate = new Date(startDate.getTime());
                 weekStartDate.setDate(weekStartDate.getDate() - weekStartDate.getDay() + 1);
                 var weekEndDate = new Date(startDate.getTime());
@@ -1287,13 +1289,13 @@
                 //var weekName = $filter('date')(weekStartDate, "mediumDate").toString() + " - " + $filter('date')(weekEndDate, "mediumDate").toString();
                 var weekName = $filter('date')(weekEndDate, "mediumDate").toString();
                 var weekNumber = "-W";
-                if(startDate.getWeek() <= 9){
-                    weekNumber = "-W0"+startDate.getWeek();
-                }else{
-                    weekNumber = "-W"+startDate.getWeek();
+                if (startDate.getWeek() <= 9) {
+                    weekNumber = "-W0" + startDate.getWeek();
+                } else {
+                    weekNumber = "-W" + startDate.getWeek();
                 }
                 vm.weeks.push({
-                    week: startDate.getFullYear()+weekNumber,
+                    week: startDate.getFullYear() + weekNumber,
                     weekStartDate: weekStartDate,
                     weekEndDate: weekEndDate,
                     weekName: weekName
@@ -1302,21 +1304,22 @@
             }
         }
 
-        function getUsers(){
+        function getUsers() {
             UserService.getUsers().then(function(response) {
                 vm.users = response;
                 vm.getPoolUsers();
-            }, function(error){
+            }, function(error) {
                 console.log(error);
             });
         }
 
         init();
+
         function init() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
                 getUsers();
-                if(vm.user.admin !== true){
+                if (vm.user.admin !== true) {
 
                 }
             });
