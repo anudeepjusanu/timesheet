@@ -142,7 +142,7 @@
             { projectBillId: "fixed-bid", projectBillName: "Fixed bid" },
             { projectBillId: "time-material", projectBillName: "Time and material" }
         ];
-        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training", "Skill Up"];
+        vm.projectBusinessUnits = ["Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training", "Skill Up"];
 
         vm.getClients = function() {
             ProjectService.getClients().then(function(response) {
