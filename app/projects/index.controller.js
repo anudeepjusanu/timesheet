@@ -32,12 +32,12 @@
             { projectBillId: "fixed-bid", projectBillName: "Fixed bid" },
             { projectBillId: "time-material", projectBillName: "Time and material" }
         ];
-        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "Skill up", "R&D"];
+        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training"];
 
-        function getProjects(){
+        function getProjects() {
             ProjectService.getAll().then(function(response) {
                 vm.projects = response;
-            }, function(error){
+            }, function(error) {
                 console.log(error);
             });
         }
@@ -49,16 +49,16 @@
             businessUnit: "All"
         };
 
-        function getClients(){
+        function getClients() {
             ProjectService.getClients().then(function(response) {
                 vm.clients = response;
-                vm.clients.unshift({_id: "", "clientName": "All"});
-            }, function(error){
+                vm.clients.unshift({ _id: "", "clientName": "All" });
+            }, function(error) {
                 console.log(error);
             });
         }
 
-        vm.delProject = function (projectId) {
+        vm.delProject = function(projectId) {
             ProjectService.delete(projectId).then(function(response) {
                 getProjects();
             }, function(error) {
@@ -69,6 +69,7 @@
         }
 
         initController();
+
         function initController() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
@@ -80,24 +81,24 @@
             getProjects();
         }
     }
-    
+
     function searchProject($filter) {
         return function(input, searchObj) {
             var output = input;
-            if(searchObj.clientId && searchObj.clientId.length > 0){
-                output = $filter('filter')(output, {clientId: searchObj.clientId});
+            if (searchObj.clientId && searchObj.clientId.length > 0) {
+                output = $filter('filter')(output, { clientId: searchObj.clientId });
             }
-            if(searchObj.projectName && searchObj.projectName.length > 0){
-                output = $filter('filter')(output, {projectName: searchObj.projectName});
+            if (searchObj.projectName && searchObj.projectName.length > 0) {
+                output = $filter('filter')(output, { projectName: searchObj.projectName });
             }
-            if(searchObj.projectBillType && searchObj.projectBillType.length > 0){
-                output = $filter('filter')(output, {projectBillType: searchObj.projectBillType});
+            if (searchObj.projectBillType && searchObj.projectBillType.length > 0) {
+                output = $filter('filter')(output, { projectBillType: searchObj.projectBillType });
             }
-            if(searchObj.projectType && searchObj.projectType.length > 0){
-                output = $filter('filter')(output, {projectType: searchObj.projectType});
+            if (searchObj.projectType && searchObj.projectType.length > 0) {
+                output = $filter('filter')(output, { projectType: searchObj.projectType });
             }
-            if(searchObj.businessUnit && searchObj.businessUnit.length > 0 && searchObj.businessUnit != "All"){
-                output = $filter('filter')(output, {businessUnit: searchObj.businessUnit});
+            if (searchObj.businessUnit && searchObj.businessUnit.length > 0 && searchObj.businessUnit != "All") {
+                output = $filter('filter')(output, { businessUnit: searchObj.businessUnit });
             }
             return output;
         }
@@ -108,7 +109,7 @@
         vm.user = {};
         vm.clients = [];
         var currentDay = new Date().getDay();
-        vm.open2 = function () {
+        vm.open2 = function() {
             vm.popup2.opened = true;
         };
         vm.popup2 = {
@@ -120,7 +121,7 @@
             startingDay: 1
         };
         vm.alerts = [];
-        vm.closeAlert = function (index) {
+        vm.closeAlert = function(index) {
             vm.alerts.splice(index, 1);
         };
         vm.obj = {
@@ -141,9 +142,9 @@
             { projectBillId: "fixed-bid", projectBillName: "Fixed bid" },
             { projectBillId: "time-material", projectBillName: "Time and material" }
         ];
-        vm.projectBusinessUnits = ["Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "Skill up", "R&D"];
-        
-        vm.getClients = function () {
+        vm.projectBusinessUnits = ["Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training"];
+
+        vm.getClients = function() {
             ProjectService.getClients().then(function(response) {
                 vm.clients = response;
             }, function(error) {
@@ -153,7 +154,7 @@
             });
         }
 
-        vm.getProject = function (projectId) {
+        vm.getProject = function(projectId) {
             ProjectService.getById(projectId).then(function(response) {
                 vm.obj = response;
                 vm.obj.startDate = new Date(vm.obj.startDate);
@@ -166,8 +167,8 @@
 
         vm.saveProject = function(form) {
             if (form.$valid) {
-                var clientObj = _.find(vm.clients, {_id: vm.obj.clientId});
-                if(clientObj){
+                var clientObj = _.find(vm.clients, { _id: vm.obj.clientId });
+                if (clientObj) {
                     vm.obj.clientName = clientObj.clientName;
                 }
                 if (vm.isNew) {
@@ -194,12 +195,12 @@
             }
         }
 
-        vm.viewClientModel = function (clientObj) {
+        vm.viewClientModel = function(clientObj) {
             var client = {};
-            if(clientObj){
+            if (clientObj) {
                 client = clientObj;
                 client.isNew = false;
-            }else{
+            } else {
                 client.isNew = true;
             }
             var modalInstance = $uibModal.open({
@@ -211,20 +212,21 @@
                 controllerAs: 'vm',
                 size: 'md',
                 resolve: {
-                    client: function () {
+                    client: function() {
                         return client;
                     }
                 }
             });
 
-            modalInstance.result.then(function (clientObj) {
+            modalInstance.result.then(function(clientObj) {
                 vm.getClients();
-            }, function () {
+            }, function() {
                 vm.getClients();
             });
         }
 
         initController();
+
         function initController() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
@@ -238,7 +240,7 @@
             vm.getClients();
         }
     }
-    
+
     function AssignUsersController($state, UserService, ProjectService, $stateParams, noty, _, $uibModal) {
         var vm = this;
         vm.alerts = [];
@@ -246,7 +248,7 @@
         vm.users = [];
         vm.assignedUsers = [];
 
-        vm.getProject = function (projectId) {
+        vm.getProject = function(projectId) {
             ProjectService.getById(projectId).then(function(response) {
                 vm.project = response;
             }, function(error) {
@@ -256,16 +258,16 @@
             });
         }
 
-        vm.getUsers = function () {
+        vm.getUsers = function() {
             UserService.getUsers().then(function(response) {
                 vm.users = [];
-                _.each(response, function (userObj) {
+                _.each(response, function(userObj) {
                     vm.users.push({
                         userName: userObj.name,
                         userId: userObj._id
                     });
                 });
-                if($stateParams.id){
+                if ($stateParams.id) {
                     vm.getAssignedUsers($stateParams.id);
                 }
             }, function(error) {
@@ -274,13 +276,13 @@
                 }
             });
         }
-        
-        vm.getAssignedUsers = function (projectId) {
+
+        vm.getAssignedUsers = function(projectId) {
             ProjectService.getAssignedUsers(projectId).then(function(response) {
                 vm.assignedUsers = response;
-                _.each(vm.assignedUsers, function (assignedUser) {
-                    var userIndex = _.findIndex(vm.users, {"userId": assignedUser.userId});
-                    if(userIndex >= 0){
+                _.each(vm.assignedUsers, function(assignedUser) {
+                    var userIndex = _.findIndex(vm.users, { "userId": assignedUser.userId });
+                    if (userIndex >= 0) {
                         vm.users.splice(userIndex, 1);
                     }
                 });
@@ -291,7 +293,7 @@
             });
         }
 
-        vm.addColumn = function (user) {
+        vm.addColumn = function(user) {
             user.isNew = true;
             var modalInstance = $uibModal.open({
                 animation: true,
@@ -302,26 +304,26 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    user: function () {
+                    user: function() {
                         return user;
                     },
-                    project: function () {
+                    project: function() {
                         return vm.project;
                     },
-                    parentAlerts: function () {
+                    parentAlerts: function() {
                         return vm.alerts;
                     }
                 }
             });
-            
-            modalInstance.result.then(function (userObj) {
+
+            modalInstance.result.then(function(userObj) {
                 vm.getAllUsers();
-            }, function () {
+            }, function() {
                 //$log.info('Modal dismissed at: ' + new Date());
             });
         }
 
-        vm.editAssignUser = function (user) {
+        vm.editAssignUser = function(user) {
             user.isNew = false;
             var modalInstance = $uibModal.open({
                 animation: true,
@@ -332,26 +334,26 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    user: function () {
+                    user: function() {
                         return user;
                     },
-                    project: function () {
+                    project: function() {
                         return vm.project;
                     },
-                    parentAlerts: function () {
+                    parentAlerts: function() {
                         return vm.alerts;
                     }
                 }
             });
 
-            modalInstance.result.then(function (userObj) {
+            modalInstance.result.then(function(userObj) {
                 vm.getAllUsers();
-            }, function () {
+            }, function() {
                 vm.getAllUsers();
             });
         }
 
-        vm.deleteAssignedUser = function (user) {
+        vm.deleteAssignedUser = function(user) {
             ProjectService.unassignUser(vm.project._id, user.userId).then(function(response) {
                 noty.showSuccess("Unassigned successfully!");
                 $state.go('projects');
@@ -363,6 +365,7 @@
         }
 
         init();
+
         function init() {
             if ($stateParams.id) {
                 vm.isNew = false;
@@ -379,41 +382,41 @@
         vm.alerts = [];
         vm.enableSaveBtn = true;
         vm.resourceTypes = [
-            {"resourceTypeId":"shadow", "resourceTypeVal":"Shadow"},
-            {"resourceTypeId":"buffer", "resourceTypeVal":"Buffer"},
-            {"resourceTypeId":"billable", "resourceTypeVal":"Billable"},
-            {"resourceTypeId":"bizdev", "resourceTypeVal":"Bizdev"},
-            {"resourceTypeId":"internal", "resourceTypeVal":"Internal"},
-            {"resourceTypeId":"operations", "resourceTypeVal":"Operations"},
-            {"resourceTypeId":"trainee", "resourceTypeVal":"Trainee"}
+            { "resourceTypeId": "shadow", "resourceTypeVal": "Shadow" },
+            { "resourceTypeId": "buffer", "resourceTypeVal": "Buffer" },
+            { "resourceTypeId": "billable", "resourceTypeVal": "Billable" },
+            { "resourceTypeId": "bizdev", "resourceTypeVal": "Bizdev" },
+            { "resourceTypeId": "internal", "resourceTypeVal": "Internal" },
+            { "resourceTypeId": "operations", "resourceTypeVal": "Operations" },
+            { "resourceTypeId": "trainee", "resourceTypeVal": "Trainee" }
         ];
 
         vm.users = [];
         vm.projects = [];
         vm.user = user;
         vm.user.chooseUser = false;
-        if(!user.userId){
+        if (!user.userId) {
             getUsers();
             vm.user.chooseUser = true;
         }
-        if(vm.user.billDates){
-            _.each(vm.user.billDates, function (billDate) {
-                if(billDate.start){
+        if (vm.user.billDates) {
+            _.each(vm.user.billDates, function(billDate) {
+                if (billDate.start) {
                     billDate.start = new Date(billDate.start);
                 }
-                if(billDate.end){
+                if (billDate.end) {
                     billDate.end = new Date(billDate.end);
                 }
             });
         }
         vm.project = project;
         vm.project.chooseProject = false;
-        if(!vm.project._id){
+        if (!vm.project._id) {
             getProjects();
             vm.project.chooseProject = true;
         }
         var currentDay = new Date().getDay();
-        vm.open2 = function () {
+        vm.open2 = function() {
             vm.popup2.opened = true;
         };
         vm.popup2 = {
@@ -425,18 +428,18 @@
             startingDay: 1
         };
 
-        vm.addBillDate = function () {
-            if(!vm.user.billDates){
+        vm.addBillDate = function() {
+            if (!vm.user.billDates) {
                 vm.user.billDates = [];
             }
-            vm.user.billDates.push({"start":"", "end":""});
+            vm.user.billDates.push({ "start": "", "end": "" });
         }
 
-        vm.deleteBillDate = function (billDate, index) {
+        vm.deleteBillDate = function(billDate, index) {
             vm.user.billDates.splice(index, 1);
         }
 
-        vm.ok = function (form) {
+        vm.ok = function(form) {
             if (form.$valid) {
                 vm.enableSaveBtn = false;
                 var assignedUsers = [];
@@ -458,14 +461,14 @@
             }
         };
 
-        vm.cancel = function () {
+        vm.cancel = function() {
             $uibModalInstance.dismiss('cancel');
         };
 
         function getUsers() {
             UserService.getUsers().then(function(response) {
                 vm.users = [];
-                _.each(response, function (userObj) {
+                _.each(response, function(userObj) {
                     vm.users.push({
                         userName: userObj.name,
                         userId: userObj._id
@@ -479,18 +482,18 @@
             });
         }
 
-        function getProjects(){
+        function getProjects() {
             ProjectService.getAll().then(function(response) {
                 vm.projects = response;
-                if(vm.user.projects && vm.user.projects.length > 0){
-                    _.each(vm.user.projects, function (projectObj) {
-                        var prjIndex = _.findIndex(vm.projects, {_id: projectObj.projectId});
-                        if(prjIndex>=0){
+                if (vm.user.projects && vm.user.projects.length > 0) {
+                    _.each(vm.user.projects, function(projectObj) {
+                        var prjIndex = _.findIndex(vm.projects, { _id: projectObj.projectId });
+                        if (prjIndex >= 0) {
                             vm.projects.splice(prjIndex, 1);
                         }
                     });
                 }
-            }, function(error){
+            }, function(error) {
                 console.log(error);
             });
         }
@@ -502,10 +505,10 @@
         vm.alerts = [];
         vm.client = client;
 
-        vm.ok = function (form) {
+        vm.ok = function(form) {
             if (form.$valid) {
                 vm.enableSaveBtn = false;
-                if(vm.client.isNew === true){
+                if (vm.client.isNew === true) {
                     ProjectService.createClient(vm.client).then(function(response) {
                         noty.showSuccess("New Client has been created successfully!");
                         vm.enableSaveBtn = true;
@@ -517,7 +520,7 @@
                         vm.enableSaveBtn = true;
                         $uibModalInstance.close(vm.client);
                     });
-                }else{
+                } else {
                     ProjectService.updateClient(vm.client).then(function(response) {
                         noty.showSuccess("Client has been updated successfully!");
                         vm.enableSaveBtn = true;
@@ -536,25 +539,25 @@
             }
         };
 
-        vm.cancel = function () {
+        vm.cancel = function() {
             $uibModalInstance.dismiss('cancel');
         };
     };
-    
+
     function ClientsController(UserService, ProjectService, $uibModal, _) {
         var vm = this;
         vm.user = {};
         vm.clients = [];
 
-        function getClients(){
+        function getClients() {
             ProjectService.getClients().then(function(response) {
                 vm.clients = response;
-            }, function(error){
+            }, function(error) {
                 console.log(error);
             });
         }
 
-        vm.delClient = function (clientId) {
+        vm.delClient = function(clientId) {
             ProjectService.deleteClient(clientId).then(function(response) {
                 getClients();
             }, function(error) {
@@ -564,12 +567,12 @@
             });
         }
 
-        vm.viewClientModel = function (clientObj) {
+        vm.viewClientModel = function(clientObj) {
             var client = {};
-            if(clientObj){
+            if (clientObj) {
                 client = clientObj;
                 client.isNew = false;
-            }else{
+            } else {
                 client.isNew = true;
             }
             var modalInstance = $uibModal.open({
@@ -581,20 +584,21 @@
                 controllerAs: 'vm',
                 size: 'md',
                 resolve: {
-                    client: function () {
+                    client: function() {
                         return client;
                     }
                 }
             });
 
-            modalInstance.result.then(function (clientObj) {
+            modalInstance.result.then(function(clientObj) {
                 getClients();
-            }, function () {
+            }, function() {
                 getClients();
             });
         }
 
         initController();
+
         function initController() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
@@ -617,26 +621,26 @@
             { projectTypeId: "ops", projectTypeName: "ops" },
             { projectTypeId: "sales", projectTypeName: "Sales" }
         ];
-        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "Skill up", "R&D"];
+        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training"];
         vm.search = {
             projectName: "",
             projectType: "all",
             businessUnit: "All"
         };
 
-        function getProjectUsers(){
+        function getProjectUsers() {
             ProjectService.getProjectUsers().then(function(response) {
                 vm.projects = response;
-            }, function(error){
+            }, function(error) {
                 console.log(error);
             });
         }
 
-        vm.viewAssignUser = function (project, user) {
-            if(!user){
+        vm.viewAssignUser = function(project, user) {
+            if (!user) {
                 var user = {};
                 user.isNew = true;
-            }else {
+            } else {
                 user.isNew = false;
             }
             var modalInstance = $uibModal.open({
@@ -648,23 +652,24 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    user: function () {
+                    user: function() {
                         return user;
                     },
-                    project: function () {
+                    project: function() {
                         return project;
                     }
                 }
             });
 
-            modalInstance.result.then(function (userObj) {
+            modalInstance.result.then(function(userObj) {
                 getProjectUsers();
-            }, function () {
+            }, function() {
                 getProjectUsers();
             });
         }
 
         initController();
+
         function initController() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
@@ -675,20 +680,20 @@
             getProjectUsers();
         }
     };
-    
+
     function searchProjectUser($filter) {
         return function(input, searchObj) {
             var output = input;
-            if(searchObj.projectName && searchObj.projectName.length > 0){
-                output = $filter('filter')(output, {projectName: searchObj.projectName});
+            if (searchObj.projectName && searchObj.projectName.length > 0) {
+                output = $filter('filter')(output, { projectName: searchObj.projectName });
             }
             if (searchObj.projectType && searchObj.projectType.length > 0 && searchObj.projectType != 'all') {
-                output = $filter('filter')(output, function(item){
+                output = $filter('filter')(output, function(item) {
                     return (searchObj.projectType == item.projectType);
                 });
             }
-            if(searchObj.businessUnit && searchObj.businessUnit.length > 0 && searchObj.businessUnit != "All"){
-                output = $filter('filter')(output, {businessUnit: searchObj.businessUnit});
+            if (searchObj.businessUnit && searchObj.businessUnit.length > 0 && searchObj.businessUnit != "All") {
+                output = $filter('filter')(output, { businessUnit: searchObj.businessUnit });
             }
             return output;
         }
@@ -703,20 +708,20 @@
             userResourceType: ""
         };
 
-        function getUserProjects(){
+        function getUserProjects() {
             ProjectService.getUserProjects().then(function(response) {
                 vm.users = response;
-            }, function(error){
+            }, function(error) {
                 console.log(error);
             });
         }
 
-        vm.viewAssignUser = function (user, project) {
+        vm.viewAssignUser = function(user, project) {
             user.isNew = false;
-            if(project){
+            if (project) {
                 user.billDates = project.billDates;
                 project._id = project.projectId;
-            }else{
+            } else {
                 project = {};
             }
             var modalInstance = $uibModal.open({
@@ -728,23 +733,24 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    user: function () {
+                    user: function() {
                         return user;
                     },
-                    project: function () {
+                    project: function() {
                         return project;
                     }
                 }
             });
 
-            modalInstance.result.then(function (userObj) {
+            modalInstance.result.then(function(userObj) {
                 getUserProjects();
-            }, function () {
+            }, function() {
                 getUserProjects();
             });
         }
 
         initController();
+
         function initController() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
@@ -759,12 +765,12 @@
     function searchUserProject($filter) {
         return function(input, searchObj) {
             var output = input;
-            if(searchObj.userName && searchObj.userName.length > 0){
-                output = $filter('filter')(output, {userName: searchObj.userName});
+            if (searchObj.userName && searchObj.userName.length > 0) {
+                output = $filter('filter')(output, { userName: searchObj.userName });
             }
             if (searchObj.userResourceType && searchObj.userResourceType.length > 0) {
                 console.log(searchObj.userResourceType);
-                output = $filter('filter')(output, function(item){
+                output = $filter('filter')(output, function(item) {
                     return (searchObj.userResourceType == item.userResourceType);
                 });
             }
