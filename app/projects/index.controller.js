@@ -32,7 +32,7 @@
             { projectBillId: "fixed-bid", projectBillName: "Fixed bid" },
             { projectBillId: "time-material", projectBillName: "Time and material" }
         ];
-        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training"];
+        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training", "Skull Up"];
 
         function getProjects() {
             ProjectService.getAll().then(function(response) {
@@ -142,7 +142,7 @@
             { projectBillId: "fixed-bid", projectBillName: "Fixed bid" },
             { projectBillId: "time-material", projectBillName: "Time and material" }
         ];
-        vm.projectBusinessUnits = ["Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training"];
+        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training", "Skull Up"];
 
         vm.getClients = function() {
             ProjectService.getClients().then(function(response) {
@@ -621,7 +621,7 @@
             { projectTypeId: "ops", projectTypeName: "ops" },
             { projectTypeId: "sales", projectTypeName: "Sales" }
         ];
-        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training"];
+        vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training", "Skull Up"];
         vm.search = {
             projectName: "",
             projectType: "all",
