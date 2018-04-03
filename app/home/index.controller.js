@@ -620,7 +620,7 @@
                 var obj = {
                     "name": vm.userObj.name,
                     "phone": vm.userObj.phone,
-                    //"username": vm.userObj.username,
+                    "username": vm.userObj.username,
                     "employeeId": vm.userObj.employeeId,
                     "designation": vm.userObj.designation,
                     "userResourceType": vm.userObj.userResourceType,
