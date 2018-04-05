@@ -465,12 +465,13 @@
     function TimesheetController(UserService, TimesheetService, ProjectService, $filter, $state, $stateParams, noty) {
         var vm = this;
         var currentDay = new Date().getDay();
-
+        vm.timesheetHours = 0;
         vm.timesheet = {
             weekDate: new Date(),
             projects: [],
             totalHours: 0,
             timeoffHours: 0,
+            corpHolidayHours: 0,
             overtimeHours: 0
         };
         vm.hasProjects = true;
@@ -496,8 +497,10 @@
             vm.alerts.splice(index, 1);
         };
         vm.calTotalHours = function() {
+            vm.timesheetHours = 0;
             vm.timesheet.totalHours = 0;
             vm.timesheet.timeoffHours = 0;
+            vm.timesheet.corpHolidayHours = 0;
             vm.timesheet.overtimeHours = 0;
             _.each(vm.timesheet.projects, function(project) {
                 project.overtimeHours = 0;
@@ -507,8 +510,10 @@
                 vm.timesheet.totalHours += project.projectHours;
                 vm.timesheet.timeoffHours += project.sickLeaveHours;
                 vm.timesheet.timeoffHours += project.timeoffHours;
+                vm.timesheet.corpHolidayHours += project.corpHolidayHours;
                 vm.timesheet.overtimeHours += project.overtimeHours;
             });
+            vm.timesheetHours = vm.timesheet.totalHours + vm.timesheet.timeoffHours + vm.timesheet.corpHolidayHours;
         }
 
         function getTimesheet(id) {
@@ -521,31 +526,34 @@
 
         vm.saveTimesheet = function(timesheetForm) {
             if (timesheetForm.$valid) {
-                vm.timesheet.week = $filter('date')(vm.timesheet.weekDate, "yyyy-Www").toString();
-                if (vm.isNew) {
-                    TimesheetService.createTimesheet(vm.timesheet).then(function(response) {
-                        noty.showSuccess("Thank you for the update!");
-                        $state.go('timesheet');
-                    }, function(error) {
-                        if (error) {
-                            vm.alerts.push({ msg: error, type: 'danger' });
-                        }
-                    });
-                } else {
-                    TimesheetService.updateTimesheet(vm.timesheet._id, vm.timesheet).then(function(response) {
-                        noty.showSuccess("Thank you for the update!");
-                        if (vm.isPopupEdit) {
-                            $uibModalInstance.close();
-                        } else {
+                if(vm.timesheetHours >= 40){
+                    vm.timesheet.week = $filter('date')(vm.timesheet.weekDate, "yyyy-Www").toString();
+                    if (vm.isNew) {
+                        TimesheetService.createTimesheet(vm.timesheet).then(function(response) {
+                            noty.showSuccess("Thank you for the update!");
                             $state.go('timesheet');
-                        }
-                    }, function(error) {
-                        if (error) {
-                            vm.alerts.push({ msg: error, type: 'danger' });
-                        }
-                    });
+                        }, function(error) {
+                            if (error) {
+                                vm.alerts.push({ msg: error, type: 'danger' });
+                            }
+                        });
+                    } else {
+                        TimesheetService.updateTimesheet(vm.timesheet._id, vm.timesheet).then(function(response) {
+                            noty.showSuccess("Thank you for the update!");
+                            if (vm.isPopupEdit) {
+                                $uibModalInstance.close();
+                            } else {
+                                $state.go('timesheet');
+                            }
+                        }, function(error) {
+                            if (error) {
+                                vm.alerts.push({ msg: error, type: 'danger' });
+                            }
+                        });
+                    }
+                }else{
+                    vm.alerts.push({ msg: "Total hours must grater than or equal to 40", type: 'danger' });
                 }
-
             }
         }
 
@@ -557,6 +565,7 @@
             vm.timesheet.projects = [];
             vm.timesheet.totalHours = 0;
             vm.timesheet.timeoffHours = 0;
+            vm.timesheet.corpHolidayHours = 0;
             vm.timesheet.overtimeHours = 0;
             _.each(vm.user.projects, function(project) {
                 var isValidProject = false;
@@ -611,6 +620,7 @@
                         projectHours: 0,
                         sickLeaveHours: 0,
                         timeoffHours: 0,
+                        corpHolidayHours: 0,
                         overtimeHours: 0,
                         projectComment: "",
                         isAssigned: true
@@ -728,6 +738,7 @@
             projects: [],
             totalHours: 0,
             timeoffHours: 0,
+            corpHolidayHours: 0,
             overtimeHours: 0
         }
         if (vm.timesheet.weekDate.getDay() < 5) {
@@ -735,6 +746,7 @@
         } else if (vm.timesheet.weekDate.getDay() == 6) {
             vm.timesheet.weekDate.setDate(vm.timesheet.weekDate.getDate() - 1);
         }
+        vm.timesheetHours = 0;
         vm.enableSaveBtn = true;
         vm.hasProjects = true;
         vm.timesheetDateOpened = false;
@@ -754,8 +766,10 @@
         }
 
         vm.calTotalHours = function() {
+            vm.timesheetHours = 0;
             vm.timesheet.totalHours = 0;
             vm.timesheet.timeoffHours = 0;
+            vm.timesheet.corpHolidayHours = 0;
             vm.timesheet.overtimeHours = 0;
             _.each(vm.timesheet.projects, function(project) {
                 project.overtimeHours = 0;
@@ -765,8 +779,10 @@
                 vm.timesheet.totalHours += project.projectHours;
                 vm.timesheet.timeoffHours += project.sickLeaveHours;
                 vm.timesheet.timeoffHours += project.timeoffHours;
+                vm.timesheet.corpHolidayHours += project.corpHolidayHours;
                 vm.timesheet.overtimeHours += project.overtimeHours;
             });
+            vm.timesheetHours = vm.timesheet.totalHours + vm.timesheet.timeoffHours + vm.timesheet.corpHolidayHours;
         }
 
         function getTimesheet(id) {
@@ -779,27 +795,30 @@
 
         vm.saveTimesheet = function(timesheetForm) {
             if (timesheetForm.$valid) {
-                vm.timesheet.week = $filter('date')(vm.timesheet.weekDate, "yyyy-Www").toString();
-                if (vm.isNew) {
-                    TimesheetService.createTimesheet(vm.timesheet).then(function(response) {
-                        noty.showSuccess("Thank you for the update!");
-                        $uibModalInstance.close();
-                    }, function(error) {
-                        if (error) {
-                            vm.alerts.push({ msg: error, type: 'danger' });
-                        }
-                    });
-                } else {
-                    TimesheetService.updateTimesheet(vm.timesheet._id, vm.timesheet).then(function(response) {
-                        noty.showSuccess("Thank you for the update!");
-                        $uibModalInstance.close();
-                    }, function(error) {
-                        if (error) {
-                            vm.alerts.push({ msg: error, type: 'danger' });
-                        }
-                    });
+                if(vm.timesheetHours >= 40){
+                    vm.timesheet.week = $filter('date')(vm.timesheet.weekDate, "yyyy-Www").toString();
+                    if (vm.isNew) {
+                        TimesheetService.createTimesheet(vm.timesheet).then(function(response) {
+                            noty.showSuccess("Thank you for the update!");
+                            $uibModalInstance.close();
+                        }, function(error) {
+                            if (error) {
+                                vm.alerts.push({ msg: error, type: 'danger' });
+                            }
+                        });
+                    } else {
+                        TimesheetService.updateTimesheet(vm.timesheet._id, vm.timesheet).then(function(response) {
+                            noty.showSuccess("Thank you for the update!");
+                            $uibModalInstance.close();
+                        }, function(error) {
+                            if (error) {
+                                vm.alerts.push({ msg: error, type: 'danger' });
+                            }
+                        });
+                    }
+                }else{
+                    vm.alerts.push({ msg: "Total hours must grater than or equal to 40", type: 'danger' });
                 }
-
             }
         }
 
