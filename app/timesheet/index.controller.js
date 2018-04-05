@@ -507,6 +507,9 @@
                 if (project.billableMaxHours > 0 && project.projectHours > project.billableMaxHours) {
                     project.overtimeHours = project.projectHours - project.billableMaxHours;
                 }
+                if(!project.corpHolidayHours){
+                    project.corpHolidayHours = 0;
+                }
                 vm.timesheet.totalHours += project.projectHours;
                 vm.timesheet.timeoffHours += project.sickLeaveHours;
                 vm.timesheet.timeoffHours += project.timeoffHours;
@@ -775,6 +778,9 @@
                 project.overtimeHours = 0;
                 if (project.billableMaxHours > 0 && project.projectHours > project.billableMaxHours) {
                     project.overtimeHours = project.projectHours - project.billableMaxHours;
+                }
+                if(!project.corpHolidayHours){
+                    project.corpHolidayHours = 0;
                 }
                 vm.timesheet.totalHours += project.projectHours;
                 vm.timesheet.timeoffHours += project.sickLeaveHours;
