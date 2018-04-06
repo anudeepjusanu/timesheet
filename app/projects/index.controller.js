@@ -125,7 +125,8 @@
             vm.alerts.splice(index, 1);
         };
         vm.obj = {
-            visibility: 'Private'
+            visibility: 'Private',
+            isActive: true
         };
         vm.isNew = true;
         vm.projectTypes = [
@@ -166,6 +167,7 @@
         }
 
         vm.saveProject = function(form) {
+            console.log(vm.obj);
             if (form.$valid) {
                 var clientObj = _.find(vm.clients, { _id: vm.obj.clientId });
                 if (clientObj) {

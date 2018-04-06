@@ -44,6 +44,8 @@ function create(projectParam) {
         projectBillType: projectParam.projectBillType,
         projectType: projectParam.projectType,
         businessUnit: projectParam.businessUnit,
+        estimatedHours: projectParam.estimatedHours,
+        estimatedCost: projectParam.estimatedCost,
         visibility: projectParam.visibility,
         isActive: projectParam.isActive,
         description: projectParam.description,
@@ -69,6 +71,8 @@ function update(_id, params) {
         projectBillType: params.projectBillType,
         projectType: params.projectType,
         businessUnit: params.businessUnit,
+        estimatedHours: params.estimatedHours,
+        estimatedCost: params.estimatedCost,
         visibility: params.visibility,
         isActive: params.isActive,
         description: params.description
