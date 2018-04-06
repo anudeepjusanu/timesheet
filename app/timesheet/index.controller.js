@@ -823,7 +823,7 @@
                         });
                     }
                 }else{
-                    vm.alerts.push({ msg: "Total hours must grater than or equal to 40", type: 'danger' });
+                    vm.alerts.push({ msg: "Total hours must greater than or equal to 40", type: 'danger' });
                 }
             }
         }
