@@ -7,7 +7,7 @@
         .controller('Timesheet.TimesheetController', TimesheetController)
         .controller('Timesheet.TimesheetModelController', TimesheetModelController)
         .controller('Timesheet.ConsolidatedController', ConsolidatedController)
-        .controller('Timesheet.PoolController', PoolController)
+        //.controller('Timesheet.PoolController', PoolController)
 
     .directive('exportTable', function() {
         return {
@@ -1239,7 +1239,7 @@
         }
     };
 
-    function PoolController(UserService, $filter, $scope) {
+    /*function PoolController(UserService, $filter, $scope) {
         var vm = this;
         vm.user = {};
         vm.users = [];
@@ -1349,6 +1349,6 @@
                 }
             });
         }
-    };
+    };*/
 
 })();

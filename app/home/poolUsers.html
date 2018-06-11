@@ -1,0 +1,66 @@
+<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+    {{alert.msg}}
+</div>
+<div class="content-wrapper">
+    <div class="">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Pool Users</h3>
+            </div>
+            <div class="panel-body ">
+                <!--<div class="clearfix row">
+                    <div class="col-md-2">
+                        <button class="btn btn-primary" ng-click="vm.exportTable()">Export</button>
+                    </div>
+                    <div class="col-md-10">
+                        <form class="form-inline" method="post">
+                            <div class="form-group">
+                                <label class="" for="startDate">Start Date :</label>
+                                <p class="input-group" style="width: 140px;">
+                                    <input type="text" id="startDate" class="form-control" uib-datepicker-popup ng-model="vm.search.startDate" is-open="vm.search.startDateOpened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getPoolUsers();" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="vm.search.startDateOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="form-group">
+                                <label class="" for="endDate">End Date :</label>
+                                <p class="input-group" style="width: 140px;">
+                                    <input type="text" id="endDate" class="form-control" uib-datepicker-popup ng-model="vm.search.endDate" is-open="vm.search.endDateOpened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getPoolUsers();" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="vm.search.endDateOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary" ng-click="vm.getPoolUsers()">Search</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>-->
+                <table class="table table-condensed table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Mobile</th>
+                        <th>EMP ID</th>
+                        <th>designation</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="user in vm.users | allUserSearch:vm.search | orderBy:'name'">
+                        <td>{{$index + 1}}</td>
+                        <td>{{user.name}}</td>
+                        <td>{{user.userResourceType}}</td>
+                        <td>{{user.phone}}</td>
+                        <td>{{user.employeeId}}</td>
+                        <td>{{user.designation}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

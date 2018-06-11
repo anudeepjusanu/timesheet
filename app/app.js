@@ -51,8 +51,8 @@
             })
             .state('poolUsers', {
                 url: '/poolUsers',
-                templateUrl: 'timesheet/poolUsers.html',
-                controller: 'Timesheet.PoolController',
+                templateUrl: 'home/poolUsers.html',
+                controller: 'Home.PoolUsersController',
                 controllerAs: 'vm',
                 data: { activeTab: 'poolUsers' }
             })

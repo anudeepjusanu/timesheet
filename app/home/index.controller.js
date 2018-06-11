@@ -10,6 +10,7 @@
         .controller('Home.AdminController', AdminController)
         .controller('Home.UserInfoController', UserInfoController)
         .controller('Home.UserModelController', UserModelController)
+        .controller('Home.PoolUsersController', PoolUsersController)
         .filter('allUserSearch', function ($filter) {
             return function(input, searchObj) {
                 var output = input;
@@ -19,6 +20,11 @@
                 if (searchObj.userResourceType && searchObj.userResourceType.length > 0) {
                     output = $filter('filter')(output, function(item){
                         return (searchObj.userResourceType == item.userResourceType);
+                    });
+                }
+                if (searchObj.userResourceStatus && searchObj.userResourceStatus.length > 0) {
+                    output = $filter('filter')(output, function(item){
+                        return (searchObj.userResourceStatus == item.userResourceStatus);
                     });
                 }
                 if (searchObj.isActive == 'true' || searchObj.isActive == 'false') {
@@ -554,6 +560,7 @@
         vm.search = {
             userName: "",
             userResourceType: "",
+            userResourceStatus: "",
             isActive: ""
         };
 
@@ -563,7 +570,7 @@
             });
         }
 
-        function getAllUsers(week) {
+        function getAllUsers() {
             UserService.GetAll().then(function(users) {
                 vm.users = users;
             });
@@ -624,6 +631,7 @@
                     "employeeId": vm.userObj.employeeId,
                     "designation": vm.userObj.designation,
                     "userResourceType": vm.userObj.userResourceType,
+                    "userResourceStatus": vm.userObj.userResourceStatus,
                     "isActive": vm.userObj.isActive
                 }
                 UserService.UpdateEmployeeInfo(vm.userObj._id, obj).then(function(response) {
@@ -951,6 +959,63 @@
             });
         }
         init();
+    }
+
+    function PoolUsersController(UserService, _, $uibModal) {
+        var vm = this;
+        vm.users = [];
+        vm.search = {
+            userName: "",
+            userResourceType: "",
+            isActive: ""
+        };
+
+        function getAllUsers() {
+            vm.users = [];
+            UserService.GetAll().then(function(users) {
+                _.each(users, function (userObj) {
+                    if(userObj.userResourceStatus == "Pool" && userObj.isActive==true) {
+                        vm.users.push(userObj);
+                    }
+                });
+            });
+        }
+
+        vm.viewUser = function (user) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'home/editUser.html',
+                controller: 'Home.UserModelController',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    user: function () {
+                        return user;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (userObj) {
+                getAllUsers();
+            }, function () {
+                getAllUsers();
+            });
+        }
+
+        initController();
+        function initController() {
+            UserService.GetCurrent().then(function(user) {
+                vm.user = user;
+                getAllUsers();
+                if (vm.user.admin) {
+                    vm.isAdmin = true;
+                } else {
+                    vm.isAdmin = false;
+                }
+            });
+        }
     }
 
 })();
