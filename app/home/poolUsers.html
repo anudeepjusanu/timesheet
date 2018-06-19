@@ -5,48 +5,21 @@
     <div class="">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Pool Users</h3>
+                <h3 class="panel-title">Resource Pool Users</h3> &nbsp;
+                <a class="btn btn-primary btn-xs" ng-show="vm.showAllUsers==true" ng-click="vm.showAllUsers=false;vm.getAllUsers();">Show Pool</a>
+                <a class="btn btn-primary btn-xs" ng-show="vm.showAllUsers==false" ng-click="vm.showAllUsers=true;vm.getAllUsers();">Show All</a>
             </div>
             <div class="panel-body ">
-                <!--<div class="clearfix row">
-                    <div class="col-md-2">
-                        <button class="btn btn-primary" ng-click="vm.exportTable()">Export</button>
-                    </div>
-                    <div class="col-md-10">
-                        <form class="form-inline" method="post">
-                            <div class="form-group">
-                                <label class="" for="startDate">Start Date :</label>
-                                <p class="input-group" style="width: 140px;">
-                                    <input type="text" id="startDate" class="form-control" uib-datepicker-popup ng-model="vm.search.startDate" is-open="vm.search.startDateOpened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getPoolUsers();" />
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default" ng-click="vm.search.startDateOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
-                                    </span>
-                                </p>
-                            </div>
-                            <div class="form-group">
-                                <label class="" for="endDate">End Date :</label>
-                                <p class="input-group" style="width: 140px;">
-                                    <input type="text" id="endDate" class="form-control" uib-datepicker-popup ng-model="vm.search.endDate" is-open="vm.search.endDateOpened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getPoolUsers();" />
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default" ng-click="vm.search.endDateOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
-                                    </span>
-                                </p>
-                            </div>
-                            <div class="form-group">
-                                <button class="btn btn-primary" ng-click="vm.getPoolUsers()">Search</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>-->
                 <table class="table table-condensed table-bordered table-striped">
                     <thead>
                     <tr>
                         <th>#</th>
                         <th>Name</th>
                         <th>Type</th>
-                        <th>Mobile</th>
                         <th>EMP ID</th>
+                        <th>Pool Name</th>
                         <th>designation</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -54,9 +27,14 @@
                         <td>{{$index + 1}}</td>
                         <td>{{user.name}}</td>
                         <td>{{user.userResourceType}}</td>
-                        <td>{{user.phone}}</td>
                         <td>{{user.employeeId}}</td>
+                        <td>{{user.poolName}}</td>
                         <td>{{user.designation}}</td>
+                        <td>
+                            <a class="btn btn-primary btn-xs" ng-click="vm.viewUserPoolLog(user)">Logs</a>
+                            <a class="btn btn-primary btn-xs" ng-click="vm.viewReleaseToPool(user)" ng-show="user.resourceInPool!==true">Release To Pool</a>
+                            <a class="btn btn-primary btn-xs" ng-click="vm.viewReleaseFromPool(user)" ng-show="user.resourceInPool===true">Release From Pool</a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

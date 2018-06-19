@@ -13,7 +13,7 @@
                         <th>#</th>
                         <th>Name</th>
                         <th>Type</th>
-                        <th>Resource Status</th>
+                        <th>Mobile</th>
                         <th>EMP ID</th>
                         <th>designation</th>
                         <th>Status</th>
@@ -23,7 +23,7 @@
                         <td></td>
                         <td><input class="form-control" type="text" ng-model="vm.search.userName" /></td>
                         <td><select class="form-control" ng-model="vm.search.userResourceType" ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'Billable',label:'Billable'}, {id:'Non-billable',label:'Non-billable'}]"></select></td>
-                        <td><select class="form-control" ng-model="vm.search.userResourceStatus" ng-options="opt.id as opt.label for opt in [{id:'', label:'All'}, {id:'Pool', label:'Pool'}]"></select></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td>
@@ -37,7 +37,7 @@
                         <td>{{$index + 1}}</td>
                         <td>{{user.name}}</td>
                         <td>{{user.userResourceType}}</td>
-                        <td>{{user.userResourceStatus}}</td>
+                        <td>{{user.phone}}</td>
                         <td>{{user.employeeId}}</td>
                         <td>{{user.designation}}</td>
                         <td>
@@ -46,6 +46,8 @@
                         </td>
                         <td>
                             <a class="btn btn-primary btn-xs" ng-click="vm.viewUser(user)" ng-show="vm.user.admin">Edit</a>
+                            <a class="btn btn-primary btn-xs" ng-click="vm.viewReleaseToPool(user)" ng-if="vm.user.admin && user.isActive==true" ng-show="user.resourceInPool!==true">Release To Pool</a>
+                            <a class="btn btn-primary btn-xs" ng-click="vm.viewReleaseFromPool(user)" ng-if="vm.user.admin && user.isActive==true" ng-show="user.resourceInPool===true">Release From Pool</a>
                         </td>
                     </tr>
                     </tbody>

@@ -5,6 +5,7 @@
         .module('app')
         .controller('Projects.IndexController', Controller)
         .controller('Projects.AddProjectController', AddProjectController)
+        .controller('Projects.ViewProjectModel', ViewProjectModel)
         .controller('Projects.AssignUsersController', AssignUsersController)
         .controller('Projects.AssignUserModel', AssignUserModel)
         .controller('Projects.ClientModel', ClientModel)
@@ -15,7 +16,7 @@
         .filter('searchUserProject', searchUserProject)
         .filter('searchProject', searchProject)
 
-    function Controller(UserService, ProjectService, $filter, _, FlashService, NgTableParams, noty) {
+    function Controller(UserService, ProjectService, $filter, _, FlashService, NgTableParams, $uibModal, noty) {
         var vm = this;
         vm.user = {};
         vm.clients = [];
@@ -55,6 +56,28 @@
                 vm.clients.unshift({ _id: "", "clientName": "All" });
             }, function(error) {
                 console.log(error);
+            });
+        }
+        
+        vm.viewProject = function (projectObj) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'projects/viewProjectModel.html',
+                controller: 'Projects.ViewProjectModel',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    projectObj: function() {
+                        return projectObj;
+                    }
+                }
+            });
+            modalInstance.result.then(function(projectObj) {
+
+            }, function() {
+
             });
         }
 
@@ -242,6 +265,24 @@
             vm.getClients();
         }
     }
+
+    function ViewProjectModel($uibModalInstance, ProjectService, noty, projectObj) {
+        var vm = this;
+        vm.alerts = [];
+        vm.projectObj = projectObj;
+        vm.assignedUsers = [];
+        function getProjectAssignedUsers(projectId) {
+            ProjectService.getAssignedUsers(projectId).then(function(response) {
+                vm.assignedUsers = response;
+            }, function(error) {
+                console.log(error);
+            });
+        }
+        getProjectAssignedUsers(vm.projectObj._id);
+        vm.closeBox = function() {
+            $uibModalInstance.dismiss('cancel');
+        };
+    };
 
     function AssignUsersController($state, UserService, ProjectService, $stateParams, noty, _, $uibModal) {
         var vm = this;

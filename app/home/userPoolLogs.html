@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">{{vm.userObj.name}} - Pool Logs</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <table class="table table-condensed table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Pool Name</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="log in vm.logs">
+            <td>{{$index + 1}}</td>
+            <td>{{log.poolName}}</td>
+            <td>{{log.startDate}}</td>
+            <td>{{log.endDate}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="vm.close()">Close</button>
+</div>

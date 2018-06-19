@@ -6,6 +6,7 @@ var Q = require('q');
 var mongo = require('mongoskin');
 var db = mongo.db(config.connectionString, { native_parser: true });
 db.bind('users');
+db.bind('poolLogs');
 
 var service = {};
 
@@ -21,6 +22,9 @@ service.createPassword = createPassword;
 service.delete = _delete;
 service.adminAccess = adminAccess;
 service.adminUpdate = adminUpdate;
+service.releaseToPool = releaseToPool;
+service.releaseFromPool = releaseFromPool;
+service.userPoolLogs = userPoolLogs;
 
 module.exports = service;
 
@@ -312,6 +316,73 @@ function adminUpdate(id, userId, userParam) {
                 deferred.reject('something went wrong');
             });
     }
+
+    return deferred.promise;
+}
+
+function releaseToPool(userId, userParam) {
+    var deferred = Q.defer();
+    db.users.findById(userId, function(err, userObj) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (userObj && userObj.isActive === true) {
+            db.users.update({_id: userObj._id}, {$set: {resourceInPool: true, poolName: userParam.poolName}}, function(err, response) {
+                if (err) deferred.reject(err.name + ': ' + err.message);
+                var logData = {
+                    userId: userObj._id,
+                    poolName: userParam.poolName,
+                    startDate: new Date()
+                }
+                db.poolLogs.insert(logData, function(err, log) {
+                    deferred.resolve(response);
+                });
+            }, function(err){
+                deferred.reject('something went wrong');
+            });
+        } else {
+            deferred.reject('You dont have prvilage to update the user');
+        }
+    });
+    return deferred.promise;
+}
+
+function releaseFromPool(userId, userParam) {
+    var deferred = Q.defer();
+    db.users.findById(userId, function(err, userObj) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (userObj && userObj.isActive === true) {
+            db.users.update({_id: userObj._id}, {$set: {resourceInPool: false, poolName: ""}}, function(err, response) {
+                if (err) deferred.reject(err.name + ': ' + err.message);
+                db.poolLogs.find({userId: userObj._id}).sort({_id:-1}).limit(1).toArray(function(err, logs) {
+                    if(logs && logs[0]) {
+                        var logObj = logs[0];
+                        db.poolLogs.update({_id: logObj._id}, {$set: {endDate: new Date()}}, function (err, logResponse) {
+                            deferred.resolve(response);
+                        });
+                    }else{
+                        deferred.resolve(response);
+                    }
+                });
+            }, function(err){
+                deferred.reject('something went wrong');
+            });
+        } else {
+            deferred.reject('You dont have prvilage to update the user');
+        }
+    });
+    return deferred.promise;
+}
+
+function userPoolLogs(userId) {
+    var deferred = Q.defer();
+
+    db.poolLogs.find({'userId': mongo.helper.toObjectID(userId)}).toArray(function(err, logs) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (logs) {
+            deferred.resolve(logs);
+        } else {
+            deferred.resolve([]);
+        }
+    });
 
     return deferred.promise;
 }

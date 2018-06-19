@@ -18,6 +18,9 @@
         service.Delete = Delete;
         service.GetEmployeeInfo = GetEmployeeInfo;
         service.UpdateEmployeeInfo = UpdateEmployeeInfo;
+        service.releaseToPool = releaseToPool;
+        service.releaseFromPool = releaseFromPool;
+        service.userPoolLogs = userPoolLogs;
 
         return service;
 
@@ -59,6 +62,18 @@
 
         function UpdateEmployeeInfo(_id, employee){
             return $http.put('/api/users/adminUpdate/' + _id, employee).then(handleSuccess, handleError);
+        }
+
+        function releaseToPool(_id, params){
+            return $http.post('/api/users/releaseToPool/' + _id, params).then(handleSuccess, handleError);
+        }
+
+        function releaseFromPool(_id, params){
+            return $http.post('/api/users/releaseFromPool/' + _id, params).then(handleSuccess, handleError);
+        }
+
+        function userPoolLogs(_id){
+            return $http.get('/api/users/userPoolLogs/' + _id).then(handleSuccess, handleError);
         }
 
         // private functions

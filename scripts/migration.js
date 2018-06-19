@@ -13,18 +13,15 @@ var service = {};
 
 db.timesheets.find({}).sort({createdOn: -1}).toArray(function(err, timesheets) {
     _.each(timesheets, function (timesheetObj) {
-        timesheetObj.overtimeHours = 0;
-        _.each(timesheetObj.projects, function (projectObj) {
-            projectObj.overtimeHours = 0;
-            if(projectObj.billableMaxHours > 0 && projectObj.projectHours > projectObj.billableMaxHours){
-                projectObj.overtimeHours = projectObj.projectHours - projectObj.billableMaxHours;
-            }
-            timesheetObj.overtimeHours += projectObj.overtimeHours;
-        });
-        db.timesheets.update({ _id: mongo.helper.toObjectID(timesheetObj._id) }, { '$set': timesheetObj }, function(err, response) {
+        var weekDate = new Date(timesheetObj.weekDate);
+        if(weekDate.getDay()!==5){
+            //console.log(weekDate.getDay()+" "+weekDate);
+            console.log(timesheetObj);
+        }
+        /*db.timesheets.update({ _id: mongo.helper.toObjectID(timesheetObj._id) }, { '$set': timesheetObj }, function(err, response) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             console.log(timesheetObj._id);
-        });
+        });*/
     });
 });
 

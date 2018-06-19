@@ -10,7 +10,9 @@
         .controller('Home.AdminController', AdminController)
         .controller('Home.UserInfoController', UserInfoController)
         .controller('Home.UserModelController', UserModelController)
+        .controller('Home.ReleaseUserModelController', ReleaseUserModelController)
         .controller('Home.PoolUsersController', PoolUsersController)
+        .controller('Home.PoolLogsController', PoolLogsController)
         .filter('allUserSearch', function ($filter) {
             return function(input, searchObj) {
                 var output = input;
@@ -20,11 +22,6 @@
                 if (searchObj.userResourceType && searchObj.userResourceType.length > 0) {
                     output = $filter('filter')(output, function(item){
                         return (searchObj.userResourceType == item.userResourceType);
-                    });
-                }
-                if (searchObj.userResourceStatus && searchObj.userResourceStatus.length > 0) {
-                    output = $filter('filter')(output, function(item){
-                        return (searchObj.userResourceStatus == item.userResourceStatus);
                     });
                 }
                 if (searchObj.isActive == 'true' || searchObj.isActive == 'false') {
@@ -599,6 +596,50 @@
             });
         }
 
+        vm.viewReleaseToPool = function (user) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'home/releaseToPool.html',
+                controller: 'Home.ReleaseUserModelController',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    user: function () {
+                        return user;
+                    }
+                }
+            });
+            modalInstance.result.then(function (userObj) {
+                getAllUsers();
+            }, function () {
+                getAllUsers();
+            });
+        }
+
+        vm.viewReleaseFromPool = function (user) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'home/releaseFromPool.html',
+                controller: 'Home.ReleaseUserModelController',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    user: function () {
+                        return user;
+                    }
+                }
+            });
+            modalInstance.result.then(function (userObj) {
+                getAllUsers();
+            }, function () {
+                getAllUsers();
+            });
+        }
+
         initController();
         function initController() {
             UserService.GetCurrent().then(function(user) {
@@ -631,7 +672,6 @@
                     "employeeId": vm.userObj.employeeId,
                     "designation": vm.userObj.designation,
                     "userResourceType": vm.userObj.userResourceType,
-                    "userResourceStatus": vm.userObj.userResourceStatus,
                     "isActive": vm.userObj.isActive
                 }
                 UserService.UpdateEmployeeInfo(vm.userObj._id, obj).then(function(response) {
@@ -643,6 +683,53 @@
                     }
                 });
             }
+        }
+
+        vm.closeUser = function () {
+            $uibModalInstance.close();
+        }
+
+        init();
+        function init() {
+
+        }
+    }
+
+    function ReleaseUserModelController(UserService, $filter, noty, $uibModalInstance, user) {
+        var vm = this;
+        vm.userObj = user;
+        vm.alerts = [];
+        vm.enableSaveBtn = true;
+        vm.closeAlert = function(index) {
+            vm.alerts.splice(index, 1);
+        }
+
+        vm.toPool = function (userForm) {
+            if(userForm.$valid){
+                var obj = {
+                    "resourceInPool": true,
+                    "poolName": vm.userObj.poolName
+                }
+                UserService.releaseToPool(vm.userObj._id, obj).then(function(response) {
+                    noty.showSuccess("User has been release to pool successfully!");
+                    $uibModalInstance.close();
+                }, function(error) {
+                    if (error) {
+                        vm.alerts.push({ msg: error, type: 'danger' });
+                    }
+                });
+            }
+        }
+
+        vm.fromPool = function (userForm) {
+            UserService.releaseFromPool(vm.userObj._id).then(function(response) {
+                noty.showSuccess("User has been release from pool successfully!");
+                $uibModalInstance.close();
+            }, function(error) {
+                if (error) {
+                    vm.alerts.push({ msg: error, type: 'danger' });
+                }
+            });
         }
 
         vm.closeUser = function () {
@@ -963,6 +1050,7 @@
 
     function PoolUsersController(UserService, _, $uibModal) {
         var vm = this;
+        vm.showAllUsers = false;
         vm.users = [];
         vm.search = {
             userName: "",
@@ -970,24 +1058,28 @@
             isActive: ""
         };
 
-        function getAllUsers() {
+        vm.getAllUsers = function() {
             vm.users = [];
             UserService.GetAll().then(function(users) {
                 _.each(users, function (userObj) {
-                    if(userObj.userResourceStatus == "Pool" && userObj.isActive==true) {
-                        vm.users.push(userObj);
+                    if(userObj.isActive==true) {
+                        if(vm.showAllUsers === true){
+                            vm.users.push(userObj);
+                        }else if(vm.showAllUsers === false && userObj.resourceInPool === true) {
+                            vm.users.push(userObj);
+                        }
                     }
                 });
             });
         }
 
-        vm.viewUser = function (user) {
+        vm.viewUserPoolLog = function (user) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
-                templateUrl: 'home/editUser.html',
-                controller: 'Home.UserModelController',
+                templateUrl: 'home/userPoolLogs.html',
+                controller: 'Home.PoolLogsController',
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
@@ -996,11 +1088,54 @@
                     }
                 }
             });
-
             modalInstance.result.then(function (userObj) {
-                getAllUsers();
+
             }, function () {
-                getAllUsers();
+
+            });
+        }
+
+        vm.viewReleaseToPool = function (user) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'home/releaseToPool.html',
+                controller: 'Home.ReleaseUserModelController',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    user: function () {
+                        return user;
+                    }
+                }
+            });
+            modalInstance.result.then(function (userObj) {
+                vm.getAllUsers();
+            }, function () {
+                vm.getAllUsers();
+            });
+        }
+
+        vm.viewReleaseFromPool = function (user) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'home/releaseFromPool.html',
+                controller: 'Home.ReleaseUserModelController',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    user: function () {
+                        return user;
+                    }
+                }
+            });
+            modalInstance.result.then(function (userObj) {
+                vm.getAllUsers();
+            }, function () {
+                vm.getAllUsers();
             });
         }
 
@@ -1008,13 +1143,35 @@
         function initController() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
-                getAllUsers();
                 if (vm.user.admin) {
                     vm.isAdmin = true;
                 } else {
                     vm.isAdmin = false;
                 }
+                vm.getAllUsers();
             });
+        }
+    }
+
+    function PoolLogsController(UserService, _, $uibModalInstance, user) {
+        var vm = this;
+        vm.user = user;
+        vm.logs = [];
+
+        function getUserPoolLogs(userId) {
+            vm.logs = [];
+            UserService.userPoolLogs(vm.user._id).then(function(logs) {
+                vm.logs = logs;
+            });
+        }
+
+        vm.close = function () {
+            $uibModalInstance.close();
+        }
+
+        initController();
+        function initController() {
+            getUserPoolLogs(vm.user._id);
         }
     }
 

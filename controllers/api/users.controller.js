@@ -14,6 +14,9 @@ router.put('/grantAdmin/:_id', adminAccess);
 router.get('/all', getAllUsers);
 router.get('/getUsers', getUsers);
 router.put('/adminUpdate/:_id', adminUpdate);
+router.post('/releaseToPool/:_id', releaseToPool);
+router.post('/releaseFromPool/:_id', releaseFromPool);
+router.get('/userPoolLogs/:_id', userPoolLogs);
 
 module.exports = router;
 
@@ -148,4 +151,40 @@ function adminUpdate(req, res){
         .catch(function (err) {
             res.status(400).send(err);
         });
+}
+
+function releaseToPool(req, res){
+    userService.releaseToPool(req.params._id, req.body).then(function (response) {
+        if (response) {
+            res.send(response);
+        } else {
+            res.sendStatus(404);
+        }
+    }).catch(function (err) {
+        res.status(400).send(err);
+    });
+}
+
+function releaseFromPool(req, res){
+    userService.releaseFromPool(req.params._id, req.body).then(function (response) {
+        if (response) {
+            res.send(response);
+        } else {
+            res.sendStatus(404);
+        }
+    }).catch(function (err) {
+        res.status(400).send(err);
+    });
+}
+
+function userPoolLogs(req, res){
+    userService.userPoolLogs(req.params._id).then(function (response) {
+        if (response) {
+            res.send(response);
+        } else {
+            res.sendStatus(404);
+        }
+    }).catch(function (err) {
+        res.status(400).send(err);
+    });
 }

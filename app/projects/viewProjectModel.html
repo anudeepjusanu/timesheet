@@ -1,0 +1,65 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">
+        <span>{{vm.projectObj.projectName}}</span>
+    </h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
+    <div class="row">
+        <table class="table table-condensed table-bordered table-striped">
+            <tr>
+                <th width="30%">Project Name</th>
+                <td>{{vm.projectObj.projectName}}</td>
+            </tr>
+            <tr>
+                <th>Customer Name</th>
+                <td>{{vm.projectObj.clientName}}</td>
+            </tr>
+            <tr>
+                <th>Start Date</th>
+                <td>{{vm.projectObj.startDate}}</td>
+            </tr>
+            <tr>
+                <th>Project Bill Type</th>
+                <td>{{vm.projectObj.projectBillType}}</td>
+            </tr>
+            <tr>
+                <th>Project Type</th>
+                <td>{{vm.projectObj.projectType}}</td>
+            </tr>
+            <tr>
+                <th>Business Unit</th>
+                <td>{{vm.projectObj.businessUnit}}</td>
+            </tr>
+            <tr>
+                <th>Estimated Hours</th>
+                <td>{{vm.projectObj.estimatedHours}}</td>
+            </tr>
+            <tr>
+                <th>Estimated Cost</th>
+                <td>{{vm.projectObj.estimatedCost}}</td>
+            </tr>
+            <tr>
+                <th>Visibility</th>
+                <td>{{vm.projectObj.visibility}}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{vm.projectObj.projectName}}</td>
+            </tr>
+            <tr>
+                <th>Assigned Users</th>
+                <td>
+                    <table class="table table-condensed table-striped">
+                        <tr ng-repeat="user in vm.assignedUsers">
+                            <td>{{user.userName}}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="vm.closeBox()">Close</button>
+</div>
