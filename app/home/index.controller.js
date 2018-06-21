@@ -672,6 +672,7 @@
                     "employeeId": vm.userObj.employeeId,
                     "designation": vm.userObj.designation,
                     "userResourceType": vm.userObj.userResourceType,
+                    "profileImgUrl": vm.userObj.profileImgUrl,
                     "isActive": vm.userObj.isActive
                 }
                 UserService.UpdateEmployeeInfo(vm.userObj._id, obj).then(function(response) {
