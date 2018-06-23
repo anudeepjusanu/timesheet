@@ -325,12 +325,14 @@ function releaseToPool(userId, userParam) {
     db.users.findById(userId, function(err, userObj) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (userObj && userObj.isActive === true) {
-            db.users.update({_id: userObj._id}, {$set: {resourceInPool: true, poolName: userParam.poolName}}, function(err, response) {
+            var poolSinceDate = new Date(userParam.poolSinceDate);
+            db.users.update({_id: userObj._id}, {$set: {resourceInPool: true, poolName: userParam.poolName, poolSinceDate: poolSinceDate}}, function(err, response) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
                 var logData = {
                     userId: userObj._id,
                     poolName: userParam.poolName,
-                    startDate: new Date()
+                    poolSinceDate: poolSinceDate,
+                    createdDate: new Date()
                 }
                 db.poolLogs.insert(logData, function(err, log) {
                     deferred.resolve(response);
@@ -350,7 +352,7 @@ function releaseFromPool(userId, userParam) {
     db.users.findById(userId, function(err, userObj) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (userObj && userObj.isActive === true) {
-            db.users.update({_id: userObj._id}, {$set: {resourceInPool: false, poolName: ""}}, function(err, response) {
+            db.users.update({_id: userObj._id}, {$set: {resourceInPool: false, poolName: "", poolSinceDate: ""}}, function(err, response) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
                 db.poolLogs.find({userId: userObj._id}).sort({_id:-1}).limit(1).toArray(function(err, logs) {
                     if(logs && logs[0]) {

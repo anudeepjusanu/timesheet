@@ -16,9 +16,20 @@
                 <select class="form-control" ng-model="vm.userObj.poolName" ng-options="option as option for option in ['Organization Available Pool', 'Care Available Pool', 'Tapclicks Available Pool']" ng-required="true"></select>
             </div>
         </div>
+        <div class="form-group required">
+            <label class="col-md-3 col-xs-12 control-label">Since date</label>
+            <div class="col-md-6 col-xs-12">
+                <p class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.userObj.poolSinceDate" is-open="vm.sinceDateOpened" datepicker-options="vm.dateOptions" ng-focus="vm.sinceDateOpened=true" ng-required="true" close-text="Close" readonly />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.sinceDateOpened=true"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </p>
+            </div>
+        </div>
     </form>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-disabled="!vm.enableSaveBtn" ng-click="vm.toPool(userForm);">Save</button>
+    <button class="btn btn-primary" type="button" ng-click="vm.toPool(userForm);">Save</button>
     <button class="btn btn-warning" type="button" ng-click="vm.closeUser()">Cancel</button>
 </div>

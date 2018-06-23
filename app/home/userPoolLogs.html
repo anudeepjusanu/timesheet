@@ -7,6 +7,7 @@
         <tr>
             <th>#</th>
             <th>Pool Name</th>
+            <th>Pool Since Date</th>
             <th>Start Date</th>
             <th>End Date</th>
         </tr>
@@ -15,8 +16,9 @@
         <tr ng-repeat="log in vm.logs">
             <td>{{$index + 1}}</td>
             <td>{{log.poolName}}</td>
-            <td>{{log.startDate}}</td>
-            <td>{{log.endDate}}</td>
+            <td>{{log.poolSinceDate | date : format : timezone}}</td>
+            <td>{{log.createdDate | date : format : timezone}}</td>
+            <td>{{log.endDate | date : format : timezone}}</td>
         </tr>
         </tbody>
     </table>

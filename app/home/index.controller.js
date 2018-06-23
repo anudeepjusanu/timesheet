@@ -700,7 +700,12 @@
         var vm = this;
         vm.userObj = user;
         vm.alerts = [];
-        vm.enableSaveBtn = true;
+        vm.dateOptions = {
+            formatYear: 'yy',
+            maxDate: new Date(2020, 5, 22),
+            startingDay: 1
+        };
+        vm.sinceDateOpened = false;
         vm.closeAlert = function(index) {
             vm.alerts.splice(index, 1);
         }
@@ -709,6 +714,7 @@
             if(userForm.$valid){
                 var obj = {
                     "resourceInPool": true,
+                    "poolSinceDate": vm.userObj.poolSinceDate,
                     "poolName": vm.userObj.poolName
                 }
                 UserService.releaseToPool(vm.userObj._id, obj).then(function(response) {
@@ -1065,8 +1071,10 @@
                 _.each(users, function (userObj) {
                     if(userObj.isActive==true) {
                         if(vm.showAllUsers === true){
+                            userObj.poolSince = vm.calWeeksSinceNow(userObj.poolSinceDate);
                             vm.users.push(userObj);
                         }else if(vm.showAllUsers === false && userObj.resourceInPool === true) {
+                            userObj.poolSince = vm.calWeeksSinceNow(userObj.poolSinceDate);
                             vm.users.push(userObj);
                         }
                     }
@@ -1140,6 +1148,19 @@
             });
         }
 
+        vm.calWeeksSinceNow = function (sinceDate) {
+            if(sinceDate && sinceDate.length > 0){
+                var oneDay = 24*60*60*1000;
+                var oneWeek = 7*24*60*60*1000;
+                var now = new Date();
+                var sinceDate = new Date(sinceDate);
+                var diff = parseInt((now - sinceDate)/oneWeek);
+                return diff + " Weeks";
+            }else{
+                return "";
+            }
+        }
+
         initController();
         function initController() {
             UserService.GetCurrent().then(function(user) {
@@ -1168,6 +1189,19 @@
 
         vm.close = function () {
             $uibModalInstance.close();
+        }
+
+        vm.calWeeksSinceEnd= function (sinceDate, endDate) {
+            if(sinceDate && sinceDate.length > 0){
+                var oneDay = 24*60*60*1000;
+                var oneWeek = 7*24*60*60*1000;
+                var now = new Date();
+                var sinceDate = new Date(sinceDate);
+                var diff = parseInt((now - sinceDate)/oneWeek);
+                return diff + " Weeks";
+            }else{
+                return "";
+            }
         }
 
         initController();
