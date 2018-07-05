@@ -51,25 +51,25 @@
                     <a ui-sref="home"><span class="fa fa-desktop"></span> <span class="xn-text">Dashboard</span></a>
                 </li>
                 <li class="" ng-class="{active: activeTab === 'timesheet'}">
-                    <a ui-sref="timesheet"><span class="fa fa-calendar"></span> <span class="xn-text">Timesheet</span></a>
+                    <a ui-sref="timesheet"><span class="fa fa-file-excel-o"></span> <span class="xn-text">Timesheet</span></a>
                 </li>
                 <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'consolidatedTimesheet'}">
-                    <a ui-sref="consolidatedTimesheet"><span class="fa fa-calendar"></span> <span class="xn-text">Consolidated Timesheet</span></a>
+                    <a ui-sref="consolidatedTimesheet"><img class="fa" src="app-content/assets/progress-report.png"> <span class="xn-text">Consolidated Timesheet</span></a>
                 </li>
                 <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'projectUsers'}">
-                    <a ui-sref="projectUsers"><span class="fa fa-users"></span> <span class="xn-text">Project Users</span></a>
+                    <a ui-sref="projectUsers"><img class="fa" src="app-content/assets/user-group.png"> <span class="xn-text">Project Users</span></a>
                 </li>
                 <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'userProjects'}">
-                    <a ui-sref="userProjects"><span class="fa fa-users"></span> <span class="xn-text">User Projects</span></a>
+                    <a ui-sref="userProjects"><img class="fa" src="app-content/assets/operator-with-headset.png"> <span class="xn-text">User Projects</span></a>
                 </li>
                 <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'poolUsers'}">
-                    <a ui-sref="poolUsers"><span class="fa fa-users"></span> <span class="xn-text">Resource Pool</span></a>
+                    <a ui-sref="poolUsers"><img class="fa" src="app-content/assets/sleepy-man.png"> <span class="xn-text">Resource Pool</span></a>
                 </li>
                 <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'allUsers'}">
                     <a ui-sref="allUsers"><span class="fa fa-users"></span> <span class="xn-text">All Users</span></a>
                 </li>
                 <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'projects'}">
-                    <a ui-sref="projects"><span class="fa fa-tasks"></span> <span class="xn-text">Projects</span></a>
+                    <a ui-sref="projects"><img class="fa" src="app-content/assets/project.png"> <span class="xn-text">Projects</span></a>
                 </li>
                 <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'clients'}">
                     <a ui-sref="clients"><span class="fa fa-tags"></span> <span class="xn-text">Clients</span></a>
