@@ -1070,11 +1070,11 @@ body.page-container-boxed .page-container {
   text-align: center;
 }
 .profile .profile-image img {
-  width: 100px;
   border: 3px solid #FFF;
   -moz-border-radius: 20%;
   -webkit-border-radius: 20%;
   border-radius: 20%;
+  max-height: 120px;
 }
 .profile .profile-data {
   width: 100%;
@@ -7328,4 +7328,21 @@ li.ext_zip {
 }
 .x-navigation-minimized .xn-logo{
 display:none;
+}
+
+.user-image {
+  float: left;
+  width: 100%;
+  margin: 0px 0px 10px;
+  text-align: left;
+}
+.user-image img {
+  border: 3px solid #FFF;
+  -moz-border-radius: 20%;
+  -webkit-border-radius: 20%;
+  border-radius: 20%;
+  max-height: 60px;
+}
+.user-name{
+  float: left;
 }

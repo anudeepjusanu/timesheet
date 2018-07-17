@@ -35,7 +35,7 @@
             <div class="panel panel-default">
                 <div class="panel-body profile">
                     <div class="profile-image">
-                        <img ng-src="{{user.profileImgUrl}}" alt="{{user.name}}" />
+                        <img ng-src="{{user.profileImgUrl}}" onerror="this.src='app-content/assets/user.jpg'" alt="{{user.name}}" />
                     </div>
                     <div class="profile-data">
                         <div class="profile-data-name">{{user.name}}</div>

@@ -1066,11 +1066,11 @@ body.page-container-boxed .page-container {
   text-align: center;
 }
 .profile .profile-image img {
-  width: 100px;
   border: 3px solid #FFF;
   -moz-border-radius: 20%;
   -webkit-border-radius: 20%;
   border-radius: 20%;
+  max-height: 120px;
 }
 .profile .profile-data {
   width: 100%;

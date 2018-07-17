@@ -26,7 +26,12 @@
                     <tbody>
                     <tr ng-repeat="user in vm.users | allUserSearch:vm.search | orderBy:'name'">
                         <td>{{$index + 1}}</td>
-                        <td>{{user.name}}</td>
+                        <td>
+                            <div class="user-image">
+                                <img ng-src="{{user.profileImgUrl}}" onerror="this.src='app-content/assets/user.jpg'" alt="{{user.name}}" />
+                                {{user.name}}
+                            </div>
+                        </td>
                         <td>{{user.userResourceType}}</td>
                         <td>{{user.employeeId}}</td>
                         <td>{{user.poolName}}</td>
