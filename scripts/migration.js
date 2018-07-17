@@ -12,13 +12,20 @@ db.bind('poolLogs');
 
 var service = {};
 
-db.poolLogs.find({}).toArray(function(err, poolLogs) {
-    _.each(poolLogs, function (logObj) {
-        if(logObj.startDate) {
-            logObj.createdDate = new Date(logObj.startDate);
-            db.poolLogs.update({_id: mongo.helper.toObjectID(logObj._id)}, {'$set': logObj}, function (err, userResponse) {
-                if (err) deferred.reject(err.name + ': ' + err.message);
-            });
+db.users.find({}).toArray(function(err, users) {
+    _.each(users, function (userObj) {
+        if(userObj.employeeId){
+            userObj.profileImgUrl = 'http://elogos.wavelabs.in/'+userObj.employeeId.substring(2)+'.png';
+            var options = {method: 'HEAD', host: 'elogos.wavelabs.in', port: 80, path: userObj.profileImgUrl, body: userObj};
+            var req = http.request(options, function(response) {
+                    if(response.statusCode == 200) {
+                        db.users.update({_id: mongo.helper.toObjectID(userObj._id)}, {'$set': userObj}, function (err, userResponse) {
+                            if (err) deferred.reject(err.name + ': ' + err.message);
+                            console.log(userObj.employeeId + " -- " + response.req.path);
+                        });
+                    }
+                });
+            req.end();
         }
     });
 });
