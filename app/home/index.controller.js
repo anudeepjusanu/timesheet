@@ -531,9 +531,9 @@
                 vm.users = users;
                 _.each(vm.users, function (userObj) {
                     if(!(userObj.profileImgUrl) || userObj.profileImgUrl == ""){
-                        userObj.profileImgUrl = 'app-content/assets/user.jpg';
+                        userObj.profileImgUrl = '/app/app-content/assets/user.jpg';
                     }
-                })
+                });
                 vm.tableParams.settings({
                     dataset: vm.users
                 });
@@ -575,6 +575,11 @@
         function getAllUsers() {
             UserService.GetAll().then(function(users) {
                 vm.users = users;
+                _.each(vm.users, function (userObj) {
+                    if(!(userObj.profileImgUrl) || userObj.profileImgUrl == ""){
+                        userObj.profileImgUrl = '/app/app-content/assets/user.jpg';
+                    }
+                });
             });
         }
 
@@ -1083,6 +1088,11 @@
                             vm.users.push(userObj);
                         }
                     }
+
+                    if(!(userObj.profileImgUrl) || userObj.profileImgUrl == ""){
+                        userObj.profileImgUrl = '/app/app-content/assets/user.jpg';
+                    }
+
                 });
             });
         }
