@@ -530,7 +530,7 @@
             UserService.GetAll().then(function(users) {
                 vm.users = users;
                 _.each(vm.users, function (userObj) {
-                    if(!userObj.profileImgUrl || userObj.profileImgUrl.length<0){
+                    if(!(userObj.profileImgUrl) || userObj.profileImgUrl == ""){
                         userObj.profileImgUrl = 'app-content/assets/user.jpg';
                     }
                 })
