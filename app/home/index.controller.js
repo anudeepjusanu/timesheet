@@ -529,6 +529,11 @@
         function getAllUsers(week) {
             UserService.GetAll().then(function(users) {
                 vm.users = users;
+                _.each(vm.users, function (userObj) {
+                    if(!userObj.profileImgUrl || userObj.profileImgUrl.length<0){
+                        userObj.profileImgUrl = 'app-content/assets/user.jpg';
+                    }
+                })
                 vm.tableParams.settings({
                     dataset: vm.users
                 });
