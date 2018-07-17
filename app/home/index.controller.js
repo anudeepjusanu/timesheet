@@ -591,7 +591,6 @@
                         userObj.profileImgUrl = '/app/app-content/assets/user.jpg';
                     }
                 });
-                vm.users.sort('name');
             });
         }
 
