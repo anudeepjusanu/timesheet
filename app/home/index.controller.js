@@ -563,7 +563,18 @@
             userName: "",
             userResourceType: "",
             userResourceStatus: "",
-            isActive: ""
+            isActive: "",
+            orderBy: 'name',
+            sortDESC: false
+        };
+
+        vm.sorting = function (orderBy) {
+            if(vm.search.orderBy == orderBy){
+                vm.search.sortDESC = !vm.search.sortDESC;
+            }else{
+                vm.search.sortDESC = false;
+            }
+            vm.search.orderBy = orderBy;
         };
 
         function deleteUser(id) {
@@ -580,6 +591,7 @@
                         userObj.profileImgUrl = '/app/app-content/assets/user.jpg';
                     }
                 });
+                vm.users.sort('name');
             });
         }
 
@@ -1072,7 +1084,18 @@
         vm.search = {
             userName: "",
             userResourceType: "",
-            isActive: ""
+            isActive: "",
+            orderBy: 'name',
+            sortDESC: false
+        };
+
+        vm.sorting = function (orderBy) {
+            if(vm.search.orderBy == orderBy){
+                vm.search.sortDESC = !vm.search.sortDESC;
+            }else{
+                vm.search.sortDESC = false;
+            }
+            vm.search.orderBy = orderBy;
         };
 
         vm.getAllUsers = function() {

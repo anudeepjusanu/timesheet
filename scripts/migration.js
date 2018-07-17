@@ -8,7 +8,7 @@ var db = mongo.db(config.connectionString, { native_parser: true });
 db.bind('timesheets');
 db.bind('users');
 db.bind('projects');
-db.bind('poolLogs');
+var http = require('http');
 
 var service = {};
 

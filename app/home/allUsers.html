@@ -11,11 +11,17 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Name</th>
+                        <th class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='name'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='name'&&vm.search.sortDESC===true}">
+                            <a ng-click="vm.sorting('name');">Name</a>
+                        </th>
                         <th>Type</th>
                         <th>Mobile</th>
-                        <th>EMP ID</th>
-                        <th>designation</th>
+                        <th class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='employeeId'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='employeeId'&&vm.search.sortDESC===true}">
+                            <a ng-click="vm.sorting('employeeId');">EMP ID</a>
+                        </th>
+                        <th class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='designation'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='designation'&&vm.search.sortDESC===true}">
+                            <a ng-click="vm.sorting('designation');">designation</a>
+                        </th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -33,7 +39,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="user in vm.users | allUserSearch:vm.search | orderBy:'name'">
+                    <tr ng-repeat="user in vm.users | allUserSearch:vm.search | orderBy:vm.search.orderBy:vm.search.sortDESC">
                         <td>{{$index + 1}}</td>
                         <td>
                             <div class="user-image">

@@ -14,17 +14,31 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Name</th>
+                        <th class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='name'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='name'&&vm.search.sortDESC===true}">
+                            <a ng-click="vm.sorting('name');">Name</a>
+                        </th>
                         <th>Type</th>
-                        <th>EMP ID</th>
+                        <th class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='employeeId'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='employeeId'&&vm.search.sortDESC===true}">
+                            <a ng-click="vm.sorting('employeeId');">EMP ID</a>
+                        </th>
                         <th>Pool Name</th>
                         <th>Pool Since Date</th>
                         <th>Pool Since</th>
                         <th>Action</th>
                     </tr>
+                    <tr>
+                        <td></td>
+                        <td><input class="form-control" type="text" ng-model="vm.search.userName" /></td>
+                        <td><select class="form-control" ng-model="vm.search.userResourceType" ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'Billable',label:'Billable'}, {id:'Non-billable',label:'Non-billable'}]"></select></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="user in vm.users | allUserSearch:vm.search | orderBy:'name'">
+                    <tr ng-repeat="user in vm.users | allUserSearch:vm.search | orderBy:vm.search.orderBy:vm.search.sortDESC">
                         <td>{{$index + 1}}</td>
                         <td>
                             <div class="user-image">
