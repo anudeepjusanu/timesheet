@@ -30,7 +30,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-3" ng-repeat="user in vm.users | filter: vm.searchText">
+        <div class="col-md-3" ng-repeat="user in vm.users | orderBy:name | filter: vm.searchText">
             <!-- CONTACT ITEM -->
             <div class="panel panel-default">
                 <div class="panel-body profile">

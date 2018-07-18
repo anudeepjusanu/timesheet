@@ -21,7 +21,9 @@
                         <th class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='employeeId'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='employeeId'&&vm.search.sortDESC===true}">
                             <a ng-click="vm.sorting('employeeId');">EMP ID</a>
                         </th>
-                        <th>Pool Name</th>
+                        <th class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='poolName'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='poolName'&&vm.search.sortDESC===true}">
+                            <a ng-click="vm.sorting('poolName');">Pool Name</a>
+                        </th>
                         <th>Pool Since Date</th>
                         <th>Pool Since</th>
                         <th>Action</th>
