@@ -15,6 +15,7 @@ service.createTimesheet = createTimesheet;
 service.updateTimesheet = updateTimesheet;
 service.getTimesheet = getTimesheet;
 service.deleteTimesheet = deleteTimesheet;
+service.adminDeleteTimesheet = adminDeleteTimesheet;
 service.getByWeek = getByWeek;
 service.getByMonth = getByMonth;
 service.getMine = getMine;
@@ -270,6 +271,19 @@ function getTimesheet(id){
 function deleteTimesheet(timesheetId, userId){
     var deferred = Q.defer();
     db.timesheets.remove({ _id: mongo.helper.toObjectID(timesheetId), userId: mongo.helper.toObjectID(userId)}, function(err, doc) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (doc) {
+            deferred.resolve(doc);
+        } else {
+            deferred.reject("Please select valid id");
+        }
+    });
+    return deferred.promise;
+}
+
+function adminDeleteTimesheet(timesheetId){
+    var deferred = Q.defer();
+    db.timesheets.remove({ _id: mongo.helper.toObjectID(timesheetId)}, function(err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (doc) {
             deferred.resolve(doc);

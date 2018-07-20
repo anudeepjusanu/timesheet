@@ -426,6 +426,12 @@
             });
         }
 
+        vm.adminDeleteTimesheet = function(timesheetId) {
+            TimesheetService.deleteTimesheet(timesheetId).then(function(response) {
+                vm.getAllReports(vm.currentWeek);
+            });
+        }
+
         vm.deleteTimesheet = function(timesheetId) {
             TimesheetService.deleteTimesheet(timesheetId).then(function(response) {
                 getMyTimesheets();
