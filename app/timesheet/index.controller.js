@@ -81,6 +81,7 @@
             { "resourceTypeId": "buffer", "resourceTypeVal": "Buffer" },
             { "resourceTypeId": "billable", "resourceTypeVal": "Billable" },
             { "resourceTypeId": "bizdev", "resourceTypeVal": "Bizdev" },
+            { "resourceTypeId": "projectDelivery", "resourceTypeVal": "Project Delivery" },
             { "resourceTypeId": "internal", "resourceTypeVal": "Internal" },
             { "resourceTypeId": "operations", "resourceTypeVal": "Operations" },
             { "resourceTypeId": "trainee", "resourceTypeVal": "Trainee" }
