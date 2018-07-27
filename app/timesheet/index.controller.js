@@ -82,7 +82,6 @@
             { "resourceTypeId": "billable", "resourceTypeVal": "Billable" },
             { "resourceTypeId": "bizdev", "resourceTypeVal": "Bizdev" },
             { "resourceTypeId": "projectDelivery", "resourceTypeVal": "Project Delivery" },
-            { "resourceTypeId": "Mgmt", "resourceTypeVal": "Mgmt" },
             { "resourceTypeId": "internal", "resourceTypeVal": "Internal" },
             { "resourceTypeId": "operations", "resourceTypeVal": "Operations" },
             { "resourceTypeId": "trainee", "resourceTypeVal": "Trainee" }
