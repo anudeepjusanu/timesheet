@@ -288,9 +288,14 @@
                             userObj.timesheetId = timesheet._id;
                             userObj.week = timesheet.week;
                             userObj.weekDate = timesheet.weekDate;
-                            userObj.projects = timesheet.projects;
                             userObj.totalHours = timesheet.totalHours;
                             userObj.timeoffHours = timesheet.timeoffHours;
+                            userObj.projects = [];
+                            _.each(timesheet.projects, function (prjObj) {
+                                if(prjObj.projectHours > 0 || prjObj.timeoffHours > 0 || prjObj.sickLeaveHours > 0 || prjObj.corpHolidayHours > 0){
+                                    userObj.projects.push(prjObj);
+                                }
+                            });
                             if (timesheet.projects.length > 0) {
                                 userObj.remind = false;
                             }
@@ -441,6 +446,17 @@
 
         function getMyTimesheets() {
             TimesheetService.getMine().then(function(timesheets) {
+                if(timesheets.length > 0){
+                    _.each(timesheets, function (timesheetObj) {
+                        var tempProjects = timesheetObj.projects;
+                        timesheetObj.projects = [];
+                        _.each(tempProjects, function (prjObj) {
+                            if(prjObj.projectHours > 0 || prjObj.timeoffHours > 0 || prjObj.sickLeaveHours > 0 || prjObj.corpHolidayHours > 0){
+                                timesheetObj.projects.push(prjObj);
+                            }
+                        });
+                    });
+                }
                 vm.timesheets = timesheets;
             });
         }
