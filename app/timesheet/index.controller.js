@@ -433,15 +433,19 @@
         }
 
         vm.adminDeleteTimesheet = function(timesheetId) {
-            TimesheetService.deleteTimesheet(timesheetId).then(function(response) {
-                vm.getAllReports(vm.currentWeek);
-            });
+            if(confirm("Do you want to delete this timesheet ?")) {
+                TimesheetService.deleteTimesheet(timesheetId).then(function (response) {
+                    vm.getAllReports(vm.currentWeek);
+                });
+            }
         }
 
         vm.deleteTimesheet = function(timesheetId) {
-            TimesheetService.deleteTimesheet(timesheetId).then(function(response) {
-                getMyTimesheets();
-            });
+            if(confirm("Do you want to delete this timesheet ?")) {
+                TimesheetService.deleteTimesheet(timesheetId).then(function (response) {
+                    getMyTimesheets();
+                });
+            }
         }
 
         function getMyTimesheets() {
