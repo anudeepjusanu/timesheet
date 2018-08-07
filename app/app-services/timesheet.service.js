@@ -10,6 +10,7 @@
         service.getMine = getMine;
         service.createTimesheet = createTimesheet;
         service.updateTimesheet = updateTimesheet;
+        service.setTimesheetStatus = setTimesheetStatus;
         service.deleteTimesheet = deleteTimesheet;
         service.getTimesheet = getTimesheet;
         service.getReportByWeek = getReportByWeek;
@@ -38,6 +39,10 @@
 
         function updateTimesheet(id, obj) {
             return $http.put('/api/timesheet/' + id, obj).then(handleSuccess, handleError);
+        }
+
+        function setTimesheetStatus(id, obj) {
+            return $http.post('/api/timesheet/setTimesheetStatus/' + id, obj).then(handleSuccess, handleError);
         }
 
         function deleteTimesheet(id) {

@@ -13,6 +13,7 @@ var service = {};
 
 service.createTimesheet = createTimesheet;
 service.updateTimesheet = updateTimesheet;
+service.setTimesheetStatus = setTimesheetStatus;
 service.getTimesheet = getTimesheet;
 service.deleteTimesheet = deleteTimesheet;
 service.adminDeleteTimesheet = adminDeleteTimesheet;
@@ -97,6 +98,8 @@ function createTimesheet(currentUser, userParam) {
                         timeoffHours: userParam.timeoffHours,
                         overtimeHours: userParam.overtimeHours,
                         projects: userParam.projects,
+                        reportingTo: userParam.reportingTo,
+                        timesheetStatus: userParam.timesheetStatus,
                         createdOn: new Date(),
                         updatedOn: new Date()
                     }
@@ -175,7 +178,9 @@ function updateTimesheet(sheetId, userParam, currentUser) {
                         totalBillableHours: userParam.totalBillableHours,
                         timeoffHours: userParam.timeoffHours,
                         overtimeHours: userParam.overtimeHours,
-                        projects: userParam.projects
+                        projects: userParam.projects,
+                        reportingTo: userParam.reportingTo,
+                        timesheetStatus: userParam.timesheetStatus
                     }
                     newSheetObj.updatedOn = new Date();
                     db.timesheets.update({ _id: mongo.helper.toObjectID(sheetId) }, { $set: newSheetObj }, function(err, responseSheet) {
@@ -190,6 +195,15 @@ function updateTimesheet(sheetId, userParam, currentUser) {
     });
 
 
+    return deferred.promise;
+}
+
+function setTimesheetStatus(sheetId, userParam) {
+    var deferred = Q.defer();
+    db.timesheets.update({ _id: mongo.helper.toObjectID(sheetId) }, { $set: {timesheetStatus: userParam.timesheetStatus} }, function(err, responseSheet) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        deferred.resolve(responseSheet);
+    });
     return deferred.promise;
 }
 

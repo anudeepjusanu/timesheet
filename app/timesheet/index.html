@@ -60,6 +60,7 @@
                             <th>Total Hours</th>
                             <th>Total Timeoff</th>
                             <th>Total Overtime</th>
+                            <th width="100px;">Status</th>
                             <th>Action</th>
                         </tr>
                         <tr>
@@ -85,6 +86,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
+                            <td></td>
                             <td>
                                 <select class="form-control" ng-model="vm.search.isFilled" ng-options="opt.id as opt.label for opt in [{id:'', label:'All'}, {id:'filled', label:'Filled'}, {id:'notfilled', label:'Not Filled'}]"></select>
                             </td>
@@ -97,6 +99,7 @@
                             <th>{{vm.search.timesheetResult.totalBillableHours}}</th>
                             <th>{{vm.search.timesheetResult.timeoffHours}}</th>
                             <th>{{vm.search.timesheetResult.overtimeHours}}</th>
+                            <th></th>
                             <th></th>
                         </tr>
                         </thead>
@@ -123,9 +126,22 @@
                             <td>{{row.timeoffHours}}</td>
                             <td>{{row.overtimeHours}}</td>
                             <td>
+                                <span class="badge badge-secondary" ng-if="row.timesheetStatus===null">Pending</span>
+                                <span class="badge badge-success" ng-if="row.timesheetStatus===true">Approved</span>
+                                <span class="badge badge-danger" ng-if="row.timesheetStatus===false">Rejected</span>
+                                <div>
+                                <select ng-if="row.timesheetStatus===null || row.timesheetStatus===true || row.timesheetStatus===false" class="form-control" ng-model="vm.newTimesheetVal[row.timesheetId]" ng-change="vm.setTimesheetStatus(row.timesheetId)">
+                                    <option value="">Change To</option>
+                                    <option ng-if="row.timesheetStatus!==null" value="Pending">Pending</option>
+                                    <option ng-if="row.timesheetStatus===null || row.timesheetStatus===false" value="Approved">Approved</option>
+                                    <option ng-if="row.timesheetStatus===null || row.timesheetStatus===true" value="Rejected">Rejected</option>
+                                </select>
+                                </div>
+                            </td>
+                            <td>
                                 <a class="btn btn-primary btn-xs" ng-click="vm.remind(row.userId)" ng-show="row.remind">Remind</a>
-                                <a class="btn btn-link" ng-click="vm.viewUserTimesheet(row)" ng-show="row.timesheetId != '' && vm.user.admin"><span class="glyphicon glyphicon-edit"></span> </a>
-                                <a class="btn btn-link" ng-if="row.timesheetId" ng-click="vm.adminDeleteTimesheet(row.timesheetId)"><span class="glyphicon glyphicon-trash"></span></a>
+                                <a class="btn" ng-click="vm.viewUserTimesheet(row)" ng-show="row.timesheetId != '' && vm.user.admin"><span class="glyphicon glyphicon-edit"></span> </a>
+                                <a class="btn" ng-if="row.timesheetId" ng-click="vm.adminDeleteTimesheet(row.timesheetId)"><span class="glyphicon glyphicon-trash"></span></a>
                             </td>
                         </tr>
                         </tbody>
@@ -138,6 +154,7 @@
                             <th>{{vm.search.timesheetResult.totalBillableHours}}</th>
                             <th>{{vm.search.timesheetResult.timeoffHours}}</th>
                             <th>{{vm.search.timesheetResult.overtimeHours}}</th>
+                            <th></th>
                             <th></th>
                         </tr>
                         </tfoot>
@@ -166,6 +183,7 @@
                                 <th width="80px;">Total Working Hours</th>
                                 <th width="80px;">Total Timeoff Hours</th>
                                 <th width="80px;">Total Overtime Hours</th>
+                                <th width="80px;">Status</th>
                                 <th width="120px;">Action</th>
                             </tr>
                             <tr ng-repeat="sheet in vm.timesheets | orderBy: '-weekDate'">
@@ -187,8 +205,13 @@
                                 <th>{{sheet.timeoffHours}}</th>
                                 <th>{{sheet.overtimeHours}}</th>
                                 <td>
-                                    <a class="btn btn-primary btn-xs" ui-sref="editTimesheet({id: sheet._id})">Update</a>
-                                    <a class="btn btn-primary btn-xs" ng-click="vm.deleteTimesheet(sheet._id)">Delete</a>
+                                    <span class="badge badge-secondary" ng-if="sheet.timesheetStatus===null">Pending</span>
+                                    <span class="badge badge-success" ng-if="sheet.timesheetStatus===true">Approved</span>
+                                    <span class="badge badge-danger" ng-if="sheet.timesheetStatus===false">Rejected</span>
+                                </td>
+                                <td>
+                                    <a ng-if="sheet.timesheetStatus!==true || sheet.timesheetStatus!==false" class="btn btn-primary btn-xs" ui-sref="editTimesheet({id: sheet._id})">Update</a>
+                                    <a ng-if="sheet.timesheetStatus!==true || sheet.timesheetStatus!==false" class="btn btn-primary btn-xs" ng-click="vm.deleteTimesheet(sheet._id)">Delete</a>
                                 </td>
                             </tr>
                         </table>
@@ -220,6 +243,7 @@
                     <th width="80px;">Total Working Hours</th>
                     <th width="80px;">Total Timeoff Hours</th>
                     <th width="80px;">Total Overtime Hours</th>
+                    <th width="80px;">Status</th>
                     <th width="120px;">Action</th>
                 </tr>
                 <tr ng-repeat="sheet in vm.timesheets | orderBy: '-weekDate'">
@@ -241,8 +265,13 @@
                     <th>{{sheet.timeoffHours}}</th>
                     <th>{{sheet.overtimeHours}}</th>
                     <td>
-                        <a class="btn btn-primary btn-xs" ui-sref="editTimesheet({id: sheet._id})">Edit</a>
-                        <a class="btn btn-primary btn-xs" ng-click="vm.deleteTimesheet(sheet._id)">Delete</a>
+                        <span class="badge badge-secondary" ng-if="sheet.timesheetStatus===null">Pending</span>
+                        <span class="badge badge-success" ng-if="sheet.timesheetStatus===true">Approved</span>
+                        <span class="badge badge-danger" ng-if="sheet.timesheetStatus===false">Rejected</span>
+                    </td>
+                    <td>
+                        <a ng-if="sheet.timesheetStatus!==true" class="btn btn-primary btn-xs" ui-sref="editTimesheet({id: sheet._id})">Edit</a>
+                        <a ng-if="sheet.timesheetStatus!==true || sheet.timesheetStatus!==false" class="btn btn-primary btn-xs" ng-click="vm.deleteTimesheet(sheet._id)">Delete</a>
                     </td>
                 </tr>
             </table>

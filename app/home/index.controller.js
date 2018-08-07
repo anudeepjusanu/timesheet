@@ -606,6 +606,16 @@
                 resolve: {
                     user: function () {
                         return user;
+                    },
+                    reportUsers: function(){
+                        var reportUsers = [];
+                        reportUsers.push({id:null, name:"None"});
+                        _.each(vm.users, function(userObj){
+                            if(userObj.isActive === true && user._id != userObj._id && userObj.userRole && userObj.userRole=="manager"){
+                                reportUsers.push({id:userObj._id, name:userObj.name});    
+                            }
+                        });
+                        return reportUsers;
                     }
                 }
             });
@@ -675,10 +685,12 @@
         }
     }
 
-    function UserModelController(UserService, $filter, noty, $uibModalInstance, user) {
+    function UserModelController(UserService, $filter, noty, $uibModalInstance, user, reportUsers) {
         var vm = this;
         vm.userObj = user;
         vm.alerts = [];
+        vm.userRoles = [];
+        vm.reportUsers = reportUsers;
         vm.enableSaveBtn = true;
         vm.closeAlert = function(index) {
             vm.alerts.splice(index, 1);
@@ -693,6 +705,8 @@
                     "employeeId": vm.userObj.employeeId,
                     "designation": vm.userObj.designation,
                     "userResourceType": vm.userObj.userResourceType,
+                    "userRole": vm.userObj.userRole,
+                    "reportingTo": vm.userObj.reportingTo,
                     "profileImgUrl": vm.userObj.profileImgUrl,
                     "isActive": vm.userObj.isActive
                 }
@@ -713,7 +727,7 @@
 
         init();
         function init() {
-
+            vm.userRoles = UserService.getUserRoles();
         }
     }
 

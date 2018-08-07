@@ -97,6 +97,7 @@
             vm.currentWeek.setDate(vm.currentWeek.getDate() - 1);
         }
         var currentDate = $filter('date')(vm.currentWeek, "yyyy-Www").toString();
+        vm.newTimesheetVal = [];
 
         vm.open2 = open2;
         vm.popup2 = {
@@ -290,6 +291,8 @@
                             userObj.weekDate = timesheet.weekDate;
                             userObj.totalHours = timesheet.totalHours;
                             userObj.timeoffHours = timesheet.timeoffHours;
+                            userObj.reportingTo = timesheet.reportingTo;
+                            userObj.timesheetStatus = timesheet.timesheetStatus;
                             userObj.projects = [];
                             _.each(timesheet.projects, function (prjObj) {
                                 if(prjObj.projectHours > 0 || prjObj.timeoffHours > 0 || prjObj.sickLeaveHours > 0 || prjObj.corpHolidayHours > 0){
@@ -474,6 +477,26 @@
             });
         }
 
+        vm.setTimesheetStatus = function(timesheetId){
+            if(vm.newTimesheetVal[timesheetId]){
+                var newTimesheetVal = null;
+                if(vm.newTimesheetVal[timesheetId]=="Approved"){
+                    newTimesheetVal = true;
+                }else if(vm.newTimesheetVal[timesheetId]=="Rejected"){
+                    newTimesheetVal = false;
+                }
+                _.each(vm.tblUsers, function(userObj){
+                    if(timesheetId==userObj.timesheetId){
+                        userObj.timesheetStatus = newTimesheetVal;
+                        TimesheetService.setTimesheetStatus(timesheetId, {timesheetStatus: newTimesheetVal}).then(function (response) {
+                            getMyTimesheets();
+                        });
+                    }
+                });
+                vm.newTimesheetVal[timesheetId] = "";
+            }
+        }
+
         initController();
 
         function initController() {
@@ -597,6 +620,11 @@
             vm.timesheet.timeoffHours = 0;
             vm.timesheet.corpHolidayHours = 0;
             vm.timesheet.overtimeHours = 0;
+            vm.timesheet.reportingTo = null;
+            vm.timesheet.timesheetStatus = null;
+            if(vm.user.reportingTo){
+                vm.timesheet.reportingTo = vm.user.reportingTo;
+            }
             _.each(vm.user.projects, function(project) {
                 var isValidProject = false;
                 var BillData = {
@@ -754,6 +782,14 @@
                 } else {
                     getClients();
                     vm.hasProjects = false;
+                }
+                if(vm.user.reportingTo){
+                    UserService.GetById(vm.user.reportingTo).then(function(response) {
+                        vm.user.reportingUser = {
+                            id: response._id,
+                            name: response.name
+                        };
+                    }, function(error) {});
                 }
             });
         }

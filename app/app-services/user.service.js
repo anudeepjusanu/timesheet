@@ -21,6 +21,7 @@
         service.releaseToPool = releaseToPool;
         service.releaseFromPool = releaseFromPool;
         service.userPoolLogs = userPoolLogs;
+        service.getUserRoles = getUserRoles;
 
         return service;
 
@@ -37,7 +38,7 @@
         }
 
         function GetById(_id) {
-            return $http.get('/api/users/' + _id).then(handleSuccess, handleError);
+            return $http.get('/api/users/admin/' + _id).then(handleSuccess, handleError);
         }
 
         function GetByUsername(username) {
@@ -74,6 +75,10 @@
 
         function userPoolLogs(_id){
             return $http.get('/api/users/userPoolLogs/' + _id).then(handleSuccess, handleError);
+        }
+
+        function getUserRoles(){
+            return [{id: "employee", name: "Employee"}, {id: "manager", name: "Manager"}, {id: "admin", name: "Admin"}];
         }
 
         // private functions
