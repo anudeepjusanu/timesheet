@@ -19,8 +19,8 @@
                         <th class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='employeeId'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='employeeId'&&vm.search.sortDESC===true}">
                             <a ng-click="vm.sorting('employeeId');">EMP ID</a>
                         </th>
-                        <th class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='designation'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='designation'&&vm.search.sortDESC===true}">
-                            <a ng-click="vm.sorting('designation');">designation</a>
+                        <th class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='reportingUserName'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='reportingUserName'&&vm.search.sortDESC===true}">
+                            <a ng-click="vm.sorting('reportingUserName');">Reporting To</a>
                         </th>
                         <th>Status</th>
                         <th>Action</th>
@@ -50,7 +50,7 @@
                         <td>{{user.userResourceType}}</td>
                         <td>{{user.phone}}</td>
                         <td>{{user.employeeId}}</td>
-                        <td>{{user.designation}}</td>
+                        <td>{{user.reportingUserName}}</td>
                         <td>
                             <span ng-if="user.isActive==true">Active</span>
                             <span ng-if="user.isActive==false">Inactive</span>

@@ -590,6 +590,10 @@
                     if(!(userObj.profileImgUrl) || userObj.profileImgUrl == ""){
                         userObj.profileImgUrl = '/app/app-content/assets/user.jpg';
                     }
+                    if(userObj.reportingTo){
+                        var reportUser = _.find(vm.users, {_id: userObj.reportingTo});
+                        userObj.reportingUserName = reportUser.name;
+                    }
                 });
             });
         }
