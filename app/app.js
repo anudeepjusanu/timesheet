@@ -27,6 +27,12 @@
                 controller: 'Timesheet.IndexController',
                 controllerAs: 'vm',
                 data: { activeTab: 'timesheet' }
+            }).state('myTimesheets', {
+                url: '/myTimesheets',
+                templateUrl: 'timesheet/myTimesheets.html',
+                controller: 'Timesheet.MyTimesheetsController',
+                controllerAs: 'vm',
+                data: { activeTab: 'timesheet' }
             })
             .state('addTimesheet', {
                 url: '/addTimesheet',

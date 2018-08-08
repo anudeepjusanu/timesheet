@@ -4,6 +4,7 @@
     angular
         .module('app')
         .controller('Timesheet.IndexController', Controller)
+        .controller('Timesheet.MyTimesheetsController', MyTimesheetsController)
         .controller('Timesheet.TimesheetController', TimesheetController)
         .controller('Timesheet.TimesheetModelController', TimesheetModelController)
         .controller('Timesheet.ConsolidatedController', ConsolidatedController)
@@ -48,7 +49,7 @@
     function Controller(UserService, TimesheetService, ProjectService, $filter, _, $scope, FlashService, NgTableParams, noty, $uibModal) {
         var vm = this;
         vm.user = null;
-        vm.timesheets = [];
+        //vm.timesheets = [];
         vm.projects = [];
         vm.post = post;
         vm.remind = remind;
@@ -59,8 +60,8 @@
         vm.getMonthReport = getMonthReport;
 
         var currentDay = new Date().getDay();
-        vm.toggleView = toggleView;
-        var dayThreshold = [5, 1, 5, 6, 5, 6, 5, 5, 6, 5, 6, 5];
+        //vm.toggleView = toggleView;
+        //var dayThreshold = [5, 1, 5, 6, 5, 6, 5, 5, 6, 5, 6, 5];
         vm.obj = {
             question: new Date()
         };
@@ -127,13 +128,6 @@
 
         function post() {
             $filter('date')(vm.obj.question, "yyyy-Www");
-        }
-
-        function toggleView(isMonth) {
-            vm.monthView = isMonth;
-            if (isMonth) {
-                vm.getMonthReport(vm.currentMonth);
-            }
         }
 
         function remind(userId) {
@@ -267,20 +261,40 @@
             vm.filterDate = filterDate;
             UserService.getUsers().then(function(users) {
                 vm.users = [];
-                _.each(users, function(userObj) {
-                    vm.users.push({
-                        userId: userObj._id,
-                        userName: userObj.name,
-                        userResourceType: userObj.userResourceType,
-                        timesheetId: "",
-                        week: "",
-                        weekDate: "",
-                        projects: [],
-                        totalHours: 0,
-                        timeoffHours: 0,
-                        remind: true
+                if(vm.user.admin){
+                    _.each(users, function(userObj) {
+                        vm.users.push({
+                            userId: userObj._id,
+                            userName: userObj.name,
+                            userResourceType: userObj.userResourceType,
+                            timesheetId: "",
+                            week: "",
+                            weekDate: "",
+                            projects: [],
+                            totalHours: 0,
+                            timeoffHours: 0,
+                            remind: true
+                        });
                     });
-                });
+                }else if(vm.user.userRole == 'manager'){
+                    var reportingUserId = vm.user._id+"";
+                    _.each(users, function(userObj) {
+                        if(userObj.reportingTo &&  reportingUserId == userObj.reportingTo){
+                            vm.users.push({
+                                userId: userObj._id,
+                                userName: userObj.name,
+                                userResourceType: userObj.userResourceType,
+                                timesheetId: "",
+                                week: "",
+                                weekDate: "",
+                                projects: [],
+                                totalHours: 0,
+                                timeoffHours: 0,
+                                remind: true
+                            });
+                        }
+                    });
+                }
                 vm.users = _.sortBy(vm.users, ['userName']);
                 TimesheetService.getReportByWeek(filterDate).then(function(timesheets) {
                     _.each(timesheets, function(timesheet) {
@@ -443,6 +457,85 @@
             }
         }
 
+        function getProjects() {
+            ProjectService.getAll().then(function(projects) {
+                vm.projects.push({ id: '', title: 'All' });
+                _.each(projects, function(project) {
+                    vm.projects.push({ id: project._id, title: project.projectName });
+                });
+            });
+        }
+
+        vm.setTimesheetStatus = function(timesheetId){
+            if(vm.newTimesheetVal[timesheetId]){
+                var newTimesheetVal = null;
+                if(vm.newTimesheetVal[timesheetId]=="Approved"){
+                    newTimesheetVal = true;
+                }else if(vm.newTimesheetVal[timesheetId]=="Rejected"){
+                    newTimesheetVal = false;
+                }
+                _.each(vm.tblUsers, function(userObj){
+                    if(timesheetId==userObj.timesheetId){
+                        userObj.timesheetStatus = newTimesheetVal;
+                        TimesheetService.setTimesheetStatus(timesheetId, {timesheetStatus: newTimesheetVal}).then(function (response) {
+                            getAllReports();
+                        });
+                    }
+                });
+                vm.newTimesheetVal[timesheetId] = "";
+            }
+        }
+
+        initController();
+
+        function initController() {
+            // get current user
+            UserService.GetCurrent().then(function(user) {
+                vm.user = user;
+                if (vm.user.admin || vm.user.userRole == 'manager') {
+                    getAllReports();
+                }
+                getProjects();
+            });
+        }
+    }
+
+    function MyTimesheetsController(UserService, TimesheetService, ProjectService, $filter, _, $scope, FlashService, NgTableParams, noty, $uibModal) {
+        var vm = this;
+        vm.user = null;
+        vm.timesheets = [];
+        //vm.projects = [];
+        vm.closeAlert = closeAlert;
+        vm.alerts = [];
+
+        function closeAlert(index) {
+            vm.alerts.splice(index, 1);
+        };
+
+        vm.viewUserTimesheet = function(userTimesheet) {
+            userTimesheet._id = userTimesheet.timesheetId;
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'timesheet/editTimesheet.html',
+                controller: 'Timesheet.TimesheetModelController',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    userTimesheet: function() {
+                        return userTimesheet;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function(userObj) {
+                vm.getAllReports(vm.currentWeek);
+            }, function() {
+                vm.getAllReports(vm.currentWeek);
+            });
+        }
+
         vm.deleteTimesheet = function(timesheetId) {
             if(confirm("Do you want to delete this timesheet ?")) {
                 TimesheetService.deleteTimesheet(timesheetId).then(function (response) {
@@ -468,14 +561,14 @@
             });
         }
 
-        function getProjects() {
-            ProjectService.getAll().then(function(projects) {
-                vm.projects.push({ id: '', title: 'All' });
-                _.each(projects, function(project) {
-                    vm.projects.push({ id: project._id, title: project.projectName });
-                });
-            });
-        }
+        // function getProjects() {
+        //     ProjectService.getAll().then(function(projects) {
+        //         vm.projects.push({ id: '', title: 'All' });
+        //         _.each(projects, function(project) {
+        //             vm.projects.push({ id: project._id, title: project.projectName });
+        //         });
+        //     });
+        // }
 
         vm.setTimesheetStatus = function(timesheetId){
             if(vm.newTimesheetVal[timesheetId]){
@@ -503,11 +596,8 @@
             // get current user
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
-                if (vm.user.admin) {
-                    getAllReports();
-                }
                 getMyTimesheets();
-                getProjects();
+                //getProjects();
             });
         }
     }

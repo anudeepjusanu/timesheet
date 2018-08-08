@@ -2,15 +2,8 @@
     {{alert.msg}}</div>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <div class="" ng-if="vm.user.admin">
         <div class="panel panel-default tabs">
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#tab-first" role="tab" data-toggle="tab">All Users</a></li>
-                <li><a href="#tab-second" role="tab" data-toggle="tab">Mine</a></li>
-            </ul>
             <div class="panel-body tab-content">
-                <div class="tab-pane active" id="tab-first">
-                    <p></p>
                     <div class="clearfix row">
                         <div class="col-sm-6">
                             <button class="btn btn-primary" ng-click="vm.exportTable()">Export</button>
@@ -159,122 +152,6 @@
                         </tr>
                         </tfoot>
                     </table>
-                </div>
-                <div class="tab-pane" id="tab-second">
-                    <p></p>
-                    <a class="btn btn-primary" ui-sref="addTimesheet">Add Hours</a>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <tr>
-                                <th width="100px;">Week</th>
-                                <th class="row">
-                                    <table>
-                                        <tr>
-                                            <td width="240px;">Project Name</td>
-                                            <td width="80px;">Project Hours</td>
-                                            <td width="80px;">Sick Leaves</td>
-                                            <td width="80px;">Timeoff</td>
-                                            <td width="80px;">Overtime</td>
-                                            <td width="80px;">Crop Holiday</td>
-                                            <td width="300px;">Project Comment</td>
-                                        </tr>
-                                    </table>
-                                </th>
-                                <th width="80px;">Total Working Hours</th>
-                                <th width="80px;">Total Timeoff Hours</th>
-                                <th width="80px;">Total Overtime Hours</th>
-                                <th width="80px;">Status</th>
-                                <th width="120px;">Action</th>
-                            </tr>
-                            <tr ng-repeat="sheet in vm.timesheets | orderBy: '-weekDate'">
-                                <td>{{sheet.weekDate | date: 'mediumDate'}}</td>
-                                <td class="row">
-                                    <table>
-                                        <tr class="" ng-repeat="project in sheet.projects">
-                                            <td width="240px;">{{project.projectName}}</td>
-                                            <td width="80px;">{{project.billableHours}}</td>
-                                            <td width="80px;">{{project.sickLeaveHours}}</td>
-                                            <td width="80px;">{{project.timeoffHours}}</td>
-                                            <td width="80px;">{{project.corpHolidayHours}}</td>
-                                            <td width="80px;">{{project.overtimeHours}}</td>
-                                            <td width="300px;"><p style="max-width: 300px; margin: 0px!important;">{{project.projectComment}}</p></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <th>{{sheet.totalHours}}</th>
-                                <th>{{sheet.timeoffHours}}</th>
-                                <th>{{sheet.overtimeHours}}</th>
-                                <td>
-                                    <span class="badge badge-secondary" ng-if="sheet.timesheetStatus===null">Pending</span>
-                                    <span class="badge badge-success" ng-if="sheet.timesheetStatus===true">Approved</span>
-                                    <span class="badge badge-danger" ng-if="sheet.timesheetStatus===false">Rejected</span>
-                                </td>
-                                <td>
-                                    <a ng-if="sheet.timesheetStatus!==true || sheet.timesheetStatus!==false" class="btn btn-primary btn-xs" ui-sref="editTimesheet({id: sheet._id})">Update</a>
-                                    <a ng-if="sheet.timesheetStatus!==true || sheet.timesheetStatus!==false" class="btn btn-primary btn-xs" ng-click="vm.deleteTimesheet(sheet._id)">Delete</a>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
             </div>
         </div>
-    </div>
-    <div ng-if="!vm.user.admin">
-        <br>
-        <a class="btn btn-primary" ui-sref="addTimesheet">Add Hours</a>
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <tr>
-                    <th width="100px;">Week</th>
-                    <th class="row">
-                        <table>
-                            <tr>
-                                <td width="240px;">Project Name</td>
-                                <td width="80px;">Project Hours</td>
-                                <td width="80px;">Sick Leaves</td>
-                                <td width="80px;">Timeoff</td>
-                                <td width="80px;">Overtime</td>
-                                <td width="80px;">Crop Holiday</td>
-                                <td width="300px;">Project Comment</td>
-                            </tr>
-                        </table>
-                    </th>
-                    <th width="80px;">Total Working Hours</th>
-                    <th width="80px;">Total Timeoff Hours</th>
-                    <th width="80px;">Total Overtime Hours</th>
-                    <th width="80px;">Status</th>
-                    <th width="120px;">Action</th>
-                </tr>
-                <tr ng-repeat="sheet in vm.timesheets | orderBy: '-weekDate'">
-                    <td>{{sheet.weekDate | date: 'mediumDate'}}</td>
-                    <td class="row">
-                        <table>
-                            <tr class="" ng-repeat="project in sheet.projects">
-                                <td width="240px;">{{project.projectName}}</td>
-                                <td width="80px;">{{project.billableHours}}</td>
-                                <td width="80px;">{{project.sickLeaveHours}}</td>
-                                <td width="80px;">{{project.timeoffHours}}</td>
-                                <td width="80px;">{{project.overtimeHours}}</td>
-                                <td width="80px;">{{project.corpHolidayHours}}</td>
-                                <td width="300px;"><p style="max-width: 300px; margin: 0px!important;">{{project.projectComment}}</p></td>
-                            </tr>
-                        </table>
-                    </td>
-                    <th>{{sheet.totalHours}}</th>
-                    <th>{{sheet.timeoffHours}}</th>
-                    <th>{{sheet.overtimeHours}}</th>
-                    <td>
-                        <span class="badge badge-secondary" ng-if="sheet.timesheetStatus===null">Pending</span>
-                        <span class="badge badge-success" ng-if="sheet.timesheetStatus===true">Approved</span>
-                        <span class="badge badge-danger" ng-if="sheet.timesheetStatus===false">Rejected</span>
-                    </td>
-                    <td>
-                        <a ng-if="sheet.timesheetStatus!==true" class="btn btn-primary btn-xs" ui-sref="editTimesheet({id: sheet._id})">Edit</a>
-                        <a ng-if="sheet.timesheetStatus!==true || sheet.timesheetStatus!==false" class="btn btn-primary btn-xs" ng-click="vm.deleteTimesheet(sheet._id)">Delete</a>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
 </div>
