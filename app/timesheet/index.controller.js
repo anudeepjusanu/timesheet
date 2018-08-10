@@ -729,9 +729,10 @@
             vm.timesheet.corpHolidayHours = 0;
             vm.timesheet.overtimeHours = 0;
             vm.timesheet.reportingTo = null;
-            vm.timesheet.timesheetStatus = null;
+            vm.timesheet.timesheetStatus = '';
             if(vm.user.reportingTo){
                 vm.timesheet.reportingTo = vm.user.reportingTo;
+                vm.timesheet.timesheetStatus = null;
             }
             _.each(vm.user.projects, function(project) {
                 var isValidProject = false;
