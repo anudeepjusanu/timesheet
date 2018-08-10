@@ -78,7 +78,7 @@
         }
 
         function getUserRoles(){
-            return [{id: "employee", name: "Employee"}, {id: "manager", name: "Manager"}, {id: "admin", name: "Admin"}];
+            return [{id: "employee", name: "Employee"}, {id: "lead", name: "Lead"}, {id: "manager", name: "Manager"}];
         }
 
         // private functions

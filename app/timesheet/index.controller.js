@@ -276,7 +276,7 @@
                             remind: true
                         });
                     });
-                }else if(vm.user.userRole == 'manager'){
+                }else if(vm.user.userRole == 'lead' || vm.user.userRole == 'manager'){
                     var reportingUserId = vm.user._id+"";
                     _.each(users, function(userObj) {
                         if(userObj.reportingTo &&  reportingUserId == userObj.reportingTo){
@@ -492,7 +492,7 @@
             // get current user
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
-                if (vm.user.admin || vm.user.userRole == 'manager') {
+                if (vm.user.admin || vm.user.userRole == 'lead'|| vm.user.userRole == 'manager') {
                     getAllReports();
                 }
                 getProjects();
