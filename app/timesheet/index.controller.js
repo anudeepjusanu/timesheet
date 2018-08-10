@@ -71,6 +71,7 @@
             projectId: "",
             businessUnit: "All",
             resourceType: "",
+            timesheetStatus: "",
             isFilled: "",
             timesheetResult: {
                 headCount: 0
@@ -177,6 +178,10 @@
             vm.tblUsers = timesheetFilter();
         });
 
+        $scope.$watch('vm.search.timesheetStatus', function(newVal) {
+            vm.tblUsers = timesheetFilter();
+        });
+
         $scope.$watch('vm.search.isFilled', function(newVal) {
             vm.tblUsers = timesheetFilter();
         });
@@ -208,6 +213,11 @@
                 output = $filter('filter')(output, function(item) {
                     item.projects = $filter('filter')(item.projects, { resourceType: searchObj.resourceType });
                     return (item.projects.length > 0);
+                });
+            }
+            if (searchObj.timesheetStatus && searchObj.timesheetStatus.length > 0) {
+                output = $filter('filter')(output, function(item) {
+                    return (searchObj.timesheetStatus === item.timesheetStatus);
                 });
             }
             if (searchObj.isFilled && searchObj.isFilled.length > 0) {
@@ -328,6 +338,7 @@
                         projectId: "",
                         businessUnit: "All",
                         resourceType: "",
+                        timesheetStatus: "",
                         isFilled: "",
                         timesheetResult: {
                             headCount: 0
