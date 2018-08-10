@@ -80,7 +80,7 @@
                             <td></td>
                             <td></td>
                             <td>
-                                <select class="form-control" ng-model="vm.search.timesheetStatus" ng-options="opt.id as opt.label for opt in [{id:'', label:'All'}, {id:null, label:'Pending'}, {id:true, label:'Approved'}, {id:false, label:'Rejected'}]"></select>
+                                <select class="form-control" ng-model="vm.search.timesheetStatus" ng-options="opt.id as opt.label for opt in [{id:'', label:'All'}, {id:'pending', label:'Pending'}, {id:'approved', label:'Approved'}, {id:'rejected', label:'Rejected'}]"></select>
                             </td>
                             <td>
                                 <select class="form-control" ng-model="vm.search.isFilled" ng-options="opt.id as opt.label for opt in [{id:'', label:'All'}, {id:'filled', label:'Filled'}, {id:'notfilled', label:'Not Filled'}]"></select>

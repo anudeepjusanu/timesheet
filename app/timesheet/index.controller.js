@@ -179,6 +179,7 @@
         });
 
         $scope.$watch('vm.search.timesheetStatus', function(newVal) {
+            console.log("Calling");
             vm.tblUsers = timesheetFilter();
         });
 
@@ -216,8 +217,14 @@
                 });
             }
             if (searchObj.timesheetStatus && searchObj.timesheetStatus.length > 0) {
+                var timesheetStatus = null;
+                if(searchObj.timesheetStatus=='approved'){
+                    timesheetStatus = true;
+                }else if(searchObj.timesheetStatus=='rejected'){
+                    timesheetStatus = false;
+                }
                 output = $filter('filter')(output, function(item) {
-                    return (searchObj.timesheetStatus === item.timesheetStatus);
+                    return (timesheetStatus === item.timesheetStatus);
                 });
             }
             if (searchObj.isFilled && searchObj.isFilled.length > 0) {
