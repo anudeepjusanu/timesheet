@@ -1,4 +1,4 @@
-﻿(function () {
+﻿(function() {
     'use strict';
 
     angular
@@ -24,6 +24,7 @@
         service.getProjectUsers = getProjectUsers;
         service.getUserProjects = getUserProjects;
         service.getProjectsWithUserCount = getProjectsWithUserCount;
+        service.getMyProjects = getMyProjects;
 
         return service;
 
@@ -89,6 +90,10 @@
 
         function getProjectsWithUserCount() {
             return $http.get('/api/projects/projectsWithUserCount').then(handleSuccess, handleError);
+        }
+
+        function getMyProjects(userId) {
+            return $http.get('/api/projects/myProjects/' + userId).then(handleSuccess, handleError);
         }
 
         // private functions

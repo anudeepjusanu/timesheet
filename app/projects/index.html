@@ -21,6 +21,7 @@
                         <th>Project Bill Type</th>
                         <th>Project Type</th>
                         <th>Business Unit</th>
+                        <th>Owner</th>
                         <th>Start Date</th>
                         <th ng-if="vm.user.admin">Action</th>
                     </tr>
@@ -32,6 +33,7 @@
                         <th><select class="form-control" ng-model="vm.search.projectType" ng-options="prj.projectTypeId as prj.projectTypeName for prj in vm.projectTypes"></select></th>
                         <th><select class="form-control" ng-model="vm.search.businessUnit" ng-options="option as option for option in vm.projectBusinessUnits" ng-change="vm.search.projectId=''; vm.search.clientId=''; vm.getConsolidatedProjects();"></select></th>
                         <th></th>
+                        <th></th>
                         <th ng-if="vm.user.admin"></th>
                     </tr>
                     <tr ng-repeat="project in vm.projects | searchProject:vm.search | orderBy:'name'">
@@ -41,6 +43,7 @@
                         <td>{{project.projectBillType}}</td>
                         <td>{{project.projectType}}</td>
                         <td>{{project.businessUnit}}</td>
+                        <td>{{project.ownerName}}</td>
                         <td>{{project.startDate | date: 'mediumDate'}}</td>
                         <td ng-if="vm.user.admin">
                             <a class="btn btn-primary btn-xs" ng-click="vm.viewProject(project);">View</i></a>

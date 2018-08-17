@@ -1,0 +1,36 @@
+<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+    {{alert.msg}}
+</div>
+<div class="content-wrapper">
+    <div class="">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Surveys</h3>
+                <div class="clearfix row">
+                    <div class="col-sm-6">
+                        <a class="btn btn-primary" ui-sref="addSurvey" ng-if="vm.user.admin">Add Survey</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body panel-body-table">
+                <table class="table table-condensed table-bordered table-striped" export-table>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th ng-if="vm.user.admin">Action</th>
+                    </tr>
+                    <tr ng-repeat="survey in vm.surveys | orderBy:'name'">
+                        <td>{{$index+1}}</td>
+                        <td>{{survey.name}}</td>
+                        <td>{{survey.description}}</td>
+                        <td ng-if="vm.user.admin">
+                            <a class="btn btn-primary btn-xs" ui-sref="assignUsers({id: survey._id})">Assign Users</a>
+                            <a class="btn btn-primary btn-xs" ui-sref="editSurvey({id: survey._id})">Update</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

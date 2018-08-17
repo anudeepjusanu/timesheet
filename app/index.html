@@ -9,108 +9,71 @@
     <link rel='stylesheet' href='bower_components/angular-loading-bar/build/loading-bar.min.css' type='text/css' media='all' />
     <link rel='stylesheet' href='bower_components/angular-ui-select/dist/select.css' type='text/css' />
     <link rel="stylesheet" href="app-content/ng-table.min.css">
+    <link rel='stylesheet' href='bower_components/angular-chips/dist/main.css' type='text/css' />
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="app-content/wavelabs.css" rel="stylesheet" />
+    <link rel="manifest" href="manifest.json" />
 </head>
 
 <body>
-    <!-- START PAGE CONTAINER -->
-    <div class="page-container">
-        <!-- START PAGE SIDEBAR -->
-        <div class="page-sidebar" ng-controller="Home.SidebarController as vm">
-            <!-- START X-NAVIGATION -->
-            <ul class="x-navigation">
-                <li class="xn-logo">
-                    <a ui-sref="home">Wavelabs</a>
-                    <a href="#" class="x-navigation-control"></a>
-                </li>
-                <li class="xn-profile">
-                    <a href="#" class="profile-mini">
-                        <img ng-src="{{vm.user.profileImgUrl}}" src="app-content/assets/user.jpg" alt="{{vm.user.name}}"/>
-                    </a>
-                    <div class="profile">
-                        <div class="profile-image">
-                            <img ng-src="{{vm.user.profileImgUrl}}" src="app-content/assets/user.jpg" alt="{{vm.user.name}}" />
-                        </div>
-                        <div class="profile-data">
-                            <div class="profile-data-name">{{vm.user.name}}</div>
-                            <div class="profile-data-title" ng-if="vm.user.designation">
-                                {{vm.user.designation}}
-                            </div>
-                            <div class="profile-data-title" ng-if="!vm.user.designation">
-                                NA
-                            </div>
-                        </div>
-                        <div class="profile-controls">
-                            <a ui-sref="account" class="profile-control-left"><span class="fa fa-info"></span></a>
-                            <a class="profile-control-right"><span class="fa fa-envelope"></span></a>
-                        </div>
-                    </div>
-                </li>
-                <li class="xn-title">Navigation</li>
-                <li class="" ng-class="{active: activeTab === 'home'}">
-                    <a ui-sref="home"><span class="fa fa-desktop"></span> <span class="xn-text">Dashboard</span></a>
-                </li>
-                <li class="" ng-class="{active: activeTab === 'myTimesheets'}">
-                    <a ui-sref="myTimesheets"><span class="fa fa-file-excel-o"></span> <span class="xn-text">My Timesheets</span></a>
-                </li>
-                <li class="" ng-if="vm.user.admin===true || vm.user.userRole=='manager'|| vm.user.userRole=='lead'" ng-class="{active: activeTab === 'timesheet'}">
-                        <a ui-sref="timesheet"><span class="fa fa-file-excel-o"></span> <span class="xn-text">Timesheets</span></a>
-                    </li>
-                <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'consolidatedTimesheet'}">
-                    <a ui-sref="consolidatedTimesheet"><img class="fa" src="app-content/assets/progress-report.png"> <span class="xn-text">Consolidated Timesheet</span></a>
-                </li>
-                <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'projectUsers'}">
-                    <a ui-sref="projectUsers"><img class="fa" src="app-content/assets/user-group.png"> <span class="xn-text">Project Users</span></a>
-                </li>
-                <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'userProjects'}">
-                    <a ui-sref="userProjects"><img class="fa" src="app-content/assets/operator-with-headset.png"> <span class="xn-text">User Projects</span></a>
-                </li>
-                <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'poolUsers'}">
-                    <a ui-sref="poolUsers"><img class="fa" src="app-content/assets/sleepy-man.png"> <span class="xn-text">Resource Pool</span></a>
-                </li>
-                <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'allUsers'}">
-                    <a ui-sref="allUsers"><span class="fa fa-users"></span> <span class="xn-text">All Users</span></a>
-                </li>
-                <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'projects'}">
-                    <a ui-sref="projects"><img class="fa" src="app-content/assets/project.png"> <span class="xn-text">Projects</span></a>
-                </li>
-                <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'clients'}">
-                    <a ui-sref="clients"><span class="fa fa-tags"></span> <span class="xn-text">Clients</span></a>
-                </li>
-                <li class="" ng-class="{active: activeTab === 'account'}">
-                    <a ui-sref="account"><span class="fa fa-cogs"></span> <span class="xn-text">Account</span></a>
-                </li>
-            </ul>
-            <!-- END X-NAVIGATION -->
-        </div>
-        <!-- END PAGE SIDEBAR -->
-        <!-- PAGE CONTENT -->
-        <div class="page-content">
-            <!-- START X-NAVIGATION VERTICAL -->
-            <ul class="x-navigation x-navigation-horizontal x-navigation-panel">
-                <!-- TOGGLE NAVIGATION -->
-                <li class="xn-icon-button">
-                    <a href="#" class="x-navigation-minimize"><span class="fa fa-dedent"></span></a>
-                </li>
-                <!-- END TOGGLE NAVIGATION -->
-                <!-- END SEARCH -->
-                <!-- SIGN OUT -->
-                <li class="xn-icon-button pull-right">
-                    <a href="/login" target="_self" class="mb-control">
-                        <span class="fa fa-sign-out"></span>
-                    </a>
-                </li>
-                <!-- END SIGN OUT -->
-                <!-- END TASKS -->
-            </ul>
-            <!-- PAGE CONTENT WRAPPER -->
-            <div class="page-content-wrap" ui-view>
-            </div>
-            <!-- END PAGE CONTENT WRAPPER -->
-        </div>
-        <!-- END PAGE CONTENT -->
-    </div>
-    <!-- END PAGE CONTAINER -->
+    <div ui-view></div>
+    <div class="regId"></div>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./service-worker.js', {
+                    scope: './'
+                })
+                .then(function(registration) {
+                    console.log(registration);
+                    registration.onupdatefound = function() {
+                        if (navigator.serviceWorker.controller) {
+                            var installingWorker = registration.installing;
+
+                            installingWorker.onstatechange = function() {
+                                switch (installingWorker.state) {
+                                    case 'installed':
+                                        break;
+                                    case 'redundant':
+                                        throw new Error('The installing ' +
+                                            'service worker became redundant.');
+                                    default:
+                                        // Ignore
+                                }
+                            };
+                        }
+                    };
+                    registration.pushManager.getSubscription().then(function(sub) {
+                        if (sub === null) {
+                            // Update UI to ask user to register for Push
+                            console.log('Not subscribed to push service!');
+                        } else {
+                            // We have a subscription, update the database
+                            console.log('Subscription object: ', sub);
+                        }
+                    });
+                }).catch(function(e) {
+                    console.log("111");
+                    console.error('Error during service worker registration:', e);
+                });
+            navigator.serviceWorker.ready
+                .then(function(serviceWorkerRegistration) {
+                    return serviceWorkerRegistration.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        //applicationServerKey: urlB64ToUint8Array("AAAAv49aHos:APA91bFfcl75Rs3We0HfnK6vF4klQN-LidZClqMiP3pirWC__Zz0xJYnsU8ECH4BX-4F9m0AzC-SUBrGb4B0zGkeTsOpdb_0K57F--iedSUow0NzM2OUAHSkn9TIdJ0trxpD0Bs8Sy6cNmK4GaFuYBNyDVb7nNkbnw")
+                    });
+                })
+                .then(function(subscription) {
+                    console.log(subscription.endpoint);
+                    var endpointParts = subscription.endpoint.split('/')
+                    var registrationId = endpointParts[endpointParts.length - 1];
+                    console.log(registrationId);
+                    console.log($('.regId'))
+                    $('.regId')[0].innerText = registrationId;
+                });
+        } else {
+            console.log('service worker is not supported');
+        }
+    </script>
     <!-- external scripts -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="bower_components/lodash/dist/lodash.min.js"></script>
@@ -121,6 +84,7 @@
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src='bower_components/angular-loading-bar/build/loading-bar.min.js'></script>
     <script src='bower_components/angular-ui-select/dist/select.js'></script>
+    <script src="bower_components/angular-chips/dist/angular-chips.min.js"></script>
     <script src="libs/tableExport.js"></script>
     <script src="libs/xlsx.core.min.js"></script>
     <script src="libs/jquery.base64.js"></script>
@@ -144,6 +108,12 @@
     <script type="text/javascript" src="libs/js/plugins/owl/owl.carousel.min.js"></script>
     <script type="text/javascript" src="libs/js/plugins/moment.min.js"></script>
     <script type="text/javascript" src="libs/js/plugins/daterangepicker/daterangepicker.js"></script>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/3.6.6/firebase.js"></script>
+
+    <!-- AngularFire -->
+    <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
     <!-- END THIS PAGE PLUGINS-->
     <!-- START TEMPLATE -->
     <script type="text/javascript" src="libs/js/plugins.js"></script>
@@ -156,11 +126,18 @@
     <script src="app-services/flash.service.js"></script>
     <script src="app-services/project.service.js"></script>
     <script src="app-services/timesheet.service.js"></script>
+    <script src="app-services/survey.service.js"></script>
     <script src="home/index.controller.js"></script>
     <script src="timesheet/index.controller.js"></script>
     <script src="account/index.controller.js"></script>
     <script src="projects/index.controller.js"></script>
+    <script src="surveys/index.controller.js"></script>
+    <script src="login/login.controller.js"></script>
+    <script src="layout/layout.controller.js"></script>
+    <script src="leaves/leaves.controller.js"></script>
+    <script src="team/teams.controller.js"></script>
     <!-- END SCRIPTS -->
+
 </body>
 
 </html>

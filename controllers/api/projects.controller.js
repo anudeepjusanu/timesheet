@@ -23,183 +23,184 @@ router.get('/client/:_id', getClientById);
 router.post('/client/', addClient);
 router.put('/client/:_id', updateClient);
 router.delete('/client/:_id', deleteClient);
+router.get('/myProjects/:_id', getMyProjects);
 
 module.exports = router;
 
 function getAllProjects(req, res) {
     projectService.getAllProjects()
-        .then(function (projects) {
+        .then(function(projects) {
             if (projects) {
                 res.send(projects);
             } else {
                 res.sendStatus(404);
             }
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function addProject(req, res) {
     projectService.create(req.body)
-     .then(function (response) {
-         res.sendStatus(200).send(response);
-     })
-     .catch(function (err) {
-     res.status(400).send(err);
-     });
+        .then(function(response) {
+            res.sendStatus(200).send(response);
+        })
+        .catch(function(err) {
+            res.status(400).send(err);
+        });
 }
 
 function updateProject(req, res) {
     projectService.update(req.params._id, req.body)
-        .then(function (response) {
+        .then(function(response) {
             res.sendStatus(200);
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function deleteProject(req, res) {
     projectService.delete(req.params._id)
-        .then(function (response) {
+        .then(function(response) {
             res.sendStatus(200);
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function getProjectById(req, res) {
     projectService.getProjectById(req.params._id)
-        .then(function (project) {
+        .then(function(project) {
             if (project) {
                 res.send(project);
             } else {
                 res.sendStatus(404);
             }
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function getAssignedUsers(req, res) {
     projectService.getAssignedUsers(req.params._id)
-        .then(function (users) {
+        .then(function(users) {
             if (users) {
                 res.send(users);
             } else {
                 res.sendStatus(404);
             }
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function assignedUsers(req, res) {
     projectService.assignUsers(req.params._id, req.body)
-        .then(function (response) {
+        .then(function(response) {
             res.sendStatus(200);
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function addAssignUser(req, res) {
     projectService.assignUser(req.params._id, req.body)
-        .then(function (response) {
+        .then(function(response) {
             res.sendStatus(200);
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function unassignUser(req, res) {
     projectService.unassignUser(req.params._id, req.params._userId)
-        .then(function (response) {
+        .then(function(response) {
             res.sendStatus(200);
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function getClients(req, res) {
     projectService.getClients()
-        .then(function (clients) {
+        .then(function(clients) {
             if (clients) {
                 res.send(clients);
             } else {
                 res.sendStatus(404);
             }
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function getClientById(req, res) {
     projectService.getClientById(req.params._id)
-        .then(function (client) {
+        .then(function(client) {
             if (client) {
                 res.send(client);
             } else {
                 res.sendStatus(404);
             }
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function addClient(req, res) {
     projectService.createClient(req.body)
-        .then(function (response) {
+        .then(function(response) {
             res.sendStatus(200).send(response);
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function updateClient(req, res) {
     projectService.updateClient(req.params._id, req.body)
-        .then(function (response) {
+        .then(function(response) {
             res.sendStatus(200);
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function deleteClient(req, res) {
     projectService.deleteClient(req.params._id)
-        .then(function (response) {
+        .then(function(response) {
             res.sendStatus(200);
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function getProjectUsers(req, res) {
     projectService.getAllProjects()
-        .then(function (projects) {
+        .then(function(projects) {
             if (projects) {
-                _.each(projects, function (projectObj) {
+                _.each(projects, function(projectObj) {
                     projectObj.users = [];
-                    projectObj._id = projectObj._id+"";
+                    projectObj._id = projectObj._id + "";
                 });
-                userService.getAll().then(function (users) {
-                    if(users){
-                        _.each(users, function (userObj) {
-                            _.each(userObj.projects, function (assignPrj) {
-                                var projectObj = _.find(projects, {_id: assignPrj.projectId+""});
-                                if(projectObj){
+                userService.getAll().then(function(users) {
+                    if (users) {
+                        _.each(users, function(userObj) {
+                            _.each(userObj.projects, function(assignPrj) {
+                                var projectObj = _.find(projects, { _id: assignPrj.projectId + "" });
+                                if (projectObj) {
                                     projectObj.users.push({
                                         userId: userObj._id,
                                         userName: userObj.name,
@@ -212,22 +213,22 @@ function getProjectUsers(req, res) {
                         });
                     }
                     res.send(projects);
-                }).catch(function (err) {
+                }).catch(function(err) {
                     res.status(400).send(err);
                 });
             } else {
                 res.sendStatus(404);
             }
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function getUserProjects(req, res) {
-    userService.getUsers().then(function (users) {
+    userService.getUsers().then(function(users) {
         var usersList = [];
-        _.each(users, function (userObj) {
+        _.each(users, function(userObj) {
             usersList.push({
                 userId: userObj._id,
                 userName: userObj.name,
@@ -236,43 +237,57 @@ function getUserProjects(req, res) {
             });
         });
         res.send(usersList);
-    }).catch(function (err) {
+    }).catch(function(err) {
         res.status(400).send(err);
     });
 }
 
 function getProjectsWithUserCount(req, res) {
-    projectService.getAllProjects().then(function (projectData) {
+    projectService.getAllProjects().then(function(projectData) {
         if (projectData) {
             var projects = [];
-            _.each(projectData, function (projectObj) {
+            _.each(projectData, function(projectObj) {
                 projects.push({
-                    projectId: projectObj._id+"",
+                    projectId: projectObj._id + "",
                     projectName: projectObj.projectName,
                     clientName: projectObj.clientName,
                     userCount: 0
                 });
             });
-            userService.getAll().then(function (users) {
-                if(users){
-                    _.each(users, function (userObj) {
-                        _.each(userObj.projects, function (assignPrj) {
-                            var projectObj = _.find(projects, {projectId: assignPrj.projectId});
-                            if(projectObj){
+            userService.getAll().then(function(users) {
+                if (users) {
+                    _.each(users, function(userObj) {
+                        _.each(userObj.projects, function(assignPrj) {
+                            var projectObj = _.find(projects, { projectId: assignPrj.projectId });
+                            if (projectObj) {
                                 projectObj.userCount++;
                             }
                         });
                     });
                 }
                 res.send(projects);
-            }).catch(function (err) {
+            }).catch(function(err) {
                 res.status(400).send(err);
             });
         } else {
             res.sendStatus(404);
         }
-    }).catch(function (err) {
+    }).catch(function(err) {
         res.status(400).send(err);
     });
-}
+};
 
+function getMyProjects(req, res) {
+    console.log(req.params._id);
+    userService.getUserById(req.params._id)
+        .then(function(user) {
+            if (user) {
+                res.send(user);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function(err) {
+            res.status(400).send(err);
+        });
+};

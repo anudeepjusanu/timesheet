@@ -3,24 +3,25 @@ var router = express.Router();
 var request = require('request');
 var config = require('config.json');
 
-router.get('/', function (req, res) {
+router.get('/', function(req, res) {
     // log user out
     delete req.session.token;
 
     // move success message into local variable so it only appears once (single read)
     var viewData = { success: req.session.success };
     delete req.session.success;
-
-    res.render('login', viewData);
+    res.send({ "type": "success" });
+    //res.render('login', viewData);
 });
 
-router.post('/', function (req, res) {
+
+router.post('/', function(req, res) {
     // authenticate using api to maintain clean separation between layers
     request.post({
         url: config.apiUrl + '/users/authenticate',
         form: req.body,
         json: true
-    }, function (error, response, body) {
+    }, function(error, response, body) {
         if (error) {
             return res.render('login', { error: 'An error occurred' });
         }
@@ -31,10 +32,16 @@ router.post('/', function (req, res) {
 
         // save JWT token in the session to make it available to the angular app
         req.session.token = body.token;
-        
+        if (body.token) {
+            // authentication successful
+            res.send({ token: body.token });
+        } else {
+            // authentication failed
+            res.status(401).send('Username or password is incorrect');
+        }
         // redirect to returnUrl
-        var returnUrl = req.query.returnUrl && decodeURIComponent(req.query.returnUrl) || '/';
-        res.redirect(returnUrl);
+        //var returnUrl = req.query.returnUrl && decodeURIComponent(req.query.returnUrl) || '/';
+        //res.redirect(returnUrl);
     });
 });
 

@@ -1,4 +1,4 @@
-﻿(function () {
+﻿(function() {
     'use strict';
 
     angular
@@ -8,6 +8,8 @@
     function Service($http, $q) {
         var service = {};
 
+        service.login = login;
+        service.logout = logout;
         service.GetCurrent = GetCurrent;
         service.GetAll = GetAll;
         service.getUsers = getUsers;
@@ -24,6 +26,14 @@
         service.getUserRoles = getUserRoles;
 
         return service;
+
+        function login(loginObj) {
+            return $http.post('/login', loginObj).then(handleSuccess, handleError);
+        }
+
+        function logout() {
+            return $http.get('/login').then(handleSuccess, handleError);
+        }
 
         function GetCurrent() {
             return $http.get('/api/users/current').then(handleSuccess, handleError);
@@ -57,28 +67,28 @@
             return $http.delete('/api/users/' + _id).then(handleSuccess, handleError);
         }
 
-        function GetEmployeeInfo(_id){
+        function GetEmployeeInfo(_id) {
             return $http.get('/api/users/admin/' + _id).then(handleSuccess, handleError);
         }
 
-        function UpdateEmployeeInfo(_id, employee){
+        function UpdateEmployeeInfo(_id, employee) {
             return $http.put('/api/users/adminUpdate/' + _id, employee).then(handleSuccess, handleError);
         }
 
-        function releaseToPool(_id, params){
+        function releaseToPool(_id, params) {
             return $http.post('/api/users/releaseToPool/' + _id, params).then(handleSuccess, handleError);
         }
 
-        function releaseFromPool(_id, params){
+        function releaseFromPool(_id, params) {
             return $http.post('/api/users/releaseFromPool/' + _id, params).then(handleSuccess, handleError);
         }
 
-        function userPoolLogs(_id){
+        function userPoolLogs(_id) {
             return $http.get('/api/users/userPoolLogs/' + _id).then(handleSuccess, handleError);
         }
 
-        function getUserRoles(){
-            return [{id: "employee", name: "Employee"}, {id: "lead", name: "Lead"}, {id: "manager", name: "Manager"}];
+        function getUserRoles() {
+            return [{ id: "employee", name: "Employee" }, { id: "lead", name: "Lead" }, { id: "manager", name: "Manager" }];
         }
 
         // private functions

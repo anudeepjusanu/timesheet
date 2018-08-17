@@ -1,2 +1,2 @@
-appId: "d573f8af-4004-44f6-889a-d20a2d46ea09",
-    appPassword: "layxCOFI3308}!chtHVD4#+"
+appId: "03d79ab1-9dce-411e-8a3c-80244fad94ac",
+    appPassword: "cnaHHT2706]?;@fcfkKOCP8"

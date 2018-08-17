@@ -62,13 +62,13 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label" for="projectName">Estimated Hours</label>
                                 <div class="col-md-9">
-                                    <input id="estimatedHours" name="estimatedHours" type="text" placeholder="Estimated Hours" class="form-control" ng-model="vm.obj.estimatedHours"/>
+                                    <input id="estimatedHours" name="estimatedHours" type="text" placeholder="Estimated Hours" class="form-control" ng-model="vm.obj.estimatedHours" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 control-label" for="projectName">Estimated Cost</label>
                                 <div class="col-md-9">
-                                    <input id="estimatedCost" name="estimatedCost" type="text" placeholder="Estimated Cost" class="form-control" ng-model="vm.obj.estimatedCost"/>
+                                    <input id="estimatedCost" name="estimatedCost" type="text" placeholder="Estimated Cost" class="form-control" ng-model="vm.obj.estimatedCost" />
                                 </div>
                             </div>
                             <div class="form-group required">
@@ -90,6 +90,12 @@
                                         <input type="checkbox" class="switch" ng-model="vm.obj.isActive" />
                                         <span></span>
                                     </label>
+                                </div>
+                            </div>
+                            <div class="form-group required">
+                                <label class="col-md-3 col-xs-12 control-label">Owner</label>
+                                <div class="col-md-6 col-xs-12">
+                                    <select class="form-control" ng-model="vm.obj.user" ng-options="userObj as userObj.name for userObj in vm.users" ng-required="true"></select>
                                 </div>
                             </div>
                             <div class="form-group">

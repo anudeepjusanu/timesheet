@@ -1,4 +1,4 @@
-﻿require('rootpath')();
+require('rootpath')();
 var express = require('express');
 var app = express();
 var session = require('express-session');
@@ -27,10 +27,19 @@ app.use('/api', expressJwt({ secret: config.secret }).unless({ path: ['/api/user
 
 app.post('/api/messages', connector.listen());
 app.get('/api/messages', function(req, res) {
-    var users = {
-        "name": "Anudeep"
+    var userId = "29:1bOwm8VyO3OvQojh77MGMZhgXNdHKMgAWgabAfyODFZg";
+    var obj = {
+        "username": "anudeepd@wavelabs.in",
+        "password": "anudeep02"
     }
-    res.json(users);
+    console.log("here")
+    userService.updateEmail(userId, obj)
+        .then(function() {
+            res.sendStatus(200);
+        })
+        .catch(function(err) {
+            res.status(400).send(err);
+        });
 });
 
 bot.on('contactRelationUpdate', function(message) {
@@ -55,7 +64,7 @@ bot.on('deleteUserData', function(message) {
 
 bot.dialog('/', function(session) {
     session.sendTyping();
-    console.log(session.message.text);
+
     if (session.message.text.toLowerCase().indexOf('hello') == 0) {
         session.send(`Hey, How are you?. \n\n`);
     } else if (session.message.text.toLowerCase().indexOf('email') == 0) {
@@ -93,8 +102,8 @@ bot.dialog('/', function(session) {
                 session.send(err);
                 session.endDialog();
             });
-    } else if (session.message.text.toLowerCase().indexOf('wliobot') == 0) {
-        var notification = session.message.text.replace('wliobot', '');
+    } else if (session.message.text.toLowerCase().indexOf('bot') == 0) {
+        var notification = session.message.text.replace('bot', '');
         userService.getAll()
             .then(function(users) {
                 if (users) {
@@ -104,6 +113,7 @@ bot.dialog('/', function(session) {
                             .text(notification);
                         bot.send(msg, function(err) {
                             // Return success/failure
+
                         });
                     }
 
@@ -112,11 +122,8 @@ bot.dialog('/', function(session) {
             .catch(function(err) {
 
             });
-    } else if (session.message.text.toLocaleLowerCase().indexOf('survey') == 0) {
-        session.beginDialog('/postSurvey');
     } else {
         session.send(`Sorry, no donuts for you!`);
-        //session.beginDialog('/postSurvey');
     }
 });
 
@@ -125,12 +132,17 @@ bot.dialog('/registerEmail', [function(session) {
 }, function(session, results) {
     if (results.response) {
         var addressObj = session.message.address;
-        var regex = /\S+@\S+\.\S+/;
-        if (regex.exec(results.response) && regex.exec(results.response)[0]) {
+        var regex = />\s*(.*?)\s*<\/a>/g;
+        var matches = [];
+        while (m = regex.exec(results.response)) {
+            matches.push(m[1]);
+        }
+        if (matches && matches.length) {
             var obj = {
-                "username": results.response
+                "username": matches[0]
             }
             obj.password = Math.random().toString(36).substring(7);
+
             userService.updateEmail(addressObj.user.id, obj)
                 .then(function() {
                     session.send("Email Registered Successfully, \n\n Here are your login details \n\n username:" + obj.username + "\n\n Password:" + obj.password + "\n\n login at http://timesheet.wavelabs.in You can change your password under my account tab");
@@ -141,31 +153,9 @@ bot.dialog('/registerEmail', [function(session) {
                     session.endDialog();
                 });
         } else {
-            session.send("This is not a valid email id try again by giving the command email");
             session.endDialog();
+            session.beginDialog('/registerEmail');
         }
-    } else {
-        session.send("Thank you!!");
-        session.endDialog();
-    }
-}]);
-var salesData = {
-    "veg": {
-        id: "123"
-    },
-    "non-veg": {
-        id: "123"
-    }
-};
-bot.dialog('/postSurvey', [function(session) {
-    session.surveyId = "123";
-    builder.Prompts.choice(session, "Food preference?", salesData, { listStyle: 3 });
-}, function(session, results) {
-    if (results.response) {
-        console.log(results.response);
-        var region = salesData[results.response.entity];
-        console.log(region);
-        session.endDialog();
     } else {
         session.send("Thank you!!");
         session.endDialog();
@@ -178,8 +168,6 @@ app.use('/register', require('./controllers/register.controller'));
 app.use('/app', require('./controllers/app.controller'));
 app.use('/api/users', require('./controllers/api/users.controller'));
 app.use('/api/timesheet', require('./controllers/api/timesheet.controller'));
-app.use('/api/projects', require('./controllers/api/projects.controller'));
-app.use('/api/surveys', require('./controllers/api/surveys.controller'));
 
 // make '/app' default route
 app.get('/', function(req, res) {

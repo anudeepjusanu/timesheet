@@ -58,8 +58,8 @@
                 console.log(error);
             });
         }
-        
-        vm.viewProject = function (projectObj) {
+
+        vm.viewProject = function(projectObj) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -178,10 +178,24 @@
             });
         }
 
+        function getAllUsers() {
+            UserService.GetAll().then(function(users) {
+                vm.users = users;
+                if (!vm.isNew) {
+                    _.each(users, function(user) {
+                        if (user._id == vm.obj.ownerId) {
+                            vm.obj.user = user;
+                        };
+                    });
+                }
+            });
+        };
+
         vm.getProject = function(projectId) {
             ProjectService.getById(projectId).then(function(response) {
                 vm.obj = response;
                 vm.obj.startDate = new Date(vm.obj.startDate);
+                getAllUsers();
             }, function(error) {
                 if (error) {
                     vm.alerts.push({ msg: error, type: 'danger' });
@@ -190,12 +204,13 @@
         }
 
         vm.saveProject = function(form) {
-            console.log(vm.obj);
             if (form.$valid) {
                 var clientObj = _.find(vm.clients, { _id: vm.obj.clientId });
                 if (clientObj) {
                     vm.obj.clientName = clientObj.clientName;
                 }
+                vm.obj.ownerId = vm.obj.user._id;
+                vm.obj.ownerName = vm.obj.user.name;
                 if (vm.isNew) {
                     ProjectService.create(vm.obj).then(function(response) {
                         noty.showSuccess("New Project has been added successfully!");
@@ -261,8 +276,10 @@
                 vm.getProject($stateParams.id);
             } else {
                 vm.isNew = true;
+                getAllUsers();
             }
             vm.getClients();
+
         }
     }
 
@@ -271,6 +288,7 @@
         vm.alerts = [];
         vm.projectObj = projectObj;
         vm.assignedUsers = [];
+
         function getProjectAssignedUsers(projectId) {
             ProjectService.getAssignedUsers(projectId).then(function(response) {
                 vm.assignedUsers = response;

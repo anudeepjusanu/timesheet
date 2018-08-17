@@ -1,0 +1,14 @@
+<div class="page-title">
+    <h2><span class="fa fa-congs"></span> My Projects</h2>
+</div>
+<div class="page-content-wrap">
+    <div class="row">
+        <div class="col-md-3" ng-repeat="project in vm.user.projects track by $index">
+            <a ng-click="vm.viewProject(project)" class="tile tile-info" ng-class-even="tile-valign" ng-class-odd="tile-primary" style="font-size: 16px;">
+            {{project.projectName}}
+            <div class="informer informer-default"></div>
+            <div class="informer informer-default dir-br"><span class="fa fa-users"></span></div>
+        </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="login-container lightmode" style="min-height:650px;">
+    <div class="login-box animated fadeInDown">
+        <div class="login-logo"></div>
+        <div class="login-body">
+            <div class="login-title"><strong>Log In</strong> to your account</div>
+            <form class="form-horizontal" method="post">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" id="username" name="username" ng-model="vm.loginObj.username" placeholder="Username">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="password" class="form-control" name="password" id="password" ng-model="vm.loginObj.password" placeholder="Password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6">
+
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-info btn-block" ng-click="vm.login()">Log In</button>
+                    </div>
+                </div>
+            </form>
+            <!-- <span class="skype-button bubble " data-bot-id="c8fc3ad9-72cb-46ff-b5f1-09432ed9b7db" data-color="#b2d233"></span>
+            <span class="skype-chat" data-color-message="#2992d1"></span>
+            <script src="https://swc.cdn.skype.com/sdk/v1/sdk.min.js"></script> -->
+        </div>
+        <div class="login-footer">
+            <div class="pull-left">
+                &copy; 2017 Wavelabs
+            </div>
+            <div class="pull-right">
+                <a href="http://www.wavelabs.in" target="_blank">About</a> |
+                <a href="http://wavelabs.in/blog" target="_blank">Blog</a> |
+                <a href="http://wavelabs.in/contact-us" target="_blank">Contact Us</a>
+            </div>
+        </div>
+    </div>
+</div>

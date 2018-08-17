@@ -1,0 +1,60 @@
+<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+    {{alert.msg}}
+</div>
+<div class="content-wrapper">
+    <div class="">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Add Survey</h3>
+                <div class="clearfix row">
+                    <div class="col-sm-6">
+
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body panel-body-table">
+                <form class="form-horizontal" name="vm.surveyForm">
+                    <p></p>
+                    <div class="form-group required">
+                        <label class="col-md-3 col-xs-12 control-label">Name</label>
+                        <div class="col-md-6 col-xs-12">
+                            <input type="text" required="true" ng-model="vm.survey.name" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label class="col-md-3 col-xs-12 control-label">Description</label>
+                        <div class="col-md-6 col-xs-12">
+                            <input type="text" required="true" ng-model="vm.survey.description" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="clearfix">
+                        <button type="button" class="btn btn-primary btn-xs pull-right" ng-click="vm.addQuestion()">Add Question</button>
+                    </div>
+                    <div ng-repeat="question in vm.survey.questions">
+                        <div class="form-group">
+                            <label class="col-md-3 col-xs-12 control-label">Question {{$index+1}}</label>
+                            <div class="col-md-6 col-xs-12">
+                                <input type="text" ng-model="question.question" class="form-control" />
+                                <p>Options</p>
+                                <chips class="wl-chips" ng-model="question.options">
+                                    <chip-tmpl>
+                                        <div class="default-chip">
+                                            {{chip}}
+                                            <span class="glyphicon glyphicon-remove" remove-chip></span>
+                                        </div>
+                                    </chip-tmpl>
+                                    <input chip-control></input>
+                                </chips>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12 text-right">
+                            <button type="button" class="btn btn-primary btn-lg" ng-click="vm.postSurvey(vm.surveyForm)">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

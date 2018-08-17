@@ -17,12 +17,13 @@ router.put('/adminUpdate/:_id', adminUpdate);
 router.post('/releaseToPool/:_id', releaseToPool);
 router.post('/releaseFromPool/:_id', releaseFromPool);
 router.get('/userPoolLogs/:_id', userPoolLogs);
+router.get('/createPassword/:_id', createPassword);
 
 module.exports = router;
 
 function authenticateUser(req, res) {
     userService.authenticate(req.body.username, req.body.password)
-        .then(function (token) {
+        .then(function(token) {
             if (token) {
                 // authentication successful
                 res.send({ token: token });
@@ -31,45 +32,45 @@ function authenticateUser(req, res) {
                 res.status(401).send('Username or password is incorrect');
             }
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function registerUser(req, res) {
     userService.create(req.body)
-        .then(function () {
+        .then(function() {
             res.sendStatus(200);
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function getCurrentUser(req, res) {
     userService.getById(req.user.sub)
-        .then(function (user) {
+        .then(function(user) {
             if (user) {
                 res.send(user);
             } else {
                 res.sendStatus(404);
             }
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function getUser(req, res) {
     userService.getUserById(req.params._id)
-        .then(function (user) {
+        .then(function(user) {
             if (user) {
                 res.send(user);
             } else {
                 res.sendStatus(404);
             }
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
@@ -82,30 +83,30 @@ function updateUser(req, res) {
     }
 
     userService.update(userId, req.body)
-        .then(function () {
+        .then(function() {
             res.sendStatus(200);
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function deleteUser(req, res) {
     userService.delete(req.params._id)
-        .then(function () {
+        .then(function() {
             res.sendStatus(200);
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function adminAccess(req, res) {
     userService.adminAccess(req.params._id)
-        .then(function () {
+        .then(function() {
             res.sendStatus(200);
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
@@ -113,78 +114,89 @@ function adminAccess(req, res) {
 
 function getAllUsers(req, res) {
     userService.getAll()
-        .then(function (user) {
+        .then(function(user) {
             if (user) {
                 res.send(user);
             } else {
                 res.sendStatus(404);
             }
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
 function getUsers(req, res) {
     userService.getUsers()
-        .then(function (user) {
+        .then(function(user) {
             if (user) {
                 res.send(user);
             } else {
                 res.sendStatus(404);
             }
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
-function adminUpdate(req, res){
+function adminUpdate(req, res) {
     userService.adminUpdate(req.user.sub, req.params._id, req.body)
-        .then(function (user) {
+        .then(function(user) {
             if (user) {
                 res.send(user);
             } else {
                 res.sendStatus(404);
             }
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
-function releaseToPool(req, res){
-    userService.releaseToPool(req.params._id, req.body).then(function (response) {
+function releaseToPool(req, res) {
+    userService.releaseToPool(req.params._id, req.body).then(function(response) {
         if (response) {
             res.send(response);
         } else {
             res.sendStatus(404);
         }
-    }).catch(function (err) {
+    }).catch(function(err) {
         res.status(400).send(err);
     });
 }
 
-function releaseFromPool(req, res){
-    userService.releaseFromPool(req.params._id, req.body).then(function (response) {
+function releaseFromPool(req, res) {
+    userService.releaseFromPool(req.params._id, req.body).then(function(response) {
         if (response) {
             res.send(response);
         } else {
             res.sendStatus(404);
         }
-    }).catch(function (err) {
+    }).catch(function(err) {
         res.status(400).send(err);
     });
 }
 
-function userPoolLogs(req, res){
-    userService.userPoolLogs(req.params._id).then(function (response) {
+function userPoolLogs(req, res) {
+    userService.userPoolLogs(req.params._id).then(function(response) {
         if (response) {
             res.send(response);
         } else {
             res.sendStatus(404);
         }
-    }).catch(function (err) {
+    }).catch(function(err) {
         res.status(400).send(err);
     });
 }
+
+function createPassword(req, res) {
+    var obj = {
+        "password": "1234"
+    }
+    userService.createPassword(req.params._id, obj).then(function(response) {
+        res.send("ok");
+    }).catch(function(err) {
+        res.status(400).send(err);
+    });
+};
