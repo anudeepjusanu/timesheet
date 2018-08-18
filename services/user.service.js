@@ -51,7 +51,6 @@ function getById(_id) {
 
     db.users.findById(_id, function(err, user) {
         if (err) deferred.reject(err.name + ': ' + err.message);
-        console.log(user);
         if (user) {
             // return user (without hashed password)
             deferred.resolve(_.omit(user, 'hash'));
