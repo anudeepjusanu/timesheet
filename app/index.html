@@ -66,9 +66,8 @@
                     console.log(subscription.endpoint);
                     var endpointParts = subscription.endpoint.split('/')
                     var registrationId = endpointParts[endpointParts.length - 1];
-                    console.log(registrationId);
-                    console.log($('.regId'))
-                    $('.regId')[0].innerText = registrationId;
+                    window.pushToken = registrationId;
+                    //$('.regId')[0].innerText = registrationId;
                 });
         } else {
             console.log('service worker is not supported');

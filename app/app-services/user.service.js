@@ -24,6 +24,7 @@
         service.releaseFromPool = releaseFromPool;
         service.userPoolLogs = userPoolLogs;
         service.getUserRoles = getUserRoles;
+        service.updatePushToken = updatePushToken;
 
         return service;
 
@@ -89,6 +90,10 @@
 
         function getUserRoles() {
             return [{ id: "employee", name: "Employee" }, { id: "lead", name: "Lead" }, { id: "manager", name: "Manager" }];
+        }
+
+        function updatePushToken(user) {
+            return $http.put('/api/users/updatePushToken/' + user._id, user).then(handleSuccess, handleError);
         }
 
         // private functions

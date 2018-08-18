@@ -13,24 +13,24 @@
         .controller('Home.ReleaseUserModelController', ReleaseUserModelController)
         .controller('Home.PoolUsersController', PoolUsersController)
         .controller('Home.PoolLogsController', PoolLogsController)
-        .filter('allUserSearch', function ($filter) {
+        .filter('allUserSearch', function($filter) {
             return function(input, searchObj) {
                 var output = input;
-                if(searchObj.userName && searchObj.userName.length > 0){
-                    output = $filter('filter')(output, {name: searchObj.userName});
+                if (searchObj.userName && searchObj.userName.length > 0) {
+                    output = $filter('filter')(output, { name: searchObj.userName });
                 }
                 if (searchObj.userResourceType && searchObj.userResourceType.length > 0) {
-                    output = $filter('filter')(output, function(item){
+                    output = $filter('filter')(output, function(item) {
                         return (searchObj.userResourceType == item.userResourceType);
                     });
                 }
                 if (searchObj.isActive == 'true' || searchObj.isActive == 'false') {
-                    output = $filter('filter')(output, function (item, index) {
-                        if(searchObj.isActive == 'true'){
+                    output = $filter('filter')(output, function(item, index) {
+                        if (searchObj.isActive == 'true') {
                             return (item.isActive === true);
-                        }else if(searchObj.isActive == 'false'){
+                        } else if (searchObj.isActive == 'false') {
                             return (item.isActive === false);
-                        }else{
+                        } else {
                             return true;
                         }
 
@@ -40,7 +40,7 @@
             }
         })
 
-    function Controller(UserService, TimesheetService, ProjectService, $filter, _, $interval) {
+    function Controller(UserService, TimesheetService, ProjectService, $filter, _, $interval, $window) {
         var vm = this;
         var currentDate;
         vm.widgetDate;
@@ -54,7 +54,7 @@
             "October", "November", "December"
         ];
         vm.dateOptions = {
-            dateDisabled: function (data) {
+            dateDisabled: function(data) {
                 var date = data.date,
                     mode = data.mode;
                 return mode === 'day' && (date.getDay() != 5);
@@ -89,9 +89,9 @@
             data: [],
             labels: []
         };
-        if(vm.manpowerChart.weekDate.getDay() < 5){
+        if (vm.manpowerChart.weekDate.getDay() < 5) {
             vm.manpowerChart.weekDate.setDate(vm.manpowerChart.weekDate.getDate() - (vm.manpowerChart.weekDate.getDay() + 2));
-        }else if(vm.manpowerChart.weekDate.getDay() == 6){
+        } else if (vm.manpowerChart.weekDate.getDay() == 6) {
             vm.manpowerChart.weekDate.setDate(vm.manpowerChart.weekDate.getDate() - 1);
         }
         vm.monthHoursChart = {
@@ -134,9 +134,9 @@
             data: [],
             labels: []
         };
-        if(vm.projectManpower.weekDate.getDay() < 5){
+        if (vm.projectManpower.weekDate.getDay() < 5) {
             vm.projectManpower.weekDate.setDate(vm.projectManpower.weekDate.getDate() - (vm.projectManpower.weekDate.getDay() + 2));
-        }else if(vm.projectManpower.weekDate.getDay() == 6){
+        } else if (vm.projectManpower.weekDate.getDay() == 6) {
             vm.projectManpower.weekDate.setDate(vm.projectManpower.weekDate.getDate() - 1);
         }
         /*vm.projectMonthlyHours = {
@@ -166,7 +166,7 @@
                     }],
                     yAxes: [{
                         stacked: true,
-                        ticks: {beginAtZero:true}
+                        ticks: { beginAtZero: true }
                     }]
                 }
             },
@@ -187,7 +187,7 @@
                     }],
                     yAxes: [{
                         stacked: true,
-                        ticks: {beginAtZero:true}
+                        ticks: { beginAtZero: true }
                     }]
                 }
             },
@@ -205,7 +205,7 @@
                 },
                 scales: {
                     yAxes: [{
-                        ticks: {beginAtZero:true, max: 100}
+                        ticks: { beginAtZero: true, max: 100 }
                     }]
                 }
             },
@@ -226,7 +226,7 @@
                     }],
                     yAxes: [{
                         stacked: true,
-                        ticks: {beginAtZero:true, max: 100}
+                        ticks: { beginAtZero: true, max: 100 }
                     }]
                 }
             },
@@ -247,7 +247,7 @@
                     }],
                     yAxes: [{
                         stacked: true,
-                        ticks: {beginAtZero:true, max: 100}
+                        ticks: { beginAtZero: true, max: 100 }
                     }]
                 }
             },
@@ -311,21 +311,21 @@
             TimesheetService.allUserHoursByWeek(week).then(function(manpowerData) {
                 vm.manpowerChart.labels = [];
                 vm.manpowerChart.data = [];
-                _.each(manpowerData.resourceTypes, function (resourceTypeObj) {
-                    vm.manpowerChart.labels.push(resourceTypeObj.resourceType + ' ('+ resourceTypeObj.projectUserCount +')');
+                _.each(manpowerData.resourceTypes, function(resourceTypeObj) {
+                    vm.manpowerChart.labels.push(resourceTypeObj.resourceType + ' (' + resourceTypeObj.projectUserCount + ')');
                     vm.manpowerChart.data.push(resourceTypeObj.projectHours);
                 });
             });
         };
 
         vm.getProjectUserHoursByWeek = function() {
-            if(vm.projectManpower.projectId) {
+            if (vm.projectManpower.projectId) {
                 var week = $filter('date')(new Date(vm.projectManpower.weekDate), "yyyy-Www").toString();
-                TimesheetService.projectUserHoursByWeek(week, vm.projectManpower.projectId).then(function (manpowerData) {
+                TimesheetService.projectUserHoursByWeek(week, vm.projectManpower.projectId).then(function(manpowerData) {
                     vm.projectManpower.labels = [];
                     vm.projectManpower.data = [];
-                    _.each(manpowerData.resourceTypes, function (resourceTypeObj) {
-                        vm.projectManpower.labels.push(resourceTypeObj.resourceType + ' ('+ resourceTypeObj.projectUserCount +')');
+                    _.each(manpowerData.resourceTypes, function(resourceTypeObj) {
+                        vm.projectManpower.labels.push(resourceTypeObj.resourceType + ' (' + resourceTypeObj.projectUserCount + ')');
                         vm.projectManpower.data.push(resourceTypeObj.projectHours);
                     });
                 });
@@ -340,18 +340,18 @@
                 vm.monthHoursChart.labels = [];
                 vm.monthHoursChart.data = [];
                 vm.monthHoursChart.series = [];
-                _.each(manpowerData[0].resourceTypes, function (resourceTypeObj) {
+                _.each(manpowerData[0].resourceTypes, function(resourceTypeObj) {
                     //vm.monthHoursChart.series.push(resourceTypeObj.resourceType + '('+ resourceTypeObj.projectUserCount +')');
                     vm.monthHoursChart.series.push(resourceTypeObj.resourceType);
                 });
-                _.each(manpowerData, function (manpower) {
-                    vm.monthHoursChart.labels.push(manpower.week+ "("+manpower.totalHours+")");
+                _.each(manpowerData, function(manpower) {
+                    vm.monthHoursChart.labels.push(manpower.week + "(" + manpower.totalHours + ")");
                 });
-                _.each(vm.monthHoursChart.series, function (resourceTypeVal) {
+                _.each(vm.monthHoursChart.series, function(resourceTypeVal) {
                     var dataObj = [];
-                    _.each(manpowerData, function (manpowerObj) {
-                        var resourceTypeObj = _.find(manpowerObj.resourceTypes, {"resourceType": resourceTypeVal});
-                        if(resourceTypeObj){
+                    _.each(manpowerData, function(manpowerObj) {
+                        var resourceTypeObj = _.find(manpowerObj.resourceTypes, { "resourceType": resourceTypeVal });
+                        if (resourceTypeObj) {
                             dataObj.push(resourceTypeObj.projectHours);
                         }
                     });
@@ -361,17 +361,17 @@
                 vm.monthHeadCountChart.labels = [];
                 vm.monthHeadCountChart.data = [];
                 vm.monthHeadCountChart.series = [];
-                _.each(manpowerData[0].resourceTypes, function (resourceTypeObj) {
+                _.each(manpowerData[0].resourceTypes, function(resourceTypeObj) {
                     vm.monthHeadCountChart.series.push(resourceTypeObj.resourceType);
                 });
-                _.each(manpowerData, function (manpower) {
-                    vm.monthHeadCountChart.labels.push(manpower.week+ "("+manpower.totalUserCount+")");
+                _.each(manpowerData, function(manpower) {
+                    vm.monthHeadCountChart.labels.push(manpower.week + "(" + manpower.totalUserCount + ")");
                 });
-                _.each(vm.monthHeadCountChart.series, function (resourceTypeVal) {
+                _.each(vm.monthHeadCountChart.series, function(resourceTypeVal) {
                     var dataObj = [];
-                    _.each(manpowerData, function (manpowerObj) {
-                        var resourceTypeObj = _.find(manpowerObj.resourceTypes, {"resourceType": resourceTypeVal});
-                        if(resourceTypeObj){
+                    _.each(manpowerData, function(manpowerObj) {
+                        var resourceTypeObj = _.find(manpowerObj.resourceTypes, { "resourceType": resourceTypeVal });
+                        if (resourceTypeObj) {
                             dataObj.push(resourceTypeObj.projectUserCount);
                         }
                     });
@@ -417,8 +417,8 @@
                 var enterpriseData = [];
                 var lanchpadData = [];
                 var noBillableProjectData = [];
-                _.each(resultData, function (weekData) {
-                    vm.utzHeadCountChart.labels.push(weekData.week+"("+weekData.weekHeadCount+")");
+                _.each(resultData, function(weekData) {
+                    vm.utzHeadCountChart.labels.push(weekData.week + "(" + weekData.weekHeadCount + ")");
                     enterpriseData.push(weekData.enterpriseHeadCount);
                     lanchpadData.push(weekData.launchpadHeadCount);
                     noBillableProjectData.push(weekData.haveNoBillableProjectHeadCount);
@@ -431,8 +431,8 @@
                 vm.utzHoursChart.data = [];
                 var enterpriseData = [];
                 var lanchpadData = [];
-                _.each(resultData, function (weekData) {
-                    vm.utzHoursChart.labels.push(weekData.week+"("+weekData.weekBillableHours+")");
+                _.each(resultData, function(weekData) {
+                    vm.utzHoursChart.labels.push(weekData.week + "(" + weekData.weekBillableHours + ")");
                     enterpriseData.push(weekData.enterpriseBillableHours);
                     lanchpadData.push(weekData.launchpadBillableHours);
                 });
@@ -442,10 +442,10 @@
                 vm.utilizationHeadCountChart.labels = [];
                 vm.utilizationHeadCountChart.data = [];
                 var utilizationData = [];
-                _.each(resultData, function (weekData) {
+                _.each(resultData, function(weekData) {
                     vm.utilizationHeadCountChart.labels.push(weekData.week);
-                    var utilizationVal = (weekData.enterpriseHeadCount/weekData.weekHeadCount)*100;
-                    if(isNaN(utilizationVal)){
+                    var utilizationVal = (weekData.enterpriseHeadCount / weekData.weekHeadCount) * 100;
+                    if (isNaN(utilizationVal)) {
                         utilizationVal = 0;
                     }
                     utilizationVal = parseInt(utilizationVal);
@@ -456,10 +456,10 @@
                 vm.utilizationHoursChart.labels = [];
                 vm.utilizationHoursChart.data = [];
                 var utilizationData = [];
-                _.each(resultData, function (weekData) {
+                _.each(resultData, function(weekData) {
                     vm.utilizationHoursChart.labels.push(weekData.week);
-                    var utilizationVal = (weekData.enterpriseBillableHours/weekData.weekBillableHours)*100;
-                    if(isNaN(utilizationVal)){
+                    var utilizationVal = (weekData.enterpriseBillableHours / weekData.weekBillableHours) * 100;
+                    if (isNaN(utilizationVal)) {
                         utilizationVal = 0;
                     }
                     utilizationVal = parseInt(utilizationVal);
@@ -470,10 +470,10 @@
                 vm.utzOrganizationHeadCountChart.labels = [];
                 vm.utzOrganizationHeadCountChart.data = [];
                 var utilizationData = [];
-                _.each(resultData, function (weekData) {
+                _.each(resultData, function(weekData) {
                     vm.utzOrganizationHeadCountChart.labels.push(weekData.week);
-                    var utilizationVal = (weekData.haveBillableProjectHeadCount/weekData.weekHeadCount)*100;
-                    if(isNaN(utilizationVal)){
+                    var utilizationVal = (weekData.haveBillableProjectHeadCount / weekData.weekHeadCount) * 100;
+                    if (isNaN(utilizationVal)) {
                         utilizationVal = 0;
                     }
                     utilizationVal = parseInt(utilizationVal);
@@ -484,15 +484,29 @@
             });
         };
 
+        function savePushToken() {
+            UserService.updatePushToken(vm.user)
+                .then(function() {
+                    //noty.showSuccess("Updated Successfully")
+                })
+                .catch(function(error) {
+                    //FlashService.Error(error);
+                });
+        }
+
         var init = function() {
             getUsers();
             getProjectsWithUserCount();
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
-                if(vm.user.admin) {
+                if (vm.user.admin) {
                     vm.getAllUserHoursByWeek();
                     vm.getAllUserHoursByMonth();
                     vm.utilizationByMonth();
+                }
+                if ($window && $window.pushToken && vm.user.pushToken != $window.pushToken) {
+                    vm.user.pushToken = $window.pushToken;
+                    savePushToken();
                 }
             });
         };
@@ -529,8 +543,8 @@
         function getAllUsers(week) {
             UserService.GetAll().then(function(users) {
                 vm.users = users;
-                _.each(vm.users, function (userObj) {
-                    if(!(userObj.profileImgUrl) || userObj.profileImgUrl == ""){
+                _.each(vm.users, function(userObj) {
+                    if (!(userObj.profileImgUrl) || userObj.profileImgUrl == "") {
                         userObj.profileImgUrl = '/app/app-content/assets/user.jpg';
                     }
                 });
@@ -568,10 +582,10 @@
             sortDESC: false
         };
 
-        vm.sorting = function (orderBy) {
-            if(vm.search.orderBy == orderBy){
+        vm.sorting = function(orderBy) {
+            if (vm.search.orderBy == orderBy) {
                 vm.search.sortDESC = !vm.search.sortDESC;
-            }else{
+            } else {
                 vm.search.sortDESC = false;
             }
             vm.search.orderBy = orderBy;
@@ -586,19 +600,19 @@
         function getAllUsers() {
             UserService.GetAll().then(function(users) {
                 vm.users = users;
-                _.each(vm.users, function (userObj) {
-                    if(!(userObj.profileImgUrl) || userObj.profileImgUrl == ""){
+                _.each(vm.users, function(userObj) {
+                    if (!(userObj.profileImgUrl) || userObj.profileImgUrl == "") {
                         userObj.profileImgUrl = '/app/app-content/assets/user.jpg';
                     }
-                    if(userObj.reportingTo){
-                        var reportUser = _.find(vm.users, {_id: userObj.reportingTo});
+                    if (userObj.reportingTo) {
+                        var reportUser = _.find(vm.users, { _id: userObj.reportingTo });
                         userObj.reportingUserName = reportUser.name;
                     }
                 });
             });
         }
 
-        vm.viewUser = function (user) {
+        vm.viewUser = function(user) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -608,15 +622,15 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    user: function () {
+                    user: function() {
                         return user;
                     },
-                    reportUsers: function(){
+                    reportUsers: function() {
                         var reportUsers = [];
-                        reportUsers.push({id:null, name:"None"});
-                        _.each(vm.users, function(userObj){
-                            if(userObj.isActive === true && user._id != userObj._id && userObj.userRole && userObj.userRole=="manager"){
-                                reportUsers.push({id:userObj._id, name:userObj.name});    
+                        reportUsers.push({ id: null, name: "None" });
+                        _.each(vm.users, function(userObj) {
+                            if (userObj.isActive === true && user._id != userObj._id && userObj.userRole && userObj.userRole == "manager") {
+                                reportUsers.push({ id: userObj._id, name: userObj.name });
                             }
                         });
                         return reportUsers;
@@ -624,14 +638,14 @@
                 }
             });
 
-            modalInstance.result.then(function (userObj) {
+            modalInstance.result.then(function(userObj) {
                 getAllUsers();
-            }, function () {
+            }, function() {
                 getAllUsers();
             });
         }
 
-        vm.viewReleaseToPool = function (user) {
+        vm.viewReleaseToPool = function(user) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -641,19 +655,19 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    user: function () {
+                    user: function() {
                         return user;
                     }
                 }
             });
-            modalInstance.result.then(function (userObj) {
+            modalInstance.result.then(function(userObj) {
                 getAllUsers();
-            }, function () {
+            }, function() {
                 getAllUsers();
             });
         }
 
-        vm.viewReleaseFromPool = function (user) {
+        vm.viewReleaseFromPool = function(user) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -663,19 +677,20 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    user: function () {
+                    user: function() {
                         return user;
                     }
                 }
             });
-            modalInstance.result.then(function (userObj) {
+            modalInstance.result.then(function(userObj) {
                 getAllUsers();
-            }, function () {
+            }, function() {
                 getAllUsers();
             });
         }
 
         initController();
+
         function initController() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
@@ -700,8 +715,8 @@
             vm.alerts.splice(index, 1);
         }
 
-        vm.saveUser = function (userForm) {
-            if(userForm.$valid){
+        vm.saveUser = function(userForm) {
+            if (userForm.$valid) {
                 var obj = {
                     "name": vm.userObj.name,
                     "phone": vm.userObj.phone,
@@ -725,11 +740,12 @@
             }
         }
 
-        vm.closeUser = function () {
+        vm.closeUser = function() {
             $uibModalInstance.close();
         }
 
         init();
+
         function init() {
             vm.userRoles = UserService.getUserRoles();
         }
@@ -749,8 +765,8 @@
             vm.alerts.splice(index, 1);
         }
 
-        vm.toPool = function (userForm) {
-            if(userForm.$valid){
+        vm.toPool = function(userForm) {
+            if (userForm.$valid) {
                 var obj = {
                     "resourceInPool": true,
                     "poolSinceDate": vm.userObj.poolSinceDate,
@@ -767,7 +783,7 @@
             }
         }
 
-        vm.fromPool = function (userForm) {
+        vm.fromPool = function(userForm) {
             UserService.releaseFromPool(vm.userObj._id).then(function(response) {
                 noty.showSuccess("User has been release from pool successfully!");
                 $uibModalInstance.close();
@@ -778,11 +794,12 @@
             });
         }
 
-        vm.closeUser = function () {
+        vm.closeUser = function() {
             $uibModalInstance.close();
         }
 
         init();
+
         function init() {
 
         }
@@ -1106,10 +1123,10 @@
             sortDESC: false
         };
 
-        vm.sorting = function (orderBy) {
-            if(vm.search.orderBy == orderBy){
+        vm.sorting = function(orderBy) {
+            if (vm.search.orderBy == orderBy) {
                 vm.search.sortDESC = !vm.search.sortDESC;
-            }else{
+            } else {
                 vm.search.sortDESC = false;
             }
             vm.search.orderBy = orderBy;
@@ -1118,18 +1135,18 @@
         vm.getAllUsers = function() {
             vm.users = [];
             UserService.GetAll().then(function(users) {
-                _.each(users, function (userObj) {
-                    if(userObj.isActive==true) {
-                        if(vm.showAllUsers === true){
+                _.each(users, function(userObj) {
+                    if (userObj.isActive == true) {
+                        if (vm.showAllUsers === true) {
                             userObj.poolSince = vm.calWeeksSinceNow(userObj.poolSinceDate);
                             vm.users.push(userObj);
-                        }else if(vm.showAllUsers === false && userObj.resourceInPool === true) {
+                        } else if (vm.showAllUsers === false && userObj.resourceInPool === true) {
                             userObj.poolSince = vm.calWeeksSinceNow(userObj.poolSinceDate);
                             vm.users.push(userObj);
                         }
                     }
 
-                    if(!(userObj.profileImgUrl) || userObj.profileImgUrl == ""){
+                    if (!(userObj.profileImgUrl) || userObj.profileImgUrl == "") {
                         userObj.profileImgUrl = '/app/app-content/assets/user.jpg';
                     }
 
@@ -1137,7 +1154,7 @@
             });
         }
 
-        vm.viewUserPoolLog = function (user) {
+        vm.viewUserPoolLog = function(user) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -1147,19 +1164,19 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    user: function () {
+                    user: function() {
                         return user;
                     }
                 }
             });
-            modalInstance.result.then(function (userObj) {
+            modalInstance.result.then(function(userObj) {
 
-            }, function () {
+            }, function() {
 
             });
         }
 
-        vm.viewReleaseToPool = function (user) {
+        vm.viewReleaseToPool = function(user) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -1169,19 +1186,19 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    user: function () {
+                    user: function() {
                         return user;
                     }
                 }
             });
-            modalInstance.result.then(function (userObj) {
+            modalInstance.result.then(function(userObj) {
                 vm.getAllUsers();
-            }, function () {
+            }, function() {
                 vm.getAllUsers();
             });
         }
 
-        vm.viewReleaseFromPool = function (user) {
+        vm.viewReleaseFromPool = function(user) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -1191,32 +1208,33 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    user: function () {
+                    user: function() {
                         return user;
                     }
                 }
             });
-            modalInstance.result.then(function (userObj) {
+            modalInstance.result.then(function(userObj) {
                 vm.getAllUsers();
-            }, function () {
+            }, function() {
                 vm.getAllUsers();
             });
         }
 
-        vm.calWeeksSinceNow = function (sinceDate) {
-            if(sinceDate && sinceDate.length > 0){
-                var oneDay = 24*60*60*1000;
-                var oneWeek = 7*24*60*60*1000;
+        vm.calWeeksSinceNow = function(sinceDate) {
+            if (sinceDate && sinceDate.length > 0) {
+                var oneDay = 24 * 60 * 60 * 1000;
+                var oneWeek = 7 * 24 * 60 * 60 * 1000;
                 var now = new Date();
                 var sinceDate = new Date(sinceDate);
-                var diff = parseInt((now - sinceDate)/oneWeek);
+                var diff = parseInt((now - sinceDate) / oneWeek);
                 return diff + " Weeks";
-            }else{
+            } else {
                 return "";
             }
         }
 
         initController();
+
         function initController() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
@@ -1242,24 +1260,25 @@
             });
         }
 
-        vm.close = function () {
+        vm.close = function() {
             $uibModalInstance.close();
         }
 
-        vm.calWeeksSinceEnd= function (sinceDate, endDate) {
-            if(sinceDate && sinceDate.length > 0){
-                var oneDay = 24*60*60*1000;
-                var oneWeek = 7*24*60*60*1000;
+        vm.calWeeksSinceEnd = function(sinceDate, endDate) {
+            if (sinceDate && sinceDate.length > 0) {
+                var oneDay = 24 * 60 * 60 * 1000;
+                var oneWeek = 7 * 24 * 60 * 60 * 1000;
                 var now = new Date();
                 var sinceDate = new Date(sinceDate);
-                var diff = parseInt((now - sinceDate)/oneWeek);
+                var diff = parseInt((now - sinceDate) / oneWeek);
                 return diff + " Weeks";
-            }else{
+            } else {
                 return "";
             }
         }
 
         initController();
+
         function initController() {
             getUserPoolLogs(vm.user._id);
         }

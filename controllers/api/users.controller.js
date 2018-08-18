@@ -18,6 +18,7 @@ router.post('/releaseToPool/:_id', releaseToPool);
 router.post('/releaseFromPool/:_id', releaseFromPool);
 router.get('/userPoolLogs/:_id', userPoolLogs);
 router.get('/createPassword/:_id', createPassword);
+router.put('/updatePushToken/:_id', updatePushToken);
 
 module.exports = router;
 
@@ -199,4 +200,16 @@ function createPassword(req, res) {
     }).catch(function(err) {
         res.status(400).send(err);
     });
+};
+
+
+function updatePushToken(req, res) {
+    var userId = req.user.sub;
+    userService.updatePushToken(userId, req.body)
+        .then(function() {
+            res.sendStatus(200);
+        })
+        .catch(function(err) {
+            res.status(400).send(err);
+        });
 };
