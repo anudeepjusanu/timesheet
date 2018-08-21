@@ -29,6 +29,7 @@ router.get('/clientUserHoursByWeek/:weekId/:clientId', clientUserHoursByWeek);
 router.get('/allUserHoursByMonth/:monthId/:yearId', allUserHoursByMonth);
 router.post('/timesheetBetweenDates/:startDate/:endDate', timesheetBetweenDates);
 router.get('/projectUserHoursByMonth/:monthId/:yearId/:projectId', projectUserHoursByMonth);
+router.get('/project/:projectId/week/:weekId', getTimesheetByProject);
 
 
 module.exports = router;
@@ -50,12 +51,12 @@ function createTimesheet(req, res) {
     });
 }
 
-function updateTimesheet(req, res){
+function updateTimesheet(req, res) {
     userService.getById(req.user.sub).then(function(currentUser) {
         if (currentUser) {
-            timesheetService.updateTimesheet(req.params.id, req.body, currentUser).then(function () {
+            timesheetService.updateTimesheet(req.params.id, req.body, currentUser).then(function() {
                 res.sendStatus(200);
-            }).catch(function (err) {
+            }).catch(function(err) {
                 res.status(400).send(err);
             });
         } else {
@@ -66,41 +67,41 @@ function updateTimesheet(req, res){
     });
 }
 
-function setTimesheetStatus(req, res){
-    timesheetService.setTimesheetStatus(req.params.id, req.body).then(function () {
+function setTimesheetStatus(req, res) {
+    timesheetService.setTimesheetStatus(req.params.id, req.body).then(function() {
         res.sendStatus(200);
-    }).catch(function (err) {
+    }).catch(function(err) {
         res.status(400).send(err);
     });
 }
 
-function getTimesheet(req, res){
+function getTimesheet(req, res) {
     timesheetService.getTimesheet(req.params.id)
-        .then(function (response) {
+        .then(function(response) {
             res.send(response);
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
-function deleteTimesheet(req, res){
+function deleteTimesheet(req, res) {
     var userId = req.user.sub;
     userService.getById(req.user.sub).then(function(currentUser) {
         if (currentUser && currentUser.admin === true) {
             timesheetService.adminDeleteTimesheet(req.params.id)
-                .then(function (response) {
+                .then(function(response) {
                     res.send(response);
                 })
-                .catch(function (err) {
+                .catch(function(err) {
                     res.status(400).send(err);
                 });
         } else {
             timesheetService.deleteTimesheet(req.params.id, userId)
-                .then(function (response) {
+                .then(function(response) {
                     res.send(response);
                 })
-                .catch(function (err) {
+                .catch(function(err) {
                     res.status(400).send(err);
                 });
         }
@@ -135,7 +136,7 @@ function remind(req, res) {
             if (user) {
                 var msg = new builder.Message()
                     .address(user.address)
-                    .text("Hi, Please update your weekly hours for "+req.params.week +" at http://timesheet.wavelabs.in");
+                    .text("Hi, Please update your weekly hours for " + req.params.week + " at http://timesheet.wavelabs.in");
                 bot.send(msg, function(err) {
                     // Return success/failure
                     res.sendStatus(200);
@@ -159,7 +160,7 @@ function remindAll(req, res) {
                         .text("Please update your weekly hours for current week at http://timesheet.wavelabs.in , Ignore if already updated");
                     bot.send(msg, function(err) {
                         // Return success/failure
-                        
+
                     });
                 }
                 res.sendStatus(200);
@@ -173,23 +174,23 @@ function remindAll(req, res) {
         });
 }
 
-function adminUpdate(req, res){
+function adminUpdate(req, res) {
     var userId = req.user.sub;
     timesheetService.adminUpdate(req.params.id, req.body)
-        .then(function () {
+        .then(function() {
             res.sendStatus(200);
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
 
-function getReportbyMonth(req, res){
+function getReportbyMonth(req, res) {
     timesheetService.getByMonth(req.body.weekArr)
-        .then(function (reports) {
+        .then(function(reports) {
             res.send(reports);
         })
-        .catch(function (err) {
+        .catch(function(err) {
             res.status(400).send(err);
         });
 }
@@ -263,6 +264,16 @@ function timesheetBetweenDates(req, res) {
     timesheetService.timesheetBetweenDates(req.params.startDate, req.params.endDate, req.body)
         .then(function(report) {
             res.send(report);
+        })
+        .catch(function(err) {
+            res.status(400).send(err);
+        });
+}
+
+function getTimesheetByProject(req, res) {
+    timesheetService.getByProject(req.params.weekId, req.params.projectId)
+        .then(function(reports) {
+            res.send(reports);
         })
         .catch(function(err) {
             res.status(400).send(err);

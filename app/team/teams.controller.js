@@ -12,8 +12,8 @@
         function filterProjects() {
             _.each(vm.user.projects, function(project) {
                 if (project.ownerId == vm.user._id) {
-                    project.isOwner = true;
-                }
+                    getUsers(project._id)
+                };
             });
         };
 

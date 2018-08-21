@@ -143,6 +143,7 @@ function getAssignedUsers(projectId) {
                     userProject.billDates = [];
                 }
                 assignedUsers.push({
+                    projectId: projectId,
                     userId: user._id,
                     userName: user.name,
                     //startDate: userProject.startDate,

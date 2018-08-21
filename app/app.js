@@ -48,6 +48,14 @@
                 parent: 'layout',
                 data: { activeTab: 'timesheet' }
             })
+            .state('timesheetApprove', {
+                url: '/timesheets',
+                templateUrl: 'timesheet/timesheetApprove.html',
+                controller: 'Timesheet.ApprovalController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'timesheetApprove' }
+            })
             .state('myTimesheets', {
                 url: '/myTimesheets',
                 templateUrl: 'timesheet/myTimesheets.html',

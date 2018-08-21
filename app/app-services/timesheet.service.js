@@ -26,6 +26,7 @@
         service.projectUserHoursByMonth = projectUserHoursByMonth;
         service.utilizationByMonth = utilizationByMonth;
         service.timesheetBetweenDates = timesheetBetweenDates;
+        service.projectHours = projectHours;
 
         return service;
 
@@ -50,18 +51,18 @@
         }
 
         function getTimesheet(id) {
-            return $http.get('/api/timesheet/'+id).then(handleSuccess, handleError);
+            return $http.get('/api/timesheet/' + id).then(handleSuccess, handleError);
         }
 
         function getReportByWeek(week) {
             return $http.get('/api/timesheet/week/' + week).then(handleSuccess, handleError);
         }
 
-        function remind(id, week){
-            return $http.get('/api/timesheet/remind/' +id+ '/'+week).then(handleSuccess, handleError);
+        function remind(id, week) {
+            return $http.get('/api/timesheet/remind/' + id + '/' + week).then(handleSuccess, handleError);
         }
 
-        function remindAll(){
+        function remindAll() {
             return $http.get('/api/timesheet/remind/all').then(handleSuccess, handleError);
         }
 
@@ -69,7 +70,7 @@
             return $http.put('/api/timesheet/admin/' + id, obj).then(handleSuccess, handleError);
         }
 
-        function getReportByMonth(obj){
+        function getReportByMonth(obj) {
             return $http.post('/api/timesheet/month/report', obj).then(handleSuccess, handleError);
         }
 
@@ -98,11 +99,18 @@
         }
 
         function utilizationByMonth(month, year) {
-            return $http.get('/api/timesheet/utilizationByMonth/' + month + '/' + year ).then(handleSuccess, handleError);
+            return $http.get('/api/timesheet/utilizationByMonth/' + month + '/' + year).then(handleSuccess, handleError);
         }
 
         function timesheetBetweenDates(startDate, endDate, paramObj) {
             return $http.post('/api/timesheet/timesheetBetweenDates/' + startDate + '/' + endDate, paramObj).then(handleSuccess, handleError);
+        }
+
+        function projectHours(weekId, projectId) {
+            if (weekId && projectId) {
+                return $http.get('/api/timesheet/project/' + projectId + '/week/' + weekId).then(handleSuccess, handleError);
+            }
+
         }
 
         // private functions

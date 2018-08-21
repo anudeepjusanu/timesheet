@@ -29,19 +29,20 @@ service.projectUserHoursByMonth = projectUserHoursByMonth;
 service.timesheetBetweenDates = timesheetBetweenDates;
 service.getProjectInfoById = getProjectInfoById;
 service.utilizationByMonth = utilizationByMonth;
+service.getByProject = getByProject;
 
 module.exports = service;
 
 function createTimesheet(currentUser, userParam) {
     var deferred = Q.defer();
-    if(!userParam.userId){
-        userParam.userId = currentUser._id+"";
+    if (!userParam.userId) {
+        userParam.userId = currentUser._id + "";
     }
-    _.each(userParam.projects, function (projectObj) {
+    _.each(userParam.projects, function(projectObj) {
         projectObj.projectId = mongo.helper.toObjectID(projectObj.projectId);
     });
-    var timeOffPrj = _.find(userParam.projects, {projectName: "Timeoff"});
-    if(timeOffPrj && timeOffPrj.projectHours == 0){
+    var timeOffPrj = _.find(userParam.projects, { projectName: "Timeoff" });
+    if (timeOffPrj && timeOffPrj.projectHours == 0) {
         userParam.projects.splice(userParam.projects.indexOf(timeOffPrj), 1);
     }
     var allProjects;
@@ -50,16 +51,16 @@ function createTimesheet(currentUser, userParam) {
 
         db.users.findById(userParam.userId, function(err, user) {
             if (user && user.projects) {
-                _.each(userParam.projects, function (projectObj) {
+                _.each(userParam.projects, function(projectObj) {
                     var billData = getProjectBillData(projectObj, userParam.weekDate, user);
                     projectObj.resourceType = billData.resourceType;
                     projectObj.allocatedHours = billData.allocatedHours;
                     projectObj.billableMaxHours = billData.billableMaxHours;
                     projectObj.overtimeHours = 0;
-                    if(projectObj.billableMaxHours > 0 && projectObj.projectHours > projectObj.billableMaxHours){
+                    if (projectObj.billableMaxHours > 0 && projectObj.projectHours > projectObj.billableMaxHours) {
                         projectObj.billableHours = projectObj.billableMaxHours;
                         projectObj.overtimeHours = projectObj.projectHours - projectObj.billableMaxHours;
-                    }else{
+                    } else {
                         projectObj.billableHours = projectObj.projectHours;
                     }
                 });
@@ -67,12 +68,12 @@ function createTimesheet(currentUser, userParam) {
                 userParam.totalBillableHours = 0;
                 userParam.timeoffHours = 0;
                 userParam.overtimeHours = 0;
-                _.each(userParam.projects, function (projectObj) {
-                    if(!projectObj.businessUnit){
+                _.each(userParam.projects, function(projectObj) {
+                    if (!projectObj.businessUnit) {
                         projectObj.businessUnit = "";
                     }
-                    var projectInfo = _.find(allProjects, {_id: projectObj.projectId});
-                    if(projectInfo && projectInfo.businessUnit){
+                    var projectInfo = _.find(allProjects, { _id: projectObj.projectId });
+                    if (projectInfo && projectInfo.businessUnit) {
                         projectObj.businessUnit = projectInfo.businessUnit;
                     }
                     userParam.totalHours += projectObj.projectHours;
@@ -82,10 +83,10 @@ function createTimesheet(currentUser, userParam) {
                     userParam.overtimeHours += projectObj.overtimeHours;
                 });
             }
-            if(!user.userResourceType){
+            if (!user.userResourceType) {
                 user.userResourceType = "";
             }
-            db.timesheets.findOne({ userId: user._id, week: userParam.week}, function(err, sheet) {
+            db.timesheets.findOne({ userId: user._id, week: userParam.week }, function(err, sheet) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
                 if (!sheet) {
                     var sheetObj = {
@@ -119,12 +120,12 @@ function createTimesheet(currentUser, userParam) {
 
 function updateTimesheet(sheetId, userParam, currentUser) {
     var deferred = Q.defer();
-    var currentUserId = currentUser._id+"";
-    _.each(userParam.projects, function (projectObj) {
+    var currentUserId = currentUser._id + "";
+    _.each(userParam.projects, function(projectObj) {
         projectObj.projectId = mongo.helper.toObjectID(projectObj.projectId);
     });
-    var timeOffPrj = _.find(userParam.projects, {projectName: "Timeoff"});
-    if(timeOffPrj && timeOffPrj.projectHours == 0){
+    var timeOffPrj = _.find(userParam.projects, { projectName: "Timeoff" });
+    if (timeOffPrj && timeOffPrj.projectHours == 0) {
         userParam.projects.splice(userParam.projects.indexOf(timeOffPrj), 1);
     }
     var allProjects;
@@ -133,18 +134,18 @@ function updateTimesheet(sheetId, userParam, currentUser) {
 
         db.timesheets.findById(sheetId, function(err, sheetObj) {
             if (err) deferred.reject(err.name + ': ' + err.message);
-            if(sheetObj.userId == currentUserId ||  currentUser.admin === true){
+            if (sheetObj.userId == currentUserId || currentUser.admin === true) {
                 db.users.findById(sheetObj.userId, function(err, sheetUserObj) {
-                    _.each(userParam.projects, function (projectObj) {
+                    _.each(userParam.projects, function(projectObj) {
                         var billData = getProjectBillData(projectObj, userParam.weekDate, sheetUserObj);
                         projectObj.resourceType = billData.resourceType;
                         projectObj.allocatedHours = billData.allocatedHours;
                         projectObj.billableMaxHours = billData.billableMaxHours;
                         projectObj.overtimeHours = 0;
-                        if(projectObj.billableMaxHours > 0 && projectObj.projectHours > projectObj.billableMaxHours){
+                        if (projectObj.billableMaxHours > 0 && projectObj.projectHours > projectObj.billableMaxHours) {
                             projectObj.billableHours = projectObj.billableMaxHours;
                             projectObj.overtimeHours = projectObj.projectHours - projectObj.billableMaxHours;
-                        }else{
+                        } else {
                             projectObj.billableHours = projectObj.projectHours;
                         }
                     });
@@ -152,12 +153,12 @@ function updateTimesheet(sheetId, userParam, currentUser) {
                     userParam.totalBillableHours = 0;
                     userParam.timeoffHours = 0;
                     userParam.overtimeHours = 0;
-                    _.each(userParam.projects, function (projectObj) {
-                        if(!projectObj.businessUnit){
+                    _.each(userParam.projects, function(projectObj) {
+                        if (!projectObj.businessUnit) {
                             projectObj.businessUnit = "";
                         }
-                        var projectInfo = _.find(allProjects, {_id: projectObj.projectId});
-                        if(projectInfo && projectInfo.businessUnit){
+                        var projectInfo = _.find(allProjects, { _id: projectObj.projectId });
+                        if (projectInfo && projectInfo.businessUnit) {
                             projectObj.businessUnit = projectInfo.businessUnit;
                         }
                         userParam.totalHours += projectObj.projectHours;
@@ -166,7 +167,7 @@ function updateTimesheet(sheetId, userParam, currentUser) {
                         userParam.timeoffHours += projectObj.timeoffHours;
                         userParam.overtimeHours += projectObj.overtimeHours;
                     });
-                    if(!sheetUserObj.userResourceType){
+                    if (!sheetUserObj.userResourceType) {
                         sheetUserObj.userResourceType = "";
                     }
                     var newSheetObj = {
@@ -188,7 +189,7 @@ function updateTimesheet(sheetId, userParam, currentUser) {
                         deferred.resolve(responseSheet);
                     });
                 });
-            }else{
+            } else {
                 deferred.reject("You are not authorized");
             }
         });
@@ -200,7 +201,7 @@ function updateTimesheet(sheetId, userParam, currentUser) {
 
 function setTimesheetStatus(sheetId, userParam) {
     var deferred = Q.defer();
-    db.timesheets.update({ _id: mongo.helper.toObjectID(sheetId) }, { $set: {timesheetStatus: userParam.timesheetStatus} }, function(err, responseSheet) {
+    db.timesheets.update({ _id: mongo.helper.toObjectID(sheetId) }, { $set: { timesheetStatus: userParam.timesheetStatus } }, function(err, responseSheet) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         deferred.resolve(responseSheet);
     });
@@ -214,10 +215,10 @@ function getProjectBillData(projectObj, weekDateVal, sheetUserObj) {
         billableMaxHours: 0
     };
     if (sheetUserObj && sheetUserObj.projects) {
-        var prjData = _.find(sheetUserObj.projects, {"projectId": projectObj.projectId+""});
+        var prjData = _.find(sheetUserObj.projects, { "projectId": projectObj.projectId + "" });
         if (prjData && prjData.billDates) {
             var weekDate = new Date(weekDateVal);
-            _.each(prjData.billDates, function (billDate) {
+            _.each(prjData.billDates, function(billDate) {
                 if (billDate.start && billDate.start != "" && billDate.end && billDate.end != "") {
                     var startDate = new Date(billDate.start);
                     var endDate = new Date(billDate.end);
@@ -248,10 +249,10 @@ function getProjectBillData(projectObj, weekDateVal, sheetUserObj) {
             });
         }
     }
-    if(!(BillData.allocatedHours >= 0)){
+    if (!(BillData.allocatedHours >= 0)) {
         BillData.allocatedHours = 40;
     }
-    if(!(BillData.billableMaxHours >= 0)){
+    if (!(BillData.billableMaxHours >= 0)) {
         BillData.billableMaxHours = 0;
     }
     return BillData;
@@ -269,7 +270,7 @@ function getProjectInfoById(projectId) {
     return deferred.promise;
 }
 
-function getTimesheet(id){
+function getTimesheet(id) {
     var deferred = Q.defer();
     db.timesheets.findById(id, function(err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
@@ -282,9 +283,9 @@ function getTimesheet(id){
     return deferred.promise;
 }
 
-function deleteTimesheet(timesheetId, userId){
+function deleteTimesheet(timesheetId, userId) {
     var deferred = Q.defer();
-    db.timesheets.remove({ _id: mongo.helper.toObjectID(timesheetId), userId: mongo.helper.toObjectID(userId)}, function(err, doc) {
+    db.timesheets.remove({ _id: mongo.helper.toObjectID(timesheetId), userId: mongo.helper.toObjectID(userId) }, function(err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (doc) {
             deferred.resolve(doc);
@@ -295,9 +296,9 @@ function deleteTimesheet(timesheetId, userId){
     return deferred.promise;
 }
 
-function adminDeleteTimesheet(timesheetId){
+function adminDeleteTimesheet(timesheetId) {
     var deferred = Q.defer();
-    db.timesheets.remove({ _id: mongo.helper.toObjectID(timesheetId)}, function(err, doc) {
+    db.timesheets.remove({ _id: mongo.helper.toObjectID(timesheetId) }, function(err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (doc) {
             deferred.resolve(doc);
@@ -323,7 +324,7 @@ function getByWeek(week) {
 
 function getByMonth(weekArr) {
     var deferred = Q.defer();
-    db.timesheets.find({ "week": {"$in": weekArr} }).toArray(function(err, doc) {
+    db.timesheets.find({ "week": { "$in": weekArr } }).toArray(function(err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (doc) {
             deferred.resolve(doc);
@@ -391,20 +392,20 @@ function weekHoursCal(sheets, resourceTypes, weekVal) {
         totalHours: 0,
         resourceTypes: []
     };
-    _.each(resourceTypes, function (resourceType) {
+    _.each(resourceTypes, function(resourceType) {
         report.resourceTypes.push({
             resourceType: resourceType,
             projectUserCount: 0,
             projectHours: 0
         });
     })
-    _.each(sheets, function (sheet) {
+    _.each(sheets, function(sheet) {
         report.totalUserCount += 1;
         report.totalHours += sheet.totalHours;
-        _.each(sheet.projects, function (project) {
-            var resourceTypeId = (project.resourceType == "")?"buffer":project.resourceType;
-            var resourceTypeObj = _.find(report.resourceTypes, {"resourceType": resourceTypeId});
-            if(resourceTypeObj){
+        _.each(sheet.projects, function(project) {
+            var resourceTypeId = (project.resourceType == "") ? "buffer" : project.resourceType;
+            var resourceTypeObj = _.find(report.resourceTypes, { "resourceType": resourceTypeId });
+            if (resourceTypeObj) {
                 resourceTypeObj.projectUserCount += 1;
                 resourceTypeObj.projectHours += project.projectHours;
             }
@@ -454,7 +455,7 @@ function allUserHoursByWeek(week) {
 
 function projectUserHoursByWeek(week, projectId) {
     var deferred = Q.defer();
-    db.timesheets.find({ week: week, "projects.projectId": {"$in":[mongo.helper.toObjectID(projectId)]} }).toArray(function(err, sheets) {
+    db.timesheets.find({ week: week, "projects.projectId": { "$in": [mongo.helper.toObjectID(projectId)] } }).toArray(function(err, sheets) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (sheets) {
             /*var report = {
@@ -514,21 +515,21 @@ function allUserHoursByMonth(month, year) {
     var resultData = [];
     var weeks = [];
     var startDate = new Date(year, month, 1);
-    if(month >= 11){
-        var endDate = new Date(year+1, 0, 0);
-    }else{
+    if (month >= 11) {
+        var endDate = new Date(year + 1, 0, 0);
+    } else {
         var endDate = new Date(year, month + 1, 0);
     }
     var loop = 1;
-    while (startDate < endDate && loop++ < 6){
-        if(startDate.getWeek() <= 9){
-            weeks.push(startDate.getFullYear()+"-W0"+startDate.getWeek());
-        }else{
-            weeks.push(startDate.getFullYear()+"-W"+startDate.getWeek());
+    while (startDate < endDate && loop++ < 6) {
+        if (startDate.getWeek() <= 9) {
+            weeks.push(startDate.getFullYear() + "-W0" + startDate.getWeek());
+        } else {
+            weeks.push(startDate.getFullYear() + "-W" + startDate.getWeek());
         }
         startDate.setDate(startDate.getDate() + 7);
     }
-    _.each(weeks, function (weekVal) {
+    _.each(weeks, function(weekVal) {
         db.timesheets.find({ week: weekVal }).toArray(function(err, sheets) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             if (sheets) {
@@ -560,7 +561,7 @@ function allUserHoursByMonth(month, year) {
                     });
                 });*/
                 resultData.push(weekHoursCal(sheets, resourceTypes, weekVal));
-                if(resultData.length == weeks.length){
+                if (resultData.length == weeks.length) {
                     resultData = _.sortBy(resultData, ['week']);
                     deferred.resolve(resultData);
                 }
@@ -581,22 +582,22 @@ function projectUserHoursByMonth(month, year, projectId) {
     var resultData = [];
     var weeks = [];
     var startDate = new Date(year, month, 1);
-    if(month >= 11){
-        var endDate = new Date(year+1, 0, 0);
-    }else{
+    if (month >= 11) {
+        var endDate = new Date(year + 1, 0, 0);
+    } else {
         var endDate = new Date(year, month + 1, 0);
     }
     var loop = 1;
-    while (startDate < endDate && loop++ < 6){
-        if(startDate.getWeek() <= 9){
-            weeks.push(startDate.getFullYear()+"-W0"+startDate.getWeek());
-        }else{
-            weeks.push(startDate.getFullYear()+"-W"+startDate.getWeek());
+    while (startDate < endDate && loop++ < 6) {
+        if (startDate.getWeek() <= 9) {
+            weeks.push(startDate.getFullYear() + "-W0" + startDate.getWeek());
+        } else {
+            weeks.push(startDate.getFullYear() + "-W" + startDate.getWeek());
         }
         startDate.setDate(startDate.getDate() + 7);
     }
-    _.each(weeks, function (weekVal) {
-        db.timesheets.find({ week: weekVal, "projects.projectId": {"$in":[mongo.helper.toObjectID(projectId)]} }).toArray(function(err, sheets) {
+    _.each(weeks, function(weekVal) {
+        db.timesheets.find({ week: weekVal, "projects.projectId": { "$in": [mongo.helper.toObjectID(projectId)] } }).toArray(function(err, sheets) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             if (sheets) {
                 /*var report = {
@@ -627,7 +628,7 @@ function projectUserHoursByMonth(month, year, projectId) {
                     });
                 });*/
                 resultData.push(weekHoursCal(sheets, resourceTypes, weekVal));
-                if(resultData.length == weeks.length){
+                if (resultData.length == weeks.length) {
                     resultData = _.sortBy(resultData, 'week');
                     deferred.resolve(resultData);
                 }
@@ -639,7 +640,7 @@ function projectUserHoursByMonth(month, year, projectId) {
     return deferred.promise;
 }
 
-function timesheetBetweenDates(startDateVal, endDateVal, params){
+function timesheetBetweenDates(startDateVal, endDateVal, params) {
     var deferred = Q.defer();
     Date.prototype.getWeek = function() {
         var onejan = new Date(this.getFullYear(), 0, 1);
@@ -649,31 +650,31 @@ function timesheetBetweenDates(startDateVal, endDateVal, params){
     var startDate = new Date(startDateVal);
     var endDate = new Date(endDateVal);
     var loop = 1;
-    while (startDate < endDate && loop++ < 50){
-        if(startDate.getWeek() <= 9){
-            weeks.push(startDate.getFullYear()+"-W0"+startDate.getWeek());
-        }else{
-            weeks.push(startDate.getFullYear()+"-W"+startDate.getWeek());
+    while (startDate < endDate && loop++ < 50) {
+        if (startDate.getWeek() <= 9) {
+            weeks.push(startDate.getFullYear() + "-W0" + startDate.getWeek());
+        } else {
+            weeks.push(startDate.getFullYear() + "-W" + startDate.getWeek());
         }
         startDate.setDate(startDate.getDate() + 7);
     }
-    if(weeks.length > 0 ){
+    if (weeks.length > 0) {
         var queryStr = {};
         var projectList = [];
-        if(params.projectIds && params.projectIds.length > 0){
-            _.each(params.projectIds, function (projectId) {
+        if (params.projectIds && params.projectIds.length > 0) {
+            _.each(params.projectIds, function(projectId) {
                 projectList.push(mongo.helper.toObjectID(projectId));
             });
             queryStr = {
-                "projects.projectId": {"$in": projectList}
+                "projects.projectId": { "$in": projectList }
             };
         }
         var timesheets = [];
         var loopCount = 0;
-        _.each(weeks, function (weekVal) {
+        _.each(weeks, function(weekVal) {
             queryStr.week = weekVal;
             db.timesheets.find(queryStr).toArray(function(err, sheets) {
-                _.each(sheets, function (sheetObj) {
+                _.each(sheets, function(sheetObj) {
                     var timesheetObj = {
                         _id: sheetObj._id,
                         userId: sheetObj.userId,
@@ -681,16 +682,16 @@ function timesheetBetweenDates(startDateVal, endDateVal, params){
                         weekDate: sheetObj.weekDate,
                         projects: []
                     };
-                    if(projectList.length === 0){
-                        _.each(sheetObj.projects, function (projectObj) {
+                    if (projectList.length === 0) {
+                        _.each(sheetObj.projects, function(projectObj) {
                             timesheetObj.projects.push(projectObj);
                         });
-                    }else{
-                        _.each(projectList, function (projectIdVal) {
+                    } else {
+                        _.each(projectList, function(projectIdVal) {
                             projectIdVal = projectIdVal + "";
-                            _.each(sheetObj.projects, function (sheetPrj) {
+                            _.each(sheetObj.projects, function(sheetPrj) {
                                 sheetPrj.projectId = sheetPrj.projectId + "";
-                                if(sheetPrj.projectId == projectIdVal){
+                                if (sheetPrj.projectId == projectIdVal) {
                                     timesheetObj.projects.push(sheetPrj);
                                 }
                             });
@@ -703,13 +704,13 @@ function timesheetBetweenDates(startDateVal, endDateVal, params){
                     timesheets.push(timesheetObj);
                 });
                 loopCount++;
-                if(loopCount >= weeks.length){
+                if (loopCount >= weeks.length) {
                     //timesheets = _.groupBy(timesheets, 'userId');
                     deferred.resolve(timesheets);
                 }
             });
         });
-    }else{
+    } else {
         deferred.reject("Please enetr valid date range");
     }
 
@@ -725,29 +726,29 @@ function utilizationByMonth(month, year, params) {
     var resultData = [];
     var weeks = [];
     var startDate = new Date(year, month, 1);
-    if(month >= 11){
-        var endDate = new Date(year+1, 0, 0);
-    }else{
+    if (month >= 11) {
+        var endDate = new Date(year + 1, 0, 0);
+    } else {
         var endDate = new Date(year, month + 1, 0);
     }
     var loop = 1;
-    while (startDate < endDate && loop++ < 6){
-        if(startDate.getWeek() <= 9){
-            weeks.push(startDate.getFullYear()+"-W0"+startDate.getWeek());
-        }else{
-            weeks.push(startDate.getFullYear()+"-W"+startDate.getWeek());
+    while (startDate < endDate && loop++ < 6) {
+        if (startDate.getWeek() <= 9) {
+            weeks.push(startDate.getFullYear() + "-W0" + startDate.getWeek());
+        } else {
+            weeks.push(startDate.getFullYear() + "-W" + startDate.getWeek());
         }
         startDate.setDate(startDate.getDate() + 7);
     }
-    _.each(weeks, function (weekVal) {
+    _.each(weeks, function(weekVal) {
         db.timesheets.find({ week: weekVal }).toArray(function(err, sheets) {
             var report = {
                 week: weekVal,
                 weekHeadCount: 0,
                 weekBillableHours: 0,
                 businessUnits: [
-                    {businessUnit: 'Launchpad'},
-                    {businessUnit: 'Enterprise'}
+                    { businessUnit: 'Launchpad' },
+                    { businessUnit: 'Enterprise' }
                 ],
                 launchpadHeadCount: 0,
                 launchpadBillableHours: 0,
@@ -757,37 +758,50 @@ function utilizationByMonth(month, year, params) {
                 haveBillableProjectHeadCount: 0
             };
             if (sheets) {
-                _.each(sheets, function(sheetObj){
+                _.each(sheets, function(sheetObj) {
                     var hasBillableProject = false;
-                    if(sheetObj.userResourceType == "Billable"){
+                    if (sheetObj.userResourceType == "Billable") {
                         report.weekHeadCount += 1;
-                        _.each(sheetObj.projects, function(projectObj){
-                            if(projectObj.resourceType == "billable"){
+                        _.each(sheetObj.projects, function(projectObj) {
+                            if (projectObj.resourceType == "billable") {
                                 hasBillableProject = true;
                                 report.weekBillableHours += projectObj.billableHours;
-                                if(projectObj.businessUnit == "Launchpad"){
+                                if (projectObj.businessUnit == "Launchpad") {
                                     report.launchpadHeadCount += 1;
                                     report.launchpadBillableHours += projectObj.billableHours;
-                                } else if(projectObj.businessUnit == "Enterprise"){
+                                } else if (projectObj.businessUnit == "Enterprise") {
                                     report.enterpriseHeadCount += 1;
                                     report.enterpriseBillableHours += projectObj.billableHours;
                                 }
                             }
                         });
-                        if(hasBillableProject===true){
+                        if (hasBillableProject === true) {
                             report.haveBillableProjectHeadCount += 1;
-                        }else{
+                        } else {
                             report.haveNoBillableProjectHeadCount += 1;
                         }
                     }
                 });
             }
             resultData.push(report);
-            if(resultData.length == weeks.length){
+            if (resultData.length == weeks.length) {
                 resultData = _.sortBy(resultData, 'week');
                 deferred.resolve(resultData);
             }
         });
+    });
+    return deferred.promise;
+}
+
+function getByProject(week, projectId) {
+    var deferred = Q.defer();
+    db.timesheets.find({ week: week, "projects.projectId": mongo.helper.toObjectID(projectId) }).toArray(function(err, doc) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (doc) {
+            deferred.resolve(doc);
+        } else {
+            deferred.reject("Please select valid week");
+        }
     });
     return deferred.promise;
 }

@@ -1,7 +1,7 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <ul class="breadcrumb">
-        <li><a ui-sref="timesheet"><i class="fa fa-dashboard"></i> Timesheet</a></li>
+        <li><a ui-sref="myTimesheets"><i class="fa fa-dashboard"></i> Timesheet</a></li>
         <li class="active">
             <span ng-if="vm.isNew">Add Hours</span>
             <span ng-if="!vm.isNew">Edit Hours</span>
@@ -23,7 +23,8 @@
                                 <label class="col-md-2 control-label">Week</label>
                                 <div class="col-md-8">
                                     <p class="input-group">
-                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.timesheet.weekDate" is-open="vm.timesheetDateOpened" datepicker-options="vm.dateOptions" readonly ng-required="true" close-text="Close" ng-change="vm.setAssignedProjects();" ng-disabled="!vm.isNew" />
+                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.timesheet.weekDate" is-open="vm.timesheetDateOpened" datepicker-options="vm.dateOptions" readonly ng-required="true" close-text="Close" ng-change="vm.setAssignedProjects();" ng-disabled="!vm.isNew"
+                                        />
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default" ng-click="vm.timesheetDateOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
                                         </span>
