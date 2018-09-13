@@ -485,26 +485,6 @@
             });
         }
 
-        vm.setTimesheetStatus = function(timesheetId) {
-            if (vm.newTimesheetVal[timesheetId]) {
-                var newTimesheetVal = null;
-                if (vm.newTimesheetVal[timesheetId] == "Approved") {
-                    newTimesheetVal = true;
-                } else if (vm.newTimesheetVal[timesheetId] == "Rejected") {
-                    newTimesheetVal = false;
-                }
-                _.each(vm.tblUsers, function(userObj) {
-                    if (timesheetId == userObj.timesheetId) {
-                        userObj.timesheetStatus = newTimesheetVal;
-                        TimesheetService.setTimesheetStatus(timesheetId, { timesheetStatus: newTimesheetVal }).then(function(response) {
-                            getAllReports();
-                        });
-                    }
-                });
-                vm.newTimesheetVal[timesheetId] = "";
-            }
-        }
-
         initController();
 
         function initController() {
@@ -589,25 +569,6 @@
         //     });
         // }
 
-        vm.setTimesheetStatus = function(timesheetId) {
-            if (vm.newTimesheetVal[timesheetId]) {
-                var newTimesheetVal = null;
-                if (vm.newTimesheetVal[timesheetId] == "Approved") {
-                    newTimesheetVal = true;
-                } else if (vm.newTimesheetVal[timesheetId] == "Rejected") {
-                    newTimesheetVal = false;
-                }
-                _.each(vm.tblUsers, function(userObj) {
-                    if (timesheetId == userObj.timesheetId) {
-                        userObj.timesheetStatus = newTimesheetVal;
-                        TimesheetService.setTimesheetStatus(timesheetId, { timesheetStatus: newTimesheetVal }).then(function(response) {
-                            getMyTimesheets();
-                        });
-                    }
-                });
-                vm.newTimesheetVal[timesheetId] = "";
-            }
-        }
 
         initController();
 
@@ -1621,7 +1582,6 @@
         }
 
         function setTimesheetStatus(project) {
-            //console.log(project);
             TimesheetService.setTimesheetStatus(project._id, project.userProject.projectId, project.userProject.sheetStatus).then(function(response) {
                 console.log(response);
             });

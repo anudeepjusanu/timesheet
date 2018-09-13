@@ -125,7 +125,7 @@
                             <span class="badge badge-success" ng-if="row.timesheetStatus===true">Approved</span>
                             <span class="badge badge-danger" ng-if="row.timesheetStatus===false">Rejected</span>
                             <div>
-                                <select ng-if="row.timesheetStatus===null || row.timesheetStatus===true || row.timesheetStatus===false" class="form-control" ng-model="vm.newTimesheetVal[row.timesheetId]" ng-change="vm.setTimesheetStatus(row.timesheetId)">
+                                <select ng-if="row.timesheetStatus===null || row.timesheetStatus===true || row.timesheetStatus===false" class="form-control" ng-model="vm.newTimesheetVal[row.timesheetId]">
                                     <option value="">Change To</option>
                                     <option ng-if="row.timesheetStatus!==null" value="Pending">Pending</option>
                                     <option ng-if="row.timesheetStatus===null || row.timesheetStatus===false" value="Approved">Approved</option>
