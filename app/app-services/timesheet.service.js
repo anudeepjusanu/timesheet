@@ -42,8 +42,8 @@
             return $http.put('/api/timesheet/' + id, obj).then(handleSuccess, handleError);
         }
 
-        function setTimesheetStatus(id, obj) {
-            return $http.post('/api/timesheet/setTimesheetStatus/' + id, obj).then(handleSuccess, handleError);
+        function setTimesheetStatus(id, projectId, sheetStatus) {
+            return $http.post('/api/timesheet/setTimesheetStatus/' + id + '/project/' + projectId + '/status/' + sheetStatus).then(handleSuccess, handleError);
         }
 
         function deleteTimesheet(id) {

@@ -1,0 +1,69 @@
+<div class="page-title">
+    <h2 ng-if="vm.showList"><span class="fa fa-congs"></span> My Projects</h2>
+    <ul class="breadcrumb" ng-if="!vm.showList">
+        <li><a ng-click="vm.backToList()"><i class="fa fa-dashboard"></i> My Projects</a></li>
+        <li class="active">
+            <span>Aprove Hours</span>
+        </li>
+    </ul>
+</div>
+<div class="page-content-wrap">
+    <div class="row" ng-if="vm.showList">
+        <div class="col-md-3" ng-repeat="project in vm.user.projects track by $index" ng-if="project.ownerId == vm.user._id">
+            <a ng-click="vm.viewProject(project)" class="tile tile-info" ng-class-even="tile-valign" ng-class-odd="tile-primary" style="font-size: 16px;">
+            {{project.projectName}}
+            <div class="informer informer-default"></div>
+            <div class="informer informer-default dir-br"><span class="fa fa-users"></span></div>
+        </a>
+        </div>
+    </div>
+    <div class="row" ng-if="!vm.showList">
+        <div class="clearfix row">
+            <div class="col-sm-6">
+                {{vm.currentProject.projectName}}
+            </div>
+            <div class="form-group pull-right col-sm-6">
+                <label class="col-md-3">Filter By Week</label>
+                <div class="col-md-9">
+                    <p class="input-group">
+                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.currentWeek" is-open="vm.popup2.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getReport(vm.currentWeek)" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="vm.open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <tr>
+                    <th>Name</th>
+                    <th>Working Hours</th>
+                    <th>Sick Leave Hours</th>
+                    <th>Timeoff Hours</th>
+                    <th>Overtime Hours</th>
+                    <th>Corp Holiday Hours</th>
+                    <th>Status</th>
+                </tr>
+                <tr ng-repeat="sheet in vm.timesheetList | orderBy: '-weekDate'">
+                    <td>{{sheet.userName}}</td>
+                    <td>{{sheet.userProject.billableHours}}</td>
+                    <td>{{sheet.userProject.sickLeaveHours}}</td>
+                    <td>{{sheet.userProject.timeoffHours}}</td>
+                    <td>{{sheet.userProject.overtimeHours}}</td>
+                    <td>{{sheet.userProject.corpHolidayHours}}</td>
+                    <td>
+                        <span class="badge badge-secondary" ng-if="!sheet.userProject.sheetStatus">Pending</span>
+                        <span class="badge badge-success" ng-if="sheet.userProject.sheetStatus==='Approved'">Approved</span>
+                        <span class="badge badge-danger" ng-if="sheet.userProject.sheetStatus==='Rejected'">Rejected</span>
+                        <select class="form-control" ng-model="sheet.userProject.sheetStatus" ng-change="vm.setTimesheetStatus(sheet)">
+                        <option value="">Change To</option>
+                        <option ng-if="!sheet.userProject.sheetStatus" value="Pending">Pending</option>
+                        <option ng-if="!sheet.userProject.sheetStatus || sheet.userProject.sheetStatus===false" value="Approved">Approved</option>
+                        <option ng-if="!sheet.userProject.sheetStatus || sheet.userProject.sheetStatus===true" value="Rejected">Rejected</option>
+                    </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>

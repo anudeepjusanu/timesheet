@@ -12,7 +12,7 @@ var bot = new builder.UniversalBot(connector);
 
 // routes
 router.post('/', createTimesheet);
-router.post('/setTimesheetStatus/:id', setTimesheetStatus);
+router.post('/setTimesheetStatus/:id/project/:projectId/status/:sheetStatus', setTimesheetStatus);
 router.put('/:id', updateTimesheet);
 router.get('/:id', getTimesheet);
 router.delete('/:id', deleteTimesheet);
@@ -68,7 +68,7 @@ function updateTimesheet(req, res) {
 }
 
 function setTimesheetStatus(req, res) {
-    timesheetService.setTimesheetStatus(req.params.id, req.body).then(function() {
+    timesheetService.setTimesheetStatus(req.params.id, req.params.projectId, req.params.sheetStatus).then(function() {
         res.sendStatus(200);
     }).catch(function(err) {
         res.status(400).send(err);

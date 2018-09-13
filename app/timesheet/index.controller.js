@@ -60,7 +60,7 @@
         vm.closeAlert = closeAlert;
         vm.getMonthReport = getMonthReport;
 
-        var currentDay = new Date().getDay();
+        //var currentDay = new Date().getDay();
         //vm.toggleView = toggleView;
         //var dayThreshold = [5, 1, 5, 6, 5, 6, 5, 5, 6, 5, 6, 5];
         vm.obj = {
@@ -791,7 +791,8 @@
                         corpHolidayHours: 0,
                         overtimeHours: 0,
                         projectComment: "",
-                        isAssigned: true
+                        isAssigned: true,
+                        sheetStatus: null
                     });
                 }
             });
@@ -1524,46 +1525,118 @@
         }
     };*/
 
-    function ApprovalController(UserService, TimesheetService, ProjectService) {
+    function ApprovalController(UserService, TimesheetService, ProjectService, $filter) {
         var vm = this;
         vm.timesheets = {};
+        vm.viewProject = getProjectAssignedUsers;
+        vm.showList = true;
+        vm.timesheetList = [];
+        vm.setTimesheetStatus = setTimesheetStatus;
+        vm.currentWeek = new Date();
+        if (vm.currentWeek.getDay() < 5) {
+            vm.currentWeek.setDate(vm.currentWeek.getDate() - (vm.currentWeek.getDay() + 2));
+        } else if (vm.currentWeek.getDay() == 6) {
+            vm.currentWeek.setDate(vm.currentWeek.getDate() - 1);
+        }
+
+        vm.open2 = open2;
+        vm.popup2 = {
+            opened: false
+        };
+        vm.dateOptions = {
+            dateDisabled: disabled,
+            formatYear: 'yy',
+            maxDate: new Date(2020, 5, 22),
+            startingDay: 1
+        };
+        vm.currentProject = {};
+
+        vm.getReport = getReport;
+        vm.backToList = backToList;
+
+        function disabled(data) {
+            var date = data.date,
+                mode = data.mode;
+            return mode === 'day' && (date.getDay() != 5);
+        }
+
+        function open2() {
+            vm.popup2.opened = true;
+        };
 
         function filterProjectUsers() {
             _.each(vm.user.projects, function(project) {
                 if (project.ownerId == vm.user._id) {
                     vm.timesheets[project.projectId] = project;
-                    getProjectAssignedUsers(project.projectId);
+                    //getProjectAssignedUsers(project.projectId);
                 }
             });
         };
 
-        function getProjectAssignedUsers(projectId) {
-            ProjectService.getAssignedUsers(projectId).then(function(response) {
+        function getUsers() {
+            UserService.getUsers().then(function(response) {
+                vm.users = response;
+            }, function(error) {
+                console.log(error);
+            });
+        }
+
+        function getProjectAssignedUsers(project) {
+            vm.currentProject = project;
+            vm.showList = false;
+            ProjectService.getAssignedUsers(vm.currentProject.projectId).then(function(response) {
                 if (response && response.length) {
                     vm.timesheets[response[0].projectId]["users"] = response;
-                    getHoursByWeek("2018-W33");
+                    getHoursByWeek(vm.currentWeek, vm.currentProject.projectId);
                 }
             }, function(error) {
                 console.log(error);
             });
         };
 
-        function getHoursByWeek(weekId) {
-            for (var projectId in vm.timesheets) {
-                if (weekId && projectId) {
-                    TimesheetService.projectHours(weekId, projectId).then(function(response) {
-                        console.log(response);
+        function getHoursByWeek(week, projectId) {
+            var filterDate = $filter('date')(week, "yyyy-Www").toString();
+            TimesheetService.projectHours(filterDate, projectId).then(function(response) {
+                vm.timesheetList = [];
+                _.each(response, function(timesheet) {
+                    var project = _.remove(timesheet.projects, function(project) {
+                        return project.projectId == projectId;
                     });
-                }
-            }
-            TimesheetService.projectHours()
+                    timesheet.userProject = project[0];
+                });
+
+                _.each(vm.users, function(user) {
+                    _.each(response, function(timesheet) {
+                        if (timesheet.userId == user._id) {
+                            timesheet.userName = user.name;
+                        };
+                    });
+                });
+                vm.timesheetList = response;
+            });
+        };
+
+        function getReport() {
+            getHoursByWeek(vm.currentWeek, vm.currentProject.projectId);
         }
 
+        function setTimesheetStatus(project) {
+            //console.log(project);
+            TimesheetService.setTimesheetStatus(project._id, project.userProject.projectId, project.userProject.sheetStatus).then(function(response) {
+                console.log(response);
+            });
+        };
+
+        function backToList() {
+            vm.showList = true;
+            vm.currentProject = {};
+        }
 
         function init() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
                 filterProjectUsers();
+                getUsers();
             });
         }
         init();

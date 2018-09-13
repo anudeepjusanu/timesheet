@@ -63,6 +63,7 @@ function createTimesheet(currentUser, userParam) {
                     } else {
                         projectObj.billableHours = projectObj.projectHours;
                     }
+                    projectObj.sheetStatus = projectObj.sheetStatus;
                 });
                 userParam.totalHours = 0;
                 userParam.totalBillableHours = 0;
@@ -100,7 +101,6 @@ function createTimesheet(currentUser, userParam) {
                         overtimeHours: userParam.overtimeHours,
                         projects: userParam.projects,
                         reportingTo: userParam.reportingTo,
-                        timesheetStatus: userParam.timesheetStatus,
                         createdOn: new Date(),
                         updatedOn: new Date()
                     }
@@ -148,6 +148,7 @@ function updateTimesheet(sheetId, userParam, currentUser) {
                         } else {
                             projectObj.billableHours = projectObj.projectHours;
                         }
+                        projectObj.sheetStatus = projectObj.sheetStatus;
                     });
                     userParam.totalHours = 0;
                     userParam.totalBillableHours = 0;
@@ -199,11 +200,24 @@ function updateTimesheet(sheetId, userParam, currentUser) {
     return deferred.promise;
 }
 
-function setTimesheetStatus(sheetId, userParam) {
+function setTimesheetStatus(sheetId, projectId, sheetStatus) {
     var deferred = Q.defer();
-    db.timesheets.update({ _id: mongo.helper.toObjectID(sheetId) }, { $set: { timesheetStatus: userParam.timesheetStatus } }, function(err, responseSheet) {
+    db.timesheets.find({ '_id': mongo.helper.toObjectID(sheetId), "projects.projectId": mongo.helper.toObjectID(projectId) }).toArray(function(err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
-        deferred.resolve(responseSheet);
+        if (doc && doc[0]) {
+            for (var i = 0, len = doc[0].projects.length; i < len; i++) {
+                if (doc[0].projects[i].projectId == projectId) {
+                    doc[0].projects[i].sheetStatus = sheetStatus;
+                    break;
+                }
+            }
+            db.timesheets.update({ _id: mongo.helper.toObjectID(sheetId), "projects.projectId": mongo.helper.toObjectID(projectId) }, { $set: doc[0] }, function(err, responseSheet) {
+                if (err) deferred.reject(err.name + ': ' + err.message);
+                deferred.resolve(responseSheet);
+            });
+        } else {
+            deferred.reject("Invalid project Id");
+        }
     });
     return deferred.promise;
 }
