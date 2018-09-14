@@ -29,7 +29,8 @@ router.get('/clientUserHoursByWeek/:weekId/:clientId', clientUserHoursByWeek);
 router.get('/allUserHoursByMonth/:monthId/:yearId', allUserHoursByMonth);
 router.post('/timesheetBetweenDates/:startDate/:endDate', timesheetBetweenDates);
 router.get('/projectUserHoursByMonth/:monthId/:yearId/:projectId', projectUserHoursByMonth);
-router.get('/project/:projectId/week/:weekId', getTimesheetByProject);
+router.get('/project/:projectId/week/:weekId', getTimesheetByProject)
+router.get('/remind/user/:userId/project/:name/week/:weekId', remindByProject);
 
 
 module.exports = router;
@@ -274,6 +275,26 @@ function getTimesheetByProject(req, res) {
     timesheetService.getByProject(req.params.weekId, req.params.projectId)
         .then(function(reports) {
             res.send(reports);
+        })
+        .catch(function(err) {
+            res.status(400).send(err);
+        });
+}
+
+function remindByProject(req, res) {
+    userService.getById(req.params.userId)
+        .then(function(user) {
+            if (user) {
+                var msg = new builder.Message()
+                    .address(user.address)
+                    .text("Hi " + user.name + ", Please update your weekly hours for the project " + req.params.name + " for week " + req.params.weekId + " at http://timesheet.wavelabs.in");
+                bot.send(msg, function(err) {
+                    // Return success/failure
+                    res.sendStatus(200);
+                });
+            } else {
+                res.sendStatus(404);
+            }
         })
         .catch(function(err) {
             res.status(400).send(err);

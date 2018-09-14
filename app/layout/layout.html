@@ -44,9 +44,9 @@
             <li class="" ng-if="vm.user.admin===true || vm.user.userRole=='lead'" ng-class="{active: activeTab === 'timesheetApprove'}">
                 <a ui-sref="timesheetApprove"><span class="fa fa-file-excel-o"></span> <span class="xn-text">Team</span></a>
             </li>
-            <li class="" ng-if="vm.user.userRole=='lead' || vm.user.userRole=='manager' || vm.user.admin===true" ng-class="{active: activeTab === 'team'}">
+            <!-- <li class="" ng-if="vm.user.userRole=='lead' || vm.user.userRole=='manager' || vm.user.admin===true" ng-class="{active: activeTab === 'team'}">
                 <a ui-sref="team"><span class="fa fa-file-excel-o"></span> <span class="xn-text">My Projects</span></a>
-            </li>
+            </li> -->
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'consolidatedTimesheet'}">
                 <a ui-sref="consolidatedTimesheet"><img class="fa" src="app-content/assets/progress-report.png"> <span class="xn-text">Consolidated Timesheet</span></a>
             </li>
@@ -68,9 +68,9 @@
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'clients'}">
                 <a ui-sref="clients"><span class="fa fa-tags"></span> <span class="xn-text">Clients</span></a>
             </li>
-            <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'leaves'}">
+            <!-- <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'leaves'}">
                 <a ui-sref="leaves"><span class="fa fa-tags"></span> <span class="xn-text">Leaves</span></a>
-            </li>
+            </li> -->
             <li class="" ng-class="{active: activeTab === 'account'}">
                 <a ui-sref="account"><span class="fa fa-cogs"></span> <span class="xn-text">Account</span></a>
             </li>

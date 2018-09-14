@@ -12,40 +12,45 @@
         .controller('Timesheet.ApprovalController', ApprovalController)
 
     .directive('exportTable', function() {
-        return {
-            restrict: 'A',
-            link: function(scope, elem, attr) {
-                scope.$on('export-pdf',
-                    function(e, d) {
-                        elem.tableExport({
-                            type: 'pdf',
-                            escape: false
+            return {
+                restrict: 'A',
+                link: function(scope, elem, attr) {
+                    scope.$on('export-pdf',
+                        function(e, d) {
+                            elem.tableExport({
+                                type: 'pdf',
+                                escape: false
+                            });
                         });
-                    });
-                var excel = scope.$on('export-excl',
-                    function(e, d) {
-                        elem.tableExport({
-                            type: 'excel',
-                            escape: 'false',
-                            ignoreColumn: [4],
-                            ignoreRow: [1],
-                            worksheetName: d.date
+                    var excel = scope.$on('export-excl',
+                        function(e, d) {
+                            elem.tableExport({
+                                type: 'excel',
+                                escape: 'false',
+                                ignoreColumn: [4],
+                                ignoreRow: [1],
+                                worksheetName: d.date
+                            });
                         });
-                    });
-                scope.$on('export-doc',
-                    function(e, d) {
-                        elem.tableExport({
-                            type: 'doc',
-                            escape: false
+                    scope.$on('export-doc',
+                        function(e, d) {
+                            elem.tableExport({
+                                type: 'doc',
+                                escape: false
+                            });
                         });
-                    });
 
-                scope.$on('$destroy', function() {
-                    excel();
-                });
+                    scope.$on('$destroy', function() {
+                        excel();
+                    });
+                }
+            };
+        })
+        .filter('isEmpty', [function() {
+            return function(object) {
+                return angular.equals({}, object);
             }
-        };
-    });
+        }])
 
     function Controller(UserService, TimesheetService, ProjectService, $filter, _, $scope, FlashService, NgTableParams, noty, $uibModal) {
         var vm = this;
@@ -135,7 +140,7 @@
         function remind(userId) {
             var week = $filter('date')(vm.currentWeek, "Www");
             TimesheetService.remind(userId, week).then(function(response) {
-                noty.showSuccess("User Reminded!")
+                noty.showSuccess("User Reminded!");
             });
         }
 
@@ -753,7 +758,7 @@
                         overtimeHours: 0,
                         projectComment: "",
                         isAssigned: true,
-                        sheetStatus: null
+                        sheetStatus: "Pending"
                     });
                 }
             });
@@ -1486,7 +1491,7 @@
         }
     };*/
 
-    function ApprovalController(UserService, TimesheetService, ProjectService, $filter) {
+    function ApprovalController(UserService, TimesheetService, ProjectService, $filter, ReportService, noty) {
         var vm = this;
         vm.timesheets = {};
         vm.viewProject = getProjectAssignedUsers;
@@ -1514,6 +1519,17 @@
 
         vm.getReport = getReport;
         vm.backToList = backToList;
+        vm.statusList = [{
+            "id": "Approved",
+            "name": "Approved"
+        }, {
+            "id": "Pending",
+            "name": "Pending"
+        }, {
+            "id": "Rejected",
+            "name": "Rejected"
+        }];
+        vm.remind = remind;
 
         function disabled(data) {
             var date = data.date,
@@ -1543,6 +1559,7 @@
         }
 
         function getProjectAssignedUsers(project) {
+            console.log(project);
             vm.currentProject = project;
             vm.showList = false;
             ProjectService.getAssignedUsers(vm.currentProject.projectId).then(function(response) {
@@ -1559,21 +1576,21 @@
             var filterDate = $filter('date')(week, "yyyy-Www").toString();
             TimesheetService.projectHours(filterDate, projectId).then(function(response) {
                 vm.timesheetList = [];
-                _.each(response, function(timesheet) {
-                    var project = _.remove(timesheet.projects, function(project) {
-                        return project.projectId == projectId;
-                    });
-                    timesheet.userProject = project[0];
-                });
-
-                _.each(vm.users, function(user) {
+                _.each(vm.currentProject.users, function(user) {
+                    user.timesheet = {};
                     _.each(response, function(timesheet) {
-                        if (timesheet.userId == user._id) {
-                            timesheet.userName = user.name;
-                        };
+                        if (timesheet.userId == user.userId) {
+                            var project = _.remove(timesheet.projects, function(project) {
+                                return project.projectId == projectId;
+                            });
+                            project[0].sheetId = timesheet._id;
+                            if (!project[0].sheetStatus) {
+                                project[0].sheetStatus = 'Pending';
+                            }
+                            user.timesheet = project[0];
+                        }
                     });
                 });
-                vm.timesheetList = response;
             });
         };
 
@@ -1581,8 +1598,8 @@
             getHoursByWeek(vm.currentWeek, vm.currentProject.projectId);
         }
 
-        function setTimesheetStatus(project) {
-            TimesheetService.setTimesheetStatus(project._id, project.userProject.projectId, project.userProject.sheetStatus).then(function(response) {
+        function setTimesheetStatus(timesheet) {
+            TimesheetService.setTimesheetStatus(timesheet.sheetId, timesheet.projectId, timesheet.sheetStatus).then(function(response) {
                 console.log(response);
             });
         };
@@ -1590,6 +1607,13 @@
         function backToList() {
             vm.showList = true;
             vm.currentProject = {};
+        };
+
+        function remind(sheet) {
+            var week = $filter('date')(vm.currentWeek, "Www");
+            ReportService.remindByProject(sheet.userId, vm.currentProject.projectName, week).then(function(response) {
+                noty.showSuccess("User Reminded!");
+            });
         }
 
         function init() {

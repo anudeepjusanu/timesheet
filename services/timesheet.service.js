@@ -30,6 +30,7 @@ service.timesheetBetweenDates = timesheetBetweenDates;
 service.getProjectInfoById = getProjectInfoById;
 service.utilizationByMonth = utilizationByMonth;
 service.getByProject = getByProject;
+service.remindByProject = remindByProject;
 
 module.exports = service;
 
@@ -195,8 +196,6 @@ function updateTimesheet(sheetId, userParam, currentUser) {
             }
         });
     });
-
-
     return deferred.promise;
 }
 
@@ -818,4 +817,8 @@ function getByProject(week, projectId) {
         }
     });
     return deferred.promise;
+}
+
+function remindByProject(user, projectName, week) {
+
 }
