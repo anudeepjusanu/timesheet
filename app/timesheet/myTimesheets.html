@@ -54,7 +54,7 @@
                     </td>
                     <td>
                         <a ng-if="sheet.timesheetStatus!==true" class="btn btn-primary btn-xs" ui-sref="editTimesheet({id: sheet._id})">Edit</a>
-                        <a ng-if="sheet.timesheetStatus!==true || sheet.timesheetStatus!==false" class="btn btn-primary btn-xs" ng-click="vm.deleteTimesheet(sheet._id)">Delete</a>
+                        <a ng-if="sheet.timesheetStatus!==true" class="btn btn-primary btn-xs" ng-click="vm.deleteTimesheet(sheet._id)">Delete</a>
                     </td>
                 </tr>
             </table>
