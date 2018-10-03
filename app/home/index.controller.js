@@ -714,7 +714,11 @@
         vm.closeAlert = function(index) {
             vm.alerts.splice(index, 1);
         }
-
+        vm.employeeTypes = [
+            {id: "InternalEmployee", label: "Internal Employee"},
+            {id: "InternalContractor", label: "Internal Contractor"},
+            {id: "ExternalContractor", label: "External Contractor"}
+        ]
         vm.saveUser = function(userForm) {
             if (userForm.$valid) {
                 var obj = {
