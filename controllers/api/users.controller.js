@@ -3,6 +3,13 @@ var express = require('express');
 var router = express.Router();
 var userService = require('services/user.service');
 
+var builder = require('botbuilder');
+var connector = new builder.ChatConnector({
+    appId: config.botId,
+    appPassword: config.botPassword
+});
+var bot = new builder.UniversalBot(connector);
+
 // routes
 router.post('/authenticate', authenticateUser);
 router.post('/register', registerUser);
@@ -19,6 +26,7 @@ router.post('/releaseFromPool/:_id', releaseFromPool);
 router.get('/userPoolLogs/:_id', userPoolLogs);
 router.get('/createPassword/:_id', createPassword);
 router.put('/updatePushToken/:_id', updatePushToken);
+router.post('/remind/user/:_id', remindByMessage);
 
 module.exports = router;
 
@@ -213,3 +221,23 @@ function updatePushToken(req, res) {
             res.status(400).send(err);
         });
 };
+
+function remindByMessage(req, res) {
+    userService.getById(req.params._id)
+        .then(function(user) {
+            if (user) {
+                var msg = new builder.Message()
+                    .address(user.address)
+                    .text("Hi " + user.name + " " + req.body.message);
+                bot.send(msg, function(err) {
+                    // Return success/failure
+                    res.sendStatus(200);
+                });
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function(err) {
+            res.status(400).send(err);
+        });
+}

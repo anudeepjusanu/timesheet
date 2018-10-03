@@ -73,7 +73,7 @@
                 data: { activeTab: 'timesheet' }
             })
             .state('editTimesheet', {
-                url: '/editTimesheet/:id',
+                url: '/editTimesheet/:id/:projectId',
                 templateUrl: 'timesheet/addTimesheet.html',
                 controller: 'Timesheet.TimesheetController',
                 controllerAs: 'vm',

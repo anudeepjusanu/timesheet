@@ -25,6 +25,7 @@
         service.userPoolLogs = userPoolLogs;
         service.getUserRoles = getUserRoles;
         service.updatePushToken = updatePushToken;
+        service.remindUserByMessage = remindUserByMessage;
 
         return service;
 
@@ -94,6 +95,10 @@
 
         function updatePushToken(user) {
             return $http.put('/api/users/updatePushToken/' + user._id, user).then(handleSuccess, handleError);
+        }
+
+        function remindUserByMessage(userId, message) {
+            return $http.post('/api/users/remind/user/' + userId, message).then(handleSuccess, handleError);
         }
 
         // private functions

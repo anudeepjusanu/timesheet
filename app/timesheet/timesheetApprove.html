@@ -9,7 +9,7 @@
 </div>
 <div class="page-content-wrap">
     <div class="row" ng-if="vm.showList">
-        <div class="col-md-3" ng-repeat="project in vm.user.projects track by $index" ng-if="project.ownerId == vm.user._id">
+        <div class="col-md-3" ng-repeat="project in vm.user.projects track by $index" ng-if="project.ownerId == vm.user._id" style="cursor: pointer;">
             <a ng-click="vm.viewProject(project)" class="tile tile-info" ng-class-even="tile-valign" ng-class-odd="tile-primary" style="font-size: 16px;">
             {{project.projectName}}
             <div class="informer informer-default"></div>
@@ -19,8 +19,9 @@
     </div>
     <div class="row" ng-if="!vm.showList">
         <div class="clearfix row">
-            <div class="col-sm-6">
-                {{vm.currentProject.projectName}}
+            <div class="col-sm-6 clearfix">
+                <h5 class="pull-left">{{vm.currentProject.projectName}}</h5>
+                <button class="btn btn-primary pull-left" ng-click="vm.remindAll()" style="margin: 0 10px;"> Remind All</button>
             </div>
             <div class="form-group pull-right col-sm-6">
                 <label class="col-md-3">Filter By Week</label>
@@ -54,8 +55,8 @@
                     <td>{{sheet.timesheet.corpHolidayHours}}</td>
                     <td>
                         <div ng-if="!(sheet.timesheet | isEmpty)">
-                            <div ng-if="sheet.timesheet.sheetStatus == 'Pending'">
-                                <select class="form-control" ng-model="sheet.timesheet.sheetStatus" ng-change="vm.setTimesheetStatus(sheet.timesheet)" ng-required="true" ng-options="status.id as status.name for status in vm.statusList"></select>
+                            <div ng-if="sheet.timesheet.sheetStatus != 'Approved'">
+                                <select class="form-control" ng-model="sheet.timesheet.sheetStatus" ng-change="vm.setTimesheetStatus(sheet)" ng-required="true" ng-options="status.id as status.name for status in vm.statusList"></select>
                             </div>
                             <div ng-if="sheet.timesheet.sheetStatus != 'Pending'">
                                 <span class="badge badge-success" ng-class="{'badge-danger': sheet.timesheet.sheetStatus==='Rejected'}">{{sheet.timesheet.sheetStatus}}</span>

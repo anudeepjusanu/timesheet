@@ -14,8 +14,7 @@
                                 <label class="col-md-2 control-label">Week</label>
                                 <div class="col-md-8">
                                     <p class="input-group">
-                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.timesheet.weekDate" is-open="vm.timesheetDateOpened" datepicker-options="vm.dateOptions" readonly ng-required="true"
-                                               close-text="Close" ng-disabled="!vm.isNew"/>
+                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.timesheet.weekDate" is-open="vm.timesheetDateOpened" datepicker-options="vm.dateOptions" readonly ng-required="true" close-text="Close" ng-disabled="!vm.isNew" />
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default" ng-click="vm.timesheetDateOpened=false;"><i class="glyphicon glyphicon-calendar"></i></button>
                                         </span>
@@ -36,9 +35,9 @@
                             <tr ng-repeat="project in vm.timesheet.projects">
                                 <td>{{project.projectName}}</td>
                                 <td><b>{{project.allocatedHours}}</b></td>
-                                <td><input type="number" min="0" max="70" class="form-control" ng-model="project.projectHours" ng-required="true" ng-change="vm.calTotalHours();"/></td>
-                                <td><input type="number" min="0" max="40" class="form-control" ng-model="project.sickLeaveHours" ng-required="true" ng-change="vm.calTotalHours();"/></td>
-                                <td><input type="number" min="0" max="40" class="form-control" ng-model="project.timeoffHours" ng-required="true" ng-change="vm.calTotalHours();"/></td>
+                                <td><input type="number" min="0" max="70" class="form-control" ng-model="project.projectHours" ng-required="true" ng-change="vm.calTotalHours();" /></td>
+                                <td><input type="number" min="0" max="40" class="form-control" ng-model="project.sickLeaveHours" ng-required="true" ng-change="vm.calTotalHours();" /></td>
+                                <td><input type="number" min="0" max="40" class="form-control" ng-model="project.timeoffHours" ng-required="true" ng-change="vm.calTotalHours();" /></td>
                                 <td><input type="number" min="0" max="40" class="form-control" ng-model="project.overtimeHours" ng-change="vm.calTotalHours();" readonly="readonly" /></td>
                                 <td><textarea class="form-control" placeholder="Please enter your comment" rows="2" ng-model="project.projectComment"></textarea></td>
                             </tr>

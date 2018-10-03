@@ -659,19 +659,24 @@
                     if (vm.isNew) {
                         TimesheetService.createTimesheet(vm.timesheet).then(function(response) {
                             noty.showSuccess("Thank you for the update!");
-                            $state.go('myTimesheets');
+                            $state.go('dashboard');
                         }, function(error) {
                             if (error) {
                                 vm.alerts.push({ msg: error, type: 'danger' });
                             }
                         });
                     } else {
+                        _.each(vm.timesheet.projects, function(project) {
+                            if (project.projectId == vm.rejectedProjectId) {
+                                project.sheetStatus = "Pending";
+                            }
+                        });
                         TimesheetService.updateTimesheet(vm.timesheet._id, vm.timesheet).then(function(response) {
                             noty.showSuccess("Thank you for the update!");
                             if (vm.isPopupEdit) {
                                 $uibModalInstance.close();
                             } else {
-                                $state.go('myTimesheets');
+                                $state.go('dashboard');
                             }
                         }, function(error) {
                             if (error) {
@@ -848,6 +853,7 @@
                 vm.setAssignedProjects();
                 if ($stateParams.id) {
                     vm.isNew = false;
+                    vm.rejectedProjectId = $stateParams.projectId;
                     getTimesheet($stateParams.id);
                 } else {
                     vm.isNew = true;
@@ -1530,6 +1536,7 @@
             "name": "Rejected"
         }];
         vm.remind = remind;
+        vm.remindAll = remindAll;
 
         function disabled(data) {
             var date = data.date,
@@ -1559,7 +1566,6 @@
         }
 
         function getProjectAssignedUsers(project) {
-            console.log(project);
             vm.currentProject = project;
             vm.showList = false;
             ProjectService.getAssignedUsers(vm.currentProject.projectId).then(function(response) {
@@ -1596,11 +1602,21 @@
 
         function getReport() {
             getHoursByWeek(vm.currentWeek, vm.currentProject.projectId);
-        }
+        };
 
-        function setTimesheetStatus(timesheet) {
-            TimesheetService.setTimesheetStatus(timesheet.sheetId, timesheet.projectId, timesheet.sheetStatus).then(function(response) {
-                console.log(response);
+        function remindUserRejection(userId, message) {
+            UserService.remindUserByMessage(userId, { 'message': message }).then(function(response) {
+                console.log(message);
+            });
+        };
+
+        function setTimesheetStatus(sheet) {
+            TimesheetService.setTimesheetStatus(sheet.timesheet.sheetId, sheet.timesheet.projectId, sheet.timesheet.sheetStatus).then(function(response) {
+                if (sheet.timesheet.sheetStatus == 'Rejected') {
+                    var week = $filter('date')(vm.currentWeek, "Www");
+                    var message = "Your timesheet got rejected for " + sheet.timesheet.projectName + " for the week " + week + " Please update your hours again";
+                    remindUserRejection(sheet.userId, message);
+                };
             });
         };
 
@@ -1613,6 +1629,15 @@
             var week = $filter('date')(vm.currentWeek, "Www");
             ReportService.remindByProject(sheet.userId, vm.currentProject.projectName, week).then(function(response) {
                 noty.showSuccess("User Reminded!");
+            });
+        };
+
+        function remindAll() {
+            _.each(vm.currentProject.users, function(user) {
+                var isEmpty = angular.equals({}, user.timesheet);
+                if (isEmpty) {
+                    remind(user);
+                }
             });
         }
 
