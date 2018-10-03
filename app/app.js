@@ -9,7 +9,11 @@
             window._
         );
 
-    function config($stateProvider, $urlRouterProvider, ChartJsProvider) {
+    function config($stateProvider, $urlRouterProvider, ChartJsProvider, $httpProvider) {
+
+        $httpProvider.defaults.headers.common['Cache-Control'] = 'no-cache';
+        $httpProvider.defaults.cache = false;
+
         // default route
         $urlRouterProvider.otherwise("/");
 

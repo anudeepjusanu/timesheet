@@ -659,7 +659,7 @@
                     if (vm.isNew) {
                         TimesheetService.createTimesheet(vm.timesheet).then(function(response) {
                             noty.showSuccess("Thank you for the update!");
-                            $state.go('dashboard');
+                            $state.go('myTimesheets');
                         }, function(error) {
                             if (error) {
                                 vm.alerts.push({ msg: error, type: 'danger' });
@@ -676,7 +676,7 @@
                             if (vm.isPopupEdit) {
                                 $uibModalInstance.close();
                             } else {
-                                $state.go('dashboard');
+                                $state.go('home');
                             }
                         }, function(error) {
                             if (error) {
