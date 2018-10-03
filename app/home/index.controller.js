@@ -728,6 +728,7 @@
                     "employeeId": vm.userObj.employeeId,
                     "designation": vm.userObj.designation,
                     "userResourceType": vm.userObj.userResourceType,
+                    "employeeType": vm.userObj.employeeType,
                     "userRole": vm.userObj.userRole,
                     "reportingTo": vm.userObj.reportingTo,
                     "profileImgUrl": vm.userObj.profileImgUrl,
