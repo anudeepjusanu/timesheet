@@ -9,7 +9,7 @@
 </div>
 <div class="page-content-wrap">
     <div class="row" ng-if="vm.showList">
-        <div class="col-md-3" ng-repeat="project in vm.user.projects track by $index" ng-if="project.ownerId == vm.user._id" style="cursor: pointer;">
+        <div class="col-md-3" ng-repeat="project in vm.projects track by $index" ng-if="project.ownerId == vm.user._id" style="cursor: pointer;">
             <a ng-click="vm.viewProject(project)" class="tile tile-info" ng-class-even="tile-valign" ng-class-odd="tile-primary" style="font-size: 16px;">
             {{project.projectName}}
             <div class="informer informer-default"></div>

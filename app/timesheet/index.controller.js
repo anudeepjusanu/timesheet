@@ -1549,12 +1549,18 @@
         };
 
         function filterProjectUsers() {
-            _.each(vm.user.projects, function(project) {
-                if (project.ownerId == vm.user._id) {
-                    vm.timesheets[project.projectId] = project;
-                    //getProjectAssignedUsers(project.projectId);
-                }
+            ProjectService.getAll().then(function(response) {
+                vm.projects = response;
+                _.each(vm.projects, function(project) {
+                    if (project.ownerId == vm.user._id) {
+                        vm.timesheets[project._id] = project;
+                        //getProjectAssignedUsers(project.projectId);
+                    }
+                });
+            }, function(error) {
+                console.log(error);
             });
+
         };
 
         function getUsers() {
@@ -1568,10 +1574,10 @@
         function getProjectAssignedUsers(project) {
             vm.currentProject = project;
             vm.showList = false;
-            ProjectService.getAssignedUsers(vm.currentProject.projectId).then(function(response) {
+            ProjectService.getAssignedUsers(vm.currentProject._id).then(function(response) {
                 if (response && response.length) {
                     vm.timesheets[response[0].projectId]["users"] = response;
-                    getHoursByWeek(vm.currentWeek, vm.currentProject.projectId);
+                    getHoursByWeek(vm.currentWeek, vm.currentProject._id);
                 }
             }, function(error) {
                 console.log(error);
@@ -1601,7 +1607,7 @@
         };
 
         function getReport() {
-            getHoursByWeek(vm.currentWeek, vm.currentProject.projectId);
+            getHoursByWeek(vm.currentWeek, vm.currentProject._id);
         };
 
         function remindUserRejection(userId, message) {
