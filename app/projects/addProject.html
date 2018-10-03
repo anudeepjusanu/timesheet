@@ -42,6 +42,17 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="col-md-3 control-label" for="endDate">End Date</label>
+                                <div class="col-md-9">
+                                    <p class="input-group">
+                                        <input type="text" id="endDate" class="form-control" uib-datepicker-popup ng-model="vm.obj.endDate" is-open="vm.endDateOpt.opened" datepicker-options="vm.dateOptions" close-text="Close" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="vm.endDateOpt.opened=true"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label class="col-md-3 control-label" for="projectBillType">Project Bill Type</label>
                                 <div class="col-md-9">
                                     <select class="form-control" id="projectBillType" ng-model="vm.obj.projectBillType" ng-options="prj.projectBillId as prj.projectBillName for prj in vm.projectBillTypes"></select>
@@ -83,6 +94,12 @@
                                     <textarea class="form-control" id="description" name="description" placeholder="Description" rows="5" ng-model="vm.obj.description"></textarea>
                                 </div>
                             </div>
+                            <div class="form-group required">
+                                <label class="col-md-3 col-xs-12 control-label">Owner</label>
+                                <div class="col-md-6 col-xs-12">
+                                    <select class="form-control" ng-model="vm.obj.user" ng-options="userObj as userObj.name for userObj in vm.users" ng-required="true"></select>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Active</label>
                                 <div class="col-md-6 col-xs-12">
@@ -90,12 +107,6 @@
                                         <input type="checkbox" class="switch" ng-model="vm.obj.isActive" />
                                         <span></span>
                                     </label>
-                                </div>
-                            </div>
-                            <div class="form-group required">
-                                <label class="col-md-3 col-xs-12 control-label">Owner</label>
-                                <div class="col-md-6 col-xs-12">
-                                    <select class="form-control" ng-model="vm.obj.user" ng-options="userObj as userObj.name for userObj in vm.users" ng-required="true"></select>
                                 </div>
                             </div>
                             <div class="form-group">

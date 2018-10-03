@@ -181,6 +181,7 @@
         function getAllUsers() {
             UserService.GetAll().then(function(users) {
                 vm.users = users;
+                vm.users = _.sortBy(vm.users, 'name');
                 if (!vm.isNew) {
                     _.each(users, function(user) {
                         if (user._id == vm.obj.ownerId) {
