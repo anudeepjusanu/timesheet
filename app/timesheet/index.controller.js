@@ -695,6 +695,7 @@
         }
 
         vm.setAssignedProjects = function() {
+            vm.timesheetHours = 0;
             vm.timesheet.projects = [];
             vm.timesheet.totalHours = 0;
             vm.timesheet.timeoffHours = 0;
@@ -979,6 +980,7 @@
         }
 
         vm.setAssignedProjects = function() {
+            vm.timesheetHours = 0;
             vm.timesheet.projects = [];
             vm.timesheet.totalHours = 0;
             vm.timesheet.timeoffHours = 0;
