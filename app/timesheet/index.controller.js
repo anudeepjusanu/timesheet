@@ -1507,6 +1507,7 @@
         vm.timesheetList = [];
         vm.setTimesheetStatus = setTimesheetStatus;
         vm.currentWeek = new Date();
+        var currentDay = new Date();
         if (vm.currentWeek.getDay() < 5) {
             vm.currentWeek.setDate(vm.currentWeek.getDate() - (vm.currentWeek.getDay() + 2));
         } else if (vm.currentWeek.getDay() == 6) {
@@ -1578,6 +1579,9 @@
             vm.showList = false;
             ProjectService.getAssignedUsers(vm.currentProject._id).then(function(response) {
                 if (response && response.length) {
+                    _.remove(response, function(user) {
+                        return user.billDates && currentDay > new Date(user.billDates[0].end);
+                    });
                     vm.timesheets[response[0].projectId]["users"] = response;
                     getHoursByWeek(vm.currentWeek, vm.currentProject._id);
                 }
@@ -1601,7 +1605,10 @@
                             if (!project[0].sheetStatus) {
                                 project[0].sheetStatus = 'Pending';
                             }
-                            user.timesheet = project[0];
+                            if (project[0].billableHours != 0) {
+                                user.timesheet = project[0];
+                            }
+
                         }
                     });
                 });
