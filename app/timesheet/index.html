@@ -113,7 +113,12 @@
                                     <td width="60px;">{{project.sickLeaveHours}}</td>
                                     <td width="60px;">{{project.timeoffHours}}</td>
                                     <td width="60px;">{{project.corpHolidayHours}}</td>
-                                    <td width="60px;">{{project.overtimeHours}}</td>
+                                    <td width="60px;">
+                                        {{project.overtimeHours}}
+                                        <a ng-if="project.sheetStatus == 'Approved'" data-toggle="tooltip" title="Approved" style="color: green"><i class="fa fa-check"></i></a>
+                                        <a ng-if="project.sheetStatus == 'Pending'" data-toggle="tooltip" title="Pending" style="color: orange"><i class="fa fa-exclamation-triangle"></i></a>
+                                        <a ng-if="project.sheetStatus == 'Rejected'" data-toggle="tooltip" title="Rejected" style="color: red"><i class="fa fa-exclamation"></i></a>
+                                    </td>
                                 </tr>
                             </table>
                         </td>
