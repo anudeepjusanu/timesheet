@@ -49,7 +49,7 @@
                                 <span class="badge badge-danger" ng-if="project.sheetStatus==='Rejected'" style="margin: 5px 0;">Rejected</span>
                             </td>
                             <td width="80px;" style="text-align: center;">
-                                <a ng-if="project.sheetStatus=='Rejected'" class="btn btn-primary btn-xs" ui-sref="editTimesheet({id: sheet._id, projectId:project.projectId})">Edit</a>
+                                <a ng-if="project.sheetStatus=='Rejected' || project.sheetStatus == 'Pending'" class="btn btn-primary btn-xs" ui-sref="editTimesheet({id: sheet._id, projectId:project.projectId})">Edit</a>
                                 <!-- <a ng-if="sheet.timesheetStatus!==true" class="btn btn-primary btn-xs" ng-click="vm.deleteTimesheet(sheet._id)">Delete</a> -->
                             </td>
                         </tr>
