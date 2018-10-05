@@ -1579,9 +1579,9 @@
             vm.showList = false;
             ProjectService.getAssignedUsers(vm.currentProject._id).then(function(response) {
                 if (response && response.length) {
-                    _.remove(response, function(user) {
-                        return user.billDates && currentDay > new Date(user.billDates[0].end);
-                    });
+                    // _.remove(response, function(user) {
+                    //     return user.billDates && currentDay > new Date(user.billDates[0].end);
+                    // });
                     vm.timesheets[response[0].projectId]["users"] = response;
                     getHoursByWeek(vm.currentWeek, vm.currentProject._id);
                 }
