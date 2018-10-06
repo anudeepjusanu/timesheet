@@ -28,6 +28,7 @@
                                 <th>Allocated Hours</th>
                                 <th>Worked Hours</th>
                                 <th>Sick Leave</th>
+                                <th>Corp Holiday</th>
                                 <th>Timeoff</th>
                                 <th>Overtime</th>
                                 <th>Comments</th>
@@ -37,6 +38,7 @@
                                 <td><b>{{project.allocatedHours}}</b></td>
                                 <td><input type="number" min="0" max="70" class="form-control" ng-model="project.projectHours" ng-required="true" ng-change="vm.calTotalHours();" /></td>
                                 <td><input type="number" min="0" max="40" class="form-control" ng-model="project.sickLeaveHours" ng-required="true" ng-change="vm.calTotalHours();" /></td>
+                                <td><input type="number" min="0" max="40" class="form-control" ng-model="project.corpHolidayHours" ng-required="true" ng-change="vm.calTotalHours();" /></td>
                                 <td><input type="number" min="0" max="40" class="form-control" ng-model="project.timeoffHours" ng-required="true" ng-change="vm.calTotalHours();" /></td>
                                 <td><input type="number" min="0" max="40" class="form-control" ng-model="project.overtimeHours" ng-change="vm.calTotalHours();" readonly="readonly" /></td>
                                 <td><textarea class="form-control" placeholder="Please enter your comment" rows="2" ng-model="project.projectComment"></textarea></td>
