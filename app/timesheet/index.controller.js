@@ -1554,6 +1554,7 @@
         function filterProjectUsers() {
             ProjectService.getAll().then(function(response) {
                 vm.projects = response;
+                console.log(vm.projects)
                 _.each(vm.projects, function(project) {
                     if (project.ownerId == vm.user._id) {
                         vm.timesheets[project._id] = project;
@@ -1576,12 +1577,14 @@
 
         function getProjectAssignedUsers(project) {
             vm.currentProject = project;
+            console.log(project);
             vm.showList = false;
             ProjectService.getAssignedUsers(vm.currentProject._id).then(function(response) {
                 if (response && response.length) {
                     // _.remove(response, function(user) {
                     //     return user.billDates && currentDay > new Date(user.billDates[0].end);
                     // });
+                    console.log(response);
                     vm.timesheets[response[0].projectId]["users"] = response;
                     getHoursByWeek(vm.currentWeek, vm.currentProject._id);
                 }

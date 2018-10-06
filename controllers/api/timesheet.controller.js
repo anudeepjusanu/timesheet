@@ -156,13 +156,16 @@ function remindAll(req, res) {
         .then(function(users) {
             if (users) {
                 for (var i = 0, len = users.length; i < len; i++) {
-                    var msg = new builder.Message()
-                        .address(users[i].address)
-                        .text("Please update your weekly hours for current week at http://timesheet.wavelabs.in , Ignore if already updated");
-                    bot.send(msg, function(err) {
-                        // Return success/failure
+                    if (users[0].isActive) {
+                        var msg = new builder.Message()
+                            .address(users[i].address)
+                            .text("Please update your weekly hours for current week at http://timesheet.wavelabs.in , Ignore if already updated");
+                        bot.send(msg, function(err) {
+                            // Return success/failure
 
-                    });
+                        });
+                    }
+
                 }
                 res.sendStatus(200);
 

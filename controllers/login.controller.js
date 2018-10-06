@@ -26,9 +26,9 @@ router.post('/', function(req, res) {
             return res.render('login', { error: 'An error occurred' });
         }
 
-        if (!body.token) {
-            return res.render('login', { error: body, username: req.body.username });
-        }
+        // if (!body.token) {
+        //     return res.render('login', { error: body, username: req.body.username });
+        // }
 
         // save JWT token in the session to make it available to the angular app
         req.session.token = body.token;

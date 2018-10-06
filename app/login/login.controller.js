@@ -5,7 +5,7 @@
         .module('app')
         .controller('Login.IndexController', LoginController);
 
-    function LoginController(UserService, $window, $state, $http, $timeout) {
+    function LoginController(UserService, $window, $state, $http, $timeout, noty) {
         var vm = this;
         vm.loginObj = {
 
@@ -26,7 +26,8 @@
 
                 }
             }, function(error) {
-
+                console.log(error);
+                noty.showError(error)
             });
         }
 

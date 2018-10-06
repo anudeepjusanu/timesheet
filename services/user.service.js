@@ -31,7 +31,7 @@ module.exports = service;
 
 function authenticate(username, password) {
     var deferred = Q.defer();
-    db.users.findOne({ username: username }, function(err, user) {
+    db.users.findOne({ username: username, "isActive": true }, function(err, user) {
         if (err) deferred.reject(err.name + ': ' + err.message);
 
         if (user && user.hash && bcrypt.compareSync(password, user.hash)) {
@@ -240,12 +240,12 @@ function createPassword(_id, userParam) {
 
     // validation
 
-    db.users.findOne({ 'userId': _id }, function(err, user) {
+    db.users.findOne({ 'userId': _id, "isActive": true }, function(err, user) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (user) {
             updateUser(user._id);
         } else {
-            deferred.reject('You may have to register first by using the command register');
+            deferred.reject('You seems to be inactive. Please contact HR team');
         }
     });
 

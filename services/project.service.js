@@ -133,23 +133,26 @@ function getAllProjects() {
 
 function getAssignedUsers(projectId) {
     var deferred = Q.defer();
-    db.users.find({ "projects.projectId": { "$in": [projectId] } }).toArray(function(err, users) {
+    db.users.find({ "projects.projectId": { "$in": [projectId] }, "isActive": true }).toArray(function(err, users) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (users) {
             var assignedUsers = [];
             _.each(users, function(user) {
-                var userProject = _.find(user.projects, { "projectId": projectId });
-                if (!userProject.billDates) {
-                    userProject.billDates = [];
+                if (user.isActive) {
+                    var userProject = _.find(user.projects, { "projectId": projectId });
+                    if (!userProject.billDates) {
+                        userProject.billDates = [];
+                    }
+                    assignedUsers.push({
+                        projectId: projectId,
+                        userId: user._id,
+                        userName: user.name,
+                        //startDate: userProject.startDate,
+                        //allocatedHours: userProject.allocatedHours,
+                        billDates: userProject.billDates
+                    });
                 }
-                assignedUsers.push({
-                    projectId: projectId,
-                    userId: user._id,
-                    userName: user.name,
-                    //startDate: userProject.startDate,
-                    //allocatedHours: userProject.allocatedHours,
-                    billDates: userProject.billDates
-                });
+
             });
             deferred.resolve(assignedUsers);
         } else {
