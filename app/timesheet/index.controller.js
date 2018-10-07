@@ -656,7 +656,12 @@
                 if (vm.timesheetHours >= 40) {
                     vm.timesheet.week = $filter('date')(vm.timesheet.weekDate, "yyyy-Www").toString();
                     if (vm.isNew) {
-                        TimesheetService.createTimesheet(vm.timesheet).then(function(response) {
+                        var timesheetObj = angular.copy(vm.timesheet);
+                        // _.remove(timesheetObj.projects, function(project) {
+                        //     return project.projectHours == 0;
+                        // });
+                        //console.log(timesheetObj);
+                        TimesheetService.createTimesheet(timesheetObj).then(function(response) {
                             noty.showSuccess("Thank you for the update!");
                             $state.go('myTimesheets');
                         }, function(error) {
@@ -675,7 +680,7 @@
                             if (vm.isPopupEdit) {
                                 $uibModalInstance.close();
                             } else {
-                                $state.go('home');
+                                $state.go('myTimesheets');
                             }
                         }, function(error) {
                             if (error) {

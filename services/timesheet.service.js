@@ -74,7 +74,7 @@ function createTimesheet(currentUser, userParam) {
                     if (!projectObj.businessUnit) {
                         projectObj.businessUnit = "";
                     }
-                    var projectInfo = _.find(allProjects, { _id: projectObj.projectId });
+                    var projectInfo = _.find(allProjects, { projectName: projectObj.projectName });
                     if (projectInfo && projectInfo.businessUnit) {
                         projectObj.businessUnit = projectInfo.businessUnit;
                     }
