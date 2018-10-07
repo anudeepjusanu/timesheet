@@ -1552,6 +1552,9 @@
 
         function filterProjectUsers() {
             ProjectService.getAll().then(function(response) {
+                _.remove(response, function(project) {
+                    return !project.isActive;
+                })
                 vm.projects = response;
                 _.each(vm.projects, function(project) {
                     if (project.ownerId == vm.user._id) {
