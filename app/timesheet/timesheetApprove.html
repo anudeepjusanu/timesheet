@@ -39,6 +39,7 @@
             <table class="table table-bordered">
                 <tr>
                     <th>Name</th>
+                    <th>Resource Type</th>
                     <th>Working Hours</th>
                     <th>Sick Leave Hours</th>
                     <th>Timeoff Hours</th>
@@ -48,6 +49,7 @@
                 </tr>
                 <tr ng-repeat="sheet in vm.currentProject.users">
                     <td>{{sheet.userName}}</td>
+                    <td>{{sheet.timesheet.resourceType}}</td>
                     <td>{{sheet.timesheet.billableHours}}</td>
                     <td>{{sheet.timesheet.sickLeaveHours}}</td>
                     <td>{{sheet.timesheet.timeoffHours}}</td>

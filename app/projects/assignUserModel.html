@@ -38,6 +38,7 @@
                                 <th>Allocated Hours</th>
                                 <th>Billable Limit</th>
                                 <th>Resource Type</th>
+                                <th>Resource Status</th>
                                 <th></th>
                             </tr>
                             <tr ng-repeat="billDate in vm.user.billDates" class="">
@@ -61,6 +62,10 @@
                                 <td><input type="number" class="form-control" ng-model="billDate.billableMaxHours" max="80" style="width: 80px;" /></td>
                                 <td>
                                     <select class="form-control" ng-model="billDate.resourceType" ng-options="resourceType.resourceTypeId as resourceType.resourceTypeVal for resourceType in vm.resourceTypes">
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-control" ng-model="billDate.resourceStatus" ng-options="opt as opt for opt in ['Open', 'Lock']">
                                     </select>
                                 </td>
                                 <td>

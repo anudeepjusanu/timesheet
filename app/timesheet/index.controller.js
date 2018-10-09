@@ -1607,6 +1607,7 @@
             var filterDate = $filter('date')(week, "yyyy-Www").toString();
             TimesheetService.projectHours(filterDate, projectId).then(function(response) {
                 vm.timesheetList = [];
+                console.log(vm.currentProject);
                 _.each(vm.currentProject.users, function(user) {
                     user.timesheet = {};
                     _.each(response, function(timesheet) {
