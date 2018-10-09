@@ -12,14 +12,14 @@
             <div class="panel-body panel-body-table">
                 <table class="table table-condensed table-bordered table-striped" export-table>
                     <tr>
-                        <th width="80px">S.No</th>
+                        <th width="40px">S.No</th>
                         <th width="240px">
                             User Name <br/>
                             <input type="text" style="margin-top: 4px;" ng-model="vm.search.userName" class="form-control" />
                         </th>
                         <th width="80px">
                             Type <br/>
-                            <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.userResourceType" ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'Billable',label:'Billable'}, {id:'Non-billable',label:'Non-billable'}]"></select>
+                            <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.userResourceType" ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'Billable',label:'Billable'}, {id:'Non-billable',label:'Non-billable'}, {id:'Trainee',label:'Trainee'}]"></select>
                         </th>
                         <th>
                             <table class="table">
@@ -55,7 +55,10 @@
                                             <div class="col-md-3">{{billDate.end | date : 'mediumDate'}}</div>
                                             <div class="col-md-2">{{billDate.allocatedHours}}</div>
                                             <div class="col-md-2">{{billDate.billableMaxHours}}</div>
-                                            <div class="col-md-2">{{billDate.resourceType}}</div>
+                                            <div class="col-md-2">
+                                                {{billDate.resourceType}}
+                                                <i ng-if="billDate.resourceStatus && billDate.resourceStatus=='Lock'" class="glyphicon glyphicon-lock"></i>
+                                            </div>
                                         </div>
                                     </td>
                                     <td><a class="btn btn-primary btn-xs" ng-click="vm.viewAssignUser(user, project)">Edit</a></td>

@@ -5,3 +5,6 @@
 .wl-chips {
     margin-bottom: 10px;
 }
+.panel-body.panel-body-table td, .panel-body.panel-body-table th{
+    padding: 4px 5px!important;
+}
