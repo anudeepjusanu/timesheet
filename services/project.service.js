@@ -47,8 +47,8 @@ function create(projectParam) {
         visibility: projectParam.visibility,
         isActive: projectParam.isActive,
         description: projectParam.description,
-        ownerId: params.ownerId,
-        ownerName: params.ownerName,
+        ownerId: projectParam.ownerId,
+        ownerName: projectParam.ownerName,
         createdOn: new Date(),
         updatedOn: new Date()
     }
