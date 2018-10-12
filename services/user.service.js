@@ -34,7 +34,7 @@ function authenticate(username, password) {
     db.users.findOne({ username: username, "isActive": true }, function(err, user) {
         if (err) deferred.reject(err.name + ': ' + err.message);
 
-        if (user && user.hash && bcrypt.compareSync(password, user.hash)) {
+        if (user && user.hash && password && bcrypt.compareSync(password, user.hash)) {
             // authentication successful
             deferred.resolve(jwt.sign({ sub: user._id }, config.secret));
         } else {
