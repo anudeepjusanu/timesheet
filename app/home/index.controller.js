@@ -24,6 +24,11 @@
                         return (searchObj.userResourceType == item.userResourceType);
                     });
                 }
+                if (searchObj.employeeCategory && searchObj.employeeCategory.length > 0 && searchObj.employeeCategory != "All") {
+                    output = $filter('filter')(output, function(item) {
+                        return (searchObj.employeeCategory == item.employeeCategory);
+                    });
+                }
                 if (searchObj.isActive == 'true' || searchObj.isActive == 'false') {
                     output = $filter('filter')(output, function(item, index) {
                         if (searchObj.isActive == 'true') {
@@ -577,9 +582,21 @@
             userName: "",
             userResourceType: "",
             userResourceStatus: "",
-            isActive: "",
+            employeeCategory: "All",
+            isActive: 'true',
             orderBy: 'name',
             sortDESC: false
+        };
+        vm.userColumns = {
+            "name": {label: "Name", selected: true},
+            "userResourceType": {label: "Type", selected: true},
+            "phone": {label: "Mobile", selected: true},
+            "employeeId": {label: "Employee ID", selected: true},
+            "employeeCategory": {label: "Category", selected: true},
+            "employeeType": {label: "Employee Type", selected: false},
+            "reportingTo": {label: "Reporting To", selected: false},
+            "userRole": {label: "Role", selected: false},
+            "isActive": {label: "Status", selected: true}
         };
 
         vm.sorting = function(orderBy) {
@@ -687,6 +704,10 @@
             }, function() {
                 getAllUsers();
             });
+        }
+
+        vm.stopPropagation = function(e){
+            e.stopPropagation();
         }
 
         initController();
