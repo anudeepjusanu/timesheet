@@ -952,6 +952,7 @@
 
         vm.saveTimesheet = function(timesheetForm) {
             if (timesheetForm.$valid) {
+                vm.calTotalHours();
                 if (vm.timesheetHours >= 40) {
                     vm.timesheet.week = $filter('date')(vm.timesheet.weekDate, "yyyy-Www").toString();
                     if (vm.isNew) {

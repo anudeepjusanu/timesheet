@@ -731,6 +731,7 @@
                     "employeeType": vm.userObj.employeeType,
                     "userRole": vm.userObj.userRole,
                     "reportingTo": vm.userObj.reportingTo,
+                    "employeeCategory": vm.userObj.employeeCategory,
                     "profileImgUrl": vm.userObj.profileImgUrl,
                     "isActive": vm.userObj.isActive
                 }
@@ -744,6 +745,7 @@
                 });
             }
         }
+        vm.employeeCategories = ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8"];
 
         vm.closeUser = function() {
             $uibModalInstance.close();

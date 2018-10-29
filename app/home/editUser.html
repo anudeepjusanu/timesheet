@@ -37,7 +37,7 @@
         <div class="form-group required">
             <label class="col-md-3 col-xs-12 control-label">Resource Type</label>
             <div class="col-md-6 col-xs-12">
-                <select class="form-control" ng-model="vm.userObj.userResourceType" ng-required="true" ng-options="option as option for option in ['Billable', 'Non-billable', 'Trainee']"></select>
+                <select class="form-control" ng-model="vm.userObj.userResourceType" ng-required="true" ng-options="option as option for option in ['Billable', 'Non-billable', 'Trainee', 'Intern']"></select>
             </div>
         </div>
         <div class="form-group required">
@@ -56,6 +56,12 @@
             <label class="col-md-3 col-xs-12 control-label">Role</label>
             <div class="col-md-6 col-xs-12">
                 <select class="form-control" ng-model="vm.userObj.userRole" ng-required="true" ng-options="userRole.id as userRole.name for userRole in vm.userRoles"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-3 col-xs-12 control-label">employeeCategory</label>
+            <div class="col-md-6 col-xs-12">
+                <select class="form-control" ng-model="vm.userObj.employeeCategory" ng-options="cat as cat for cat in vm.employeeCategories"></select>
             </div>
         </div>
         <div class="form-group">
