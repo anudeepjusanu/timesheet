@@ -47,7 +47,7 @@
                     <th>Corp Holiday Hours</th>
                     <th>Status</th>
                 </tr>
-                <tr ng-repeat="sheet in vm.currentProject.users">
+                <tr ng-repeat="sheet in vm.currentProject.users" ng-init="bgColor=(sheet.timesheet.resourceType=='billable')?'':'background-color:#ffa500b8;';" style="{{bgColor}}">
                     <td>{{sheet.userName}}</td>
                     <td>{{sheet.timesheet.resourceType}}</td>
                     <td>{{sheet.timesheet.billableHours}}</td>
