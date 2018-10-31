@@ -50,7 +50,7 @@
                 <tr ng-repeat="sheet in vm.currentProject.users">
                     <td>{{sheet.userName}}</td>
                     <td>{{sheet.timesheet.resourceType}}</td>
-                    <td ng-init="bgColor=(sheet.timesheet.resourceType=='billable')?'':'background-color:#ffa500b8;';" style="{{bgColor}}">{{sheet.timesheet.billableHours}}</td>
+                    <td>{{sheet.timesheet.billableHours}}</td>
                     <td>{{sheet.timesheet.sickLeaveHours}}</td>
                     <td>{{sheet.timesheet.timeoffHours}}</td>
                     <td>{{sheet.timesheet.overtimeHours}}</td>
