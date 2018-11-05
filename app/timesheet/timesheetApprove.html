@@ -52,7 +52,7 @@
                     <th>Corp Holiday Hours</th>
                     <th>Status</th>
                 </tr>
-                <tr ng-repeat="sheet in vm.currentProject.users" ng-class="non-billable-row:(sheet.timesheet.resourceType && sheet.timesheet.resourceType != 'billable')">
+                <tr ng-repeat="sheet in vm.currentProject.users" ng-class="{'non-billable-row':(sheet.timesheet.resourceType && sheet.timesheet.resourceType != 'billable')}">
                     <td>{{sheet.userName}}</td>
                     <td>{{sheet.timesheet.resourceType}}</td>
                     <td>{{sheet.timesheet.billableHours}}</td>
