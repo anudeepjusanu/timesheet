@@ -92,7 +92,8 @@
             { "resourceTypeId": "projectDelivery", "resourceTypeVal": "Project Delivery" },
             { "resourceTypeId": "internal", "resourceTypeVal": "Internal" },
             { "resourceTypeId": "operations", "resourceTypeVal": "Operations" },
-            { "resourceTypeId": "trainee", "resourceTypeVal": "Trainee" }
+            { "resourceTypeId": "trainee", "resourceTypeVal": "Trainee" },
+            { "resourceTypeId": "intern", "resourceTypeVal": "Intern" }
         ];
         vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training", "Skill Up"];
         vm.alerts = [];
