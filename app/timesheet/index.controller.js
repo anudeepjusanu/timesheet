@@ -1624,7 +1624,7 @@
                             if (project[0].billableHours != 0) {
                                 user.timesheet = project[0];
                             }
-                            user.resourceType = user.timesheet.resourceType;
+                            //user.resourceType = user.timesheet.resourceType;
                         }
                     });
                 });
