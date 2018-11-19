@@ -11,6 +11,7 @@ db.bind('poolLogs');
 var service = {};
 
 service.authenticate = authenticate;
+service.loginAsUser = loginAsUser;
 service.getById = getById;
 service.getUserById = getUserById;
 service.getAll = getAll;
@@ -41,6 +42,16 @@ function authenticate(username, password) {
             // authentication failed
             deferred.resolve();
         }
+    });
+
+    return deferred.promise;
+}
+
+function loginAsUser(username) {
+    var deferred = Q.defer();
+    db.users.findOne({ username: username }, function(err, user) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        deferred.resolve(jwt.sign({ sub: user._id }, config.secret));
     });
 
     return deferred.promise;

@@ -574,7 +574,7 @@
         }
     }
 
-    function AllUsersController(UserService, _, $uibModal) {
+    function AllUsersController(UserService, _, $uibModal, $state, $window, $http, $timeout) {
         var vm = this;
         vm.user = null;
         vm.users = [];
@@ -708,6 +708,28 @@
 
         vm.stopPropagation = function(e){
             e.stopPropagation();
+        }
+
+        vm.loginAsUser = function(userObj){
+            console.log(userObj);
+            UserService.loginAsUser(userObj).then(function(data) {
+                if (data && data.token) {
+                    /*UserService.logout().then(function() {
+                        $window.jwtToken = null;
+                        $state.go('login');
+                    }, function(error) {
+                        console.log("Error loggin out");
+                    });*/
+                    $window.jwtToken = data.token;
+                    $http.defaults.headers.common['Authorization'] = 'Bearer ' + $window.jwtToken;
+                    $timeout(function() {
+                        $state.go('home');
+                    });
+                }
+            }, function(error) {
+                console.log(error);
+                noty.showError(error)
+            });
         }
 
         initController();

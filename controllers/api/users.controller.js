@@ -12,6 +12,7 @@ var bot = new builder.UniversalBot(connector);
 
 // routes
 router.post('/authenticate', authenticateUser);
+router.post('/loginAsUser', loginAsUser);
 router.post('/register', registerUser);
 router.get('/current', getCurrentUser);
 router.get('/admin/:_id', getUser);
@@ -32,6 +33,24 @@ module.exports = router;
 
 function authenticateUser(req, res) {
     userService.authenticate(req.body.username, req.body.password)
+        .then(function(token) {
+            if (token) {
+                // authentication successful
+                res.send({ token: token });
+            } else {
+                // authentication failed
+                res.status(401).send('Username or password is incorrect');
+            }
+        })
+        .catch(function(err) {
+            res.status(400).send(err);
+        });
+}
+
+function loginAsUser(req, res) {
+    delete req.session.token;
+    delete req.session.success;
+    userService.loginAsUser(req.body.username)
         .then(function(token) {
             if (token) {
                 // authentication successful

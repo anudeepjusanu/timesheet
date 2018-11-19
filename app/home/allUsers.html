@@ -86,6 +86,7 @@
                             <a class="btn btn-primary btn-xs" ng-click="vm.viewUser(user)" ng-show="vm.user.admin">Edit</a>
                             <a class="btn btn-primary btn-xs" ng-click="vm.viewReleaseToPool(user)" ng-if="vm.user.admin && user.isActive==true" ng-show="user.resourceInPool!==true">Release To Pool</a>
                             <a class="btn btn-primary btn-xs" ng-click="vm.viewReleaseFromPool(user)" ng-if="vm.user.admin && user.isActive==true" ng-show="user.resourceInPool===true">Release From Pool</a>
+                            <a class="btn btn-primary btn-xs" ng-click="vm.loginAsUser(user)" ng-show="vm.user.admin">Login</a>
                         </td>
                     </tr>
                     </tbody>

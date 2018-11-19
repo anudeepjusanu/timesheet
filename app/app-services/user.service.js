@@ -9,6 +9,7 @@
         var service = {};
 
         service.login = login;
+        service.loginAsUser = loginAsUser;
         service.logout = logout;
         service.GetCurrent = GetCurrent;
         service.GetAll = GetAll;
@@ -31,6 +32,10 @@
 
         function login(loginObj) {
             return $http.post('/login', loginObj).then(handleSuccess, handleError);
+        }
+
+        function loginAsUser(loginObj) {
+            return $http.post('/api/users/loginAsUser', loginObj).then(handleSuccess, handleError);
         }
 
         function logout() {
