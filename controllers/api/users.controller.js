@@ -53,6 +53,7 @@ function loginAsUser(req, res) {
     userService.loginAsUser(req.body.username)
         .then(function(token) {
             if (token) {
+                req.session.token = token;
                 // authentication successful
                 res.send({ token: token });
             } else {

@@ -712,18 +712,14 @@
 
         vm.loginAsUser = function(userObj){
             console.log(userObj);
-            UserService.loginAsUser(userObj).then(function(data) {
+            UserService.loginAsUser({username: userObj.username}).then(function(data) {
                 if (data && data.token) {
-                    /*UserService.logout().then(function() {
-                        $window.jwtToken = null;
-                        $state.go('login');
-                    }, function(error) {
-                        console.log("Error loggin out");
-                    });*/
                     $window.jwtToken = data.token;
                     $http.defaults.headers.common['Authorization'] = 'Bearer ' + $window.jwtToken;
                     $timeout(function() {
-                        $state.go('home');
+                        //$state.go('home');
+                        console.log(window.location.origin);
+                        window.location = window.location.origin + '/app/';
                     });
                 }
             }, function(error) {
