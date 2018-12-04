@@ -93,7 +93,8 @@
             { "resourceTypeId": "internal", "resourceTypeVal": "Internal" },
             { "resourceTypeId": "operations", "resourceTypeVal": "Operations" },
             { "resourceTypeId": "trainee", "resourceTypeVal": "Trainee" },
-            { "resourceTypeId": "intern", "resourceTypeVal": "Intern" }
+            { "resourceTypeId": "intern", "resourceTypeVal": "Intern" },
+            { "resourceTypeId": "bench", "resourceTypeVal": "Bench" }
         ];
         vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training", "Skill Up"];
         vm.alerts = [];
@@ -755,7 +756,7 @@
                 });
                 BillData.allocatedHours = (!BillData.allocatedHours) ? 0 : BillData.allocatedHours;
                 BillData.billableMaxHours = (!BillData.billableMaxHours) ? 0 : BillData.billableMaxHours;
-
+                console.log(project);
                 if (isValidProject === true) {
                     vm.timesheet.projects.push({
                         projectId: project.projectId,
