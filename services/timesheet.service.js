@@ -394,7 +394,7 @@ function adminUpdate(id, params) {
     return deferred.promise;
 }
 
-var resourceTypes = ["shadow", "buffer", "billable", "bizdev", "internal", "operations", "trainee"];
+var resourceTypes = ["shadow", "buffer", "billable", "bizdev", "internal", "operations", "trainee", "bench"];
 
 function weekHoursCal(sheets, resourceTypes, weekVal) {
     var report = {
