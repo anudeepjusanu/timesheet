@@ -1012,6 +1012,7 @@
                             BillData.resourceType = billDate.resourceType;
                             BillData.allocatedHours = billDate.allocatedHours;
                             BillData.billableMaxHours = billDate.billableMaxHours;
+                            BillData.resourceStatus = billDate.resourceStatus;
                         }
                     } else if (billDate.start && billDate.start != "") {
                         var startDate = new Date(billDate.start);
@@ -1019,6 +1020,7 @@
                             BillData.resourceType = billDate.resourceType;
                             BillData.allocatedHours = billDate.allocatedHours;
                             BillData.billableMaxHours = billDate.billableMaxHours;
+                            BillData.resourceStatus = billDate.resourceStatus;
                         }
                     } else if (billDate.end && billDate.end != "") {
                         var endDate = new Date(billDate.end);
@@ -1026,11 +1028,13 @@
                             BillData.resourceType = billDate.resourceType;
                             BillData.allocatedHours = billDate.allocatedHours;
                             BillData.billableMaxHours = billDate.billableMaxHours;
+                            BillData.resourceStatus = billDate.resourceStatus;
                         }
                     } else if (billDate.start == "" && billDate.end == "") {
                         BillData.resourceType = billDate.resourceType;
                         BillData.allocatedHours = billDate.allocatedHours;
                         BillData.billableMaxHours = billDate.billableMaxHours;
+                        BillData.resourceStatus = billDate.resourceStatus;
                     }
                 });
                 BillData.allocatedHours = (!BillData.allocatedHours) ? 0 : BillData.allocatedHours;
@@ -1046,7 +1050,8 @@
                     timeoffHours: 0,
                     overtimeHours: 0,
                     projectComment: "",
-                    isAssigned: true
+                    isAssigned: true,
+                    resourceStatus: BillData.resourceStatus
                 });
             });
 
