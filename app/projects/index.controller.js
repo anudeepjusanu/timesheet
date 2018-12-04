@@ -452,7 +452,8 @@
             { "resourceTypeId": "internal", "resourceTypeVal": "Internal" },
             { "resourceTypeId": "operations", "resourceTypeVal": "Operations" },
             { "resourceTypeId": "trainee", "resourceTypeVal": "Trainee" },
-            { "resourceTypeId": "intern", "resourceTypeVal": "Intern" }
+            { "resourceTypeId": "intern", "resourceTypeVal": "Intern" },
+            { "resourceTypeId": "bench", "resourceTypeVal": "Bench" }
         ];
 
         vm.users = [];
