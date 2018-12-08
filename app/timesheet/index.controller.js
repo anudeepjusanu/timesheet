@@ -1249,6 +1249,7 @@
                             });
                             vm.timesheets.push({
                                 userId: userId,
+                                employeeId: userObj.employeeId,
                                 userName: userName,
                                 projects: projects,
                                 weeks: userSheets
@@ -1258,10 +1259,12 @@
                     var sno = 1;
                     vm.timesheets = _.sortBy(vm.timesheets, 'userName');
                     _.each(vm.timesheets, function(sheetObj) {
+                        sheetObj.grandTotalHours = 0;
                         _.each(sheetObj.projects, function(projectObj) {
                             projectObj.totalBillableHours = 0;
                             projectObj.totalTimeoffHours = 0;
                             projectObj.totalOvertimeHours = 0;
+                            projectObj.projectTotalHours = 0;
                             _.each(vm.weeks, function(weekObj) {
                                 if (projectObj[weekObj.week].billableHours) {
                                     projectObj.totalBillableHours += projectObj[weekObj.week].billableHours;
@@ -1273,6 +1276,8 @@
                                     projectObj.totalOvertimeHours += projectObj[weekObj.week].overtimeHours;
                                 }
                             });
+                            projectObj.projectTotalHours = projectObj.totalBillableHours + projectObj.totalTimeoffHours + projectObj.totalOvertimeHours;
+                            sheetObj.grandTotalHours += projectObj.projectTotalHours;
                         });
                         sheetObj.sno = sno++;
                     });
