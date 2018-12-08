@@ -19,7 +19,7 @@
         };
 
         function viewProject() {
-            
+
         }
 
         function initController() {
@@ -66,7 +66,7 @@
                         _.each(userSheets.timesheets, function(sheetObj){
                             timeoffHours += parseFloat(sheetObj.timeoffHours);
                         });
-                        timeoffDays = parseFloat(timeoffHours).toFixed(2);
+                        timeoffDays = parseFloat((timeoffHours/8)).toFixed(2);
                         if(userObj){
                             userObj.userResourceType = userSheets.userResourceType;
                             userObj.timeoffHours = timeoffHours;
