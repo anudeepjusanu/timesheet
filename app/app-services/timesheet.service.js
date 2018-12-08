@@ -27,6 +27,7 @@
         service.utilizationByMonth = utilizationByMonth;
         service.timesheetBetweenDates = timesheetBetweenDates;
         service.projectHours = projectHours;
+        service.usersLeaveBalance = usersLeaveBalance;
 
         return service;
 
@@ -110,7 +111,10 @@
             if (weekId && projectId) {
                 return $http.get('/api/timesheet/project/' + projectId + '/week/' + weekId).then(handleSuccess, handleError);
             }
+        }
 
+        function usersLeaveBalance(financialYear) {
+            return $http.get('/api/timesheet/usersLeaveBalance/' + financialYear, {}).then(handleSuccess, handleError);
         }
 
         // private functions

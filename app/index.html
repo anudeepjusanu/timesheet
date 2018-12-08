@@ -24,7 +24,6 @@
                     scope: './'
                 })
                 .then(function(registration) {
-                    console.log(registration);
                     registration.onupdatefound = function() {
                         if (navigator.serviceWorker.controller) {
                             var installingWorker = registration.installing;
@@ -45,10 +44,10 @@
                     registration.pushManager.getSubscription().then(function(sub) {
                         if (sub === null) {
                             // Update UI to ask user to register for Push
-                            console.log('Not subscribed to push service!');
+                            //console.log('Not subscribed to push service!');
                         } else {
                             // We have a subscription, update the database
-                            console.log('Subscription object: ', sub);
+                            //console.log('Subscription object: ', sub);
                         }
                     });
                 }).catch(function(e) {
@@ -63,7 +62,7 @@
                     });
                 })
                 .then(function(subscription) {
-                    console.log(subscription.endpoint);
+                    //console.log(subscription.endpoint);
                     var endpointParts = subscription.endpoint.split('/')
                     var registrationId = endpointParts[endpointParts.length - 1];
                     window.pushToken = registrationId;

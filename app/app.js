@@ -236,6 +236,14 @@
                 parent: 'layout',
                 data: { activeTab: 'team' }
             })
+            .state('leaveBalance', {
+                url: '/leaveBalance',
+                templateUrl: 'team/leavebalance.html',
+                controller: 'Team.LeaveBalanceController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'team' }
+            })
         ChartJsProvider.setOptions({ colors: ['#1caf9a', '#273541'] });
     }
 
@@ -270,7 +278,7 @@
         // get JWT token from server
         $.get('/app/token', function(token) {
             window.jwtToken = token;
-            console.log(token);
+            //console.log(token);
             angular.bootstrap(document, ['app']);
         });
     });

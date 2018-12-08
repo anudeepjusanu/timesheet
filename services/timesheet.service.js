@@ -31,6 +31,7 @@ service.getProjectInfoById = getProjectInfoById;
 service.utilizationByMonth = utilizationByMonth;
 service.getByProject = getByProject;
 service.remindByProject = remindByProject;
+service.usersLeaveBalance = usersLeaveBalance;
 
 module.exports = service;
 
@@ -94,7 +95,7 @@ function createTimesheet(currentUser, userParam) {
                     var sheetObj = {
                         userId: mongo.helper.toObjectID(userParam.userId),
                         week: userParam.week,
-                        weekDate: userParam.weekDate,
+                        weekDate: new Date(userParam.weekDate),
                         userResourceType: user.userResourceType,
                         totalHours: userParam.totalHours,
                         totalBillableHours: userParam.totalBillableHours,
@@ -175,7 +176,7 @@ function updateTimesheet(sheetId, userParam, currentUser) {
                     var newSheetObj = {
                         userId: mongo.helper.toObjectID(sheetObj.userId),
                         week: userParam.week,
-                        weekDate: userParam.weekDate,
+                        weekDate: new Date(userParam.weekDate),
                         userResourceType: sheetUserObj.userResourceType,
                         totalHours: userParam.totalHours,
                         totalBillableHours: userParam.totalBillableHours,
@@ -820,5 +821,52 @@ function getByProject(week, projectId) {
 }
 
 function remindByProject(user, projectName, week) {
+    
+}
 
+function usersLeaveBalance(financialYear) {
+    var deferred = Q.defer();
+    var financialYearArr = financialYear.split("-");
+    var startDate = new Date(financialYearArr[0], 0, 1);
+    var endDate = new Date(financialYearArr[1], 0, 1);
+    var queryStr = {
+        weekDate: {
+            $gte: startDate,
+            $lt: endDate
+        },
+        timeoffHours: {
+            $gt: 0
+        }
+    };
+    var users = [];
+    db.timesheets.find(queryStr).toArray(function(err, sheets) {
+        _.each(sheets, function(sheetObj) {
+            var userObj = _.find(users, {_id: sheetObj.userId});
+            if(userObj){
+                userObj.timesheets.push({
+                    timeoffHours: sheetObj.timeoffHours,
+                    week: sheetObj.week,
+                    weekDate: sheetObj.weekDate,
+                    totalHours: sheetObj.totalHours,
+                    totalBillableHours: sheetObj.totalBillableHours 
+                });
+            }else{
+                var userObj = {
+                    _id: sheetObj.userId,
+                    userResourceType: sheetObj.userResourceType,
+                    timesheets: [{
+                        timeoffHours: sheetObj.timeoffHours,
+                        week: sheetObj.week,
+                        weekDate: sheetObj.weekDate,
+                        totalHours: sheetObj.totalHours,
+                        totalBillableHours: sheetObj.totalBillableHours
+                    }]
+                }
+                users.push(userObj);
+            }
+        });
+        deferred.resolve(users);
+    });
+    
+    return deferred.promise;
 }

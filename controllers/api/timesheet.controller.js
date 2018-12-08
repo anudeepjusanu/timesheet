@@ -22,6 +22,7 @@ router.get('/remind/:id/:week', remind);
 router.get('/remind/all', remindAll);
 router.put('/admin/:id', adminUpdate);
 router.post('/month/report', getReportbyMonth);
+router.get('/usersLeaveBalance/:financialYear', usersLeaveBalance);
 router.get('/utilizationByMonth/:monthId/:yearId', utilizationByMonth);
 router.get('/allUserHoursByWeek/:weekId', allUserHoursByWeek);
 router.get('/projectUserHoursByWeek/:weekId/:projectId', projectUserHoursByWeek);
@@ -298,6 +299,16 @@ function remindByProject(req, res) {
             } else {
                 res.sendStatus(404);
             }
+        })
+        .catch(function(err) {
+            res.status(400).send(err);
+        });
+}
+
+function usersLeaveBalance(req, res) {
+    timesheetService.usersLeaveBalance(req.params.financialYear)
+        .then(function(response) {
+            res.send(response);
         })
         .catch(function(err) {
             res.status(400).send(err);

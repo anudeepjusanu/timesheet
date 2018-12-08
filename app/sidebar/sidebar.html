@@ -41,6 +41,9 @@
         <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'consolidatedTimesheet'}">
             <a ui-sref="consolidatedTimesheet"><span class="fa fa-calendar"></span> <span class="xn-text">Consolidated Timesheet</span></a>
         </li>
+        <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'leaveBalance'}">
+            <a ui-sref="leaveBalance"><img class="fa" src="app-content/assets/progress-report.png"> <span class="xn-text">Leave Balance</span></a>
+        </li>
         <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'projectUsers'}">
             <a ui-sref="projectUsers"><span class="fa fa-users"></span> <span class="xn-text">Project Users</span></a>
         </li>

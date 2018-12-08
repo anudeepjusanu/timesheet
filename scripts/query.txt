@@ -1,0 +1,2 @@
+//Update weekDate string to Date object
+db.timesheets.find({}).snapshot().forEach(function(elem){ db.timesheets.update({_id: elem._id},{$set: {weekDate:new Date(elem.weekDate)}}); });
