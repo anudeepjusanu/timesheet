@@ -242,7 +242,7 @@
                 controller: 'Team.LeaveBalanceController',
                 controllerAs: 'vm',
                 parent: 'layout',
-                data: { activeTab: 'team' }
+                data: { activeTab: 'leaveBalance' }
             })
         ChartJsProvider.setOptions({ colors: ['#1caf9a', '#273541'] });
     }

@@ -55,10 +55,23 @@
             "timeoffDays": {label: "Timeoff Days", selected: true},
             "isActive": {label: "Status", selected: true}
         };
+        vm.sorting = function(orderBy) {
+            if (vm.search.orderBy == orderBy) {
+                vm.search.sortDESC = !vm.search.sortDESC;
+            } else {
+                vm.search.sortDESC = false;
+            }
+            vm.search.orderBy = orderBy;
+        };
+        vm.financialYear = '2018-2019';
 
-        function getUserLeaves(){
-            TimesheetService.usersLeaveBalance('2018-2019').then(function(response) {
+        vm.getUserLeaves = function(){
+            TimesheetService.usersLeaveBalance(vm.financialYear).then(function(response) {
                 if(response){
+                    _.each(vm.users, function(userObj){
+                        userObj.timeoffHours = 0;
+                        userObj.timeoffDays = parseFloat(0).toFixed(2);
+                    });
                     _.each(response, function(userSheets){
                         var userObj = _.find(vm.users, {_id: userSheets._id});
                         var timeoffHours = 0.00;
@@ -83,12 +96,8 @@
         function getUsers() {
             UserService.getUsers().then(function(response) {
                 if(response){
-                    _.each(response, function(userObj){
-                        userObj.timeoffHours = 0;
-                        userObj.timeoffDays = parseFloat(0).toFixed(2);
-                        vm.users.push(userObj);
-                    });
-                    getUserLeaves();
+                    vm.users = response;
+                    vm.getUserLeaves();
                 }
             }, function(error) {
                 console.log(error);

@@ -5,6 +5,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Employees</h3>
+                
                 <div class="dropdown pull-right">
                     <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
                         Columns<b class="caret"></b>
@@ -16,6 +17,9 @@
                             </label>
                         </div>
                     </div>
+                </div>
+                <div class="pull-right">
+                    <select class="form-control" ng-model="vm.financialYear" ng-options="opt as opt for opt in ['2017-2018', '2018-2019']" ng-change="vm.getUserLeaves();"></select>
                 </div>
             </div>
             <div class="panel-body">
@@ -35,8 +39,12 @@
                             <a ng-click="vm.sorting('employeeCategory');">Category</a>
                         </th>
                         <th ng-show="vm.userColumns['employeeType'].selected">Employee Type</th>
-                        <th ng-show="vm.userColumns['timeoffHours'].selected">TimeOff Hours</th>
-                        <th ng-show="vm.userColumns['timeoffHours'].selected">TimeOff Days</th>
+                        <th ng-show="vm.userColumns['timeoffHours'].selected" class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='timeoffHours'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='timeoffHours'&&vm.search.sortDESC===true}">
+                            <a ng-click="vm.sorting('timeoffHours');">TimeOff Hours</a>
+                        </th>
+                        <th ng-show="vm.userColumns['timeoffDays'].selected" class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='timeoffDays'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='timeoffDays'&&vm.search.sortDESC===true}">
+                            <a ng-click="vm.sorting('timeoffDays');">TimeOff Days</a>
+                        </th>
                         <th ng-show="vm.userColumns['isActive'].selected" >Status</th>
                     </tr>
                     <tr>
