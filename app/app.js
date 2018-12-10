@@ -238,7 +238,7 @@
             })
             .state('leaveBalance', {
                 url: '/leaveBalance',
-                templateUrl: 'team/leavebalance.html',
+                templateUrl: 'team/leaveBalance.html',
                 controller: 'Team.LeaveBalanceController',
                 controllerAs: 'vm',
                 parent: 'layout',
