@@ -19,7 +19,7 @@
                     </div>
                 </div>
                 <div class="pull-right">
-                    <select class="form-control" ng-model="vm.financialYear" ng-options="opt as opt for opt in ['2017-2018', '2018-2019']" ng-change="vm.getUserLeaves();"></select>
+                    <select class="form-control" ng-model="vm.financialYear" ng-options="opt as opt for opt in vm.financialYears" ng-change="vm.getUserLeaves();"></select>
                 </div>
             </div>
             <div class="panel-body">

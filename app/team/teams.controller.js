@@ -63,7 +63,20 @@
             }
             vm.search.orderBy = orderBy;
         };
-        vm.financialYear = '2018-2019';
+        var now = new Date();
+        vm.financialYears = [];
+        vm.financialYear = null;
+        var navYear = 2017;
+        var endYear = now.getFullYear();
+        if(now.getMonth()>=3){
+            var endYear = now.getFullYear() + 1;
+        }
+        while(endYear > navYear){
+            var fYear = navYear + "-" + (navYear+1);
+            vm.financialYears.push(fYear);
+            navYear += 1;
+        }
+        vm.financialYear = fYear;
 
         vm.getUserLeaves = function(){
             TimesheetService.usersLeaveBalance(vm.financialYear).then(function(response) {
