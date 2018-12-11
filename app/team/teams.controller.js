@@ -95,8 +95,8 @@
                         timeoffDays = parseFloat((timeoffHours/8)).toFixed(2);
                         if(userObj){
                             userObj.userResourceType = userSheets.userResourceType;
-                            userObj.timeoffHours = timeoffHours;
-                            userObj.timeoffDays = timeoffDays;
+                            userObj.timeoffHours = parseFloat(timeoffHours).toFixed(2);
+                            userObj.timeoffDays = parseFloat(timeoffDays).toFixed(20);
                             userObj.timesheets = userSheets.timesheets;
                         }
                     });
