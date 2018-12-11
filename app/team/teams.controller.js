@@ -95,8 +95,8 @@
                         timeoffDays = parseFloat((timeoffHours/8)).toFixed(2);
                         if(userObj){
                             userObj.userResourceType = userSheets.userResourceType;
-                            userObj.timeoffHours = parseFloat(timeoffHours).toFixed(2);
-                            userObj.timeoffDays = parseFloat(timeoffDays).toFixed(2);
+                            userObj.timeoffHours = timeoffHours;
+                            userObj.timeoffDays = timeoffDays;
                             userObj.timesheets = userSheets.timesheets;
                             console.log(userObj.name); console.log(userObj.timesheets);
                         }

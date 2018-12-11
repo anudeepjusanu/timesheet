@@ -71,8 +71,8 @@
                         <td ng-show="vm.userColumns['phone'].selected">{{user.phone}}</td>
                         <td ng-show="vm.userColumns['employeeCategory'].selected">{{user.employeeCategory}}</td>
                         <td ng-show="vm.userColumns['employeeType'].selected">{{user.employeeType}}</td>
-                        <td ng-show="vm.userColumns['timeoffHours'].selected">{{user.timeoffHours}}</td>
-                        <td ng-show="vm.userColumns['timeoffDays'].selected">{{user.timeoffDays}}</td>
+                        <td ng-show="vm.userColumns['timeoffHours'].selected">{{user.timeoffHours | number}}</td>
+                        <td ng-show="vm.userColumns['timeoffDays'].selected">{{user.timeoffDays | number}}</td>
                         <td ng-show="vm.userColumns['isActive'].selected">
                             <span ng-if="user.isActive==true">Active</span>
                             <span ng-if="user.isActive==false">Inactive</span>
