@@ -827,8 +827,8 @@ function remindByProject(user, projectName, week) {
 function usersLeaveBalance(financialYear) {
     var deferred = Q.defer();
     var financialYearArr = financialYear.split("-");
-    var startDate = new Date(financialYearArr[0], 0, 1);
-    var endDate = new Date(financialYearArr[1], 0, 1);
+    var startDate = new Date(financialYearArr[0], 3, 1);
+    var endDate = new Date(financialYearArr[1], 3, 1);
     var queryStr = {
         weekDate: {
             $gte: startDate,
