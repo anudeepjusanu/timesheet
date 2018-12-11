@@ -13,9 +13,9 @@ var service = {};
 db.users.find({}).toArray(function(err, users) {
     _.each(users, function (userObj) {
         if(userObj.employeeId){
-            userObj.profileImgUrl = 'http://elogos.wavelabs.in/'+userObj.employeeId+'.png';
+            userObj.profileImgUrl = 'https://elogos.wavelabs.in/'+userObj.employeeId+'.png';
             var options = {method: 'HEAD', host: 'elogos.wavelabs.in', port: 80, path: userObj.profileImgUrl, body: userObj};
-            var req = http.request(options, function(response) {
+            /*var req = http.request(options, function(response) {
                     if(response.statusCode == 200) {
                         db.users.update({_id: mongo.helper.toObjectID(userObj._id)}, {'$set': userObj}, function (err, userResponse) {
                             if (err) deferred.reject(err.name + ': ' + err.message);
@@ -23,7 +23,11 @@ db.users.find({}).toArray(function(err, users) {
                         });
                     }
                 });
-            req.end();
+            req.end();*/
+		db.users.update({_id: mongo.helper.toObjectID(userObj._id)}, {'$set': userObj}, function (err, userResponse) {
+                            if (err) deferred.reject(err.name + ': ' + err.message);
+                            console.log(userObj.employeeId + " -- ");
+                        });
         }
     });
 }); 
