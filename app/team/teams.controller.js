@@ -96,8 +96,9 @@
                         if(userObj){
                             userObj.userResourceType = userSheets.userResourceType;
                             userObj.timeoffHours = parseFloat(timeoffHours).toFixed(2);
-                            userObj.timeoffDays = parseFloat(timeoffDays).toFixed(20);
+                            userObj.timeoffDays = parseFloat(timeoffDays).toFixed(2);
                             userObj.timesheets = userSheets.timesheets;
+                            console.log(userObj.name); console.log(userObj.timesheets);
                         }
                     });
                 }
