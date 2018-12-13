@@ -779,6 +779,7 @@
                     });
                 }
             });
+            getProjects();
         }
 
         // Assign New Project
@@ -815,23 +816,26 @@
         function getProjects() {
             ProjectService.getAll().then(function(response) {
                 vm.projects = response;
-                /*_.each(vm.projects, function (prjObj) {
-                    if(prjObj.visibility == 'Public'){
+                console.log(vm.timesheet.projects);
+                _.each(vm.projects, function (prjObj) {
+                    if(prjObj.visibility == 'Public' && prjObj.projectName == 'Corp Event'){
                         var prjIndex = _.findIndex(vm.timesheet.projects, {projectId: prjObj._id});
                         if(!(prjIndex >= 0)) {
                             vm.timesheet.projects.push({
                                 projectId: prjObj._id,
                                 projectName: prjObj.projectName,
-                                allocatedHours: prjObj.allocatedHours,
+                                allocatedHours: 8,
                                 projectHours: 0,
                                 sickLeaveHours: 0,
                                 timeoffHours: 0,
+                                corpHolidayHours: 0,
+                                overtimeHours: 0,
                                 projectComment: "",
                                 isAssigned: false
                             });
                         }
                     }
-                });*/
+                });
             }, function(error) {
                 console.log(error);
             });
@@ -1054,13 +1058,13 @@
                     resourceStatus: BillData.resourceStatus
                 });
             });
-
+            getProjects();
         }
 
         function getProjects() {
             ProjectService.getAll().then(function(response) {
                 vm.projects = response;
-                /*_.each(vm.projects, function (prjObj) {
+                _.each(vm.projects, function (prjObj) {
                     if(prjObj.visibility == 'Public'){
                         var prjIndex = _.findIndex(vm.timesheet.projects, {projectId: prjObj._id});
                         if(!(prjIndex >= 0)) {
@@ -1077,7 +1081,7 @@
                             });
                         }
                     }
-                });*/
+                });
             }, function(error) {
                 console.log(error);
             });
