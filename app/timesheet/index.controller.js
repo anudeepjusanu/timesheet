@@ -722,7 +722,7 @@
                 };
                 var weekDate = new Date(vm.timesheet.weekDate);
                 _.each(project.billDates, function(billDate) {
-                    billDate.resourceStatus = (billDate.resourceStatus)?billDate.resourceStatus:null;
+                    billDate.resourceStatus = (billDate.resourceStatus) ? billDate.resourceStatus : null;
                     if (billDate.start && billDate.start != "" && billDate.end && billDate.end != "") {
                         var startDate = new Date(billDate.start);
                         var endDate = new Date(billDate.end);
@@ -816,11 +816,10 @@
         function getProjects() {
             ProjectService.getAll().then(function(response) {
                 vm.projects = response;
-                console.log(vm.timesheet.projects);
-                _.each(vm.projects, function (prjObj) {
-                    if(prjObj.visibility == 'Public' && prjObj.projectName == 'Corp Event'){
-                        var prjIndex = _.findIndex(vm.timesheet.projects, {projectId: prjObj._id});
-                        if(!(prjIndex >= 0)) {
+                _.each(vm.projects, function(prjObj) {
+                    if (prjObj.visibility == 'Public' && prjObj.projectName == 'Corp Event') {
+                        var prjIndex = _.findIndex(vm.timesheet.projects, { projectId: prjObj._id });
+                        if (!(prjIndex >= 0)) {
                             vm.timesheet.projects.push({
                                 projectId: prjObj._id,
                                 projectName: prjObj.projectName,
@@ -1064,10 +1063,10 @@
         function getProjects() {
             ProjectService.getAll().then(function(response) {
                 vm.projects = response;
-                _.each(vm.projects, function (prjObj) {
-                    if(prjObj.visibility == 'Public'){
-                        var prjIndex = _.findIndex(vm.timesheet.projects, {projectId: prjObj._id});
-                        if(!(prjIndex >= 0)) {
+                _.each(vm.projects, function(prjObj) {
+                    if (prjObj.visibility == 'Public') {
+                        var prjIndex = _.findIndex(vm.timesheet.projects, { projectId: prjObj._id });
+                        if (!(prjIndex >= 0)) {
                             vm.timesheet.projects.push({
                                 projectId: prjObj._id,
                                 projectName: prjObj.projectName,
@@ -1628,25 +1627,28 @@
         function getHoursByWeek(week, projectId) {
             var filterDate = $filter('date')(week, "yyyy-Www").toString();
             TimesheetService.projectHours(filterDate, projectId).then(function(response) {
+
+
                 vm.timesheetList = [];
-                console.log(vm.currentProject);
                 _.each(vm.currentProject.users, function(user) {
-                    user.timesheet = {};
+                    user.timesheet = [];
                     _.each(response, function(timesheet) {
                         if (timesheet.userId == user.userId) {
-                            var project = _.remove(timesheet.projects, function(project) {
-                                return project.projectId == projectId;
+                            _.each(timesheet.projects, function(project) {
+                                if (vm.currentProject._id == project.projectId) {
+                                    project.sheetId = timesheet._id;
+                                    project.isSelect = true;
+                                }
+                                if (!project.sheetStatus) {
+                                    project.sheetStatus = 'Pending';
+                                }
+                                if (project.billableHours != 0) {
+                                    user.timesheet.push(project);
+                                }
                             });
-                            project[0].sheetId = timesheet._id;
-                            if (!project[0].sheetStatus) {
-                                project[0].sheetStatus = 'Pending';
-                            }
-                            if (project[0].billableHours != 0) {
-                                user.timesheet = project[0];
-                            }
-                            //user.resourceType = user.timesheet.resourceType;
                         }
                     });
+
                 });
             });
         };
@@ -1662,10 +1664,10 @@
         };
 
         function setTimesheetStatus(sheet) {
-            TimesheetService.setTimesheetStatus(sheet.timesheet.sheetId, sheet.timesheet.projectId, sheet.timesheet.sheetStatus).then(function(response) {
-                if (sheet.timesheet.sheetStatus == 'Rejected') {
+            TimesheetService.setTimesheetStatus(sheet.sheetId, sheet.projectId, sheet.sheetStatus).then(function(response) {
+                if (sheet.sheetStatus == 'Rejected') {
                     var week = $filter('date')(vm.currentWeek, "Www");
-                    var message = "Your timesheet got rejected for " + sheet.timesheet.projectName + " for the week " + week + " Please update your hours again";
+                    var message = "Your timesheet got rejected for " + sheet.projectName + " for the week " + week + " Please update your hours again";
                     remindUserRejection(sheet.userId, message);
                 };
             });
@@ -1685,10 +1687,10 @@
 
         function remindAll() {
             _.each(vm.currentProject.users, function(user) {
-                var isEmpty = angular.equals({}, user.timesheet);
-                if (isEmpty) {
+                if (user.timesheet && user.timesheet.length == 0) {
                     remind(user);
                 }
+
             });
         }
 

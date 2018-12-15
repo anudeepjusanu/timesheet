@@ -1,6 +1,6 @@
 <style>
-    .non-billable-row{
-        background-color:#ffa500b8;
+    .non-billable-row {
+        background-color: #ffa500b8;
     }
 </style>
 <div class="page-title">
@@ -44,32 +44,48 @@
             <table class="table table-bordered">
                 <tr>
                     <th>Name</th>
-                    <th>Resource Type</th>
-                    <th>Working Hours</th>
-                    <th>Sick Leave Hours</th>
-                    <th>Timeoff Hours</th>
-                    <th>Overtime Hours</th>
-                    <th>Corp Holiday Hours</th>
-                    <th>Status</th>
+                    <th class="row" min-width="580px">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th width="120px;">Project</th>
+                                <th width="120px;">Resource Type</th>
+                                <th width="100px;">Working Hours</th>
+                                <th width="100px;">Sick Leave Hours</th>
+                                <th width="100px;">Timeoff Hours</th>
+                                <th width="100px;">Overtime Hours</th>
+                                <th width="100px;">Corp Holiday Hours</th>
+                                <th width="100px;">Status</th>
+                            </tr>
+                        </table>
+                    </th>
+
                 </tr>
-                <tr ng-repeat="sheet in vm.currentProject.users" ng-class="{'non-billable-row':(sheet.timesheet.resourceType && sheet.timesheet.resourceType != 'billable')}">
-                    <td>{{sheet.userName}}</td>
-                    <td>{{sheet.timesheet.resourceType}}</td>
-                    <td>{{sheet.timesheet.billableHours}}</td>
-                    <td>{{sheet.timesheet.sickLeaveHours}}</td>
-                    <td>{{sheet.timesheet.timeoffHours}}</td>
-                    <td>{{sheet.timesheet.overtimeHours}}</td>
-                    <td>{{sheet.timesheet.corpHolidayHours}}</td>
-                    <td>
-                        <div ng-if="!(sheet.timesheet | isEmpty)">
-                            <div ng-if="sheet.timesheet.sheetStatus != 'Approved'">
-                                <select class="form-control" ng-model="sheet.timesheet.sheetStatus" ng-change="vm.setTimesheetStatus(sheet)" ng-required="true" ng-options="status.id as status.name for status in vm.statusList"></select>
-                            </div>
-                            <div ng-if="sheet.timesheet.sheetStatus != 'Pending'">
-                                <span class="badge badge-success" ng-class="{'badge-danger': sheet.timesheet.sheetStatus==='Rejected'}">{{sheet.timesheet.sheetStatus}}</span>
-                            </div>
-                        </div>
-                        <a class="btn btn-primary btn-xs" ng-click="vm.remind(sheet)" ng-if="(sheet.timesheet | isEmpty)">Remind</a>
+                <tr ng-repeat="user in vm.currentProject.users" ng-class="{'non-billable-row':(sheet.timesheet.resourceType && sheet.timesheet.resourceType != 'billable')}">
+                    <td>{{user.userName}}</td>
+                    <td class="row" min-width="580px">
+                        <table class="table table-bordered">
+                            <tr ng-repeat="timesheet in user.timesheet">
+                                <td width="120px;">{{timesheet.projectName}}</td>
+                                <td width="120px;">{{timesheet.resourceType}}</td>
+                                <td width="100px;">{{timesheet.billableHours}}</td>
+                                <td width="100px;">{{timesheet.sickLeaveHours}}</td>
+                                <td width="100px;">{{timesheet.timeoffHours}}</td>
+                                <td width="100px;">{{timesheet.overtimeHours}}</td>
+                                <td width="100px;">{{timesheet.corpHolidayHours}}</td>
+                                <td width="100px;">
+                                    <div ng-if="!(timesheet | isEmpty)">
+                                        <div ng-if="timesheet.sheetStatus != 'Approved'">
+                                            <select class="form-control" ng-model="timesheet.sheetStatus" ng-change="vm.setTimesheetStatus(timesheet)" ng-required="true" ng-options="status.id as status.name for status in vm.statusList" ng-if="timesheet.isSelect"></select>
+                                            <span class="badge badge-secondary" ng-class="{'badge-danger': timesheet.sheetStatus==='Rejected'}" ng-if="!timesheet.isSelect">{{timesheet.sheetStatus}}</span>
+                                        </div>
+                                        <div ng-if="timesheet.sheetStatus != 'Pending'">
+                                            <span class="badge badge-success" ng-class="{'badge-danger': timesheet.sheetStatus==='Rejected'}">{{timesheet.sheetStatus}}</span>
+                                        </div>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
             </table>
