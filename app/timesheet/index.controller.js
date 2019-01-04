@@ -1064,7 +1064,7 @@
             ProjectService.getAll().then(function(response) {
                 vm.projects = response;
                 _.each(vm.projects, function(prjObj) {
-                    if (prjObj.visibility == 'Public') {
+                    if (prjObj.visibility == 'Public' && prjObj.projectName == "Corp Event") {
                         var prjIndex = _.findIndex(vm.timesheet.projects, { projectId: prjObj._id });
                         if (!(prjIndex >= 0)) {
                             vm.timesheet.projects.push({
@@ -1605,23 +1605,38 @@
         function getProjectAssignedUsers(project) {
             vm.currentProject = project;
             vm.showList = false;
-            ProjectService.getAssignedUsers(vm.currentProject._id).then(function(response) {
-                //Removing users with expired end date
-                _.remove(response, function(user) {
-                    if (user.billDates) {
-                        var endDate = user.billDates[user.billDates.length - 1].end;
-                        if (endDate && currentDay > new Date(endDate)) {
-                            return user;
-                        }
+            if(vm.currentProject.visibility == "Public" && vm.currentProject.projectName == "Corp Event"){
+                UserService.getUsers().then(function(response) {
+                    if (response && response.length) {
+                        var timesheetUsers = vm.timesheets[response[0].projectId];
+                        timesheetUsers.users = [];
+                        vm.timesheets[response[0].projectId]["users"] = response;
+                        getHoursByWeek(vm.currentWeek, vm.currentProject._id);
                     }
+                }, function(error) {
+                    console.log(error);
                 });
-                if (response && response.length) {
-                    vm.timesheets[response[0].projectId]["users"] = response;
-                    getHoursByWeek(vm.currentWeek, vm.currentProject._id);
-                }
-            }, function(error) {
-                console.log(error);
-            });
+            }else{
+                ProjectService.getAssignedUsers(vm.currentProject._id).then(function(response) {
+                    //Removing users with expired end date
+                    _.remove(response, function(user) {
+                        if (user.billDates) {
+                            var endDate = user.billDates[user.billDates.length - 1].end;
+                            if (endDate && currentDay > new Date(endDate)) {
+                                return user;
+                            }
+                        }
+                    });
+                    console.log(vm.timesheets);
+                    console.log(response);
+                    if (response && response.length) {
+                        vm.timesheets[response[0].projectId]["users"] = response;
+                        getHoursByWeek(vm.currentWeek, vm.currentProject._id);
+                    }
+                }, function(error) {
+                    console.log(error);
+                });
+            }
         };
 
         function getHoursByWeek(week, projectId) {
