@@ -98,7 +98,7 @@
                             userObj.timeoffHours = timeoffHours;
                             userObj.timeoffDays = timeoffDays;
                             userObj.timesheets = userSheets.timesheets;
-                            console.log(userObj.name); console.log(userObj.timesheets);
+                            //console.log(userObj.name); console.log(userObj.timesheets);
                         }
                     });
                 }

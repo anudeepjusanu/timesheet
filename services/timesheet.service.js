@@ -58,6 +58,7 @@ function createTimesheet(currentUser, userParam) {
                     projectObj.resourceType = billData.resourceType;
                     projectObj.allocatedHours = billData.allocatedHours;
                     projectObj.billableMaxHours = billData.billableMaxHours;
+                    projectObj.salesItemId = billData.salesItemId;
                     projectObj.overtimeHours = 0;
                     if (projectObj.billableMaxHours > 0 && projectObj.projectHours > projectObj.billableMaxHours) {
                         projectObj.billableHours = projectObj.billableMaxHours;
@@ -143,6 +144,7 @@ function updateTimesheet(sheetId, userParam, currentUser) {
                         projectObj.resourceType = billData.resourceType;
                         projectObj.allocatedHours = billData.allocatedHours;
                         projectObj.billableMaxHours = billData.billableMaxHours;
+                        projectObj.salesItemId = billData.salesItemId;
                         projectObj.overtimeHours = 0;
                         if (projectObj.billableMaxHours > 0 && projectObj.projectHours > projectObj.billableMaxHours) {
                             projectObj.billableHours = projectObj.billableMaxHours;
@@ -226,7 +228,8 @@ function getProjectBillData(projectObj, weekDateVal, sheetUserObj) {
     var BillData = {
         resourceType: "buffer",
         allocatedHours: 40,
-        billableMaxHours: 0
+        billableMaxHours: 0,
+        salesItemId: null
     };
     if (sheetUserObj && sheetUserObj.projects) {
         var prjData = _.find(sheetUserObj.projects, { "projectId": projectObj.projectId + "" });
@@ -240,6 +243,7 @@ function getProjectBillData(projectObj, weekDateVal, sheetUserObj) {
                         BillData.resourceType = billDate.resourceType;
                         BillData.allocatedHours = billDate.allocatedHours;
                         BillData.billableMaxHours = billDate.billableMaxHours;
+                        BillData.salesItemId = (billDate.salesItemId)?billDate.salesItemId:null;
                     }
                 } else if (billDate.start && billDate.start != "") {
                     var startDate = new Date(billDate.start);
@@ -247,6 +251,7 @@ function getProjectBillData(projectObj, weekDateVal, sheetUserObj) {
                         BillData.resourceType = billDate.resourceType;
                         BillData.allocatedHours = billDate.allocatedHours;
                         BillData.billableMaxHours = billDate.billableMaxHours;
+                        BillData.salesItemId = (billDate.salesItemId)?billDate.salesItemId:null;
                     }
                 } else if (billDate.end && billDate.end != "") {
                     var endDate = new Date(billDate.end);
@@ -254,11 +259,13 @@ function getProjectBillData(projectObj, weekDateVal, sheetUserObj) {
                         BillData.resourceType = billDate.resourceType;
                         BillData.allocatedHours = billDate.allocatedHours;
                         BillData.billableMaxHours = billDate.billableMaxHours;
+                        BillData.salesItemId = (billDate.salesItemId)?billDate.salesItemId:null;
                     }
                 } else if (billDate.start == "" && billDate.end == "") {
                     BillData.resourceType = billDate.resourceType;
                     BillData.allocatedHours = billDate.allocatedHours;
                     BillData.billableMaxHours = billDate.billableMaxHours;
+                    BillData.salesItemId = (billDate.salesItemId)?billDate.salesItemId:null;
                 }
             });
         }

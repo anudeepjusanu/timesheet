@@ -39,6 +39,7 @@
                                 <th>Billable Limit</th>
                                 <th>Resource Type</th>
                                 <th>Resource Status</th>
+                                <th>Sales ID</th>
                                 <th></th>
                             </tr>
                             <tr ng-repeat="billDate in vm.user.billDates" class="">
@@ -68,6 +69,7 @@
                                     <select class="form-control" ng-model="billDate.resourceStatus" ng-options="opt as opt for opt in ['Open', 'Lock']">
                                     </select>
                                 </td>
+                                <td><input type="text" class="form-control" ng-model="billDate.salesItemId" max="80" style="width: 80px;" /></td>
                                 <td>
                                     <a ng-click="vm.deleteBillDate(billDate, $index)"><span class="fa fa-times"></span></a>
                                 </td>
