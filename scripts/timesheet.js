@@ -22,11 +22,21 @@ db.users.find({}).toArray(function(err, users) {
                         var param = {
                             userId: userObj._id
                         }
-                        console.log(billDateObj);
+                        if(billDateObj.start && billDateObj.end){
+                            // between param
+                            param.weekDate = new Date(billDateObj.start);
+                            param.weekDate = new Date(billDateObj.end);
+                        }else if(billDateObj.start){
+                            // grayter then
+                        }else if(billDateObj.end){
+                            // less then
+                        }else{
+
+                        }
                         db.timesheets.find(param).toArray(function(err, timesheets) {
-                            //console.log(timesheets);
-                            return false;
+                            console.log(timesheets);
                         });
+                        //console.log(billDateObj);
                     }
                 });
             });
