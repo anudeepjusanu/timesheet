@@ -23,20 +23,36 @@ db.users.find({}).toArray(function(err, users) {
                             userId: userObj._id
                         }
                         if(billDateObj.start && billDateObj.end){
-                            // between param
-                            param.weekDate = new Date(billDateObj.start);
-                            param.weekDate = new Date(billDateObj.end);
+                            billDateObj.start = new Date(billDateObj.start);
+                            billDateObj.end = new Date(billDateObj.end);
+                            param.weekDate = {     
+                                $gte:  billDateObj.start,     
+                                $lt :  billDateObj.end 
+                            }
                         }else if(billDateObj.start){
-                            // grayter then
+                            billDateObj.start = new Date(billDateObj.start);
+                            param.weekDate = {     
+                                $gte:  billDateObj.start
+                            }
                         }else if(billDateObj.end){
-                            // less then
+                            billDateObj.end = new Date(billDateObj.end);
+                            param.weekDate = {     
+                                $lt :  billDateObj.end 
+                            }
                         }else{
 
                         }
                         db.timesheets.find(param).toArray(function(err, timesheets) {
-                            console.log(timesheets);
+                            _.each(timesheets, function (timesheetObj) {
+                                _.each(timesheetObj.projects, function (sheetProjectObj) {
+                                    if(sheetProjectObj.projectId == userProjectObj.projectId){
+                                        sheetProjectObj.salesItemId = billDateObj.salesItemId;
+                                    }
+                                });
+                                console.log(timesheetObj);
+                                // Update timesheetObj
+                            });
                         });
-                        //console.log(billDateObj);
                     }
                 });
             });
