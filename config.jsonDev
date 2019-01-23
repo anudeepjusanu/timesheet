@@ -1,0 +1,20 @@
+﻿{
+    "connectionString": "mongodb://localhost:27017/wltimesheet",
+    "apiUrl": "http://localhost:3010/api",
+    "secret": "REPLACE THIS WITH YOUR OWN SECRET, IT CAN BE ANY STRING",
+    "botId": "a53c754b-c042-4ec2-baf3-cacc93f70b3f",
+    "botPassword": "gPK88;^uqzeqgWZWGV185%@"
+}
+
+{
+    "connectionString": "mongodb://timesheet:nbostimesheet@localhost:27017/wltimesheet",
+    "apiUrl": "http://localhost:3010/api",
+    "secret": "REPLACE THIS WITH YOUR OWN SECRET, IT CAN BE ANY STRING",
+    "botId": "c8fc3ad9-72cb-46ff-b5f1-09432ed9b7db",
+    "botPassword": "Y1A0xm40NNkm1XpR0MNV3sz"
+}
+
+rohini  bot
+
+"botId": "a53c754b-c042-4ec2-baf3-cacc93f70b3f",
+"botPassword": "gPK88;^uqzeqgWZWGV185%@"

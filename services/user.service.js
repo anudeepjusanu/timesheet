@@ -27,6 +27,7 @@ service.releaseToPool = releaseToPool;
 service.releaseFromPool = releaseFromPool;
 service.userPoolLogs = userPoolLogs;
 service.updatePushToken = updatePushToken;
+service.getByUserIds = getByUserIds;
 
 module.exports = service;
 
@@ -425,6 +426,49 @@ function updatePushToken(id, userParam) {
                 deferred.resolve();
             });
     }
+
+    return deferred.promise;
+}
+
+// find by userids
+
+function getByUserIds(dude, userIds) {
+    console.log(userIds)
+    var deferred = Q.defer();
+    var db = dude;
+    var collection = db.get('users');
+    /* var query = { config_type: "UserInput" };*/
+    var query = { "_id": { "$in": userIds }};
+    collection.find(query, {}, function (e, docs) {
+        console.log(docs);
+        
+    });
+
+    /* db.users.find({ "_id": { "$in": userIds }}).toArray(function (err, users) {
+        console.log(err)
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (users) {
+           console.log(users)
+            deferred.resolve(users);
+        } else {
+            // project not found
+            deferred.resolve();
+        }
+    }); */
+    /* db.users.find({"_id" : {"$in": userIds}}).toArray(function(err, users) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        console.log(users)
+        if (users) {
+            var usersList = _.map(users, function(e) {
+                return _.omit(e, 'hash');
+            });
+            // return user (without hashed password)
+            deferred.resolve(usersList);
+        } else {
+            // user not found
+            deferred.resolve();
+        }
+    }); */
 
     return deferred.promise;
 }

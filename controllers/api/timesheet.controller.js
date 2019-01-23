@@ -33,6 +33,9 @@ router.get('/projectUserHoursByMonth/:monthId/:yearId/:projectId', projectUserHo
 router.get('/project/:projectId/week/:weekId', getTimesheetByProject)
 router.get('/remind/user/:userId/project/:name/week/:weekId', remindByProject);
 
+// NEW API's for APPgetROVALS PAGE
+router.get('/manager/:managerId/week/:weekId', getTimesheetByManager)
+router.post('/approveMultipleTimeSheetStatus', setTimesheetStatusMultiple)
 
 module.exports = router;
 
@@ -311,6 +314,28 @@ function usersLeaveBalance(req, res) {
             res.send(response);
         })
         .catch(function(err) {
+            res.status(400).send(err);
+        });
+}
+
+/// FOR APPROVALS PAGE
+
+function getTimesheetByManager(req, res) {
+    timesheetService.getByManager(req.params.weekId, req.params.managerId)
+        .then(function (reports) {
+            res.send(reports);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+
+async function setTimesheetStatusMultiple(req, res) {
+    timesheetService.setTimesheetStatusMultiple(req.body.week, req.body.data)
+        .then(function (success) {
+            res.send(success);
+        })
+        .catch(function (err) {
             res.status(400).send(err);
         });
 }

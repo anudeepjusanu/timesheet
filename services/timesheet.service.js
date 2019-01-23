@@ -8,6 +8,7 @@ var db = mongo.db(config.connectionString, { native_parser: true });
 db.bind('timesheets');
 db.bind('users');
 db.bind('projects');
+var projectService = require('services/project.service');
 
 var service = {};
 
@@ -32,6 +33,11 @@ service.utilizationByMonth = utilizationByMonth;
 service.getByProject = getByProject;
 service.remindByProject = remindByProject;
 service.usersLeaveBalance = usersLeaveBalance;
+
+// NEW SERVICES
+service.getByManager = getByManager;
+service.setTimesheetStatusMultiple = setTimesheetStatusMultiple;
+service.checkUserFilledTimesheet = checkUserFilledTimesheet;
 
 module.exports = service;
 
@@ -875,5 +881,92 @@ function usersLeaveBalance(financialYear) {
         deferred.resolve(users);
     });
     
+    return deferred.promise;
+}
+
+// FOR APPROVALS PAGE 04/01/2018
+
+// Get timehseets of all the users that comes under manager with multiple projects
+async function getByManager(week, managerId) {
+    let userData = await projectService.getAllUsersOfManager(managerId);
+    let userIds = [];
+    userData.forEach(user => {
+        userIds.push(user.userId);
+    });
+    var deferred = Q.defer();
+    db.timesheets.find({ week: week, "userId": { "$in": userIds } }).toArray(function (err, doc) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (doc) {
+            deferred.resolve(doc);
+        } else {
+            deferred.reject("Please select valid week");
+        }
+    });
+    return deferred.promise;
+}
+
+// Change multiple timesheet status for various users in single instance
+async function setTimesheetStatusMultiple(week, data) {
+    var deferred = Q.defer();
+    await data.forEach(user => {
+        db.timesheets.find({ 'week': week, "userId": mongo.helper.toObjectID(user.userId) }).toArray(function (err, doc) {
+            if (err) deferred.reject(err.name + ': ' + err.message);
+            let newProjectsData = [];
+            doc[0].projects.forEach(oldProject => {
+                let newObj = {};
+                newObj = oldProject;
+                const checkProjectId = obj => obj.projectId == oldProject.projectId;
+                if (user.projects.some(checkProjectId) === true) {
+                    const newSheetStatus = user.projects.find(project => project.projectId == oldProject.projectId);
+                    newObj.sheetStatus = newSheetStatus.sheetStatus;
+                    newProjectsData.push(newObj);
+                } else {
+                    newProjectsData.push(oldProject);
+                }
+            });
+            doc[0].newProjectsData;
+            db.timesheets.update({ _id: mongo.helper.toObjectID(doc[0]._id) }, { $set: doc[0] }, function (err, responseSheet) {
+                if (err) deferred.reject(err.name + ': ' + err.message);
+            });
+        });
+    });
+    deferred.resolve({
+        success: true,
+        message: 'Timesheet statuses updated successfully'
+    });
+
+    return deferred.promise;
+}
+
+// Check if user filled the timesheet for a given week
+function checkUserFilledTimesheet(week, userId) {
+    var deferred = Q.defer();
+    db.timesheets.find({ week: week, "userId": userId }).toArray(function (err, doc) {
+        if (err) {
+            deferred.reject({
+                success: false,
+                message: "There was an error in checking the timesheets",
+                data: err.name + ': ' + err.message
+            });
+        }
+        if (doc.length == 0) {
+            deferred.resolve({
+                success: false,
+                message: "No timesheet data for the user",
+                data: doc
+            });
+        } else if (doc.length > 0) {
+            deferred.resolve({
+                success: true,
+                message: "Timesheet exists for the given week",
+                data: doc
+            });
+        } else {
+            deferred.reject({
+                success: false,
+                message: "Please select valid week"
+            });
+        }
+    });
     return deferred.promise;
 }

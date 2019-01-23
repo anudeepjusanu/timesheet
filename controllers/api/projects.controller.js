@@ -24,6 +24,7 @@ router.post('/client/', addClient);
 router.put('/client/:_id', updateClient);
 router.delete('/client/:_id', deleteClient);
 router.get('/myProjects/:_id', getMyProjects);
+router.get('/getAllUsersOfManager/:_id', getAllUsersOfManager);
 
 module.exports = router;
 
@@ -289,5 +290,19 @@ function getMyProjects(req, res) {
         })
         .catch(function(err) {
             res.status(400).send(err);
+        });
+};
+
+function getAllUsersOfManager(req, res) {
+    projectService.getAllUsersOfManager(req.params._id)
+        .then(function(users) {
+            if (users) {
+                res.send(users);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function(err) {
+            res.status(400).json(err);
         });
 };

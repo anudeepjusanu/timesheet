@@ -29,6 +29,7 @@ service.getClientById = getClientById;
 service.createClient = createClient;
 service.updateClient = updateClient;
 service.deleteClient = deleteClient;
+service.getAllUsersOfManager = getAllUsersOfManager;
 
 module.exports = service;
 
@@ -463,4 +464,82 @@ function deleteClient(_id) {
         });
 
     return deferred.promise;
+}
+
+/// APIs for Approvals page 03/01/2019
+
+// Get Projects that are managed by the Manager
+function getManagerProjects(managerId) {
+    var deferred = Q.defer();
+    db.projects.find({ ownerId: managerId }).sort({ clientName: 1, projectName: 1 }).toArray(function (err, projects) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (projects) {
+            deferred.resolve(projects);
+        } else {
+            // project not found
+            deferred.resolve();
+        }
+    });
+    return deferred.promise;
+}
+// End of Get Projects that are managed by the Manager
+
+// Get All assiged users for all projects that are managed by the Manager
+function getAllAssignedUsers(projectIds, managerId) {
+    var deferred = Q.defer();
+    db.users.find({ "projects.projectId": { "$in": projectIds }, "isActive": true }).toArray(function (err, users) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+
+        if (users) {
+            var assignedUsers = [];
+            _.each(users, function (user) {
+                if (user.isActive) {
+                    // Filter using Manager ID, to get all the assisnged users to the manager
+                    var userProject = _.find(user.projects, { "ownerId": managerId });
+                    if (!userProject.billDates) {
+                        userProject.billDates = [];
+                    }
+                    assignedUsers.push({
+                        userId: user._id,
+                        userName: user.name,
+                        //startDate: userProject.startDate,
+                        //allocatedHours: userProject.allocatedHours,
+                        billDates: userProject.billDates
+                    });
+                }
+
+            });
+            deferred.resolve(assignedUsers);
+        } else {
+            // project not found
+            deferred.resolve();
+        }
+    });
+    return deferred.promise;
+}
+// End of Get All assiged users for all projects that are managed by the Manager
+
+
+async function getAllUsersOfManager(managerId) {
+    var deferred = Q.defer();
+
+    let managerProjects = await getManagerProjects(managerId);
+    console.log('1111111111111 manager projects')
+    console.log(managerProjects)
+    if (managerProjects.length > 0) {
+        let projectIds = [];
+        managerProjects.forEach(project => {
+            projectIds.push(String(project._id))
+        });
+        let usersData = await getAllAssignedUsers(projectIds, managerId);
+        deferred.resolve(usersData);
+    } else {
+        deferred.reject({
+            status: false,
+            message: "No projects assigned"
+        });
+    }
+
+    return deferred.promise;
+
 }

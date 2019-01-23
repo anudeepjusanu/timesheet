@@ -8,6 +8,13 @@ var config = require('config.json');
 var builder = require('botbuilder');
 var userService = require('services/user.service');
 
+// Run the Skype bot task to remind all the users to fill the timesheets
+var Scheduler = require('./scripts/scheduler')
+
+Scheduler.task.start();
+Scheduler.finalReminders.start();
+
+
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -23,7 +30,7 @@ var connector = new builder.ChatConnector({
 var bot = new builder.UniversalBot(connector);
 
 // use JWT auth to secure the api
-app.use('/api', expressJwt({ secret: config.secret }).unless({ path: ['/api/users/authenticate', '/api/users/register', '/api/messages'] }));
+app.all('/api', expressJwt({ secret: config.secret }).unless({ path: ['/api/users/authenticate', '/api/users/register', '/api/messages', '/api/bot'] }));
 
 app.post('/api/messages', connector.listen());
 app.get('/api/messages', function(req, res) {
@@ -180,6 +187,7 @@ app.use('/api/users', require('./controllers/api/users.controller'));
 app.use('/api/timesheet', require('./controllers/api/timesheet.controller'));
 app.use('/api/projects', require('./controllers/api/projects.controller'));
 app.use('/api/surveys', require('./controllers/api/surveys.controller'));
+app.use('/api/bot', require('./controllers/api/bot.controller'));
 
 // make '/app' default route
 app.get('/', function(req, res) {
