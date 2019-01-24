@@ -66,8 +66,7 @@ async function sendMsgToAllActiveUsers(req, res) {
                     .text(req.body.message);
                 bot.send(msg, function (err) {
 
-  
-app.use('/api/bot', require('./controllers/api/bot.controller'));              });
+                });
             } else {
                 console.log('User inactive');
             }

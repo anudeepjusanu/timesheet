@@ -33,7 +33,7 @@ module.exports = service;
 
 function authenticate(username, password) {
     var deferred = Q.defer();
-    db.users.findOne({ username: username, "isActive": true }, function(err, user) {
+    db.users.findOne({ username: username, "isActive": true }, function (err, user) {
         if (err) deferred.reject(err.name + ': ' + err.message);
 
         if (user && user.hash && password && bcrypt.compareSync(password, user.hash)) {
@@ -50,7 +50,7 @@ function authenticate(username, password) {
 
 function loginAsUser(username) {
     var deferred = Q.defer();
-    db.users.findOne({ username: username }, function(err, user) {
+    db.users.findOne({ username: username }, function (err, user) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         deferred.resolve(jwt.sign({ sub: user._id }, config.secret));
     });
@@ -61,7 +61,7 @@ function loginAsUser(username) {
 function getById(_id) {
     var deferred = Q.defer();
 
-    db.users.findById(_id, function(err, user) {
+    db.users.findById(_id, function (err, user) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (user) {
             // return user (without hashed password)
@@ -78,7 +78,7 @@ function getById(_id) {
 function getUserById(_id) {
     var deferred = Q.defer();
 
-    db.users.findById(_id, function(err, user) {
+    db.users.findById(_id, function (err, user) {
         if (err) deferred.reject(err.name + ': ' + err.message);
 
         if (user) {
@@ -96,11 +96,11 @@ function getUserById(_id) {
 function getAll() {
     var deferred = Q.defer();
 
-    db.users.find().toArray(function(err, users) {
+    db.users.find().toArray(function (err, users) {
         if (err) deferred.reject(err.name + ': ' + err.message);
 
         if (users) {
-            var usersList = _.map(users, function(e) {
+            var usersList = _.map(users, function (e) {
                 return _.omit(e, 'hash');
             });
             // return user (without hashed password)
@@ -117,11 +117,11 @@ function getAll() {
 function getUsers() {
     var deferred = Q.defer();
 
-    db.users.find({ "isActive": true }).toArray(function(err, users) {
+    db.users.find({ "isActive": true }).toArray(function (err, users) {
         if (err) deferred.reject(err.name + ': ' + err.message);
 
         if (users) {
-            var usersList = _.map(users, function(e) {
+            var usersList = _.map(users, function (e) {
                 return _.omit(e, 'hash');
             });
             // return user (without hashed password)
@@ -140,7 +140,7 @@ function createUser(userParam) {
 
     // validation
     db.users.findOne({ userId: userParam.userId },
-        function(err, user) {
+        function (err, user) {
             if (err) deferred.reject(err.name + ': ' + err.message);
 
             if (user) {
@@ -154,7 +154,7 @@ function createUser(userParam) {
     function createUser() {
         db.users.insert(
             userParam,
-            function(err, doc) {
+            function (err, doc) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
 
                 deferred.resolve();
@@ -168,13 +168,13 @@ function update(_id, userParam) {
     var deferred = Q.defer();
 
     // validation
-    db.users.findById(_id, function(err, user) {
+    db.users.findById(_id, function (err, user) {
         if (err) deferred.reject(err.name + ': ' + err.message);
 
         if (user.username !== userParam.username) {
             // username has changed so check if the new username is already taken
             db.users.findOne({ username: userParam.username },
-                function(err, user) {
+                function (err, user) {
                     if (err) deferred.reject(err.name + ': ' + err.message);
 
                     if (user) {
@@ -201,7 +201,7 @@ function update(_id, userParam) {
         }
 
         db.users.update({ _id: mongo.helper.toObjectID(_id) }, { $set: set },
-            function(err, doc) {
+            function (err, doc) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
 
                 deferred.resolve();
@@ -215,7 +215,7 @@ function updateEmail(id, userParam) {
     var deferred = Q.defer();
 
     // validation
-    db.users.findOne({ 'userId': id }, function(err, user) {
+    db.users.findOne({ 'userId': id }, function (err, user) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (user && user.username) {
             deferred.reject('Username is already mapped for you');
@@ -238,7 +238,7 @@ function updateEmail(id, userParam) {
         }
 
         db.users.update({ _id: mongo.helper.toObjectID(id) }, { $set: set }, { upsert: true, multi: true },
-            function(err, doc) {
+            function (err, doc) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
                 deferred.resolve();
             });
@@ -252,7 +252,7 @@ function createPassword(_id, userParam) {
 
     // validation
 
-    db.users.findOne({ 'userId': _id, "isActive": true }, function(err, user) {
+    db.users.findOne({ 'userId': _id, "isActive": true }, function (err, user) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (user) {
             updateUser(user._id);
@@ -269,7 +269,7 @@ function createPassword(_id, userParam) {
             set.hash = bcrypt.hashSync(userParam.password, 10);
         }
         db.users.update({ _id: mongo.helper.toObjectID(id) }, { $set: set },
-            function(err, doc) {
+            function (err, doc) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
 
                 deferred.resolve();
@@ -283,7 +283,7 @@ function _delete(_id) {
     var deferred = Q.defer();
 
     db.users.remove({ _id: mongo.helper.toObjectID(_id) },
-        function(err) {
+        function (err) {
             if (err) deferred.reject(err.name + ': ' + err.message);
 
             deferred.resolve();
@@ -298,7 +298,7 @@ function adminAccess(_id) {
         admin: true
     }
     db.users.update({ _id: mongo.helper.toObjectID(_id) }, { $set: set },
-        function(err) {
+        function (err) {
             if (err) deferred.reject(err.name + ': ' + err.message);
 
             deferred.resolve();
@@ -309,7 +309,7 @@ function adminAccess(_id) {
 
 function adminUpdate(id, userId, userParam) {
     var deferred = Q.defer();
-    db.users.findById(id, function(err, user) {
+    db.users.findById(id, function (err, user) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (user && user.admin) {
             update_user(userId, userParam);
@@ -321,11 +321,11 @@ function adminUpdate(id, userId, userParam) {
     function update_user(userId, userParam) {
 
         db.users.update({ _id: mongo.helper.toObjectID(userId) }, { $set: userParam },
-            function(err, doc) {
+            function (err, doc) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
                 deferred.resolve(doc);
             },
-            function(err) {
+            function (err) {
                 deferred.reject('something went wrong');
             });
     }
@@ -335,11 +335,11 @@ function adminUpdate(id, userId, userParam) {
 
 function releaseToPool(userId, userParam) {
     var deferred = Q.defer();
-    db.users.findById(userId, function(err, userObj) {
+    db.users.findById(userId, function (err, userObj) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (userObj && userObj.isActive === true) {
             var poolSinceDate = new Date(userParam.poolSinceDate);
-            db.users.update({ _id: userObj._id }, { $set: { resourceInPool: true, poolName: userParam.poolName, poolSinceDate: poolSinceDate } }, function(err, response) {
+            db.users.update({ _id: userObj._id }, { $set: { resourceInPool: true, poolName: userParam.poolName, poolSinceDate: poolSinceDate } }, function (err, response) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
                 var logData = {
                     userId: userObj._id,
@@ -347,10 +347,10 @@ function releaseToPool(userId, userParam) {
                     poolSinceDate: poolSinceDate,
                     createdDate: new Date()
                 }
-                db.poolLogs.insert(logData, function(err, log) {
+                db.poolLogs.insert(logData, function (err, log) {
                     deferred.resolve(response);
                 });
-            }, function(err) {
+            }, function (err) {
                 deferred.reject('something went wrong');
             });
         } else {
@@ -362,22 +362,22 @@ function releaseToPool(userId, userParam) {
 
 function releaseFromPool(userId, userParam) {
     var deferred = Q.defer();
-    db.users.findById(userId, function(err, userObj) {
+    db.users.findById(userId, function (err, userObj) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (userObj && userObj.isActive === true) {
-            db.users.update({ _id: userObj._id }, { $set: { resourceInPool: false, poolName: "", poolSinceDate: "" } }, function(err, response) {
+            db.users.update({ _id: userObj._id }, { $set: { resourceInPool: false, poolName: "", poolSinceDate: "" } }, function (err, response) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
-                db.poolLogs.find({ userId: userObj._id }).sort({ _id: -1 }).limit(1).toArray(function(err, logs) {
+                db.poolLogs.find({ userId: userObj._id }).sort({ _id: -1 }).limit(1).toArray(function (err, logs) {
                     if (logs && logs[0]) {
                         var logObj = logs[0];
-                        db.poolLogs.update({ _id: logObj._id }, { $set: { endDate: new Date() } }, function(err, logResponse) {
+                        db.poolLogs.update({ _id: logObj._id }, { $set: { endDate: new Date() } }, function (err, logResponse) {
                             deferred.resolve(response);
                         });
                     } else {
                         deferred.resolve(response);
                     }
                 });
-            }, function(err) {
+            }, function (err) {
                 deferred.reject('something went wrong');
             });
         } else {
@@ -390,7 +390,7 @@ function releaseFromPool(userId, userParam) {
 function userPoolLogs(userId) {
     var deferred = Q.defer();
 
-    db.poolLogs.find({ 'userId': mongo.helper.toObjectID(userId) }).toArray(function(err, logs) {
+    db.poolLogs.find({ 'userId': mongo.helper.toObjectID(userId) }).toArray(function (err, logs) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (logs) {
             deferred.resolve(logs);
@@ -406,7 +406,7 @@ function updatePushToken(id, userParam) {
     var deferred = Q.defer();
 
     // validation
-    db.users.findById(id, function(err, user) {
+    db.users.findById(id, function (err, user) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (user && user.username) {
             updateToken(user._id);
@@ -421,7 +421,7 @@ function updatePushToken(id, userParam) {
             pushToken: userParam.pushToken
         };
         db.users.update({ _id: mongo.helper.toObjectID(id) }, { $set: set }, { upsert: true, multi: true },
-            function(err, doc) {
+            function (err, doc) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
                 deferred.resolve();
             });
@@ -433,15 +433,21 @@ function updatePushToken(id, userParam) {
 // find by userids
 
 function getByUserIds(dude, userIds) {
-    console.log(userIds)
     var deferred = Q.defer();
-    var db = dude;
+    var monk = require('monk');
+    var db = monk('localhost:27017/wltimesheet');
     var collection = db.get('users');
     /* var query = { config_type: "UserInput" };*/
-    var query = { "_id": { "$in": userIds }};
-    collection.find(query, {}, function (e, docs) {
-        console.log(docs);
-        
+    var query = { "_id": { "$in": userIds } };
+    collection.find(query, {}, function (err, users) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (users) {
+            // return user (without hashed password)
+            deferred.resolve(users);
+        } else {
+            // user not found
+            deferred.resolve();
+        }
     });
 
     /* db.users.find({ "_id": { "$in": userIds }}).toArray(function (err, users) {
