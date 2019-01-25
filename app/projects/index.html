@@ -22,6 +22,7 @@
                         <th>Project Type</th>
                         <th>Business Unit</th>
                         <th>Owner</th>
+                        <th>Status</th>
                         <th>Start Date</th>
                         <th ng-if="vm.user.admin">Action</th>
                     </tr>
@@ -33,6 +34,7 @@
                         <th><select class="form-control" ng-model="vm.search.projectType" ng-options="prj.projectTypeId as prj.projectTypeName for prj in vm.projectTypes"></select></th>
                         <th><select class="form-control" ng-model="vm.search.businessUnit" ng-options="option as option for option in vm.projectBusinessUnits" ng-change="vm.search.projectId=''; vm.search.clientId=''; vm.getConsolidatedProjects();"></select></th>
                         <th></th>
+                        <th><select class="form-control" ng-model="vm.search.isActive" ng-options="opt.id as opt.label for opt in [{id:null , label:'All'}, {id: true, label:'Active'}, {id: false, label:'Inactive'}]"></select></th>
                         <th></th>
                         <th ng-if="vm.user.admin"></th>
                     </tr>
@@ -44,6 +46,10 @@
                         <td>{{project.projectType}}</td>
                         <td>{{project.businessUnit}}</td>
                         <td>{{project.ownerName}}</td>
+                        <td>
+                            <span ng-if="project.isActive==true">Active</span>
+                            <span ng-if="project.isActive==false">Inactive</span>
+                        </td>
                         <td>{{project.startDate | date: 'mediumDate'}}</td>
                         <td ng-if="vm.user.admin">
                             <a class="btn btn-primary btn-xs" ng-click="vm.viewProject(project);">View</i></a>

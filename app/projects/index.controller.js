@@ -47,7 +47,8 @@
             projectName: "",
             projectBillType: "",
             projectType: "",
-            businessUnit: "All"
+            businessUnit: "All",
+            isActive: true
         };
 
         function getClients() {
@@ -122,6 +123,9 @@
             }
             if (searchObj.businessUnit && searchObj.businessUnit.length > 0 && searchObj.businessUnit != "All") {
                 output = $filter('filter')(output, { businessUnit: searchObj.businessUnit });
+            }
+            if (searchObj.isActive === true || searchObj.isActive === false) {
+                output = $filter('filter')(output, { isActive: searchObj.isActive });
             }
             return output;
         }
