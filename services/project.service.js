@@ -524,8 +524,6 @@ async function getAllUsersOfManager(managerId) {
     var deferred = Q.defer();
 
     let managerProjects = await getManagerProjects(managerId);
-    console.log('1111111111111 manager projects')
-    console.log(managerProjects)
     if (managerProjects.length > 0) {
         let projectIds = [];
         managerProjects.forEach(project => {

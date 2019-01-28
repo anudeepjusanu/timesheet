@@ -323,6 +323,7 @@ function usersLeaveBalance(req, res) {
 function getTimesheetByManager(req, res) {
     timesheetService.getByManager(req.params.weekId, req.params.managerId)
         .then(function (reports) {
+            console.log(reports)
             res.send(reports);
         })
         .catch(function (err) {
