@@ -7,6 +7,7 @@ var mongo = require('mongoskin');
 var db = mongo.db(config.connectionString, { native_parser: true });
 db.bind('users');
 db.bind('poolLogs');
+var emailService = require('../services/email.service');
 
 var service = {};
 
@@ -156,7 +157,7 @@ function createUser(userParam) {
             userParam,
             function (err, doc) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
-
+                emailService.registrationEmail(userParam);
                 deferred.resolve();
             });
     }
