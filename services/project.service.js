@@ -42,6 +42,7 @@ function create(projectParam) {
         projectBillType: projectParam.projectBillType,
         projectType: projectParam.projectType,
         businessUnit: projectParam.businessUnit,
+        costAccount: projectParam.costAccount,
         estimatedHours: projectParam.estimatedHours,
         estimatedCost: projectParam.estimatedCost,
         visibility: projectParam.visibility,
@@ -71,6 +72,7 @@ function update(_id, params) {
         projectBillType: params.projectBillType,
         projectType: params.projectType,
         businessUnit: params.businessUnit,
+        costAccount: params.costAccount,
         estimatedHours: params.estimatedHours,
         estimatedCost: params.estimatedCost,
         visibility: params.visibility,
@@ -83,7 +85,7 @@ function update(_id, params) {
     db.projects.update({ _id: mongo.helper.toObjectID(_id) }, { '$set': projectObj }, function(err, project) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         db.users.update({ "projects.projectId": _id }, { '$set': { "projects.$.projectName": params.projectName, "projects.$.ownerId": params.ownerId, "projects.$.ownerName": params.ownerName } }, { upsert: true, multi: true }, function(err, respone) {
-            db.timesheets.update({ "projects.projectId": mongo.helper.toObjectID(_id) }, { '$set': { "projects.$.projectName": params.projectName, "projects.$.businessUnit": params.businessUnit } }, { upsert: true, multi: true }, function(err, respone) {
+            db.timesheets.update({ "projects.projectId": mongo.helper.toObjectID(_id) }, { '$set': { "projects.$.projectName": params.projectName, "projects.$.businessUnit": params.businessUnit, "projects.$.costAccount": params.costAccount } }, { upsert: true, multi: true }, function(err, respone) {
                 deferred.resolve(project);
             });
         });
