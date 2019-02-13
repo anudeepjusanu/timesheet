@@ -592,6 +592,7 @@
         var vm = this;
         var currentDay = new Date().getDay();
         vm.timesheetHours = 0;
+        vm.userAssignedHours = 0;
         vm.timesheet = {
             weekDate: new Date(),
             projects: [],
@@ -655,7 +656,7 @@
 
         vm.saveTimesheet = function(timesheetForm) {
             if (timesheetForm.$valid) {
-                if (vm.timesheetHours >= 40) {
+                if (vm.timesheetHours >= vm.userAssignedHours) {
                     vm.timesheet.week = $filter('date')(vm.timesheet.weekDate, "yyyy-Www").toString();
                     if (vm.isNew) {
                         var timesheetObj = angular.copy(vm.timesheet);
@@ -691,7 +692,7 @@
                         });
                     }
                 } else {
-                    vm.alerts.push({ msg: "Total hours must grater than or equal to 40", type: 'danger' });
+                    vm.alerts.push({ msg: "Total hours must grater than or equal to "+vm.userAssignedHours, type: 'danger' });
                 }
             }
         }
@@ -701,6 +702,7 @@
         }
 
         vm.setAssignedProjects = function() {
+            vm.userAssignedHours = 0;
             vm.timesheetHours = 0;
             vm.timesheet.projects = [];
             vm.timesheet.totalHours = 0;
@@ -761,6 +763,7 @@
                 });
                 BillData.allocatedHours = (!BillData.allocatedHours) ? 0 : BillData.allocatedHours;
                 BillData.billableMaxHours = (!BillData.billableMaxHours) ? 0 : BillData.billableMaxHours;
+                vm.userAssignedHours = (isValidProject)?(vm.userAssignedHours+BillData.allocatedHours):vm.userAssignedHours;
                 if (isValidProject === true) {
                     vm.timesheet.projects.push({
                         projectId: project.projectId,
@@ -779,6 +782,7 @@
                     });
                 }
             });
+            vm.userAssignedHours = (vm.userAssignedHours<=40)?vm.userAssignedHours:40;
             getProjects();
         }
 
@@ -897,6 +901,7 @@
         var vm = this;
         vm.projects = [];
         vm.alerts = [];
+        vm.userAssignedHours = 0;
         vm.timesheet = {
             weekDate: new Date(),
             projects: [],
@@ -985,7 +990,7 @@
                         });
                     }
                 } else {
-                    vm.alerts.push({ msg: "Total hours must greater than or equal to 40", type: 'danger' });
+                    vm.alerts.push({ msg: "Total hours must greater than or equal to "+vm.userAssignedHours, type: 'danger' });
                 }
             }
         }
@@ -995,6 +1000,7 @@
         }
 
         vm.setAssignedProjects = function() {
+            vm.userAssignedHours = 0;
             vm.timesheetHours = 0;
             vm.timesheet.projects = [];
             vm.timesheet.totalHours = 0;
@@ -1042,7 +1048,7 @@
                 });
                 BillData.allocatedHours = (!BillData.allocatedHours) ? 0 : BillData.allocatedHours;
                 BillData.billableMaxHours = (!BillData.billableMaxHours) ? 0 : BillData.billableMaxHours;
-
+                vm.userAssignedHours = vm.userAssignedHours + BillData.allocatedHours;
                 vm.timesheet.projects.push({
                     projectId: project.projectId,
                     projectName: project.projectName,
@@ -1057,6 +1063,7 @@
                     resourceStatus: BillData.resourceStatus
                 });
             });
+            vm.userAssignedHours = (vm.userAssignedHours<=40)?vm.userAssignedHours:40;
             getProjects();
         }
 
