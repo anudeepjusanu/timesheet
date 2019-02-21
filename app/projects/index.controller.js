@@ -124,6 +124,9 @@
             if (searchObj.businessUnit && searchObj.businessUnit.length > 0 && searchObj.businessUnit != "All") {
                 output = $filter('filter')(output, { businessUnit: searchObj.businessUnit });
             }
+            if (searchObj.ownerName && searchObj.ownerName.length > 0) {
+                output = $filter('filter')(output, { ownerName: searchObj.ownerName });
+            }
             if (searchObj.isActive === true || searchObj.isActive === false) {
                 output = $filter('filter')(output, { isActive: searchObj.isActive });
             }

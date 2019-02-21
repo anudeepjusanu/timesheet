@@ -29,11 +29,11 @@
                     <tr>
                         <th></th>
                         <th><select class="form-control" ng-model="vm.search.clientId" ng-options="client._id as client.clientName for client in vm.clients"></select></th>
-                        <th><input type="text" ng-model="vm.search.projectName" class="form-control" /></th>
+                        <th><input type="text" class="form-control" ng-model="vm.search.projectName" /></th>
                         <th><select class="form-control" ng-model="vm.search.projectBillType" ng-options="prj.projectBillId as prj.projectBillName for prj in vm.projectBillTypes"></select></th>
                         <th><select class="form-control" ng-model="vm.search.projectType" ng-options="prj.projectTypeId as prj.projectTypeName for prj in vm.projectTypes"></select></th>
                         <th><select class="form-control" ng-model="vm.search.businessUnit" ng-options="option as option for option in vm.projectBusinessUnits" ng-change="vm.search.projectId=''; vm.search.clientId=''; vm.getConsolidatedProjects();"></select></th>
-                        <th></th>
+                        <th><input type="text" class="form-control" ng-model="vm.search.ownerName" /></th>
                         <th><select class="form-control" ng-model="vm.search.isActive" ng-options="opt.id as opt.label for opt in [{id:null , label:'All'}, {id: true, label:'Active'}, {id: false, label:'Inactive'}]"></select></th>
                         <th></th>
                         <th ng-if="vm.user.admin"></th>
