@@ -53,7 +53,8 @@
             "employeeType": {label: "Employee Type", selected: false},
             "timeoffHours": {label: "Timeoff Hours", selected: true},
             "timeoffDays": {label: "Timeoff Days", selected: true},
-            "isActive": {label: "Status", selected: true}
+            "isActive": {label: "Status", selected: true},
+            "leaveWeeks": {label: "Leave Weeks", selected: true}
         };
         vm.sorting = function(orderBy) {
             if (vm.search.orderBy == orderBy) {
@@ -90,7 +91,9 @@
                         var timeoffHours = 0.00;
                         var timeoffDays = 0.00;
                         _.each(userSheets.timesheets, function(sheetObj){
-                            timeoffHours += parseFloat(sheetObj.timeoffHours);
+                            sheetObj.timeoffHours = parseFloat(sheetObj.timeoffHours) 
+                            timeoffHours += sheetObj.timeoffHours;
+                            sheetObj.timeoffDays = parseFloat((sheetObj.timeoffHours/8)).toFixed(2)
                         });
                         timeoffDays = parseFloat((timeoffHours/8)).toFixed(2);
                         if(userObj){
@@ -108,7 +111,7 @@
         }
         
         function getUsers() {
-            UserService.getUsers().then(function(response) {
+            UserService.GetAll().then(function(response) {
                 if(response){
                     vm.users = response;
                     vm.getUserLeaves();

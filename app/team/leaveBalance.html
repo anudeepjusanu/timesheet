@@ -46,6 +46,7 @@
                             <a ng-click="vm.sorting('timeoffDays');">TimeOff Days</a>
                         </th>
                         <th ng-show="vm.userColumns['isActive'].selected" >Status</th>
+                        <th ng-show="vm.userColumns['leaveWeeks'].selected" >Leave Weeks</th>
                     </tr>
                     <tr>
                         <td></td>
@@ -60,6 +61,7 @@
                         <td ng-show="vm.userColumns['isActive'].selected">
                             <select class="form-control" ng-model="vm.search.isActive" ng-options="opt.id as opt.label for opt in [{id:'', label:'All'}, {id:'true', label:'Active'}, {id:'false', label:'Inactive'}]"></select>
                         </td>
+                        <td ng-show="vm.userColumns['leaveWeeks'].selected"></td>
                     </tr>
                     </thead>
                     <tbody>
@@ -76,6 +78,9 @@
                         <td ng-show="vm.userColumns['isActive'].selected">
                             <span ng-if="user.isActive==true">Active</span>
                             <span ng-if="user.isActive==false">Inactive</span>
+                        </td>
+                        <td ng-show="vm.userColumns['leaveWeeks'].selected">
+                            <div ng-repeat="sheet in user.timesheets">{{sheet.week}} ({{sheet.timeoffDays}})</div>
                         </td>
                     </tr>
                     </tbody>
