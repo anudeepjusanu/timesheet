@@ -30,6 +30,7 @@
                         </th>
                         <th ng-show="vm.userColumns['userResourceType'].selected" >Type</th>
                         <th ng-show="vm.userColumns['phone'].selected" >Mobile</th>
+                        <th ng-show="vm.userColumns['joinDate'].selected" >Join Date</th>
                         <th ng-show="vm.userColumns['employeeId'].selected"  class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='employeeId'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='employeeId'&&vm.search.sortDESC===true}">
                             <a ng-click="vm.sorting('employeeId');">EMP ID</a>
                         </th>
@@ -49,8 +50,9 @@
                     <tr>
                         <td></td>
                         <td ng-show="vm.userColumns['name'].selected"><input class="form-control" type="text" ng-model="vm.search.userName" /></td>
-                        <td ng-show="vm.userColumns['userResourceType'].selected"><select class="form-control" ng-model="vm.search.userResourceType" ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'Billable',label:'Billable'}, {id:'Non-billable',label:'Non-billable'}, {id:'Trainee',label:'Trainee'}, {id:'Intern',label:'Intern'}]"></select></td>
+                        <td ng-show="vm.userColumns['userResourceType'].selected"><select class="form-control" ng-model="vm.search.userResourceType" ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'Billable',label:'Billable'}, {id:'Non-billable',label:'Non-billable'}, {id:'Trainee',label:'Trainee'}, {id:'Intern',label:'Intern'}, {id:'Sales',label:'Sales'}, {id:'Operations',label:'Operations'}, {id:'Leadership',label:'Leadership'}]"></select></td>
                         <td ng-show="vm.userColumns['phone'].selected"></td>
+                        <td ng-show="vm.userColumns['joinDate'].selected"></td>
                         <td ng-show="vm.userColumns['employeeId'].selected"></td>
                         <td ng-show="vm.userColumns['employeeCategory'].selected"><select class="form-control" ng-model="vm.search.employeeCategory" ng-options="opt as opt for opt in ['All', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10']"></select></td>
                         <td ng-show="vm.userColumns['employeeType'].selected"></td>
@@ -73,6 +75,7 @@
                         </td>
                         <td ng-show="vm.userColumns['userResourceType'].selected" >{{user.userResourceType}}</td>
                         <td ng-show="vm.userColumns['phone'].selected" >{{user.phone}}</td>
+                        <td ng-show="vm.userColumns['joinDate'].selected" >{{user.joinDate | date: 'mediumDate'}}</td>
                         <td ng-show="vm.userColumns['employeeId'].selected" >{{user.employeeId}}</td>
                         <td ng-show="vm.userColumns['employeeCategory'].selected" >{{user.employeeCategory}}</td>
                         <td ng-show="vm.userColumns['employeeType'].selected" >{{user.employeeType}}</td>

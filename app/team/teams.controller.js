@@ -49,6 +49,7 @@
             "name": {label: "Name", selected: true},
             "userResourceType": {label: "Type", selected: true},
             "phone": {label: "Mobile", selected: false},
+            "joinDate": {label: "Join Date", selected: true},
             "employeeCategory": {label: "Category", selected: false},
             "employeeType": {label: "Employee Type", selected: false},
             "timeoffHours": {label: "Timeoff Hours", selected: true},
@@ -84,7 +85,7 @@
                 if(response){
                     _.each(vm.users, function(userObj){
                         userObj.timeoffHours = 0;
-                        userObj.timeoffDays = parseFloat(0).toFixed(2);
+                        userObj.timeoffDays = 0.00;
                     });
                     _.each(response, function(userSheets){
                         var userObj = _.find(vm.users, {_id: userSheets._id});
@@ -98,8 +99,8 @@
                         timeoffDays = parseFloat((timeoffHours/8)).toFixed(2);
                         if(userObj){
                             userObj.userResourceType = userSheets.userResourceType;
-                            userObj.timeoffHours = timeoffHours;
-                            userObj.timeoffDays = timeoffDays;
+                            userObj.timeoffHours = parseFloat(timeoffHours);
+                            userObj.timeoffDays = parseFloat(timeoffDays);
                             userObj.timesheets = userSheets.timesheets;
                             //console.log(userObj.name); console.log(userObj.timesheets);
                         }

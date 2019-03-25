@@ -14,7 +14,7 @@ var service = {};
 
 db.users.find({}).toArray(function(err, users) {
     _.each(users, function (userObj) {
-        userObj.employeeType = 'InternalEmployee';
+        userObj.joinDate = new Date("2018-04-01");
         db.users.update({_id: mongo.helper.toObjectID(userObj._id)}, {'$set': userObj}, function (err, userResponse) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             console.log(userObj._id + " -- ");

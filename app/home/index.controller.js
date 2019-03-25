@@ -590,8 +590,9 @@
         vm.userColumns = {
             "name": {label: "Name", selected: true},
             "userResourceType": {label: "Type", selected: true},
-            "phone": {label: "Mobile", selected: true},
+            "phone": {label: "Mobile", selected: false},
             "employeeId": {label: "Employee ID", selected: true},
+            "joinDate": {label: "Join Date", selected: true},
             "employeeCategory": {label: "Category", selected: true},
             "employeeType": {label: "Employee Type", selected: false},
             "reportingTo": {label: "Reporting To", selected: false},
@@ -753,11 +754,20 @@
         vm.closeAlert = function(index) {
             vm.alerts.splice(index, 1);
         }
+        vm.joinDateOpened = false;
+        vm.dateOptions = {
+            formatYear: 'yy',
+            maxDate: new Date(2020, 5, 22),
+            startingDay: 1
+        };
         vm.employeeTypes = [
             {id: "InternalEmployee", label: "Internal Employee"},
             {id: "InternalContractor", label: "Internal Contractor"},
             {id: "ExternalContractor", label: "External Contractor"}
         ]
+        if(vm.userObj.joinDate){
+            vm.userObj.joinDate = new Date(vm.userObj.joinDate);
+        }
         vm.saveUser = function(userForm) {
             if (userForm.$valid) {
                 var obj = {
@@ -765,6 +775,7 @@
                     "phone": vm.userObj.phone,
                     "username": vm.userObj.username,
                     "employeeId": vm.userObj.employeeId,
+                    "joinDate": vm.userObj.joinDate,
                     "designation": vm.userObj.designation,
                     "userResourceType": vm.userObj.userResourceType,
                     "employeeType": vm.userObj.employeeType,
