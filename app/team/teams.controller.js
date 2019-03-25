@@ -52,6 +52,7 @@
             "joinDate": {label: "Join Date", selected: true},
             "employeeCategory": {label: "Category", selected: false},
             "employeeType": {label: "Employee Type", selected: false},
+            "leaveWallet": {label: "Leave Wallet", selected: true},
             "timeoffHours": {label: "Timeoff Hours", selected: true},
             "timeoffDays": {label: "Timeoff Days", selected: true},
             "isActive": {label: "Status", selected: true},
@@ -86,6 +87,7 @@
                     _.each(vm.users, function(userObj){
                         userObj.timeoffHours = 0;
                         userObj.timeoffDays = 0.00;
+                        userObj.leaveWallet = calLeaveWalletBalance(userObj.joinDate);
                     });
                     _.each(response, function(userSheets){
                         var userObj = _.find(vm.users, {_id: userSheets._id});
@@ -109,6 +111,34 @@
             }, function(error) {
                 console.log(error);
             });
+        }
+
+        function calLeaveWalletBalance(joinDate = false){
+            var leaveWallet = 0;
+            if(joinDate){
+                joinDate = new Date(joinDate);
+                var financialYearStart = new Date(vm.financialYear.substring(0,4)+"-04-01");
+                var financialYearEnd = new Date(vm.financialYear.substring(5)+"-03-31");
+                if(financialYearEnd>=joinDate){
+                    joinDate = (joinDate>financialYearStart)?joinDate:financialYearStart;
+                    var financialMidDate = new Date(vm.financialYear.substring(0,4)+"-09-01");
+                    /*if(joinDate==financialYearStart){
+                        leaveWallet++;
+                    }*/
+                    if(joinDate<=financialMidDate){
+                        leaveWallet++;
+                    }
+                    var navDate = joinDate;
+                    var diffMonths = 0;
+                    while(financialYearEnd>navDate){
+                        diffMonths++;
+                        navDate.setMonth(navDate.getMonth()+1);
+                    }
+                    leaveWallet += diffMonths;
+                    leaveWallet += 1;
+                }
+            }
+            return leaveWallet;
         }
         
         function getUsers() {
