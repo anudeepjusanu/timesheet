@@ -4,7 +4,42 @@
     angular
         .module('app')
         .controller('Team.IndexController', TeamsController)
-        .controller('Team.LeaveBalanceController', LeaveBalanceController);
+        .controller('Team.LeaveBalanceController', LeaveBalanceController)
+        .directive('exportTable', function() {
+            return {
+                restrict: 'A',
+                link: function(scope, elem, attr) {
+                    scope.$on('export-pdf',
+                        function(e, d) {
+                            elem.tableExport({
+                                type: 'pdf',
+                                escape: false
+                            });
+                        });
+                    var excel = scope.$on('export-excl',
+                        function(e, d) {
+                            elem.tableExport({
+                                type: 'excel',
+                                escape: 'false',
+                                ignoreColumn: [4],
+                                ignoreRow: [1],
+                                worksheetName: d.date
+                            });
+                        });
+                    scope.$on('export-doc',
+                        function(e, d) {
+                            elem.tableExport({
+                                type: 'doc',
+                                escape: false
+                            });
+                        });
+
+                    scope.$on('$destroy', function() {
+                        excel();
+                    });
+                }
+            };
+        });
 
     function TeamsController(UserService, _, $state, ProjectService) {
         var vm = this;
@@ -31,7 +66,7 @@
         initController();
     };
 
-    function LeaveBalanceController(UserService, TimesheetService, $filter, noty) {
+    function LeaveBalanceController(UserService, TimesheetService, $scope, $filter, noty) {
         var vm = this;
         vm.timesheets = {};
         vm.users = [];
@@ -80,6 +115,10 @@
             navYear += 1;
         }
         vm.financialYear = fYear;
+
+        vm.exportTable = function() {
+            $scope.$broadcast('export-excl', { "date": vm.filterDate });
+        }
 
         vm.getUserLeaves = function(){
             TimesheetService.usersLeaveBalance(vm.financialYear).then(function(response) {

@@ -21,9 +21,12 @@
                 <div class="pull-right">
                     <select class="form-control" ng-model="vm.financialYear" ng-options="opt as opt for opt in vm.financialYears" ng-change="vm.getUserLeaves();"></select>
                 </div>
+                <div class="pull-right">
+                    <button class="btn btn-primary" ng-click="vm.exportTable()">Export</button> &nbsp; &nbsp;
+                </div>
             </div>
             <div class="panel-body">
-                <table class="table table-condensed table-bordered table-striped">
+                <table class="table table-condensed table-bordered table-striped" export-table>
                     <thead>
                     <tr>
                         <th>#</th>
