@@ -147,8 +147,16 @@
         }
 
         function remindAll() {
-            TimesheetService.remindAll().then(function(response) {
+            /*TimesheetService.remindAll().then(function(response) {
                 noty.showSuccess("Users Reminded!")
+            });*/
+            var week = $filter('date')(vm.currentWeek, "Www");
+            _.each(vm.users, function(userObj){
+                if(userObj.remind===true){
+                    TimesheetService.remind(userObj.userId, week).then(function(response) {
+                        noty.showSuccess("User Reminded!");
+                    });
+                }
             });
         }
 
@@ -1712,7 +1720,6 @@
                 if (user.timesheet && user.timesheet.length == 0) {
                     remind(user);
                 }
-
             });
         }
 
