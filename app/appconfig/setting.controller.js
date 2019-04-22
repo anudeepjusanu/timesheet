@@ -9,10 +9,6 @@
         var vm = this;
         vm.user = {};
         vm.settingObj = {};
-        vm.alerts = [];
-        vm.closeAlert = function(index) {
-            vm.alerts.splice(index, 1);
-        };
 
         vm.saveSettings = function(settingForm){
             if(settingForm.$valid){
@@ -22,7 +18,7 @@
                             vm.settingObj[item.keyName] = item.keyVal;
                         });
                     }
-                    vm.alerts.push({ msg: "Successfully updated!", type: 'success' });
+                    noty.showSuccess("Successfully updated!");
                 }, function(errors){
                     console.log(errors);
                 });
