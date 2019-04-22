@@ -16,20 +16,21 @@
 
         function initController() {
             // get current user
-            
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
             });
         }
 
-        function saveUser() {
-            UserService.Update(vm.user)
+        function saveUser(userForm) {
+            if(userForm.$valid){
+                UserService.Update(vm.user)
                 .then(function () {
                     noty.showSuccess("Updated Successfully")
                 })
                 .catch(function (error) {
                     FlashService.Error(error);
                 });
+            }
         }
 
         function deleteUser() {

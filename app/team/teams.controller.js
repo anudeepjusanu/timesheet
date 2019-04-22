@@ -66,9 +66,10 @@
         initController();
     };
 
-    function LeaveBalanceController(UserService, TimesheetService, $scope, $filter, noty) {
+    function LeaveBalanceController(UserService, TimesheetService, AppConfigService, $scope, $filter, noty) {
         var vm = this;
         vm.timesheets = {};
+        vm.appSettings = [];
         vm.users = [];
         vm.search = {
             userName: "",
@@ -153,31 +154,23 @@
         }
 
         function calLeaveWalletBalance(joinDate = false){
-            var leaveWallet = 0;
+            var leaveWallet = parseFloat(0);
+            const acquire_leaves_month = parseFloat((vm.appSettings['acquire_leaves_month'])?vm.appSettings['acquire_leaves_month']:1.25);
             if(joinDate){
                 joinDate = new Date(joinDate);
                 var financialYearStart = new Date(vm.financialYear.substring(0,4)+"-04-01");
                 var financialYearEnd = new Date(vm.financialYear.substring(5)+"-03-31");
+                var nowDate = new Date();
                 if(financialYearEnd>=joinDate){
                     joinDate = (joinDate>financialYearStart)?joinDate:financialYearStart;
-                    var financialMidDate = new Date(vm.financialYear.substring(0,4)+"-09-01");
-                    /*if(joinDate==financialYearStart){
-                        leaveWallet++;
-                    }*/
-                    if(joinDate<=financialMidDate){
-                        leaveWallet++;
-                    }
                     var navDate = joinDate;
-                    var diffMonths = 0;
-                    while(financialYearEnd>navDate){
-                        diffMonths++;
+                    while(financialYearEnd>navDate && nowDate>navDate){
+                        leaveWallet = parseFloat(parseFloat(leaveWallet) + parseFloat(acquire_leaves_month)).toFixed(10);
                         navDate.setMonth(navDate.getMonth()+1);
                     }
-                    leaveWallet += diffMonths;
-                    leaveWallet += 1;
                 }
             }
-            return leaveWallet;
+            return parseFloat(leaveWallet).toFixed(2);
         }
         
         function getUsers() {
@@ -191,10 +184,23 @@
             });
         }
 
+        function getAppSettings() {
+            AppConfigService.getAppSettings().then(function(data){
+                if(data.length>0){
+                    _.each(data, function(item){
+                        vm.appSettings[item.keyName] = item.keyVal;
+                    });
+                }
+            }, function(errors){
+                console.log(errors);
+            });
+        }
+
         function init() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
                 getUsers();
+                getAppSettings();
             });
         }
         init();

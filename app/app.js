@@ -244,6 +244,14 @@
                 parent: 'layout',
                 data: { activeTab: 'leaveBalance' }
             })
+            .state('appsettings', {
+                url: '/appConfig/settings',
+                templateUrl: 'appconfig/settings.html',
+                controller: 'AppConfig.SettingController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'appsettings' }
+            })
         ChartJsProvider.setOptions({ colors: ['#1caf9a', '#273541'] });
     }
 
