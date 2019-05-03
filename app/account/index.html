@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <div class="well well-sm">
-                <form method="post" name="user-form">
+                <form method="post" name="userform">
                     <div class="form-group">
                         <label for="firstName">Name</label>
                         <input type="text" id="firstName" class="form-control" ng-model="vm.user.name" ng-required="true" />
@@ -21,7 +21,7 @@
                         <input type="password" id="password" class="form-control" ng-model="vm.user.password" ng-required="true" />
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-primary" ng-click="vm.saveUser(user-form)">Update</button>
+                        <button class="btn btn-primary" ng-click="vm.saveUser(userform)">Update</button>
                     </div>
                 </form>
             </div>
