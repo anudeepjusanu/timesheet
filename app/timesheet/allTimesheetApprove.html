@@ -1,0 +1,83 @@
+<style>
+    .non-billable-row {
+        background-color: #ffa500b8;
+    }
+</style>
+<div class="page-title">
+    <h2><span class="fa fa-congs"></span> All Timesheets for approve</h2>
+    <ul class="breadcrumb">
+        <li><a ng-click="vm.backToList()"><i class="fa fa-dashboard"></i> My Projects</a></li>
+        <li class="active">
+            <span>All Aprove Hours</span>
+        </li>
+    </ul>
+</div>
+<div class="page-content-wrap">
+    <div class="clearfix row">
+        <div class="col-sm-6 clearfix">
+            <!-- <button class="btn btn-primary pull-left" ng-click="vm.remindAll()" style="margin: 0 10px; position: relative; top: 20px;"> Remind All</button> -->
+        </div>
+        <div class="form-group pull-right col-sm-6">
+            <label class="col-md-3">Filter By Week</label>
+            <div class="col-md-9">
+                <p class="input-group">
+                    <input type="text" class="form-control pull-right" style="width: 90px;" uib-datepicker-popup ng-model="vm.selWeek" is-open="vm.selWeekOpened" datepicker-options="vm.dateOptions" readonly="true" ng-required="true" close-text="Close" ng-change="vm.getSelWeekTimesheets()" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.selWeekOpened=(!vm.selWeekOpened)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Project Name</th>
+                    <th>
+                        <table class="table table-bordered">
+                            <th width="240px;">User Name</th>
+                            <th width="120px;">Resource Type</th>
+                            <th width="80px;">Working Hours</th>
+                            <th width="80px;">Sick Leave Hours</th>
+                            <th width="80px;">Timeoff Hours</th>
+                            <th width="80px;">Overtime Hours</th>
+                            <th width="80px;">Corp Holiday</th>
+                            <th width="100px;">Status</th>
+                        </table>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="project in vm.myProjects">
+                    <td>{{project.projectName}}</td>
+                    <td>
+                        <table class="table table-bordered">
+                            <tr ng-repeat="sheet in project.timesheets">
+                                <td width="240px;">{{sheet.userName}}</td>
+                                <td width="120px;">{{sheet.resourceType}}</td>
+                                <td width="80px;">{{sheet.billableHours}}</td>
+                                <td width="80px;">{{sheet.sickLeaveHours}}</td>
+                                <td width="80px;">{{sheet.timeoffHours}}</td>
+                                <td width="80px;">{{sheet.overtimeHours}}</td>
+                                <td width="80px;">{{sheet.corpHolidayHours}}</td>
+                                <td width="100px;">
+                                    <div ng-if="!(sheet | isEmpty)">
+                                        <div ng-if="sheet.sheetStatus != 'Approved'">
+                                            <select class="form-control" ng-model="sheet.sheetStatus" ng-change="vm.setTimesheetStatus(sheet)" ng-required="true" ng-options="status.id as status.name for status in vm.statusList" ng-if="sheet.isSelect"></select>
+                                            <span class="badge badge-secondary" ng-class="{'badge-danger': sheet.sheetStatus==='Rejected'}" ng-if="!sheet.isSelect">{{sheet.sheetStatus}}</span>
+                                        </div>
+                                        <div ng-if="sheet.sheetStatus != 'Pending'">
+                                            <span class="badge badge-success" ng-class="{'badge-danger': sheet.sheetStatus==='Rejected'}">{{sheet.sheetStatus}}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

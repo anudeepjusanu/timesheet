@@ -10,6 +10,7 @@
         .controller('Timesheet.ConsolidatedController', ConsolidatedController)
         //.controller('Timesheet.PoolController', PoolController)
         .controller('Timesheet.ApprovalController', ApprovalController)
+        .controller('Timesheet.AllTimesheetApproveController', AllTimesheetApproveController)
 
     .directive('exportTable', function() {
             return {
@@ -1732,5 +1733,90 @@
         }
         init();
     }
+
+    function AllTimesheetApproveController(UserService, TimesheetService, ProjectService, $filter, ReportService, noty) {
+        var vm = this;
+        vm.user = {};
+        vm.myProjects = [];
+        vm.users = [];
+        vm.timesheets = [];
+        vm.dateOptions = {
+            dateDisabled: function(data){
+                return data.mode === 'day' && (data.date.getDay() != 5);
+            },
+            formatYear: 'yy',
+            maxDate: new Date(2020, 1, 1),
+            startingDay: 1
+        };
+        vm.selWeekOpened = false;
+        vm.selWeek = new Date(2019, 0, 4);
+        if (vm.selWeek.getDay() < 5) {
+            vm.selWeek.setDate(vm.selWeek.getDate() - (vm.selWeek.getDay() + 2));
+        } else if (vm.selWeek.getDay() == 6) {
+            vm.selWeek.setDate(vm.selWeek.getDate() - 1);
+        }
+
+        var getProjects = function(){
+            ProjectService.getAll().then(function(response) {
+                _.each(response, function(projectObj) {
+                    if (projectObj.isActive === true && projectObj.ownerId == vm.user._id) {
+                        projectObj.timesheets = [];
+                        vm.myProjects.push(projectObj);
+                    }
+                });
+            }, function(error) {
+                console.log(error);
+            });
+        }
+
+        var getUsers = function() {
+            UserService.getUsers().then(function(response) {
+                vm.users = response;
+                vm.getSelWeekTimesheets();
+            }, function(error) {
+                console.log(error);
+            });
+        }
+
+        var setTimesheetStatus = function(sheet) {
+            TimesheetService.setTimesheetStatus(sheet.sheetId, sheet.projectId, sheet.sheetStatus).then(function(response) {
+                if (sheet.sheetStatus == 'Rejected') {
+                    var week = $filter('date')(vm.selWeek, "Www");
+                    var message = "Your timesheet got rejected for " + sheet.projectName + " for the week " + week + " Please update your hours again";
+                    //remindUserRejection(sheet.userId, message);
+                };
+            });
+        };
+
+        vm.getSelWeekTimesheets = function() {
+            var weekDate = $filter('date')(new Date(vm.selWeek), "yyyy-Www").toString();
+            _.each(vm.myProjects, function(projectObj){
+                TimesheetService.projectHours(weekDate, projectObj._id).then(function(response) {
+                    _.each(response, function(sheetObj){
+                        _.each(sheetObj.projects, function(sheetProjectObj){
+                            var projectObj = _.find(vm.myProjects, {_id: sheetProjectObj.projectId});
+                            var userObj = _.find(vm.users, {_id: sheetObj.userId});
+                            if(projectObj && userObj && sheetProjectObj.projectId == projectObj._id){
+                                sheetProjectObj.userName = userObj.name;
+                                sheetProjectObj.timesheetId = sheetObj._id;
+                                if(!_.find(projectObj.timesheets, {timesheetId: sheetObj._id})){
+                                    projectObj.timesheets.push(sheetProjectObj);
+                                }
+                            }
+                        });
+                    });
+                });
+            });
+        };
+
+        function init(){
+            UserService.GetCurrent().then(function(user) {
+                vm.user = user;
+                getProjects();
+                getUsers();
+            });
+        }
+        init();
+    };
 
 })();

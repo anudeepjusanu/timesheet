@@ -91,6 +91,7 @@
             "leaveWallet": {label: "Leave Wallet", selected: true},
             "timeoffHours": {label: "Timeoff Hours", selected: true},
             "timeoffDays": {label: "Timeoff Days", selected: true},
+            "lopDays": {label: "LOP Days", selected: true},
             "isActive": {label: "Status", selected: true},
             "leaveWeeks": {label: "Leave Weeks", selected: true}
         };
@@ -127,6 +128,7 @@
                     _.each(vm.users, function(userObj){
                         userObj.timeoffHours = 0;
                         userObj.timeoffDays = 0.00;
+                        userObj.lopDays = 0;
                         userObj.leaveWallet = calLeaveWalletBalance(userObj.joinDate);
                     });
                     _.each(response, function(userSheets){
@@ -144,7 +146,7 @@
                             userObj.timeoffHours = parseFloat(timeoffHours);
                             userObj.timeoffDays = parseFloat(timeoffDays);
                             userObj.timesheets = userSheets.timesheets;
-                            //console.log(userObj.name); console.log(userObj.timesheets);
+                            userObj.lopDays = ((userObj.leaveWallet - userObj.timeoffDays)<0)?(userObj.timeoffDays-userObj.leaveWallet):0;
                         }
                     });
                 }

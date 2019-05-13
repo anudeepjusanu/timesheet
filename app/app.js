@@ -244,6 +244,14 @@
                 parent: 'layout',
                 data: { activeTab: 'leaveBalance' }
             })
+            .state('allTimesheetApprove', {
+                url: '/allTimesheetApprove',
+                templateUrl: 'timesheet/allTimesheetApprove.html',
+                controller: 'Timesheet.AllTimesheetApproveController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'allTimesheetApprove' }
+            })
             .state('appsettings', {
                 url: '/appConfig/settings',
                 templateUrl: 'appconfig/settings.html',
