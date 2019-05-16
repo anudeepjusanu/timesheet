@@ -65,8 +65,8 @@
                                 <td width="100px;">
                                     <div ng-if="!(sheet | isEmpty)">
                                         <div ng-if="sheet.sheetStatus != 'Approved'">
-                                            <select class="form-control" ng-model="sheet.sheetStatus" ng-change="vm.setTimesheetStatus(sheet)" ng-required="true" ng-options="status.id as status.name for status in vm.statusList" ng-if="sheet.isSelect"></select>
-                                            <span class="badge badge-secondary" ng-class="{'badge-danger': sheet.sheetStatus==='Rejected'}" ng-if="!sheet.isSelect">{{sheet.sheetStatus}}</span>
+                                            <select class="form-control" ng-model="sheet.sheetStatus" ng-change="vm.setTimesheetStatus(sheet)" ng-required="true" ng-options="status.id as status.name for status in vm.statusList"></select>
+                                            <!-- <span class="badge badge-secondary" ng-class="{'badge-danger': sheet.sheetStatus==='Rejected'}" ng-if="!sheet.isSelect">{{sheet.sheetStatus}}</span> -->
                                         </div>
                                         <div ng-if="sheet.sheetStatus != 'Pending'">
                                             <span class="badge badge-success" ng-class="{'badge-danger': sheet.sheetStatus==='Rejected'}">{{sheet.sheetStatus}}</span>

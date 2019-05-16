@@ -1755,6 +1755,16 @@
         } else if (vm.selWeek.getDay() == 6) {
             vm.selWeek.setDate(vm.selWeek.getDate() - 1);
         }
+        vm.statusList = [{
+            "id": "Approved",
+            "name": "Approved"
+        }, {
+            "id": "Pending",
+            "name": "Pending"
+        }, {
+            "id": "Rejected",
+            "name": "Rejected"
+        }];
 
         var getProjects = function(){
             ProjectService.getAll().then(function(response) {
@@ -1778,13 +1788,19 @@
             });
         }
 
-        var setTimesheetStatus = function(sheet) {
-            TimesheetService.setTimesheetStatus(sheet.sheetId, sheet.projectId, sheet.sheetStatus).then(function(response) {
+        vm.setTimesheetStatus = function(sheet) {
+            TimesheetService.setTimesheetStatus(sheet.timesheetId, sheet.projectId, sheet.sheetStatus).then(function(response) {
                 if (sheet.sheetStatus == 'Rejected') {
                     var week = $filter('date')(vm.selWeek, "Www");
                     var message = "Your timesheet got rejected for " + sheet.projectName + " for the week " + week + " Please update your hours again";
-                    //remindUserRejection(sheet.userId, message);
+                    remindUserRejection(sheet.userId, message);
                 };
+            });
+        };
+
+        function remindUserRejection(userId, message) {
+            UserService.remindUserByMessage(userId, { 'message': message }).then(function(response) {
+                console.log(message);
             });
         };
 
@@ -1798,6 +1814,7 @@
                             var userObj = _.find(vm.users, {_id: sheetObj.userId});
                             if(projectObj && userObj && sheetProjectObj.projectId == projectObj._id){
                                 sheetProjectObj.userName = userObj.name;
+                                sheetProjectObj.userId = userObj._id;
                                 sheetProjectObj.timesheetId = sheetObj._id;
                                 if(!_.find(projectObj.timesheets, {timesheetId: sheetObj._id})){
                                     projectObj.timesheets.push(sheetProjectObj);
