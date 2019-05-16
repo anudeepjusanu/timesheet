@@ -1805,6 +1805,9 @@
         };
 
         vm.getSelWeekTimesheets = function() {
+            _.each(vm.myProjects, function(projectObj){
+                projectObj.timesheets = [];
+            });
             var weekDate = $filter('date')(new Date(vm.selWeek), "yyyy-Www").toString();
             _.each(vm.myProjects, function(projectObj){
                 TimesheetService.projectHours(weekDate, projectObj._id).then(function(response) {
