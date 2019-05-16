@@ -1749,7 +1749,7 @@
             startingDay: 1
         };
         vm.selWeekOpened = false;
-        vm.selWeek = new Date(2019, 0, 4);
+        vm.selWeek = new Date();
         if (vm.selWeek.getDay() < 5) {
             vm.selWeek.setDate(vm.selWeek.getDate() - (vm.selWeek.getDay() + 2));
         } else if (vm.selWeek.getDay() == 6) {
