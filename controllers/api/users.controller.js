@@ -2,6 +2,7 @@
 var express = require('express');
 var router = express.Router();
 var userService = require('services/user.service');
+var leaveWalletService = require('services/leaveWallet.service');
 
 var builder = require('botbuilder');
 var connector = new builder.ChatConnector({
@@ -28,6 +29,8 @@ router.get('/userPoolLogs/:_id', userPoolLogs);
 router.get('/createPassword/:_id', createPassword);
 router.put('/updatePushToken/:_id', updatePushToken);
 router.post('/remind/user/:_id', remindByMessage);
+router.get('/myLeaveWallet', getMyLeaveWallet);
+router.get('/myLeaveWalletBalance', getMyLeaveWalletBalance);
 
 module.exports = router;
 
@@ -260,4 +263,30 @@ function remindByMessage(req, res) {
         .catch(function(err) {
             res.status(400).send(err);
         });
+}
+
+function getMyLeaveWallet(req, res){
+    var userId = req.user.sub;
+    leaveWalletService.getUserLeaveWallet(userId).then(function(response) {
+        if (response) {
+            res.send(response);
+        } else {
+            res.sendStatus(404);
+        }
+    }).catch(function(err) {
+        res.status(400).send(err);
+    });
+}
+
+function getMyLeaveWalletBalance(req, res){
+    var userId = req.user.sub;
+    leaveWalletService.getUserLeaveWalletBalance(userId).then(function(response) {
+        if (response) {
+            res.send(response);
+        } else {
+            res.sendStatus(404);
+        }
+    }).catch(function(err) {
+        res.status(400).send(err);
+    });
 }

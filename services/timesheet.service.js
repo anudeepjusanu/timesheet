@@ -32,6 +32,8 @@ service.utilizationByMonth = utilizationByMonth;
 service.getByProject = getByProject;
 service.remindByProject = remindByProject;
 service.usersLeaveBalance = usersLeaveBalance;
+service.userTakenLeaves = userTakenLeaves;
+service.userTakenLeaveBalance = userTakenLeaveBalance;
 
 module.exports = service;
 
@@ -875,5 +877,79 @@ function usersLeaveBalance(financialYear) {
         deferred.resolve(users);
     });
     
+    return deferred.promise;
+}
+
+function userTakenLeaves(userId, financialYear=null) {
+    var deferred = Q.defer();
+    if(financialYear){
+        var financialYearArr = financialYear.split("-");
+        var startDate = new Date(financialYearArr[0], 3, 1);
+        var endDate = new Date(financialYearArr[1], 3, 1);
+    }else{
+        var now = new Date();
+        var startYear = (now.getMonth()>=3)?now.getFullYear():now.getFullYear()+1; 
+        var startDate = new Date(startYear, 3, 1);
+        var endDate = new Date((startYear+1), 3, 1);
+    }
+    var queryStr = {
+        userId: mongo.helper.toObjectID(userId),
+        weekDate: {
+            $gte: startDate,
+            $lt: endDate
+        },
+        timeoffHours: {
+            $gt: 0
+        }
+    };
+    var userSheets = [];
+    db.timesheets.find(queryStr).toArray(function(err, sheets) {
+        _.each(sheets, function(sheetObj) {
+            userSheets.push({
+                timeoffHours: sheetObj.timeoffHours,
+                week: sheetObj.week,
+                weekDate: sheetObj.weekDate,
+                totalHours: sheetObj.totalHours,
+                totalBillableHours: sheetObj.totalBillableHours 
+            });
+        });
+        deferred.resolve(userSheets);
+    });
+    return deferred.promise;
+}
+
+function userTakenLeaveBalance(userId, financialYear=null) {
+    var deferred = Q.defer();
+    if(financialYear){
+        var financialYearArr = financialYear.split("-");
+        var startDate = new Date(financialYearArr[0], 3, 1);
+        var endDate = new Date(financialYearArr[1], 3, 1);
+    }else{
+        var now = new Date();
+        var startYear = (now.getMonth()>=3)?now.getFullYear():now.getFullYear()+1; 
+        var startDate = new Date(startYear, 3, 1);
+        var endDate = new Date((startYear+1), 3, 1);
+    }
+    var queryStr = {
+        userId: mongo.helper.toObjectID(userId),
+        weekDate: {
+            $gte: startDate,
+            $lt: endDate
+        },
+        timeoffHours: {
+            $gt: 0
+        }
+    };
+    var userSheetBalance = {
+        timeoffHours: 0.00,
+        timeoffDays: 0.00
+    };
+    db.timesheets.find(queryStr).toArray(function(err, sheets) {
+        _.each(sheets, function(sheetObj) {
+            userSheetBalance.timeoffHours += sheetObj.timeoffHours;
+        });
+        userSheetBalance.timeoffDays = parseFloat(userSheetBalance.timeoffHours/8).toFixed(2);
+        deferred.resolve(userSheetBalance);
+    });
     return deferred.promise;
 }

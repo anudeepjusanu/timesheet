@@ -27,6 +27,8 @@
         service.getUserRoles = getUserRoles;
         service.updatePushToken = updatePushToken;
         service.remindUserByMessage = remindUserByMessage;
+        service.getMyLeaveWallet = getMyLeaveWallet;
+        service.getMyLeaveWalletBalance = getMyLeaveWalletBalance;
 
         return service;
 
@@ -104,6 +106,14 @@
 
         function remindUserByMessage(userId, message) {
             return $http.post('/api/users/remind/user/' + userId, message).then(handleSuccess, handleError);
+        }
+
+        function getMyLeaveWallet() {
+            return $http.get('/api/users/myLeaveWallet/').then(handleSuccess, handleError);
+        }
+
+        function getMyLeaveWalletBalance() {
+            return $http.get('/api/users/myLeaveWalletBalance/').then(handleSuccess, handleError);
         }
 
         // private functions

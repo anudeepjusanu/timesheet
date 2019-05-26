@@ -1,4 +1,4 @@
-﻿var config = require('config.json');
+﻿var config = require(__dirname+'/../config.json');
 var _ = require('lodash');
 var Q = require('q');
 //var mongo = require('mongoskin');

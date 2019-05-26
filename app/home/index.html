@@ -24,18 +24,24 @@
         <div class="col-md-4">
             <!-- START WIDGET SLIDER -->
             <div class="widget widget-default widget-carousel">
-                <div class="owl-carousel" id="owl-example">
-                    <div>
-                        <div class="widget-title">Total Hours</div>
-                        <div class="widget-subtitle">{{vm.widgetDate | date: 'shortDate'}}</div>
-                        <div class="widget-int">{{vm.totalHours}}</div>
-                    </div>
-                    <div>
-                        <div class="widget-title">Your's</div>
-                        <div class="widget-subtitle"></div>
-                        <div class="widget-int">{{vm.myHours}}</div>
-                    </div>
-                </div>
+                <div class="widget-title">Leaves</div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Accrued</th>
+                            <th>Taken</th>
+                            <th>LOP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{vm.leaveWalletBalance.accruedLeaves}}</td>
+                            <td>{{vm.leaveWalletBalance.timeoffDays}}</td>
+                            <td>{{vm.leaveWalletBalance.deductedLOP}}</td>
+                        </tr>
+                    </tbody>
+                    
+                </table>
             </div>
             <!-- END WIDGET SLIDER -->
         </div>

@@ -77,6 +77,11 @@
             datepickerMode: "month", // Remove Single quotes
             minMode: 'month'
         };
+        vm.leaveWalletBalance = {
+            accruedLeaves: 0.00,
+            earnedLevaes: 0.00,
+            deductedLOP: 0.00
+        };
         vm.chartColors = ['#803690', '#00ADF9', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360', '#DCDCDC'];
         vm.hoursChart = {
             "options": {
@@ -504,6 +509,37 @@
                 });
         }
 
+        function savePushToken() {
+            UserService.updatePushToken(vm.user)
+                .then(function() {
+                    //noty.showSuccess("Updated Successfully")
+                })
+                .catch(function(error) {
+                    //FlashService.Error(error);
+                });
+        }
+
+        function getMyLeaveWalletBalnce() {
+            UserService.getMyLeaveWalletBalance().then(function(response) {
+                if(response){
+                    vm.leaveWalletBalance.accruedLeaves = response.accruedLeaves;
+                    vm.leaveWalletBalance.earnedLevaes = response.earnedLevaes;
+                    vm.leaveWalletBalance.deductedLOP = response.deductedLOP;
+                }
+            }).catch(function(error) {
+                //FlashService.Error(error);
+            });
+            TimesheetService.userTakenLeaveBalance(vm.user._id).then(function(response) {
+                console.log(response);
+                if(response){
+                    vm.leaveWalletBalance.timeoffHours = response.timeoffHours;
+                    vm.leaveWalletBalance.timeoffDays = response.timeoffDays;                    
+                }
+            }).catch(function(error) {
+                //FlashService.Error(error);
+            });
+        }
+
         var init = function() {
             getUsers();
             getProjectsWithUserCount();
@@ -514,6 +550,7 @@
                     vm.getAllUserHoursByMonth();
                     vm.utilizationByMonth();
                 }
+                getMyLeaveWalletBalnce();
                 if ($window && $window.pushToken && vm.user.pushToken != $window.pushToken) {
                     vm.user.pushToken = $window.pushToken;
                     savePushToken();

@@ -28,6 +28,8 @@
         service.timesheetBetweenDates = timesheetBetweenDates;
         service.projectHours = projectHours;
         service.usersLeaveBalance = usersLeaveBalance;
+        service.userTakenLeaves = userTakenLeaves;
+        service.userTakenLeaveBalance = userTakenLeaveBalance;
 
         return service;
 
@@ -115,6 +117,14 @@
 
         function usersLeaveBalance(financialYear) {
             return $http.get('/api/timesheet/usersLeaveBalance/' + financialYear, {}).then(handleSuccess, handleError);
+        }
+
+        function userTakenLeaves(userId) {
+            return $http.get('/api/timesheet/userTakenLeaves/' + userId, {}).then(handleSuccess, handleError);
+        }
+
+        function userTakenLeaveBalance(userId) {
+            return $http.get('/api/timesheet/userTakenLeaveBalance/' + userId, {}).then(handleSuccess, handleError);
         }
 
         // private functions

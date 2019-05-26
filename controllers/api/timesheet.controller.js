@@ -23,6 +23,8 @@ router.get('/remind/all', remindAll);
 router.put('/admin/:id', adminUpdate);
 router.post('/month/report', getReportbyMonth);
 router.get('/usersLeaveBalance/:financialYear', usersLeaveBalance);
+router.get('/userTakenLeaves/:userId', userTakenLeaves);
+router.get('/userTakenLeaveBalance/:userId', userTakenLeaveBalance);
 router.get('/utilizationByMonth/:monthId/:yearId', utilizationByMonth);
 router.get('/allUserHoursByWeek/:weekId', allUserHoursByWeek);
 router.get('/projectUserHoursByWeek/:weekId/:projectId', projectUserHoursByWeek);
@@ -307,6 +309,26 @@ function remindByProject(req, res) {
 
 function usersLeaveBalance(req, res) {
     timesheetService.usersLeaveBalance(req.params.financialYear)
+        .then(function(response) {
+            res.send(response);
+        })
+        .catch(function(err) {
+            res.status(400).send(err);
+        });
+}
+
+function userTakenLeaves(req, res) {
+    timesheetService.usersLeaveBalance(req.params.userId)
+        .then(function(response) {
+            res.send(response);
+        })
+        .catch(function(err) {
+            res.status(400).send(err);
+        });
+}
+
+function userTakenLeaveBalance(req, res) {
+    timesheetService.userTakenLeaveBalance(req.params.userId)
         .then(function(response) {
             res.send(response);
         })
