@@ -530,7 +530,6 @@
                 //FlashService.Error(error);
             });
             TimesheetService.userTakenLeaveBalance(vm.user._id).then(function(response) {
-                console.log(response);
                 if(response){
                     vm.leaveWalletBalance.timeoffHours = response.timeoffHours;
                     vm.leaveWalletBalance.timeoffDays = response.timeoffDays;                    
