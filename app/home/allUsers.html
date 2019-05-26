@@ -41,6 +41,9 @@
                         <th ng-show="vm.userColumns['reportingTo'].selected" class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='reportingUserName'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='reportingUserName'&&vm.search.sortDESC===true}">
                             <a ng-click="vm.sorting('reportingUserName');">Reporting To</a>
                         </th>
+                        <th ng-show="vm.userColumns['isAdmin'].selected"  class="">
+                            <a ng-click="vm.sorting('isAdmin');">Admin</a>
+                        </th>
                         <th ng-show="vm.userColumns['userRole'].selected"  class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='userRole'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='userRole'&&vm.search.sortDESC===true}">
                             <a ng-click="vm.sorting('userRole');">Role</a>
                         </th>
@@ -57,6 +60,9 @@
                         <td ng-show="vm.userColumns['employeeCategory'].selected"><select class="form-control" ng-model="vm.search.employeeCategory" ng-options="opt as opt for opt in ['All', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10']"></select></td>
                         <td ng-show="vm.userColumns['employeeType'].selected"></td>
                         <td ng-show="vm.userColumns['reportingTo'].selected"></td>
+                        <td ng-show="vm.userColumns['isAdmin'].selected">
+                            <select class="form-control" ng-model="vm.search.isAdmin" ng-options="opt.id as opt.label for opt in [{id: '', label: 'All'}, {id: true, label: 'True'}, {id: false, label: 'False'}]"></select>
+                        </td>
                         <td ng-show="vm.userColumns['userRole'].selected"></td>
                         <td ng-show="vm.userColumns['isActive'].selected">
                             <select class="form-control" ng-model="vm.search.isActive" ng-options="opt.id as opt.label for opt in [{id:'', label:'All'}, {id:'true', label:'Active'}, {id:'false', label:'Inactive'}]"></select>
@@ -80,6 +86,7 @@
                         <td ng-show="vm.userColumns['employeeCategory'].selected" >{{user.employeeCategory}}</td>
                         <td ng-show="vm.userColumns['employeeType'].selected" >{{user.employeeType}}</td>
                         <td ng-show="vm.userColumns['reportingTo'].selected" >{{user.reportingUserName}}</td>
+                        <td ng-show="vm.userColumns['isAdmin'].selected" >{{user.admin}}</td>
                         <td ng-show="vm.userColumns['userRole'].selected" >{{user.userRole}}</td>
                         <td ng-show="vm.userColumns['isActive'].selected" >
                             <span ng-if="user.isActive==true">Active</span>

@@ -29,6 +29,11 @@
                         return (searchObj.employeeCategory == item.employeeCategory);
                     });
                 }
+                if (searchObj.isAdmin === true || searchObj.isAdmin === false) {
+                    output = $filter('filter')(output, function(item) {
+                        return (searchObj.isAdmin == item.admin);
+                    });
+                }
                 if (searchObj.isActive == 'true' || searchObj.isActive == 'false') {
                     output = $filter('filter')(output, function(item, index) {
                         if (searchObj.isActive == 'true') {
@@ -596,6 +601,7 @@
             "employeeCategory": {label: "Category", selected: true},
             "employeeType": {label: "Employee Type", selected: false},
             "reportingTo": {label: "Reporting To", selected: false},
+            "isAdmin": {label: "Is Admin", selected: false},
             "userRole": {label: "Role", selected: false},
             "isActive": {label: "Status", selected: true}
         };
