@@ -80,7 +80,10 @@
         vm.leaveWalletBalance = {
             accruedLeaves: 0.00,
             creditedLeaves: 0.00,
-            deductedLOP: 0.00
+            deductedLOP: 0.00,
+            leaveBalance: 0.00,
+            timeoffHours: 0.00,
+            timeoffDays: 0.00
         };
         vm.chartColors = ['#803690', '#00ADF9', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360', '#DCDCDC'];
         vm.hoursChart = {
@@ -522,21 +525,22 @@
         function getMyLeaveWalletBalnce() {
             UserService.getMyLeaveWalletBalance().then(function(response) {
                 if(response){
-                    vm.leaveWalletBalance.accruedLeaves = response.accruedLeaves;
-                    vm.leaveWalletBalance.creditedLeaves = response.creditedLeaves;
-                    vm.leaveWalletBalance.deductedLOP = response.deductedLOP;
+                    vm.leaveWalletBalance.accruedLeaves = parseFloat(response.accruedLeaves);
+                    vm.leaveWalletBalance.creditedLeaves = parseFloat(response.creditedLeaves);
+                    vm.leaveWalletBalance.deductedLOP = parseFloat(response.deductedLOP);
+                    vm.leaveWalletBalance.leaveBalance = (vm.leaveWalletBalance.accruedLeaves + vm.leaveWalletBalance.creditedLeaves - vm.leaveWalletBalance.deductedLOP);
                 }
+                TimesheetService.userTakenLeaveBalance(vm.user._id).then(function(response) {
+                    if(response){
+                        vm.leaveWalletBalance.timeoffHours = response.timeoffHours;
+                        vm.leaveWalletBalance.timeoffDays = response.timeoffDays;
+                        vm.leaveWalletBalance.leaveBalance = parseFloat(vm.leaveWalletBalance.accruedLeaves + vm.leaveWalletBalance.creditedLeaves - response.timeoffDays - vm.leaveWalletBalance.deductedLOP).toFixed(2);              
+                    }
+                }).catch(function(error) {});
             }).catch(function(error) {
                 //FlashService.Error(error);
             });
-            TimesheetService.userTakenLeaveBalance(vm.user._id).then(function(response) {
-                if(response){
-                    vm.leaveWalletBalance.timeoffHours = response.timeoffHours;
-                    vm.leaveWalletBalance.timeoffDays = response.timeoffDays;                    
-                }
-            }).catch(function(error) {
-                //FlashService.Error(error);
-            });
+            
         }
 
         var init = function() {
