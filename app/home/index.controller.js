@@ -79,7 +79,7 @@
         };
         vm.leaveWalletBalance = {
             accruedLeaves: 0.00,
-            earnedLevaes: 0.00,
+            creditedLeaves: 0.00,
             deductedLOP: 0.00
         };
         vm.chartColors = ['#803690', '#00ADF9', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360', '#DCDCDC'];
@@ -523,7 +523,7 @@
             UserService.getMyLeaveWalletBalance().then(function(response) {
                 if(response){
                     vm.leaveWalletBalance.accruedLeaves = response.accruedLeaves;
-                    vm.leaveWalletBalance.earnedLevaes = response.earnedLevaes;
+                    vm.leaveWalletBalance.creditedLeaves = response.creditedLeaves;
                     vm.leaveWalletBalance.deductedLOP = response.deductedLOP;
                 }
             }).catch(function(error) {

@@ -41,7 +41,7 @@ function getUserLeaveWalletBalance(userId){
     var endYearMonth = 202003;
     var leaveWalletBalance = {
         accruedLeaves: 0.00,
-        earnedLevaes: 0.00,
+        creditedLeaves: 0.00,
         deductedLOP: 0.00
     };
     var deferred = Q.defer();
@@ -50,7 +50,7 @@ function getUserLeaveWalletBalance(userId){
         if(response && response.length>0){
             _.each(response, function(item){
                 leaveWalletBalance.accruedLeaves += item.accruedLeaves;
-                leaveWalletBalance.earnedLevaes += item.earnedLevaes;
+                leaveWalletBalance.creditedLeaves += item.creditedLeaves;
                 leaveWalletBalance.deductedLOP += item.deductedLOP;
             });
         }

@@ -12,6 +12,7 @@ var nowDate = new Date();
 var month = nowDate.getMonth() + 1;
 var yearMonth = nowDate.getFullYear()+"-"+String(month<10?"0"+month:month);
 var yearMonthNumber = nowDate.getFullYear()+String(month<10?"0"+month:month);
+var financialYear = (month>=4)?nowDate.getFullYear():nowDate.getFullYear()-1;
 
 appConfigService.getSettings().then(function(response){
     _.each(response, function(item){
@@ -22,17 +23,24 @@ appConfigService.getSettings().then(function(response){
     
     db.users.find({isActive: true}).toArray(function(err, users) {
         _.each(users, function (userObj) {
-            var leaveWalletData = {
-                userId: userObj._id,
-                yearMonth: yearMonth,
-                yearMonthNumber: yearMonthNumber,
-                accruedLeaves: acquire_leaves_month
-            };
-            leaveWalletService.saveMonthlyLeaves(leaveWalletData).then(function(response){
-               
-            }).catch(function(errors){
-                console.log(errors);
-            });
+            if(userObj.joinDate){
+                joinDate = new Date(userObj.joinDate);
+                var middleDate = new Date(nowDate.getFullYear(), nowDate.getMonth(), 15);
+                if(middleDate>joinDate){
+                    var leaveWalletData = {
+                        userId: userObj._id,
+                        yearMonth: yearMonth,
+                        yearMonthNumber: yearMonthNumber,
+                        accruedLeaves: acquire_leaves_month
+                    };
+                    leaveWalletService.saveMonthlyLeaves(leaveWalletData).then(function(response){
+                       
+                    }).catch(function(errors){
+                        console.log(errors);
+                    });
+                }
+            }
+            
         });
     });
 

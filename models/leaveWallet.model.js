@@ -20,7 +20,7 @@ var LeaveWalletSchema = new Schema({
         type: Number,
         default: 0
     },
-    earnedLevaes: {
+    creditedLeaves: {
         type: Number,
         default: 0
     },
