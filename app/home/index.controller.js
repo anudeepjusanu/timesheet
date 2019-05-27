@@ -532,8 +532,8 @@
                 }
                 TimesheetService.userTakenLeaveBalance(vm.user._id).then(function(response) {
                     if(response){
-                        vm.leaveWalletBalance.timeoffHours = response.timeoffHours;
-                        vm.leaveWalletBalance.timeoffDays = response.timeoffDays;
+                        vm.leaveWalletBalance.timeoffHours = parseFloat(response.timeoffHours);
+                        vm.leaveWalletBalance.timeoffDays = parseFloat(response.timeoffDays);
                         vm.leaveWalletBalance.leaveBalance = parseFloat(vm.leaveWalletBalance.accruedLeaves + vm.leaveWalletBalance.creditedLeaves - response.timeoffDays - vm.leaveWalletBalance.deductedLOP).toFixed(2);              
                     }
                 }).catch(function(error) {});
