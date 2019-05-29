@@ -35,7 +35,9 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                        <td>
+                            <select class="form-control" ng-model="vm.search.poolSinceDays" ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'L30',label:'Less 30 Days'}, {id:'L60',label:'Less 60 Days'}, {id:'L90',label:'Less 90 Days'}, {id:'G90',label:'Above 90 Days'}]"></select>
+                        </td>
                         <td></td>
                     </tr>
                     </thead>

@@ -34,6 +34,15 @@
                         return (searchObj.isAdmin == item.admin);
                     });
                 }
+                if (searchObj.poolSinceDays && searchObj.poolSinceDays.length > 0 && searchObj.poolSinceDays != "All") {
+                    output = $filter('filter')(output, function(item) {
+                        return ((searchObj.poolSinceDays == "L30" && item.poolSinceDays <= 30) || 
+                            (searchObj.poolSinceDays == "L60" && item.poolSinceDays <= 60) ||
+                            (searchObj.poolSinceDays == "L90" && item.poolSinceDays <= 90) ||
+                            (searchObj.poolSinceDays == "G90" && item.poolSinceDays > 90)
+                        );
+                    });
+                }
                 if (searchObj.isActive == 'true' || searchObj.isActive == 'false') {
                     output = $filter('filter')(output, function(item, index) {
                         if (searchObj.isActive == 'true') {
@@ -1222,6 +1231,7 @@
             userName: "",
             userResourceType: "",
             isActive: "",
+            poolSinceDays: "",
             orderBy: 'name',
             sortDESC: false
         };
@@ -1242,9 +1252,11 @@
                     if (userObj.isActive == true) {
                         if (vm.showAllUsers === true) {
                             userObj.poolSince = vm.calWeeksSinceNow(userObj.poolSinceDate);
+                            userObj.poolSinceDays = vm.calDaysSinceNow(userObj.poolSinceDate);
                             vm.users.push(userObj);
                         } else if (vm.showAllUsers === false && userObj.resourceInPool === true) {
                             userObj.poolSince = vm.calWeeksSinceNow(userObj.poolSinceDate);
+                            userObj.poolSinceDays = vm.calDaysSinceNow(userObj.poolSinceDate);
                             vm.users.push(userObj);
                         }
                     }
@@ -1333,6 +1345,19 @@
                 return diff + " Weeks";
             } else {
                 return "";
+            }
+        }
+
+        vm.calDaysSinceNow = function(sinceDate) {
+            if (sinceDate && sinceDate.length > 0) {
+                var oneDay = 24 * 60 * 60 * 1000;
+                var oneWeek = 7 * 24 * 60 * 60 * 1000;
+                var now = new Date();
+                var sinceDate = new Date(sinceDate);
+                var diff = parseInt((now - sinceDate) / oneDay);
+                return diff;
+            } else {
+                return 0;
             }
         }
 
