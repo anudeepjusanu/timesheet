@@ -16,12 +16,11 @@
                 </tr>
             </thead>
             <tbody>
-                    <!-- ng-repeat = "leaveValues in vm.leaveWalletBalance" -->
-                <tr >
-                    <td>{{leaveValues.accruedLeaves}}</td>
-                    <td>{{leaveValues.timeoffDays}}</td>
-                    <td>{{leaveValues.deductedLOP}}</td>
-                    <td>{{leaveValues.leaveBalance}}</td>
+                <tr ng-repeat="myleave in vm.myleaves">
+                    <td>{{myleave.accruedLeaves}}</td>
+                    <td>{{myleave.takenLeaves}}</td>
+                    <td>{{myleave.deductedLOP}}</td>
+                    <td>{{myleave.monthBalance}}</td>
                 </tr>
             </tbody>
 
