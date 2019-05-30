@@ -220,6 +220,16 @@
                 parent: 'layout',
                 data: { activeTab: 'leaves' }
             })
+
+            .state('myLeaves', {
+                url: '/myLeaves',
+                templateUrl: 'leaves/myLeaves.html',
+                controller: 'Leaves.ViewLeaveController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'myLeaves' }
+            })
+
             .state('addLeave', {
                 url: '/leaves/add',
                 templateUrl: 'leaves/addLeave.html',
