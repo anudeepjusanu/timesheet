@@ -270,6 +270,14 @@
                 parent: 'layout',
                 data: { activeTab: 'appsettings' }
             })
+            .state('myLeaves', {
+                url: '/myLeaves',
+                templateUrl: 'leaves/myLeaves.html',
+                controller: 'Leaves.ViewLeaveController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'myLeaves' }
+            })
         ChartJsProvider.setOptions({ colors: ['#1caf9a', '#273541'] });
     }
 

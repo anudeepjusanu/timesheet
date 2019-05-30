@@ -318,7 +318,7 @@ function usersLeaveBalance(req, res) {
 }
 
 function userTakenLeaves(req, res) {
-    timesheetService.usersLeaveBalance(req.params.userId)
+    timesheetService.userTakenLeaves(req.params.userId)
         .then(function(response) {
             res.send(response);
         })
