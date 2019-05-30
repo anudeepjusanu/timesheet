@@ -36,8 +36,16 @@
                 <a ui-sref="home"><span class="fa fa-desktop"></span> <span class="xn-text">Dashboard</span></a>
             </li>
             <li class="" ng-class="{active: activeTab === 'myTimesheets'}">
-                <a ui-sref="myTimesheets"><span class="fa fa-file-excel-o"></span> <span class="xn-text">My Timesheets</span></a>
+                <a ui-sref="myTimesheets"><span class="fa fa-file-excel-o"></span> 
+                    <span class="xn-text">My Timesheets</span></a>
             </li>
+
+            <li class="" ng-class="{active: activeTab === 'myLeaves'}">
+                <a ui-sref="myLeaves"><span class="fa fa-file-excel-o"></span> 
+                    <span class="xn-text">My Leaves</span>
+                </a>
+            </li>
+
             <li class="" ng-if="vm.user.admin===true || vm.user.userRole=='manager'" ng-class="{active: activeTab === 'timesheet'}">
                 <a ui-sref="timesheet"><span class="fa fa-file-excel-o"></span> <span class="xn-text">Timesheets</span></a>
             </li>

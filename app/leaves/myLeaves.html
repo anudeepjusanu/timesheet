@@ -1,0 +1,31 @@
+﻿
+
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+  
+    <div class="table-responsive">
+        <table class="table table-bordered">
+          
+            <thead>
+                <tr>
+                    <th>Accrued</th>
+                    <th>Taken</th>
+                    <th>LOP</th>
+                    <th>Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                    <!-- ng-repeat = "leaveValues in vm.leaveWalletBalance" -->
+                <tr >
+                    <td>{{leaveValues.accruedLeaves}}</td>
+                    <td>{{leaveValues.timeoffDays}}</td>
+                    <td>{{leaveValues.deductedLOP}}</td>
+                    <td>{{leaveValues.leaveBalance}}</td>
+                </tr>
+            </tbody>
+
+        </table>
+               
+    </div>
+</div>
