@@ -40,9 +40,9 @@
                             <th width="240px;">User Name</th>
                             <th width="120px;">Resource Type</th>
                             <th width="80px;">Working Hours</th>
+                            <th width="80px;">Overtime Hours</th>
                             <th width="80px;">Sick Leave Hours</th>
                             <th width="80px;">Timeoff Hours</th>
-                            <th width="80px;">Overtime Hours</th>
                             <th width="80px;">Corp Holiday</th>
                             <th width="100px;">Status</th>
                         </table>
@@ -54,13 +54,13 @@
                     <td>{{project.projectName}}</td>
                     <td>
                         <table class="table table-bordered">
-                            <tr ng-repeat="sheet in project.timesheets">
+                            <tr ng-repeat="sheet in project.timesheets" ng-init="bgColor=(sheet.sickLeaveHours || sheet.timeoffHours)?'background-color:#CD5C5C;color:black;':(sheet.resourceType=='buffer')?'background-color:#ffa500b8':'';" style="{{bgColor}}">
                                 <td width="240px;">{{sheet.userName}}</td>
-                                <td width="120px;">{{sheet.resourceType}}</td>
+                                <td width="120px;" >{{sheet.resourceType}}</td>
                                 <td width="80px;">{{sheet.billableHours}}</td>
+                                <td width="80px;">{{sheet.overtimeHours}}</td>
                                 <td width="80px;">{{sheet.sickLeaveHours}}</td>
                                 <td width="80px;">{{sheet.timeoffHours}}</td>
-                                <td width="80px;">{{sheet.overtimeHours}}</td>
                                 <td width="80px;">{{sheet.corpHolidayHours}}</td>
                                 <td width="100px;">
                                     <div ng-if="!(sheet | isEmpty)">
