@@ -33,44 +33,51 @@
                         <th ng-show="vm.userColumns['employeeId'].selected"  class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='employeeId'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='employeeId'&&vm.search.sortDESC===true}">
                             <a ng-click="vm.sorting('employeeId');">EMP ID</a>
                         </th>
-                        <th ng-show="vm.userColumns['name'].selected" class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='name'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='name'&&vm.search.sortDESC===true}">
+                        <th style="width:150px;" ng-show="vm.userColumns['name'].selected" class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='name'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='name'&&vm.search.sortDESC===true}">
                             <a ng-click="vm.sorting('name');">Name</a>
                         </th>
-                        <th ng-show="vm.userColumns['userResourceType'].selected" >Type</th>
+                        <th ng-show="vm.userColumns['yearMonth'].seleted" class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='yearMonth'&&vm.search.sortDESC===false; 'sorting_desc:vm.search.orderBy=='yearMonth'&&vm.search.sortDESC===true}">
+                            <a ng-click="vm.sorting('yearMonth');">Year Month</a>
+                        </th>
+                        <!-- <th style="width:100px;" ng-show="vm.userColumns['userResourceType'].selected" >Type</th> -->
                         <th ng-show="vm.userColumns['phone'].selected">Mobile</th>
-                        <th ng-show="vm.userColumns['joinDate'].selected">Join Date</th>
+                        <th style="width:100px;" ng-show="vm.userColumns['joinDate'].selected">Join Date</th>
                         <th ng-show="vm.userColumns['employeeCategory'].selected" class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='employeeCategory'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='employeeCategory'&&vm.search.sortDESC===true}">
                             <a ng-click="vm.sorting('employeeCategory');">Category</a>
                         </th>
                         <th ng-show="vm.userColumns['employeeType'].selected">Employee Type</th>
-                        <th ng-show="vm.userColumns['leaveWallet'].selected" class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='leaveWallet'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='leaveWallet'&&vm.search.sortDESC===true}">
-                            <a ng-click="vm.sorting('leaveWallet');">Leave Wallet</a>
-                        </th>
                         <th ng-show="vm.userColumns['timeoffDays'].selected" class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='timeoffDays'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='timeoffDays'&&vm.search.sortDESC===true}">
                             <a ng-click="vm.sorting('timeoffDays');">TimeOff Days</a>
                         </th>
                         <th ng-show="vm.userColumns['lopDays'].selected" class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='lopDays'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='lopDays'&&vm.search.sortDESC===true}">
                             <a ng-click="vm.sorting('lopDays');">LOP Days</a>
                         </th>
+                        <th ng-show="vm.userColumns['leaveWallet'].selected" class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='leaveWallet'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='leaveWallet'&&vm.search.sortDESC===true}">
+                            <a ng-click="vm.sorting('leaveWallet');">Leave Balance</a>
+                        </th>
                         <th ng-show="vm.userColumns['isActive'].selected" >Status</th>
-                        <th ng-show="vm.userColumns['leaveWeeks'].selected" >Leave Weeks</th>
+                        <!-- <th ng-show="vm.userColumns['leaveWeeks'].selected" >Leave Weeks</th> -->
+                        <th>Add</th>
+                        <th>Delete</th>
                     </tr>
                     <tr>
                         <td></td>
                         <td ng-show="vm.userColumns['employeeId'].selected"></td>
                         <td ng-show="vm.userColumns['name'].selected"><input class="form-control" type="text" ng-model="vm.search.userName" /></td>
-                        <td ng-show="vm.userColumns['userResourceType'].selected"><select class="form-control" ng-model="vm.search.userResourceType" ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'Billable',label:'Billable'}, {id:'Non-billable',label:'Non-billable'}, {id:'Trainee',label:'Trainee'}, {id:'Intern',label:'Intern'}]"></select></td>
+                        <!-- <td ng-show="vm.userColumns['userResourceType'].selected"><select class="form-control" ng-model="vm.search.userResourceType" ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'Billable',label:'Billable'}, {id:'Non-billable',label:'Non-billable'}, {id:'Trainee',label:'Trainee'}, {id:'Intern',label:'Intern'}]"></select></td> -->
                         <td ng-show="vm.userColumns['phone'].selected"></td>
                         <td ng-show="vm.userColumns['joinDate'].selected"></td>
                         <td ng-show="vm.userColumns['employeeCategory'].selected"><select class="form-control" ng-model="vm.search.employeeCategory" ng-options="opt as opt for opt in ['All', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10']"></select></td>
                         <td ng-show="vm.userColumns['employeeType'].selected"></td>
-                        <td ng-show="vm.userColumns['leaveWallet'].selected"></td>
                         <td ng-show="vm.userColumns['timeoffDays'].selected"></td>
                         <td ng-show="vm.userColumns['lopDays'].selected"></td>
+                        <td ng-show="vm.userColumns['leaveWallet'].selected"></td>
                         <td ng-show="vm.userColumns['isActive'].selected">
                             <select class="form-control" ng-model="vm.search.isActive" ng-options="opt.id as opt.label for opt in [{id:'', label:'All'}, {id:'true', label:'Active'}, {id:'false', label:'Inactive'}]"></select>
                         </td>
-                        <td ng-show="vm.userColumns['leaveWeeks'].selected"></td>
+                        <!-- <td ng-show="vm.userColumns['leaveWeeks'].selected"></td> -->
+                         <td></td>
+                         <td></td>
                     </tr>
                     </thead>
                     <tbody>
@@ -78,20 +85,26 @@
                         <td>{{$index + 1}}</td>
                         <td ng-show="vm.userColumns['employeeId'].selected">{{user.employeeId}}</td>
                         <td ng-show="vm.userColumns['name'].selected">{{user.name}}</td>
-                        <td ng-show="vm.userColumns['userResourceType'].selected">{{user.userResourceType}}</td>
+                        <!-- <td ng-show="vm.userColumns['userResourceType'].selected">{{user.userResourceType}}</td> -->
                         <td ng-show="vm.userColumns['phone'].selected">{{user.phone}}</td>
                         <td ng-show="vm.userColumns['joinDate'].selected">{{user.joinDate | date : 'mediumDate'}}</td>
                         <td ng-show="vm.userColumns['employeeCategory'].selected">{{user.employeeCategory}}</td>
                         <td ng-show="vm.userColumns['employeeType'].selected">{{user.employeeType}}</td>
-                        <td ng-show="vm.userColumns['leaveWallet'].selected">{{user.leaveWallet}}</td>
                         <td ng-show="vm.userColumns['timeoffDays'].selected">{{user.timeoffDays | number}}</td>
                         <td ng-show="vm.userColumns['lopDays'].selected">{{user.lopDays | number}}</td>
+                        <td ng-show="vm.userColumns['leaveWallet'].selected">{{user.leaveWallet}}</td>
                         <td ng-show="vm.userColumns['isActive'].selected">
                             <span ng-if="user.isActive==true">Active</span>
                             <span ng-if="user.isActive==false">Inactive</span>
                         </td>
-                        <td ng-show="vm.userColumns['leaveWeeks'].selected">
+                        <!-- <td ng-show="vm.userColumns['leaveWeeks'].selected">
                             <div ng-repeat="sheet in user.timesheets">{{sheet.week}} ({{sheet.timeoffDays}})</div>
+                        </td> -->
+                        <td>
+                            <a class="btn btn-primary btn-xs" ng-click="vm.viewClientModel(client)">+</a>
+                        </td>
+                        <td>
+                            <a class="btn btn-primary btn-xs" ng-click="vm.viewClientModel(client)">-</a>
                         </td>
                     </tr>
                     </tbody>
