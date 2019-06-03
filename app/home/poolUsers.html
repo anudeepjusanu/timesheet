@@ -25,7 +25,8 @@
                             <a ng-click="vm.sorting('poolName');">Pool Name</a>
                         </th>
                         <th>Pool Since Date</th>
-                        <th>Pool Since</th>
+                        <th>Pool Since Weeks</th>
+                        <th>Pool Since Days</th>
                         <th>Action</th>
                     </tr>
                     <tr>
@@ -35,8 +36,10 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
                         <td>
-                            <select class="form-control" ng-model="vm.search.poolSinceDays" ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'L30',label:'Less 30 Days'}, {id:'L60',label:'Less 60 Days'}, {id:'L90',label:'Less 90 Days'}, {id:'G90',label:'Above 90 Days'}]"></select>
+                            <select class="form-control" ng-model="vm.search.poolSinceDays"
+                            ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'L30',label:'Less than 30 Days'}, {id:'L60',label:'> 30 Days and <= 60 Days'}, {id:'L90',label:'> 60 Days and <= 90 Days'}, {id:'G90',label:'Above 90 Days'}]"></select>
                         </td>
                         <td></td>
                     </tr>
@@ -55,6 +58,7 @@
                         <td>{{user.poolName}}</td>
                         <td>{{user.poolSinceDate | date : format : timezone}}</td>
                         <td>{{user.poolSince}}</td>
+                        <td>{{user.poolSinceDays}} Days</td>
                         <td>
                             <a class="btn btn-primary btn-xs" ng-click="vm.viewUserPoolLog(user)">Logs</a>
                             <a class="btn btn-primary btn-xs" ng-click="vm.viewReleaseToPool(user)" ng-show="user.resourceInPool!==true">Release To Pool</a>
