@@ -66,13 +66,14 @@
         initController();
     };
 
-    function LeaveBalanceController(UserService, TimesheetService, AppConfigService, $scope, $filter, noty) {
+    function LeaveBalanceController(UserService, TimesheetService, ProjectService, AppConfigService, $scope, $filter, noty) {
         var vm = this;
         vm.timesheets = {};
         vm.appSettings = [];
         vm.users = [];
         vm.search = {
             userName: "",
+            yearMonth: "",
             userResourceType: "",
             userResourceStatus: "",
             employeeCategory: "All",
@@ -83,17 +84,18 @@
         vm.userColumns = {
             "employeeId": {label: "Employee ID", selected: true},
             "name": {label: "Name", selected: true},
-            "userResourceType": {label: "Type", selected: true},
+            "yearMonth": {label: "Year Month", selected: true},
+            // "userResourceType": {label: "Type", selected: true},
             "phone": {label: "Mobile", selected: false},
             "joinDate": {label: "Join Date", selected: true},
             "employeeCategory": {label: "Category", selected: false},
             "employeeType": {label: "Employee Type", selected: false},
-            "leaveWallet": {label: "Leave Wallet", selected: true},
+            // "leaveWallet": {label: "Leave Wallet", selected: true},
             "timeoffHours": {label: "Timeoff Hours", selected: true},
             "timeoffDays": {label: "Timeoff Days", selected: true},
             "lopDays": {label: "LOP Days", selected: true},
             "isActive": {label: "Status", selected: true},
-            "leaveWeeks": {label: "Leave Weeks", selected: true}
+            // "leaveWeeks": {label: "Leave Weeks", selected: true}
         };
         vm.sorting = function(orderBy) {
             if (vm.search.orderBy == orderBy) {
@@ -123,8 +125,10 @@
         }
 
         vm.getUserLeaves = function(){
+
             TimesheetService.usersLeaveBalance(vm.financialYear).then(function(response) {
                 if(response){
+                    // debugger;
                     _.each(vm.users, function(userObj){
                         userObj.timeoffHours = 0;
                         userObj.timeoffDays = 0.00;
@@ -153,7 +157,7 @@
             }, function(error) {
                 console.log(error);
             });
-        }
+        }        
 
         function calLeaveWalletBalance(joinDate = false){
             var leaveWallet = parseFloat(0);
@@ -163,6 +167,12 @@
                 var financialYearStart = new Date(vm.financialYear.substring(0,4)+"-04-01");
                 var financialYearEnd = new Date(vm.financialYear.substring(5)+"-03-31");
                 var nowDate = new Date();
+
+                // var leaveWeek = new Date(leaveObj.weekDate);
+                // var monthNum  = leaveWeek.getMonth()+1;
+                // var yearMonth = String(leaveWeek.getFullYear()+"-"+(monthNum>9?monthNum:"0"+monthNum));
+                // var myLeaveObj = _.find(vm.myleaves, {yearMonth: yearMonth});
+
                 if(financialYearEnd>=joinDate){
                     joinDate = (joinDate>financialYearStart)?joinDate:financialYearStart;
                     var navDate = joinDate;
@@ -203,8 +213,50 @@
                 vm.user = user;
                 getUsers();
                 getAppSettings();
+                getClients();
             });
         }
         init();
+
+        function getClients() {
+            ProjectService.getClients().then(function(response) {
+                vm.clients = response;
+            }, function(error) {
+                if (error) {
+                    vm.alerts.push({ msg: error, type: 'danger' });
+                }
+            });
+        }
+
+        vm.viewClientModel = function(clientObj) {
+            debugger;
+            var client = {};
+            if (clientObj) {
+                client = clientObj;
+                client.isNew = false;
+            } else {
+                client.isNew = true;
+            }
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'projects/addClientModel.html',
+                controller: 'Projects.ClientModel',
+                controllerAs: 'vm',
+                size: 'md',
+                resolve: {
+                    client: function() {
+                        return client;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function(clientObj) {
+                vm.getClients();
+            }, function() {
+                vm.getClients();
+            });
+        }
     };
 })();
