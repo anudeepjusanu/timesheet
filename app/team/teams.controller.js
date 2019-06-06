@@ -5,6 +5,7 @@
         .module('app')
         .controller('Team.IndexController', TeamsController)
         .controller('Team.LeaveBalanceController', LeaveBalanceController)
+        .controller('Team.UserLeavesModel',UserLeavesModel)
         .directive('exportTable', function() {
             return {
                 restrict: 'A',
@@ -66,7 +67,53 @@
         initController();
     };
 
-    function LeaveBalanceController(UserService, TimesheetService, ProjectService, AppConfigService, $scope, $filter, noty) {
+    function UserLeavesModel($uibModalInstance, ProjectService, noty, client) {
+        var vm = this;
+        vm.enableSaveBtn = true;
+        vm.alerts = [];
+        vm.client = client;
+        // vm.userLeaves = userLeaves;
+
+        // vm.ok = function(form) {
+        //     if (form.$valid) {
+        //         vm.enableSaveBtn = false;
+        //         if (vm.userLeaves.isNew === true) {
+        //             ProjectService.createClient(vm.client).then(function(response) {
+        //                 noty.showSuccess("New Client has been created successfully!");
+        //                 vm.enableSaveBtn = true;
+        //                 $uibModalInstance.close(vm.client);
+        //             }, function(error) {
+        //                 if (error) {
+        //                     vm.alerts.push({ msg: error, type: 'danger' });
+        //                 }
+        //                 vm.enableSaveBtn = true;
+        //                 $uibModalInstance.close(vm.client);
+        //             });
+        //         } else {
+        //             ProjectService.updateClient(vm.client).then(function(response) {
+        //                 noty.showSuccess("Client has been updated successfully!");
+        //                 vm.enableSaveBtn = true;
+        //                 $uibModalInstance.close(vm.client);
+        //             }, function(error) {
+        //                 if (error) {
+        //                     vm.alerts.push({ msg: error, type: 'danger' });
+        //                 }
+        //                 vm.enableSaveBtn = true;
+        //                 $uibModalInstance.close(vm.client);
+        //             });
+        //         }
+        //     } else {
+        //         vm.enableSaveBtn = true;
+        //         vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
+        //     }
+        // };
+
+        vm.cancel = function() {
+            $uibModalInstance.dismiss('cancel');
+        };
+    };
+
+    function LeaveBalanceController(UserService, TimesheetService, ProjectService, AppConfigService, $scope, $filter, $uibModal, noty) {
         var vm = this;
         vm.timesheets = {};
         vm.appSettings = [];
@@ -128,7 +175,6 @@
 
             TimesheetService.usersLeaveBalance(vm.financialYear).then(function(response) {
                 if(response){
-                    // debugger;
                     _.each(vm.users, function(userObj){
                         userObj.timeoffHours = 0;
                         userObj.timeoffDays = 0.00;
@@ -168,10 +214,9 @@
                 var financialYearEnd = new Date(vm.financialYear.substring(5)+"-03-31");
                 var nowDate = new Date();
 
-                // var leaveWeek = new Date(leaveObj.weekDate);
-                // var monthNum  = leaveWeek.getMonth()+1;
-                // var yearMonth = String(leaveWeek.getFullYear()+"-"+(monthNum>9?monthNum:"0"+monthNum));
-                // var myLeaveObj = _.find(vm.myleaves, {yearMonth: yearMonth});
+                var monthNum  = nowDate.getMonth()+1;
+                var yearMonth = String(nowDate.getFullYear()+"-"+(monthNum>9?monthNum:"0"+monthNum));
+                vm.currentYearMonth = yearMonth;
 
                 if(financialYearEnd>=joinDate){
                     joinDate = (joinDate>financialYearStart)?joinDate:financialYearStart;
@@ -228,7 +273,7 @@
             });
         }
 
-        vm.viewClientModel = function(clientObj) {
+        vm.viewLeaveModel = function(clientObj) {
             debugger;
             var client = {};
             if (clientObj) {
@@ -241,8 +286,8 @@
                 animation: true,
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
-                templateUrl: 'projects/addClientModel.html',
-                controller: 'Projects.ClientModel',
+                templateUrl: 'team/addLeavesModel.html',
+                controller: 'Team.UserLeavesModel',
                 controllerAs: 'vm',
                 size: 'md',
                 resolve: {
@@ -254,8 +299,10 @@
 
             modalInstance.result.then(function(clientObj) {
                 vm.getClients();
+                vm.getUsers();
+                vm.getUserLeaves();
             }, function() {
-                vm.getClients();
+                // vm.getClients();
             });
         }
     };
