@@ -11,6 +11,7 @@ var service = {};
 service.saveMonthlyLeaves = saveMonthlyLeaves;
 service.getUserLeaveWallet = getUserLeaveWallet;
 service.getUserLeaveWalletBalance = getUserLeaveWalletBalance;
+service.updateUserLeaveWalletBalance = updateUserLeaveWalletBalance;
 
 module.exports = service;
 
@@ -55,6 +56,17 @@ function getUserLeaveWalletBalance(userId){
             });
         }
         deferred.resolve(leaveWalletBalance);
+    });
+    return deferred.promise;
+}
+
+function updateUserLeaveWalletBalance(userId, leaveWalletData){
+    var deferred = Q.defer();
+    leaveWallet.findOneAndUpdate({userId: userId, yearMonth: leaveWalletData.yearMonth}, 
+        {$set: leaveWalletData}, 
+        {upsert: true}).exec(function(error, response){
+        if (error) deferred.reject(error);
+        deferred.resolve(response);
     });
     return deferred.promise;
 }

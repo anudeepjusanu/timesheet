@@ -28,6 +28,12 @@ var LeaveWalletSchema = new Schema({
         type: Number,
         default: 0
     },
+    creditedLeavesComment: {
+        type: String
+    },
+    deductedLOPComment: {
+        type: String
+    },
     createdOn: {
         type: Date,
         default: Date.now
