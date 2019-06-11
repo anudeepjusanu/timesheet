@@ -67,46 +67,84 @@
         initController();
     };
 
-    function UserLeavesModel($uibModalInstance, ProjectService, noty, client) {
+    function UserLeavesModel($uibModalInstance, UserService, user, ProjectService, noty) {
         var vm = this;
         vm.enableSaveBtn = true;
         vm.alerts = [];
-        vm.client = client;
-        // vm.userLeaves = userLeaves;
+        vm.user = user;
 
-        // vm.ok = function(form) {
-        //     if (form.$valid) {
-        //         vm.enableSaveBtn = false;
-        //         if (vm.userLeaves.isNew === true) {
-        //             ProjectService.createClient(vm.client).then(function(response) {
-        //                 noty.showSuccess("New Client has been created successfully!");
-        //                 vm.enableSaveBtn = true;
-        //                 $uibModalInstance.close(vm.client);
-        //             }, function(error) {
-        //                 if (error) {
-        //                     vm.alerts.push({ msg: error, type: 'danger' });
-        //                 }
-        //                 vm.enableSaveBtn = true;
-        //                 $uibModalInstance.close(vm.client);
-        //             });
-        //         } else {
-        //             ProjectService.updateClient(vm.client).then(function(response) {
-        //                 noty.showSuccess("Client has been updated successfully!");
-        //                 vm.enableSaveBtn = true;
-        //                 $uibModalInstance.close(vm.client);
-        //             }, function(error) {
-        //                 if (error) {
-        //                     vm.alerts.push({ msg: error, type: 'danger' });
-        //                 }
-        //                 vm.enableSaveBtn = true;
-        //                 $uibModalInstance.close(vm.client);
-        //             });
-        //         }
-        //     } else {
-        //         vm.enableSaveBtn = true;
-        //         vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
-        //     }
-        // };
+        var now = new Date();
+        vm.financialYears = [];
+        vm.financialYear = null;
+        var navYear = 2017;
+        var endYear = now.getFullYear();
+        if(now.getMonth()>=3){
+            var endYear = now.getFullYear() + 1;
+        }
+        while(endYear > navYear){
+            var fYear = navYear + "-" + (navYear+1);
+            vm.financialYears.push(fYear);
+            navYear += 1;
+        }
+        vm.financialYear = fYear;
+
+        vm.yearMonthSelected = false;     
+        // debugger;  
+        vm.dateOptions = {
+            dateDisabled: function(data) {
+                var date = data.date,
+                    mode = data.mode;
+                return mode === 'day' && (date.getDay() != 5);
+            },
+            formatYear: 'yy',
+            maxDate: new Date(2020, 5, 22),
+            startingDay: 1
+        };
+        vm.monthOptions = {
+            datepickerMode: "month", // Remove Single quotes
+            minMode: 'month'
+        };
+        vm.format = 'yyyy-MM';
+
+        vm.ok = function(form) {
+            if (form.$valid) {
+                vm.enableSaveBtn = false;
+                if (vm.user) {
+
+                    if(vm.user.yearMonth) {
+                        // debugger;
+                        var monthNum  = vm.user.yearMonth.getMonth()+1;
+                        var yearMonth = String(vm.user.yearMonth.getFullYear()+"-"+(monthNum>9?monthNum:"0"+monthNum));
+                        vm.user.yearMonth = yearMonth;
+                    }
+
+                    var obj = {
+                        "name": vm.user.name,
+                        "creditedLeaves": vm.user.creditedLeaves,
+                        "creditedLeavesComment": vm.user.creditedLeavesComment,
+                        "yearMonth": vm.user.yearMonth
+                    }
+
+                    UserService.updateUserLeaveWalletBalance(vm.user._id, obj).then(function(response) {
+                        // debugger;
+                        if(response) {                        
+                        noty.showSuccess("New Leave has been added successfully!");
+                        vm.enableSaveBtn = true;
+                        $uibModalInstance.close(obj);
+                    }
+                    }, function(error) {
+                        if (error) {
+                            vm.alerts.push({ msg: error, type: 'danger' });
+                        }
+                        vm.enableSaveBtn = true;
+                        $uibModalInstance.close(obj);
+                    });
+                } 
+            } else {
+                vm.enableSaveBtn = false;
+                vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
+            }
+        };
 
         vm.cancel = function() {
             $uibModalInstance.dismiss('cancel');
@@ -273,15 +311,14 @@
             });
         }
 
-        vm.viewLeaveModel = function(clientObj) {
-            debugger;
-            var client = {};
-            if (clientObj) {
-                client = clientObj;
-                client.isNew = false;
-            } else {
-                client.isNew = true;
-            }
+        vm.viewLeaveModel = function(userObj) {
+            var user = {};
+            
+            if (userObj) {
+                user = userObj;
+                user.isCreditedLeave = true;
+            } 
+
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -291,18 +328,16 @@
                 controllerAs: 'vm',
                 size: 'md',
                 resolve: {
-                    client: function() {
-                        return client;
+                    user: function() {
+                        return user;
                     }
                 }
             });
 
-            modalInstance.result.then(function(clientObj) {
-                vm.getClients();
-                vm.getUsers();
+            modalInstance.result.then(function(user) {
                 vm.getUserLeaves();
             }, function() {
-                // vm.getClients();
+                vm.getUserLeaves();
             });
         }
     };
