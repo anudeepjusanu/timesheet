@@ -44,18 +44,20 @@
                             </table>
                         </th>
                     </tr>
-                    <tr ng-repeat="project in vm.projects | searchProjectUser:vm.search | orderBy:'name'">
+                    <tr ng-repeat="project in vm.projects | searchProjectUser:vm.search | orderBy:'name'"
+                        ng-show="project.users">
                         <td>{{$index+1}}</td>
                         <td>{{project.projectName}}</td>
                         <td>{{project.businessUnit}}</td>
                         <td>{{project.projectType}}</td>
                         <td>
                             <table class="table">
-                                <tr ng-repeat="user in project.users">
+                                <tr ng-repeat="user in project.users" ng-show="user.billDates">
                                     <td width="60px">{{$index+1}}</td>
                                     <td width="320px">{{user.userName}}</td>
                                     <td width="480px">
-                                        <div class="row" ng-repeat="billDate in user.billDates">
+                                        <div class="row" ng-repeat="billDate in user.billDates"
+                                            ng-show="!billDate.end && billDate.start">
                                             <div class="col-md-3">{{billDate.start | date : 'mediumDate'}}</div>
                                             <div class="col-md-3">{{billDate.end | date : 'mediumDate'}}</div>
                                             <div class="col-md-2">{{billDate.allocatedHours}}</div>
