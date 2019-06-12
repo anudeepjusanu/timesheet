@@ -67,14 +67,18 @@
                         <!-- <td ng-show="vm.userColumns['userResourceType'].selected"><select class="form-control" ng-model="vm.search.userResourceType" ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'Billable',label:'Billable'}, {id:'Non-billable',label:'Non-billable'}, {id:'Trainee',label:'Trainee'}, {id:'Intern',label:'Intern'}]"></select></td> -->
                         <td ng-show="vm.userColumns['phone'].selected"></td>
                         <td ng-show="vm.userColumns['joinDate'].selected"></td>
-                        <td ng-show="vm.userColumns['employeeCategory'].selected"><select class="form-control" ng-model="vm.search.employeeCategory" ng-options="opt as opt for opt in ['All', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10']"></select></td>
+                        <td ng-show="vm.userColumns['employeeCategory'].selected">
+                            <select class="form-control" ng-model="vm.search.employeeCategory" 
+                                ng-options="opt as opt for opt in ['All', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10']">
+                            </select>
+                        </td>
                         <td ng-show="vm.userColumns['employeeType'].selected"></td>
                         <!-- <td></td> -->
+                        <td></td>
                         <td></td>
                         <td ng-show="vm.userColumns['timeoffDays'].selected"></td>
                         <td ng-show="vm.userColumns['lopDays'].selected"></td>
                         <td ng-show="vm.userColumns['leaveWallet'].selected"></td>
-                        <td></td>
                         <td ng-show="vm.userColumns['isActive'].selected">
                             <select class="form-control" ng-model="vm.search.isActive" ng-options="opt.id as opt.label for opt in [{id:'', label:'All'}, {id:'true', label:'Active'}, {id:'false', label:'Inactive'}]"></select>
                         </td>
@@ -104,9 +108,9 @@
                                         ng-click="vm.viewLeaveModel(user)"></i></span> -->
                         </td>
 
-                        <td ng-show="vm.userColumns['lopDays'].selected">{{user.lopDays | number}}
+                        <td ng-show="vm.userColumns['lopDays'].selected">{{user.deductedLOP}}
                             <span> <i style="float:right;margin-right:15px;cursor:pointer;" class="fa fa-plus"
-                                    ng-click="vm.viewLeaveModel(user)"></i></span>
+                                    ng-click="vm.viewLOPLeaveModel(user)"></i></span>
                         </td>
                         <td ng-show="vm.userColumns['leaveWallet'].selected">{{user.leaveWallet}}</td>
                         <td ng-show="vm.userColumns['isActive'].selected">

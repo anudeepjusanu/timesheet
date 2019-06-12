@@ -6,6 +6,7 @@
         .controller('Team.IndexController', TeamsController)
         .controller('Team.LeaveBalanceController', LeaveBalanceController)
         .controller('Team.UserLeavesModel',UserLeavesModel)
+        .controller('Team.UserLOPLeavesModel',UserLOPLeavesModel)
         .directive('exportTable', function() {
             return {
                 restrict: 'A',
@@ -126,9 +127,92 @@
                     }
 
                     UserService.updateUserLeaveWalletBalance(vm.user._id, obj).then(function(response) {
-                        // debugger;
+                        debugger;
                         if(response) {                        
                         noty.showSuccess("New Leave has been added successfully!");
+                        vm.enableSaveBtn = true;
+                        $uibModalInstance.close(obj);
+                    }
+                    }, function(error) {
+                        if (error) {
+                            vm.alerts.push({ msg: error, type: 'danger' });
+                        }
+                        vm.enableSaveBtn = true;
+                        $uibModalInstance.close(obj);
+                    });
+                } 
+            } else {
+                vm.enableSaveBtn = false;
+                vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
+            }
+        };
+
+        vm.cancel = function() {
+            $uibModalInstance.dismiss('cancel');
+        };
+    };
+
+    function UserLOPLeavesModel($uibModalInstance, UserService, user, ProjectService, noty) {
+        var vm = this;
+        vm.enableSaveBtn = true;
+        vm.alerts = [];
+        vm.user = user;
+
+        var now = new Date();
+        vm.financialYears = [];
+        vm.financialYear = null;
+        var navYear = 2017;
+        var endYear = now.getFullYear();
+        if(now.getMonth()>=3){
+            var endYear = now.getFullYear() + 1;
+        }
+        while(endYear > navYear){
+            var fYear = navYear + "-" + (navYear+1);
+            vm.financialYears.push(fYear);
+            navYear += 1;
+        }
+        vm.financialYear = fYear;
+
+        vm.yearMonthSelected = false;     
+        // debugger;  
+        vm.dateOptions = {
+            dateDisabled: function(data) {
+                var date = data.date,
+                    mode = data.mode;
+                return mode === 'day' && (date.getDay() != 5);
+            },
+            formatYear: 'yy',
+            maxDate: new Date(2020, 5, 22),
+            startingDay: 1
+        };
+        vm.monthOptions = {
+            datepickerMode: "month",
+            minMode: 'month'
+        };
+        vm.format = 'yyyy-MM';
+
+        vm.ok = function(form) {
+            if (form.$valid) {
+                vm.enableSaveBtn = false;
+                if (vm.user) {
+
+                    if(vm.user.yearMonth) {
+                        var monthNum  = vm.user.yearMonth.getMonth()+1;
+                        var yearMonth = String(vm.user.yearMonth.getFullYear()+"-"+(monthNum>9?monthNum:"0"+monthNum));
+                        vm.user.yearMonth = yearMonth;
+                    }
+
+                    var obj = {
+                        "name": vm.user.name,
+                        "deductedLOP": vm.user.deductedLOP,
+                        "deductedLOPComment": vm.user.deductedLOPComment,
+                        "yearMonth": vm.user.yearMonth
+                    }
+
+                    UserService.updateUserLeaveWalletBalance(vm.user._id, obj).then(function(response) {
+                        // debugger;
+                        if(response) {                        
+                        noty.showSuccess("Deducted LOP has been added successfully!");
                         vm.enableSaveBtn = true;
                         $uibModalInstance.close(obj);
                     }
@@ -173,6 +257,8 @@
             // "userResourceType": {label: "Type", selected: true},
             "phone": {label: "Mobile", selected: false},
             "joinDate": {label: "Join Date", selected: true},
+            "accruedLeaves": {label: "Accrued Leaves", selected: true},
+            "creditedLeaves": {label: "Credited Leaves", selected: true},
             "employeeCategory": {label: "Category", selected: false},
             "employeeType": {label: "Employee Type", selected: false},
             // "leaveWallet": {label: "Leave Wallet", selected: true},
@@ -313,11 +399,13 @@
 
         vm.viewLeaveModel = function(userObj) {
             var user = {};
-            
+
             if (userObj) {
                 user = userObj;
                 user.isCreditedLeave = true;
-            } 
+                // debugger;
+
+            }
 
             var modalInstance = $uibModal.open({
                 animation: true,
@@ -340,5 +428,37 @@
                 vm.getUserLeaves();
             });
         }
+
+        vm.viewLOPLeaveModel = function(userObj) {
+            var user = {};
+
+            if (userObj) {
+                user = userObj;
+                user.isLOPLeave = true;
+            }
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'team/addLOPLeavesModel.html',
+                controller: 'Team.UserLOPLeavesModel',
+                controllerAs: 'vm',
+                size: 'md',
+                resolve: {
+                    user: function() {
+                        return user;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function(user) {
+                vm.getUserLeaves();
+            }, function() {
+                vm.getUserLeaves();
+            });
+        }
+
+
     };
 })();
