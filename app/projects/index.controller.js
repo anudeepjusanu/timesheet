@@ -701,24 +701,24 @@
         };
 
         vm.activeProjectsfilterFn = function(item) {
-            // debugger;
-            if(item.users) {
+            var activeProjectsArr = [];
+            if(item) {
                 _.each(item.users, function(billDatesArr) {
-                    console.log("billDatesArr.billDates ---> " , billDatesArr.billDates);
                     _.each(billDatesArr.billDates, function(billDatesObj){
-                        console.log("billDatesObj --> ", billDatesObj);
-                        console.log("billDatesObj.end --> ", billDatesObj.end);
-                        vm.projects.push(billDatesObj.end);                        
-                        // return !billDatesObj.end;                       
+                        if(!billDatesObj.end) {
+                            activeProjectsArr.push(billDatesObj.end);    
+                        }
                     })
                 })            
             }
-            return !vm.projects.end;
+            return activeProjectsArr.length>0;
         };
 
         vm.billedUsersfilterFn = function(item) {
-            return !item.billDates[0].end;
-            };
+            if(item && item.billDates && item.billDates.length>0) {
+                return !item.billDates[0].end;
+            }
+        };
 
         vm.filterFn = function(item) {
             return !item.end;

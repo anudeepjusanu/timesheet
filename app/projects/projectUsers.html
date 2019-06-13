@@ -17,7 +17,7 @@
                             Project Name <br/>
                             <input type="text" style="margin-top: 4px;" ng-model="vm.search.projectName" class="form-control" />
                         </th>
-                        <th width="120px">
+                        <th width="100px">
                             Business Unit <br/>
                             <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.businessUnit" ng-options="option as option for option in vm.projectBusinessUnits"></select>
                         </th>
@@ -29,8 +29,8 @@
                             <table class="table">
                                 <tr>
                                     <td width="60px"></td>
-                                    <td width="300px">Name</td>
-                                    <td width="480px">
+                                    <td width="150px">Name</td>
+                                    <td width="600px">
                                         <div class="row">
                                             <div class="col-md-3">Start Date</div>
                                             <div class="col-md-3">End Date</div>
@@ -44,7 +44,8 @@
                             </table>
                         </th>
                     </tr>
-                    <tr ng-repeat="project in vm.projects | filter: vm.activeProjectsfilterFn | searchProjectUser:vm.search | orderBy:'name'">
+                    <tr ng-repeat="project in vm.projects | filter: vm.activeProjectsfilterFn | searchProjectUser:vm.search | orderBy:'name'"
+                        ng-show="project.users">
                         <td>{{$index+1}}</td>
                         <td>{{project.projectName}}</td>
                         <td>{{project.businessUnit}}</td>
@@ -53,8 +54,8 @@
                             <table class="table">
                                 <tr ng-repeat="user in project.users | filter: vm.billedUsersfilterFn">
                                     <td width="60px">{{$index+1}}</td>
-                                    <td width="320px">{{user.userName}}</td>
-                                    <td width="480px">
+                                    <td width="150px">{{user.userName}}</td>
+                                    <td width="600px">
                                         <div class="row" ng-repeat="billDate in user.billDates | filter: vm.filterFn">
                                             <div class="col-md-3">{{billDate.start | date : 'mediumDate'}}</div>
                                             <div class="col-md-3">{{billDate.end | date : 'mediumDate'}}</div>
