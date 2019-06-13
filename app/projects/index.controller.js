@@ -558,7 +558,7 @@
             ProjectService.getAll().then(function(response) {
                 vm.projects = response;
                 if (vm.user.projects && vm.user.projects.length > 0) {
-                    _.each(vm.user.projects, function(projectObj) {
+                    _.each(vm.user.projects, function(projectObj) {                        
                         var prjIndex = _.findIndex(vm.projects, { _id: projectObj.projectId });
                         if (prjIndex >= 0) {
                             vm.projects.splice(prjIndex, 1);
@@ -700,6 +700,30 @@
             businessUnit: "All"
         };
 
+        vm.activeProjectsfilterFn = function(item) {
+            // debugger;
+            if(item.users) {
+                _.each(item.users, function(billDatesArr) {
+                    console.log("billDatesArr.billDates ---> " , billDatesArr.billDates);
+                    _.each(billDatesArr.billDates, function(billDatesObj){
+                        console.log("billDatesObj --> ", billDatesObj);
+                        console.log("billDatesObj.end --> ", billDatesObj.end);
+                        vm.projects.push(billDatesObj.end);                        
+                        // return !billDatesObj.end;                       
+                    })
+                })            
+            }
+            return !vm.projects.end;
+        };
+
+        vm.billedUsersfilterFn = function(item) {
+            return !item.billDates[0].end;
+            };
+
+        vm.filterFn = function(item) {
+            return !item.end;
+            };
+
         function getProjectUsers() {
             ProjectService.getProjectUsers().then(function(response) {
                 vm.projects = response;
@@ -707,7 +731,7 @@
                 console.log(error);
             });
         }
-
+            
         vm.viewAssignUser = function(project, user) {
             if (!user) {
                 var user = {};
