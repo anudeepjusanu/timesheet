@@ -13,7 +13,7 @@
                 <table class="table table-condensed table-bordered table-striped" export-table>
                     <tr>
                         <th width="40px">S.No</th>
-                        <th width="200px">
+                        <th width="150px">
                             Project Name <br/>
                             <input type="text" style="margin-top: 4px;" ng-model="vm.search.projectName" class="form-control" />
                         </th>
@@ -29,7 +29,7 @@
                             <table class="table">
                                 <tr>
                                     <td width="60px"></td>
-                                    <td width="320px">Name</td>
+                                    <td width="300px">Name</td>
                                     <td width="480px">
                                         <div class="row">
                                             <div class="col-md-3">Start Date</div>
@@ -44,20 +44,18 @@
                             </table>
                         </th>
                     </tr>
-                    <tr ng-repeat="project in vm.projects | searchProjectUser:vm.search | orderBy:'name'"
-                        ng-show="project.users">
+                    <tr ng-repeat="project in vm.projects | filter: vm.activeProjectsfilterFn | searchProjectUser:vm.search | orderBy:'name'">
                         <td>{{$index+1}}</td>
                         <td>{{project.projectName}}</td>
                         <td>{{project.businessUnit}}</td>
                         <td>{{project.projectType}}</td>
                         <td>
                             <table class="table">
-                                <tr ng-repeat="user in project.users" ng-show="user.billDates">
+                                <tr ng-repeat="user in project.users | filter: vm.billedUsersfilterFn">
                                     <td width="60px">{{$index+1}}</td>
                                     <td width="320px">{{user.userName}}</td>
                                     <td width="480px">
-                                        <div class="row" ng-repeat="billDate in user.billDates"
-                                            ng-show="!billDate.end && billDate.start">
+                                        <div class="row" ng-repeat="billDate in user.billDates | filter: vm.filterFn">
                                             <div class="col-md-3">{{billDate.start | date : 'mediumDate'}}</div>
                                             <div class="col-md-3">{{billDate.end | date : 'mediumDate'}}</div>
                                             <div class="col-md-2">{{billDate.allocatedHours}}</div>
