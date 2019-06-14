@@ -702,10 +702,12 @@
 
         vm.activeProjectsfilterFn = function(item) {
             var activeProjectsArr = [];
+            // debugger;
             if(item) {
                 _.each(item.users, function(billDatesArr) {
                     _.each(billDatesArr.billDates, function(billDatesObj){
-                        if(!billDatesObj.end) {
+                        var currentDate = new Date();
+                        if(!billDatesObj.end || (billDatesObj.end > billDatesObj.currentDate)) {
                             activeProjectsArr.push(billDatesObj.end);    
                         }
                     })

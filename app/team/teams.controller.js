@@ -403,8 +403,6 @@
             if (userObj) {
                 user = userObj;
                 user.isCreditedLeave = true;
-                // debugger;
-
             }
 
             var modalInstance = $uibModal.open({

@@ -13,7 +13,7 @@
                 <table class="table table-condensed table-bordered table-striped" export-table>
                     <tr>
                         <th width="40px">S.No</th>
-                        <th width="150px">
+                        <th width="100px">
                             Project Name <br/>
                             <input type="text" style="margin-top: 4px;" ng-model="vm.search.projectName" class="form-control" />
                         </th>
@@ -25,12 +25,13 @@
                             Project Type <br/>
                             <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.projectType" ng-options="prj.projectTypeId as prj.projectTypeName for prj in vm.projectTypes"></select>
                         </th>
+                        <th width="100px">Project Owner</th>
                         <th>
                             <table class="table">
                                 <tr>
-                                    <td width="60px"></td>
-                                    <td width="150px">Name</td>
-                                    <td width="600px">
+                                    <td width="50px"></td>
+                                    <td width="150px">Resource Name</td>
+                                    <td width="550px">
                                         <div class="row">
                                             <div class="col-md-3">Start Date</div>
                                             <div class="col-md-3">End Date</div>
@@ -50,6 +51,7 @@
                         <td>{{project.projectName}}</td>
                         <td>{{project.businessUnit}}</td>
                         <td>{{project.projectType}}</td>
+                        <td>{{project.ownerName}}</td>
                         <td>
                             <table class="table">
                                 <tr ng-repeat="user in project.users | filter: vm.billedUsersfilterFn">
