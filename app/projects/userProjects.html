@@ -13,10 +13,11 @@
                 <table class="table table-condensed table-bordered table-striped" export-table>
                     <tr>
                         <th width="40px">S.No</th>
-                        <th width="240px">
+                        <th width="100px">
                             User Name <br/>
                             <input type="text" style="margin-top: 4px;" ng-model="vm.search.userName" class="form-control" />
                         </th>
+                        <th>Skills</th>
                         <th width="80px">
                             Type <br/>
                             <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.userResourceType" ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'Billable',label:'Billable'}, {id:'Non-billable',label:'Non-billable'}, {id:'Trainee',label:'Trainee'}, {id:'Intern',label:'Intern'}]"></select>
@@ -24,9 +25,10 @@
                         <th>
                             <table class="table">
                                 <tr>
-                                    <th width="60px">P.No</th>
-                                    <td width="280px">Name</td>
-                                    <td width="520px">
+                                    <th width="40px">S.No</th>
+                                    <td width="150px">Project Name</td>
+                                    <td width="100px">Project Owner</td>
+                                    <td width="500px">
                                         <div class="row">
                                             <div class="col-md-3">Start Date</div>
                                             <div class="col-md-3">End Date</div>
@@ -40,17 +42,20 @@
                             </table>
                         </th>
                     </tr>
-                    <tr ng-repeat="user in vm.users | searchUserProject:vm.search | orderBy:'userName'">
+                    <tr ng-repeat="user in vm.users | filter: vm.activeProjectsfilterFn | searchUserProject:vm.search | orderBy:'userName'"
+                        >
                         <td>{{$index+1}}</td>
                         <td>{{user.userName}}</td>
+                        <td>{{user.skills}}HTML, CSS, JAVASCRIPT, ANGULAR</td>
                         <td>{{user.userResourceType}}</td>
                         <td>
                             <table class="table">
-                                <tr ng-repeat="project in user.projects | orderBy:'projectName'">
-                                    <td width="60px">{{$index+1}}</td>
-                                    <td width="280px">{{project.projectName}}</td>
+                                <tr ng-repeat="project in user.projects | filter: vm.billedUsersfilterFn | orderBy:'projectName'">
+                                    <td width="40px">{{$index+1}}</td>
+                                    <td width="150px">{{project.projectName}}</td>
+                                    <td width="100px">{{project.ownerName}}</td>
                                     <td width="520px">
-                                        <div class="row" ng-repeat="billDate in project.billDates">
+                                        <div class="row" ng-repeat="billDate in project.billDates | filter: vm.filterFn">
                                             <div class="col-md-3">{{billDate.start | date : 'mediumDate'}}</div>
                                             <div class="col-md-3">{{billDate.end | date : 'mediumDate'}}</div>
                                             <div class="col-md-2">{{billDate.allocatedHours}}</div>

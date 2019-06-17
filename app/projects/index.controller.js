@@ -702,12 +702,11 @@
 
         vm.activeProjectsfilterFn = function(item) {
             var activeProjectsArr = [];
-            // debugger;
             if(item) {
                 _.each(item.users, function(billDatesArr) {
                     _.each(billDatesArr.billDates, function(billDatesObj){
                         var currentDate = new Date();
-                        if(!billDatesObj.end || (billDatesObj.end > billDatesObj.currentDate)) {
+                        if(!billDatesObj.end || (billDatesObj.end > currentDate)) {
                             activeProjectsArr.push(billDatesObj.end);    
                         }
                     })
@@ -813,6 +812,43 @@
                 console.log(error);
             });
         }
+
+        vm.activeProjectsfilterFn = function(item) {
+            var activeProjectsArr = [];
+           
+            if(item) {
+                _.each(item.projects, function(billDatesArr) {
+                    _.each(billDatesArr.billDates, function(billDatesObj){
+                        var currentDate = new Date();                       
+                        if(!billDatesObj.end || (billDatesObj.end > currentDate)) {
+                            activeProjectsArr.push(billDatesObj.end);    
+                        }
+                    })
+                })            
+            }
+            return activeProjectsArr.length>0;
+        };
+
+        vm.billedUsersfilterFn = function(item) {
+            var activeProjectsArr = [];
+            if(item && item.billDates && item.billDates.length>0) {
+                if(item && item.billDates && item.billDates.length>1) {
+                _.each(item.billDates, function(billDatesObj) {
+                    var currentDate = new Date();
+                       
+                    if(!billDatesObj.end || (billDatesObj.end > currentDate)) {
+                        activeProjectsArr.push(billDatesObj.end);    
+                    }
+                })
+                return activeProjectsArr.length>0;
+            }
+                return !item.billDates[0].end;
+            }
+        };
+
+        vm.filterFn = function(item) {
+            return !item.end;
+            };
 
         vm.viewAssignUser = function(user, project) {
             user.isNew = false;
