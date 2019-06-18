@@ -17,7 +17,6 @@
                             User Name <br/>
                             <input type="text" style="margin-top: 4px;" ng-model="vm.search.userName" class="form-control" />
                         </th>
-                        <th>Skills</th>
                         <th width="80px">
                             Type <br/>
                             <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.userResourceType" ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'Billable',label:'Billable'}, {id:'Non-billable',label:'Non-billable'}, {id:'Trainee',label:'Trainee'}, {id:'Intern',label:'Intern'}]"></select>
@@ -46,7 +45,6 @@
                         >
                         <td>{{$index+1}}</td>
                         <td>{{user.userName}}</td>
-                        <td>{{user.skills}}HTML, CSS, JAVASCRIPT, ANGULAR</td>
                         <td>{{user.userResourceType}}</td>
                         <td>
                             <table class="table">
