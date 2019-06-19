@@ -12,10 +12,11 @@
         .controller('Projects.ClientsController', ClientsController)
         .controller('Projects.UsersController', UsersController)
         .controller('Projects.UserProjectsController', UserProjectsController)
+        .controller('Projects.projectHierarchyController', projectHierarchyController)
         .filter('searchProjectUser', searchProjectUser)
         .filter('searchUserProject', searchUserProject)
         .filter('searchProject', searchProject)
-
+   
     function Controller(UserService, ProjectService, $filter, _, FlashService, NgTableParams, $uibModal, noty) {
         var vm = this;
         vm.user = {};
@@ -903,7 +904,7 @@
                 output = $filter('filter')(output, { userName: searchObj.userName });
             }
             if (searchObj.userResourceType && searchObj.userResourceType.length > 0) {
-                console.log(searchObj.userResourceType);
+                // console.log(searchObj.userResourceType);
                 output = $filter('filter')(output, function(item) {
                     return (searchObj.userResourceType == item.userResourceType);
                 });
@@ -911,5 +912,83 @@
             return output;
         }
     }
+
+    function projectHierarchyController(UserService, ProjectService, _, $uibModal) {
+        var vm = this;
+        vm.user = {};
+        vm.users = [];
+
+        vm.projectOwnersArr = [];
+        vm.projectNamesArr = [];
+
+        vm.search = {
+            userName: "",
+            userResourceType: ""
+        };
+
+
+        function getAllUsers() {
+                    UserService.GetAll().then(function(users) {
+                        vm.users = users;
+                        var projectOwnersArr = [];
+                        var projectNamesArr = [];
+                        debugger;
+                        if (vm.users) {
+                            _.each(users, function(user) {
+                                if(user && user.projects) {
+                               _.each(user.projects, function(project) {
+                                projectOwnersArr.push(project.ownerName);
+                                projectNamesArr.push(project.projectName);
+                                console.log("owners and projects names : " , projectNamesArr,projectOwnersArr)
+                               })
+                            }
+                            });
+                        }
+                    });
+                };
+
+        function getProjectUsers() {
+            
+                    ProjectService.getProjectUsers().then(function(response) {
+                        vm.projects = response;
+                        var projectOwnersArr = [];
+                        var projectNamesArr = [];
+        
+                        _.each(vm.projects, function(projectObj) {
+
+                            projectOwnersArr = _.find(vm.projects, { ownerName: projectObj.ownerName });
+                            projectNamesArr = _.find(vm.projects, { projectName: projectObj.projectName });
+
+                            vm.projectOwnersArr.push(projectObj.ownerName);
+                            vm.projectNamesArr.push(projectObj.projectName);
+                            // console.log("vm.projectOwnersArr : " , vm.projectOwnersArr);
+                            // console.log("vm.projectNamesArr : " , vm.projectNamesArr);
+                           
+                        })
+                        // vm.projectOwnersArr.push(projectOwnersArr.ownerName);
+                        // vm.projectNamesArr.push(projectNamesArr.projectName);
+                        // console.log("vm.projectOwnersArr : " , vm.projectOwnersArr);
+                        // console.log("vm.projectNamesArr : " , vm.projectNamesArr);
+        
+                    }, function(error) {
+                        console.log(error);
+                    });
+                }
+
+        initController();
+
+        function initController() {
+            UserService.GetCurrent().then(function(user) {
+                vm.user = user;
+                if (vm.user.admin !== true) {
+
+                }
+            });
+            getAllUsers();
+            getProjectUsers();
+            // getUserProjects();
+        }
+    };
+
 
 })();

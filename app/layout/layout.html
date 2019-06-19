@@ -67,6 +67,11 @@
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'userProjects'}">
                 <a ui-sref="userProjects"><img class="fa" src="app-content/assets/operator-with-headset.png"> <span class="xn-text">User Projects</span></a>
             </li>
+
+            <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'projectHierarchy'}">
+                <a ui-sref="projectHierarchy"><img class="fa" src="app-content/assets/operator-with-headset.png"> <span class="xn-text">Project Hierarchy</span></a>
+            </li>
+
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'poolUsers'}">
                 <a ui-sref="poolUsers"><img class="fa" src="app-content/assets/sleepy-man.png"> <span class="xn-text">Resource Pool</span></a>
             </li>

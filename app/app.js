@@ -196,6 +196,14 @@
                 parent: 'layout',
                 data: { activeTab: 'userProjects' }
             })
+            .state('projectHierarchy', {
+                url: '/projects/projectHierarchy',
+                templateUrl: 'projects/projectHierarchy.html',
+                controller: 'Projects.projectHierarchyController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'projectHierarchy' }
+            })
             .state('surveys', {
                 url: '/surveys',
                 templateUrl: 'surveys/index.html',

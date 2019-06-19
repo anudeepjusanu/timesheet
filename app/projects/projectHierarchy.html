@@ -1,0 +1,82 @@
+﻿<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+        {{alert.msg}}
+    </div>
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="">
+            <!-- START DEFAULT TABLE EXPORT -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Project Hierarchy</h3>
+                </div>
+                <div class="panel-body panel-body-table">
+                    <table class="table table-condensed table-bordered table-striped" export-table>
+                        <tr>
+                            <th width="40px">S.No</th>
+                            <th width="100px">
+                                    Project Owner <br/>
+                                    <!-- <input type="text" style="margin-top: 4px;" ng-model="vm.search.ownerName" class="form-control" /> -->
+                                </th>
+                                <th width="100px">
+                                        Project Name <br/>
+                                        <!-- <input class="form-control" style="margin-top: 4px;" ng-model="vm.search.projectName" class="form-control"> -->
+                                    </th>
+                            <!-- <th width="100px">
+                                Project Name <br/>
+                                <input type="text" style="margin-top: 4px;" ng-model="vm.search.userName" class="form-control" />
+                            </th> -->
+                            <!-- <th width="80px">
+                                Type <br/>
+                                <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.userResourceType" ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'Billable',label:'Billable'}, {id:'Non-billable',label:'Non-billable'}, {id:'Trainee',label:'Trainee'}, {id:'Intern',label:'Intern'}]"></select>
+                            </th> -->
+                            <!-- <th>
+                                <table class="table">
+                                    <tr>
+                                        <th width="40px">S.No</th>
+                                        <td width="150px">Project Name</td>
+                                        <td width="100px">Project Owner</td>
+                                        <td width="500px">
+                                            <div class="row">
+                                                <div class="col-md-3">Start Date</div>
+                                                <div class="col-md-3">End Date</div>
+                                                <div class="col-md-2">Allocated Hours</div>
+                                                <div class="col-md-2">Billable Limit</div>
+                                                <div class="col-md-2">Resource Type</div>
+                                            </div>
+                                        </td>
+                                        <td>Action</td>
+                                    </tr>
+                                </table>
+                            </th> -->
+                        </tr>
+                        <tr ng-repeat="project in vm.projects">
+                            <td>{{$index+1}}</td>
+                            <td>{{project.ownerName}}</td>
+                            <td>{{project.projectName}}</td>
+                            <!-- <td>
+                                <table class="table">
+                                    <tr ng-repeat="project in user.projects | filter: vm.billedUsersfilterFn | orderBy:'projectName'">
+                                        <td width="40px">{{$index+1}}</td>
+                                        <td width="150px">{{project.projectName}}</td>
+                                        <td width="100px">{{project.ownerName}}</td>
+                                        <td width="520px">
+                                            <div class="row" ng-repeat="billDate in project.billDates | filter: vm.filterFn">
+                                                <div class="col-md-3">{{billDate.start | date : 'mediumDate'}}</div>
+                                                <div class="col-md-3">{{billDate.end | date : 'mediumDate'}}</div>
+                                                <div class="col-md-2">{{billDate.allocatedHours}}</div>
+                                                <div class="col-md-2">{{billDate.billableMaxHours}}</div>
+                                                <div class="col-md-2">
+                                                    {{billDate.resourceType}}
+                                                    <i ng-if="billDate.resourceStatus && billDate.resourceStatus=='Lock'" class="glyphicon glyphicon-lock"></i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td> -->
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>

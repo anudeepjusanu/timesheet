@@ -50,6 +50,9 @@
         <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'userProjects'}">
             <a ui-sref="userProjects"><span class="fa fa-users"></span> <span class="xn-text">User Projects</span></a>
         </li>
+        <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'projectHierarchy'}">
+            <a ui-sref="projectHierarchy"><span class="fa fa-users"></span> <span class="xn-text">Project Hierarchy</span></a>
+        </li>
         <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'allUsers'}">
             <a ui-sref="allUsers"><span class="fa fa-users"></span> <span class="xn-text">All Users</span></a>
         </li>
