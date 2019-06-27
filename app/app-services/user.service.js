@@ -118,7 +118,7 @@
         }
 
         function updateUserLeaveWalletBalance(_id,obj) {
-            return $http.put('/api/users/updateUserLeaveWalletBalance/' + _id, obj).then(handleSuccess, handleError);
+            return $http.post('/api/users/updateUserLeaveWalletBalance/' + _id, obj).then(handleSuccess, handleError);
         }
 
         // private functions

@@ -31,7 +31,7 @@ router.put('/updatePushToken/:_id', updatePushToken);
 router.post('/remind/user/:_id', remindByMessage);
 router.get('/myLeaveWallet', getMyLeaveWallet);
 router.get('/myLeaveWalletBalance', getMyLeaveWalletBalance);
-router.put('/updateUserLeaveWalletBalance/:_id', updateUserLeaveWalletBalance);
+router.post('/updateUserLeaveWalletBalance/:_id', updateUserLeaveWalletBalance);
 
 module.exports = router;
 
