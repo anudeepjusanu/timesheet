@@ -1,0 +1,109 @@
+<style>
+    table,th,td {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+    td {
+  border-right: solid 1px; 
+  border-left: solid 1px;
+}
+.skill-rating-button {
+    border-radius: 5px;
+    height: 20px;
+    padding: 0px 0px 17px 5px;
+    margin: 2px;
+    color: #085b84;
+    background-color: #eee;
+    border: 1px solid #e5bbbb;
+}
+.badge .btn-primary:active:hover {
+    float: right;
+    background-color: #eeeeee;
+}
+.btn-primary .badge {
+    color: black;
+    background-color: #e5dbdb;
+}
+.skill-rating-edit-btn {
+    background-color: #33414e;
+    border-color: #33414e;
+    color: white;
+    font-weight: 500;
+}
+
+.skill-rating-edit-btn:hover {
+    background-color:black;
+    border-color: black;
+    color: white !important;
+}
+</style>
+
+
+<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+    {{alert.msg}}</div>
+<div class="content-wrapper">
+    <div class="" ng-if="vm.user.admin">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Skills Profile</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-condensed table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th ng-show="vm.userColumns['name'].selected" class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='name'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='name'&&vm.search.sortDESC===true}">
+                            <a ng-click="vm.sorting('name');">Profile Name</a>
+                        </th>
+                        <th>Technical Skills</th>
+                        <th ng-show="vm.userColumns['userResourceType'].selected" >Type</th>
+                        <th ng-show="vm.userColumns['isActive'].selected" >Status</th>
+                        <th>Edit Profile</th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td ng-show="vm.userColumns['name'].selected">
+                            <input class="form-control" type="text" ng-model="vm.search.userName" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" ng-model="vm.search.skillName" />
+                        </td>
+                        <td ng-show="vm.userColumns['userResourceType'].selected"><select class="form-control" ng-model="vm.search.userResourceType" ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'Billable',label:'Billable'}, {id:'Non-billable',label:'Non-billable'}, {id:'Trainee',label:'Trainee'}, {id:'Intern',label:'Intern'}, {id:'Sales',label:'Sales'}, {id:'Operations',label:'Operations'}, {id:'Leadership',label:'Leadership'}]"></select></td>
+                        <td ng-show="vm.userColumns['isActive'].selected">
+                            <select class="form-control" ng-model="vm.search.isActive" ng-options="opt.id as opt.label for opt in [{id:'', label:'All'}, {id:'true', label:'Active'}, {id:'false', label:'Inactive'}]"></select>
+                        </td>
+                        <td></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="user in vm.users | allUserSearch:vm.search | orderBy:vm.search.orderBy:vm.search.sortDESC">
+                        <td>{{$index + 1}}</td>
+                        <td ng-show="vm.userColumns['name'].selected" style="width:100px;">
+                            <div class="user-imagee" style="text-align: center;padding: 0px">
+                                 <img ng-src="{{user.profileImgUrl}}" width="75" height="75" onerror="this.src='/app/app-content/assets/user.jpg'" alt="{{user.name}}" />
+                                 <span>{{user.name}}</span>
+                            </div>
+                        </td>
+                        <td style="width: 400px;text-align: left;"> 
+                           <div style="overflow-y:scroll;height: 75px;">
+                             <button type="button" ng-repeat="skill in vm.allSkills" class="btn btn-primary skill-rating-button">{{skill.skillName}} &nbsp;
+                                <span class="badge">{{skill.skillLevel}}</span>
+                            </button>
+                        </div>
+                        </td>
+                        <td ng-show="vm.userColumns['userResourceType'].selected" >{{user.userResourceType}}</td>
+                        <td ng-show="vm.userColumns['isActive'].selected" >
+                            <span ng-if="user.isActive==true">Active</span>
+                            <span ng-if="user.isActive==false">Inactive</span>
+                        </td>
+                        <td>
+                            <a class="btn btn-xs skill-rating-edit-btn" 
+                                ng-click="vm.UpdateUserSkillsProfile(user)" ng-show="vm.user.admin">Edit Skills Profile</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

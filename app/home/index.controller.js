@@ -7,6 +7,8 @@
         .controller('Home.SidebarController', SidebarController)
         .controller('Home.AdminUsersController', AdminUsersController)
         .controller('Home.AllUsersController', AllUsersController)
+        .controller('Home.SkillsProfileController', SkillsProfileController)
+        .controller('Home.UpdateSkillsProfileController',UpdateSkillsProfileController)
         .controller('Home.AdminController', AdminController)
         .controller('Home.UserInfoController', UserInfoController)
         .controller('Home.UserModelController', UserModelController)
@@ -58,7 +60,7 @@
                 return output;
             }
         })
-
+    
     function Controller(UserService, TimesheetService, ProjectService, $filter, _, $interval, $window) {
         var vm = this;
         var currentDate;
@@ -796,6 +798,287 @@
                     vm.isAdmin = false;
                 }
             });
+        }
+    }
+
+    function SkillsProfileController(UserService, _, $uibModal, $state, $window, $http, $timeout) {
+        var vm = this;
+        vm.user = null;
+        vm.users = [];
+        vm.search = {
+            userName: "",
+            userResourceType: "",
+            userResourceStatus: "",
+            employeeCategory: "All",
+            isActive: 'true',
+            orderBy: 'name',
+            sortDESC: false
+        };
+        vm.userColumns = {
+            "name": {label: "Name", selected: true},
+            "userResourceType": {label: "Type", selected: true},
+            "isAdmin": {label: "Is Admin", selected: false},
+            "isActive": {label: "Status", selected: true}
+        };
+
+        vm.allSkills = [
+            {"skillName": "HTML5", "skillLevel": ""},
+            {"skillName": "Javascript", "skillLevel": ""},
+            {"skillName": "CSS3", "skillLevel": ""},
+            {"skillName": "Bootstrap", "skillLevel": ""},
+            {"skillName": "Java", "skillLevel": ""},
+            {"skillName": "PHP", "skillLevel": ""},
+            {"skillName": "Angularjs", "skillLevel": ""},
+            {"skillName": "Mongo", "skillLevel": ""},
+            {"skillName": "Python", "skillLevel": ""},
+            {"skillName": "DevOps", "skillLevel": ""}
+        ];
+
+        vm.sorting = function(orderBy) {
+            if (vm.search.orderBy == orderBy) {
+                vm.search.sortDESC = !vm.search.sortDESC;
+            } else {
+                vm.search.sortDESC = false;
+            }
+            vm.search.orderBy = orderBy;
+        };
+
+        function deleteUser(id) {
+            UserService.Delete(id).then(function(users) {
+                getAllUsers();
+            });
+        }
+
+        function getAllUsers() {
+            UserService.GetAll().then(function(users) {
+                vm.users = users;
+                // vm.users.push(vm.allSkills);
+                debugger;
+                _.each(vm.users, function(userObj) {
+                    if (!(userObj.profileImgUrl) || userObj.profileImgUrl == "") {
+                        userObj.profileImgUrl = '/app/app-content/assets/user.jpg';
+                        // userObj.push(vm.allSkills);
+                    }
+                    if (userObj.reportingTo) {
+                        var reportUser = _.find(vm.users, { _id: userObj.reportingTo });
+                        userObj.reportingUserName = reportUser.name;
+                    }
+                });
+            });
+        }
+
+        vm.UpdateUserSkillsProfile = function(user) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'home/editSkillsProfile.html',
+                controller: 'Home.UpdateSkillsProfileController',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    user: function() {
+                        return user;
+                    },
+                    reportUsers: function() {
+                        var reportUsers = [];
+                        reportUsers.push({ id: null, name: "None" });
+                        _.each(vm.users, function(userObj) {
+                            if (userObj.isActive === true && user._id != userObj._id && userObj.userRole && userObj.userRole == "manager") {
+                                reportUsers.push({ id: userObj._id, name: userObj.name });
+                            }
+                        });
+                        return reportUsers;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function(userObj) {
+                getAllUsers();
+            }, function() {
+                getAllUsers();
+            });
+        }
+
+        vm.stopPropagation = function(e){
+            e.stopPropagation();
+        }
+
+        initController();
+
+        function initController() {
+            UserService.GetCurrent().then(function(user) {
+                vm.user = user;
+                getAllUsers();
+                if (vm.user.admin) {
+                    vm.isAdmin = true;
+                } else {
+                    vm.isAdmin = false;
+                }
+            });
+        }
+    }
+
+    function UpdateSkillsProfileController(UserService, $filter, noty, $uibModalInstance, user, reportUsers) {
+        var vm = this;
+        vm.userObj = user;
+        vm.alerts = [];
+        vm.userRoles = [];
+        vm.reportUsers = reportUsers;
+        vm.enableSaveBtn = true;
+        vm.closeAlert = function(index) {
+            vm.alerts.splice(index, 1);
+        }
+        vm.joinDateOpened = false;
+        vm.dateOptions = {
+            formatYear: 'yy',
+            maxDate: new Date(2020, 5, 22),
+            startingDay: 1
+        };
+        vm.employeeTypes = [
+            {id: "InternalEmployee", label: "Internal Employee"},
+            {id: "InternalContractor", label: "Internal Contractor"},
+            {id: "ExternalContractor", label: "External Contractor"}
+        ]
+        if(vm.userObj.joinDate){
+            vm.userObj.joinDate = new Date(vm.userObj.joinDate);
+        }
+
+        vm.selectedSkill = {
+            "skillName":"", "skillLevel":""
+        } 
+
+        vm.allSkills = [
+            {"skillName": "HTML5", "skillLevel": ""},
+            {"skillName": "Javascript", "skillLevel": ""},
+            {"skillName": "CSS3", "skillLevel": ""},
+            {"skillName": "Bootstrap", "skillLevel": ""},
+            {"skillName": "Java", "skillLevel": ""},
+            {"skillName": "PHP", "skillLevel": ""},
+            {"skillName": "Angularjs", "skillLevel": ""},
+            {"skillName": "Mongo", "skillLevel": ""},
+            {"skillName": "Python", "skillLevel": ""},
+            {"skillName": "DevOps", "skillLevel": ""}
+        ];
+
+        vm.skillLevels = [
+            {"id":"Beginner","skillLevel": "Beginner"},
+            {"id":"Intermediate","skillLevel": "Intermediate"},
+            {"id":"Advance","skillLevel": "Advance"},
+            {"id":"Expert","skillLevel": "Expert"}
+        ]
+
+        vm.newSkills = [];
+
+        vm.selectUserSkillForAddition = function() {
+            vm.selectedSkill.skillName = event.target.text;
+            vm.selectedSkill.skillLevel = vm.selectedSkill.skillLevel;
+        }
+
+        vm.addOtherSkill = function() {
+            if(vm.otherSkill) {
+                vm.newSkills.push({
+                    "skillName": vm.otherSkill,
+                    "skillLevel": ""
+                });
+                vm.otherSkill = '';
+            }
+        }
+
+        vm.addSelectedSkill = function() {
+            if(vm.selectedSkill.skillName) {
+                if(vm.newSkills){
+                    var existSkillName = _.find(vm.newSkills, { "skillName": vm.selectedSkill.skillName });
+                        if (!existSkillName) { //avoid duplicate record
+                            vm.newSkills.push({ 
+                                "skillName": vm.selectedSkill.skillName,
+                                "skillLevel": vm.selectedSkill.skillLevel
+                            });
+                        }
+                }
+                vm.selectedSkill.skillName = '';
+                vm.selectedSkill.skillLevel = '';
+            }
+        }
+
+        vm.selectedSkillForDelete = {
+            "skillName": "", "skillLevel": ""
+        } 
+
+        vm.selectUserSkillForDeletion = function() {
+            vm.selectedSkillForDelete.skillName = event.target.childNodes[0].data.trim();
+        }
+
+        vm.deleteSelectedSkill = function() {	
+            if(vm.selectedSkillForDelete.skillName) {
+               
+                if(vm.newSkills){
+                    var foundSkillName = _.find(vm.newSkills, { "skillName": vm.selectedSkillForDelete.skillName });
+                    var index =  vm.newSkills.indexOf(foundSkillName, 1);
+                    if(index == -1) {
+                        index = index + 1;
+                    }
+                }
+                vm.newSkills.splice(index, 1);
+                vm.selectedSkillForDelete.skillName = '';
+                vm.selectedSkillForDelete.skillLevel = '';
+            } 
+        }
+        
+        vm.updateOptionLevel = function() {
+            var skillName = event.target.parentElement.firstChild.data.trim();
+            var skillLevel = event.target.value;
+           
+            if(vm.newSkills){
+                var foundSkillObj = _.find(vm.newSkills, { "skillName": skillName });               
+                   var index =  vm.newSkills.indexOf(foundSkillObj, 1);
+                   if(index == -1) { index = index + 1; }  
+                   foundSkillObj.skillLevel = skillLevel;
+                   vm.newSkills[index] = foundSkillObj;
+            }
+        }
+
+        vm.saveUser = function(userForm) {
+            debugger;
+            if (userForm.$valid) {
+
+                var obj ={};
+                if(vm.newSkills){
+                    _.each(vm.newSkills, function(userObj) {                        
+                        var foundSkillObj = _.find(vm.allSkills, { "skillName": userObj.skillName });
+                        var index =  vm.allSkills.indexOf(foundSkillObj, 1);
+                        if(index == -1) { index = index + 1; }      
+                        vm.allSkills.splice(index, 1);
+                        vm.allSkills.push({
+                            skillName: userObj.skillName,
+                            skillLevel: userObj.skillLevel
+                        });                       
+                        obj = {"name": vm.userObj.name}
+                    });
+                    obj.allSkills = vm.allSkills;
+                    vm.userObj.push(vm.allSkills);
+                }
+
+                UserService.UpdateEmployeeInfo(vm.userObj._id, obj).then(function(response) {
+                    noty.showSuccess("User Skill Profile have been updated successfully!");
+                    $uibModalInstance.close();
+                }, function(error) {
+                    if (error) {
+                        vm.alerts.push({ msg: error, type: 'danger' });
+                    }
+                });
+            }
+        }
+        vm.employeeCategories = ["C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10"];
+
+        vm.closeUser = function() {
+            $uibModalInstance.close();
+        }
+
+        init();
+
+        function init() {
+            vm.userRoles = UserService.getUserRoles();
         }
     }
 

@@ -132,6 +132,14 @@
                 parent: 'layout',
                 data: { activeTab: 'home' }
             })
+            .state('skillsProfile', {
+                url: '/userSkillsProfile',
+                templateUrl: 'home/skillsProfile.html',
+                controller: 'Home.SkillsProfileController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'skillsProfile' }
+            })
             .state('account', {
                 url: '/account',
                 templateUrl: 'account/index.html',
@@ -204,6 +212,7 @@
                 parent: 'layout',
                 data: { activeTab: 'projectHierarchy' }
             })
+           
             .state('surveys', {
                 url: '/surveys',
                 templateUrl: 'surveys/index.html',
