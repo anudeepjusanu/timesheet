@@ -296,7 +296,6 @@
         }
 
         vm.getUserLeaves = function(){
-
             TimesheetService.usersLeaveBalance(vm.financialYear).then(function(response) {
                 if(response){
                     _.each(vm.users, function(userObj){
