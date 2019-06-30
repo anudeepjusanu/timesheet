@@ -1,6 +1,6 @@
 <div class="modal-header">
     <h3 class="modal-title" id="modal-title">
-        <span ng-if="vm.user.isCreditedLeave">Add New Leaves</span> 
+        <span ng-if="vm.user.isCreditedLeave">Add New Leaves</span>
         <!-- <span ng-if="vm.user.isCreditedLeave===false">Delete Leaves</span> -->
     </h3>
 </div>
@@ -8,54 +8,41 @@
     <div class="row" style="align-items: center;">
         <form class="form-horizontal" name="vm.userLeaveForm">
             <div class="form-group">
-                    <label class="col-md-4 control-label">Employee Name</label>
-                    <div class="col-md-7">
-                        <input type="text" class="form-control" ng-model="vm.user.name" ng-required="true" disabled/>
-                    </div>
+                <label class="col-md-4 control-label">Employee Name</label>
+                <div class="col-md-7">
+                    <input type="text" class="form-control" ng-model="vm.user.name" ng-required="true" disabled />
                 </div>
+            </div>
             <div class="form-group">
-                    <label class="col-md-4 control-label">Credited Leaves</label>
-                    <div class="col-md-7">
-                        <input type="number" class="form-control" min="1" max="100" ng-model="vm.user.creditedLeaves" ng-required="true"/>
-                    </div>
+                <label class="col-md-4 control-label">Credited Leaves</label>
+                <div class="col-md-7">
+                    <input type="number" class="form-control" min="0" max="31" ng-model="vm.user.creditedLeaves"
+                        ng-required="true" />
                 </div>
-                <!-- <div class="form-group">
-                        <label class="col-md-4 control-label">Deducted LOP</label>
-                        <div class="col-md-7">
-                            <input type="text" class="form-control" ng-model="vm.user.deductedLOP"/>
-                        </div>
-                    </div> -->
-                    <!-- <input type="text" class="form-control" ng-model="vm.user.joinDate" ng-required="true" /> -->
-               
-                    <div class="form-group">
-                            <label class="col-md-4 col-xs-12 control-label">Select Year-Month</label>
-                            <div class="col-md-7">
-                                    <p class="input-group">
-                                        <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}" ng-model="vm.user.yearMonth" 
-                                        is-open="vm.yearMonthSelected" datepicker-options="vm.monthOptions" ng-required="true" 
-                                        close-text="Close" ng-change="vm.yearMonthSelect" />
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default" ng-click="vm.yearMonthSelected = !vm.yearMonthSelected">
-                                                <i class="glyphicon glyphicon-calendar"></i>
-                                            </button>
-                                        </span>
-                                    </p>
-                                </div>
-                        </div> 
-
-                    <div class="form-group">
-                            <label class="col-md-4 control-label">Credited Leaves Comments</label>
-                            <div class="col-md-7">
-                                <textarea type="text" class="form-control" ng-model="vm.user.creditedLeavesComment" ng-required="true" />
-                            </div>
-                        </div>
-
-                    <!-- <div class="form-group">
-                            <label class="col-md-4 control-label">Deducted LOP Comments</label>
-                            <div class="col-md-7">
-                                <input type="text" class="form-control" ng-model="vm.user.deductedLOPComment" />
-                            </div>
-                        </div> -->
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 col-xs-12 control-label">Select Year-Month</label>
+                <div class="col-md-7">
+                    <p class="input-group">
+                        <input type="text" class="form-control" uib-datepicker-popup="{{vm.format}}"
+                            ng-model="vm.user.yearMonth" is-open="vm.yearMonthSelected"
+                            datepicker-options="vm.monthOptions" ng-required="true" close-text="Close"
+                            ng-change="vm.yearMonthSelect" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default"
+                                ng-click="vm.yearMonthSelected = !vm.yearMonthSelected">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Credited Leaves Comments</label>
+                <div class="col-md-7">
+                    <textarea type="text" class="form-control" ng-model="vm.user.creditedLeavesComment"/>
+                </div>
+            </div>
         </form>
     </div>
 </div>

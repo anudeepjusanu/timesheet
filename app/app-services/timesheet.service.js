@@ -116,7 +116,7 @@
         }
 
         function usersLeaveBalance(financialYear) {
-            return $http.get('/api/timesheet/usersLeaveBalance/' + financialYear, {}).then(handleSuccess, handleError);
+            return $http.get('/api/leaves/usersLeaveBalance/' + financialYear, {}).then(handleSuccess, handleError);
         }
 
         function userTakenLeaves(userId) {

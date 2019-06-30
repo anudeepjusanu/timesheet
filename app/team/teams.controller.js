@@ -126,7 +126,7 @@
                         "yearMonth": vm.user.yearMonth
                     }
 
-                    UserService.updateUserLeaveWalletBalance(vm.user._id, obj).then(function(response) {
+                    UserService.updateUserLeaveBalance(vm.user._id, obj).then(function(response) {
                         debugger;
                         if(response) {                        
                         noty.showSuccess("New Leave has been added successfully!");
@@ -209,7 +209,7 @@
                         "yearMonth": vm.user.yearMonth
                     }
 
-                    UserService.updateUserLeaveWalletBalance(vm.user._id, obj).then(function(response) {
+                    UserService.updateUserLeaveBalance(vm.user._id, obj).then(function(response) {
                         // debugger;
                         if(response) {                        
                         noty.showSuccess("Deducted LOP has been added successfully!");
@@ -253,20 +253,16 @@
         vm.userColumns = {
             "employeeId": {label: "Employee ID", selected: true},
             "name": {label: "Name", selected: true},
-            "yearMonth": {label: "Year Month", selected: true},
-            // "userResourceType": {label: "Type", selected: true},
             "phone": {label: "Mobile", selected: false},
             "joinDate": {label: "Join Date", selected: true},
-            "accruedLeaves": {label: "Accrued Leaves", selected: true},
-            "creditedLeaves": {label: "Credited Leaves", selected: true},
             "employeeCategory": {label: "Category", selected: false},
             "employeeType": {label: "Employee Type", selected: false},
-            // "leaveWallet": {label: "Leave Wallet", selected: true},
-            "timeoffHours": {label: "Timeoff Hours", selected: true},
+            "totalAccruedLeaves": {label: "Accrued Leaves", selected: true},
+            "totalCreditedLeaves": {label: "Credited Leaves", selected: true},
+            //"timeoffHours": {label: "Timeoff Hours", selected: true},
             "timeoffDays": {label: "Timeoff Days", selected: true},
-            "lopDays": {label: "LOP Days", selected: true},
-            "isActive": {label: "Status", selected: true},
-            // "leaveWeeks": {label: "Leave Weeks", selected: true}
+            "totalDeductedLOP": {label: "LOP Days", selected: true},
+            "isActive": {label: "Status", selected: true}
         };
         vm.sorting = function(orderBy) {
             if (vm.search.orderBy == orderBy) {
@@ -297,29 +293,23 @@
 
         vm.getUserLeaves = function(){
             TimesheetService.usersLeaveBalance(vm.financialYear).then(function(response) {
-                if(response){
-                    _.each(vm.users, function(userObj){
-                        userObj.timeoffHours = 0;
-                        userObj.timeoffDays = 0.00;
-                        userObj.lopDays = 0;
-                        userObj.leaveWallet = calLeaveWalletBalance(userObj.joinDate);
-                    });
-                    _.each(response, function(userSheets){
-                        var userObj = _.find(vm.users, {_id: userSheets._id});
-                        var timeoffHours = 0.00;
-                        var timeoffDays = 0.00;
-                        _.each(userSheets.timesheets, function(sheetObj){
-                            sheetObj.timeoffHours = parseFloat(sheetObj.timeoffHours) 
-                            timeoffHours += sheetObj.timeoffHours;
-                            sheetObj.timeoffDays = parseFloat((sheetObj.timeoffHours/8)).toFixed(2)
-                        });
-                        timeoffDays = parseFloat((timeoffHours/8)).toFixed(2);
+                _.each(vm.users, function(userObj){
+                    userObj.totalTimeoffHours = 0;
+                    userObj.timeoffDays = 0.00;
+                    userObj.totalAccruedLeaves = 0;
+                    userObj.totalCreditedLeaves = 0;
+                    userObj.totalDeductedLOP = 0;
+                });
+                if(response){ 
+                    _.each(response, function(userSheet){
+                        var userObj = _.find(vm.users, {_id: userSheet.userId});
                         if(userObj){
-                            userObj.userResourceType = userSheets.userResourceType;
-                            userObj.timeoffHours = parseFloat(timeoffHours);
-                            userObj.timeoffDays = parseFloat(timeoffDays);
-                            userObj.timesheets = userSheets.timesheets;
-                            userObj.lopDays = ((userObj.leaveWallet - userObj.timeoffDays)<0)?(userObj.timeoffDays-userObj.leaveWallet):0;
+                            userObj.totalAccruedLeaves = userSheet.totalAccruedLeaves;
+                            userObj.totalCreditedLeaves = userSheet.totalCreditedLeaves;
+                            userObj.totalDeductedLOP = userSheet.totalDeductedLOP;
+                            userObj.totalTimeOffHours = userSheet.totalTimeOffHours;
+                            userObj.timeoffDays = parseFloat((userObj.totalTimeOffHours/8)).toFixed(2);
+                            userObj.timeoffDays = parseFloat(userObj.timeoffDays);
                         }
                     });
                 }
@@ -328,7 +318,7 @@
             });
         }        
 
-        function calLeaveWalletBalance(joinDate = false){
+        /*function calLeaveWalletBalance(joinDate = false){
             var leaveWallet = parseFloat(0);
             const acquire_leaves_month = parseFloat((vm.appSettings['acquire_leaves_month'])?vm.appSettings['acquire_leaves_month']:1.25);
             if(joinDate){
@@ -351,7 +341,7 @@
                 }
             }
             return parseFloat(leaveWallet).toFixed(2);
-        }
+        }*/
         
         function getUsers() {
             UserService.GetAll().then(function(response) {
@@ -455,7 +445,6 @@
                 vm.getUserLeaves();
             });
         }
-
-
     };
+
 })();

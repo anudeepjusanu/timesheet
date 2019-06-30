@@ -31,7 +31,7 @@ router.put('/updatePushToken/:_id', updatePushToken);
 router.post('/remind/user/:_id', remindByMessage);
 router.get('/myLeaveWallet', getMyLeaveWallet);
 router.get('/myLeaveWalletBalance', getMyLeaveWalletBalance);
-router.post('/updateUserLeaveWalletBalance/:_id', updateUserLeaveWalletBalance);
+
 
 module.exports = router;
 
@@ -282,19 +282,6 @@ function getMyLeaveWallet(req, res){
 function getMyLeaveWalletBalance(req, res){
     var userId = req.user.sub;
     leaveWalletService.getUserLeaveWalletBalance(userId).then(function(response) {
-        if (response) {
-            res.send(response);
-        } else {
-            res.sendStatus(404);
-        }
-    }).catch(function(err) {
-        res.status(400).send(err);
-    });
-}
-
-function updateUserLeaveWalletBalance(req, res){
-    var userId = req.params._id;
-    leaveWalletService.updateUserLeaveWalletBalance(userId, req.body).then(function(response) {
         if (response) {
             res.send(response);
         } else {

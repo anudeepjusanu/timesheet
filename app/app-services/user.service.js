@@ -29,7 +29,7 @@
         service.remindUserByMessage = remindUserByMessage;
         service.getMyLeaveWallet = getMyLeaveWallet;
         service.getMyLeaveWalletBalance = getMyLeaveWalletBalance;
-        service.updateUserLeaveWalletBalance = updateUserLeaveWalletBalance;
+        service.updateUserLeaveBalance = updateUserLeaveBalance;
 
         return service;
 
@@ -117,8 +117,8 @@
             return $http.get('/api/users/myLeaveWalletBalance/').then(handleSuccess, handleError);
         }
 
-        function updateUserLeaveWalletBalance(_id,obj) {
-            return $http.post('/api/users/updateUserLeaveWalletBalance/' + _id, obj).then(handleSuccess, handleError);
+        function updateUserLeaveBalance(_id,obj) {
+            return $http.post('/api/leaves/updateUserLeaveBalance/' + _id, obj).then(handleSuccess, handleError);
         }
 
         // private functions
