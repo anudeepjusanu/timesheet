@@ -86,15 +86,15 @@
                         <td ng-show="vm.userColumns['joinDate'].selected">{{user.joinDate | date : 'mediumDate'}}</td>
                         <td ng-show="vm.userColumns['employeeCategory'].selected">{{user.employeeCategory}}</td>
                         <td ng-show="vm.userColumns['employeeType'].selected">{{user.employeeType}}</td>
-                        <td ng-show="vm.userColumns['totalAccruedLeaves'].selected">{{user.totalAccruedLeaves}}</td>
-                        <td ng-show="vm.userColumns['totalCreditedLeaves'].selected"> {{user.totalCreditedLeaves}}
+                        <td ng-show="vm.userColumns['totalAccruedLeaves'].selected">{{user.totalAccruedLeaves | number}}</td>
+                        <td ng-show="vm.userColumns['totalCreditedLeaves'].selected"> {{user.totalCreditedLeaves | number}}
                             <span> <i style="float:right;margin-right:15px;cursor:pointer;" class="fa fa-plus" ng-click="vm.viewLeaveModel(user)"></i></span>
                         </td>
                         <td ng-show="vm.userColumns['timeoffDays'].selected">{{user.timeoffDays | number}}</td>
-                        <td ng-show="vm.userColumns['totalDeductedLOP'].selected"> {{user.totalDeductedLOP}}
+                        <td ng-show="vm.userColumns['totalDeductedLOP'].selected"> {{user.totalDeductedLOP | number}}
                             <span> <i style="float:right;margin-right:15px;cursor:pointer;" class="fa fa-plus" ng-click="vm.viewLOPLeaveModel(user)"></i></span>
                         </td>
-                        <td ng-show="vm.userColumns['totalBalance'].selected">{{user.totalBalance}}</td>
+                        <td ng-show="vm.userColumns['totalBalance'].selected">{{user.totalBalance | number}}</td>
                         <td ng-show="vm.userColumns['isActive'].selected">
                             <span ng-if="user.isActive==true">Active</span>
                             <span ng-if="user.isActive==false">Inactive</span>
