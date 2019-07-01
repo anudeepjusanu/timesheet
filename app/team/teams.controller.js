@@ -262,6 +262,7 @@
             //"timeoffHours": {label: "Timeoff Hours", selected: true},
             "timeoffDays": {label: "Timeoff Days", selected: true},
             "totalDeductedLOP": {label: "LOP Days", selected: true},
+            "totalBalance": {label: "Balance", selected: true},
             "isActive": {label: "Status", selected: true}
         };
         vm.sorting = function(orderBy) {
@@ -299,6 +300,7 @@
                     userObj.totalAccruedLeaves = 0;
                     userObj.totalCreditedLeaves = 0;
                     userObj.totalDeductedLOP = 0;
+                    userObj.totalBalance = 0;
                 });
                 if(response){ 
                     _.each(response, function(userSheet){
@@ -310,6 +312,7 @@
                             userObj.totalTimeOffHours = userSheet.totalTimeOffHours;
                             userObj.timeoffDays = parseFloat((userObj.totalTimeOffHours/8)).toFixed(2);
                             userObj.timeoffDays = parseFloat(userObj.timeoffDays);
+                            userObj.totalBalance = parseFloat(userObj.totalAccruedLeaves + userObj.totalCreditedLeaves + userObj.totalDeductedLOP - userObj.timeoffDays).toFixed(2);
                         }
                     });
                 }
