@@ -91,10 +91,10 @@
                             <span> <i style="float:right;margin-right:15px;cursor:pointer;" class="fa fa-plus" ng-click="vm.viewLeaveModel(user)"></i></span>
                         </td>
                         <td ng-show="vm.userColumns['timeoffDays'].selected">{{user.timeoffDays | number}}</td>
-                        <td ng-show="vm.userColumns['totalDeductedLOP'].selected"> {{user.totalDeductedLOP}}
+                        <td ng-show="vm.userColumns['totalDeductedLOP'].selected"> {{user.totalDeductedLOP | float}}
                             <span> <i style="float:right;margin-right:15px;cursor:pointer;" class="fa fa-plus" ng-click="vm.viewLOPLeaveModel(user)"></i></span>
                         </td>
-                        <td ng-show="vm.userColumns['totalBalance'].selected">{{user.totalBalance}}</td>
+                        <td ng-show="vm.userColumns['totalBalance'].selected">{{user.totalBalance | float}}</td>
                         <td ng-show="vm.userColumns['isActive'].selected">
                             <span ng-if="user.isActive==true">Active</span>
                             <span ng-if="user.isActive==false">Inactive</span>
