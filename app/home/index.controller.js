@@ -852,12 +852,9 @@
         function getAllUsers() {
             UserService.GetAll().then(function(users) {
                 vm.users = users;
-                // vm.users.push(vm.allSkills);
-                debugger;
                 _.each(vm.users, function(userObj) {
                     if (!(userObj.profileImgUrl) || userObj.profileImgUrl == "") {
                         userObj.profileImgUrl = '/app/app-content/assets/user.jpg';
-                        // userObj.push(vm.allSkills);
                     }
                     if (userObj.reportingTo) {
                         var reportUser = _.find(vm.users, { _id: userObj.reportingTo });
@@ -1039,7 +1036,6 @@
         }
 
         vm.saveUser = function(userForm) {
-            debugger;
             if (userForm.$valid) {
 
                 var obj ={};
@@ -1056,7 +1052,7 @@
                         obj = {"name": vm.userObj.name}
                     });
                     obj.allSkills = vm.allSkills;
-                    vm.userObj.push(vm.allSkills);
+                    // vm.userObj.push(vm.allSkills);
                 }
 
                 UserService.UpdateEmployeeInfo(vm.userObj._id, obj).then(function(response) {
