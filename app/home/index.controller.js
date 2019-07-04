@@ -1052,7 +1052,7 @@
                         obj = {"name": vm.userObj.name}
                     });
                     obj.allSkills = vm.allSkills;
-                    // vm.userObj.push(vm.allSkills);
+                    //vm.userObj.push(vm.allSkills);
                 }
 
                 UserService.UpdateEmployeeInfo(vm.userObj._id, obj).then(function(response) {
