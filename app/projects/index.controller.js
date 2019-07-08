@@ -697,6 +697,7 @@
         vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training", "Skill Up"];
         vm.search = {
             projectName: "",
+            projectStatus: "All",
             projectType: "all",
             businessUnit: "All"
         };
@@ -807,6 +808,13 @@
             var output = input;
             if (searchObj.projectName && searchObj.projectName.length > 0) {
                 output = $filter('filter')(output, { projectName: searchObj.projectName });
+            }
+            if (searchObj.projectStatus && searchObj.projectStatus != "All") {
+                if(searchObj.projectStatus == "Active"){
+                    output = $filter('filter')(output, { isActive: true});
+                }else if(searchObj.projectStatus == "Inactive"){
+                    output = $filter('filter')(output, { isActive: false});
+                }
             }
             if (searchObj.projectType && searchObj.projectType.length > 0 && searchObj.projectType != 'all') {
                 output = $filter('filter')(output, function(item) {

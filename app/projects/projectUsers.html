@@ -13,9 +13,10 @@
                 <table class="table table-condensed table-bordered table-striped" export-table>
                     <tr>
                         <th width="40px">S.No</th>
-                        <th width="100px">
+                        <th width="240px">
                             Project Name <br/>
                             <input type="text" style="margin-top: 4px;" ng-model="vm.search.projectName" class="form-control" />
+                            <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.projectStatus" ng-options="option as option for option in ['Active', 'Inactive', 'All']"></select>
                         </th>
                         <th width="100px">
                             Business Unit <br/>
@@ -25,7 +26,6 @@
                             Project Type <br/>
                             <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.projectType" ng-options="prj.projectTypeId as prj.projectTypeName for prj in vm.projectTypes"></select>
                         </th>
-                        <th width="100px">Project Owner</th>
                         <th>
                             <table class="table">
                                 <tr>
@@ -45,16 +45,18 @@
                             </table>
                         </th>
                     </tr>
-                    <tr ng-repeat="project in vm.projects | filter: vm.activeProjectsfilterFn | searchProjectUser:vm.search | orderBy:'name'"
+                    <tr ng-repeat="project in vm.projects | searchProjectUser:vm.search | orderBy:'name'"
                         ng-show="project.users">
                         <td>{{$index+1}}</td>
-                        <td>{{project.projectName}}</td>
+                        <td>
+                            {{project.projectName}}
+                            <br/> Owner: {{project.ownerName}}
+                        </td>
                         <td>{{project.businessUnit}}</td>
                         <td>{{project.projectType}}</td>
-                        <td>{{project.ownerName}}</td>
                         <td>
                             <table class="table">
-                                <tr ng-repeat="user in project.users | filter: vm.billedUsersfilterFn">
+                                <tr ng-repeat="user in project.users">
                                     <td width="60px">{{$index+1}}</td>
                                     <td width="150px">{{user.userName}}</td>
                                     <td width="600px">
