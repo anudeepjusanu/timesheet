@@ -713,7 +713,8 @@
                     })
                 })            
             }
-            return activeProjectsArr.length>0;
+            return true;
+            //return activeProjectsArr.length>0;
         };
 
         vm.billedUsersfilterFn = function(item) {
