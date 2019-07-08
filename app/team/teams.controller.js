@@ -6,6 +6,7 @@
         .controller('Team.IndexController', TeamsController)
         .controller('Team.LeaveBalanceController', LeaveBalanceController)
         .controller('Team.UserLeavesModel',UserLeavesModel)
+        .controller('Team.UserTimeoffLeavesModel',UserTimeoffLeavesModel)
         .controller('Team.UserAddLeavesModel',UserAddLeavesModel)
         .controller('Team.UserLOPLeavesModel',UserLOPLeavesModel)
         .directive('exportTable', function() {
@@ -156,6 +157,93 @@
 
     };
 
+    function UserTimeoffLeavesModel($uibModalInstance, UserService, TimesheetService, user, ProjectService, noty) {
+        var vm = this;
+        vm.enableSaveBtn = true;
+        vm.alerts = [];
+        vm.user = user;
+
+        var now = new Date();
+        vm.financialYears = [];
+        vm.financialYear = null;
+        var navYear = 2017;
+        var endYear = now.getFullYear();
+        if(now.getMonth()>=3){
+            var endYear = now.getFullYear() + 1;
+        }
+        while(endYear > navYear){
+            var fYear = navYear + "-" + (navYear+1);
+            vm.financialYears.push(fYear);
+            navYear += 1;
+        }
+        vm.financialYear = fYear;
+
+        vm.yearMonthSelected = false;     
+        vm.dateOptions = {
+            dateDisabled: function(data) {
+                var date = data.date,
+                    mode = data.mode;
+                return mode === 'day' && (date.getDay() != 5);
+            },
+            formatYear: 'yy',
+            maxDate: new Date(2020, 5, 22),
+            startingDay: 1
+        };
+        vm.monthOptions = {
+            datepickerMode: "month", // Remove Single quotes
+            minMode: 'month'
+        };
+        vm.format = 'yyyy-MM';
+
+        vm.myleaves = [];
+        vm.myleavesInfo = [];
+        vm.totalLeaveBalance = 0;
+        vm.leaveDetails = [];
+
+        function getUserLeaves(){
+            TimesheetService.usersLeaveBalance(vm.financialYear).then(function(response) {
+                if(response){ 
+                    _.each(response, function(eachObj){
+                        var userObj = vm.leaveDetails = _.find(response, {userId:vm.user._id});
+                        if(userObj){
+                            userObj.totalAccruedLeaves = userObj.totalAccruedLeaves;
+                            userObj.totalCreditedLeaves = userObj.totalCreditedLeaves;
+                            userObj.totalDeductedLOP = userObj.totalDeductedLOP;
+                            userObj.totalTimeOffHours = userObj.totalTimeOffHours;
+                            userObj.timeoffDays = parseFloat((userObj.totalTimeOffHours/8)).toFixed(2);
+                            userObj.timeoffDays = parseFloat(userObj.timeoffDays);
+                            userObj.totalBalance = parseFloat(userObj.totalAccruedLeaves + userObj.totalCreditedLeaves + userObj.totalDeductedLOP - userObj.timeoffDays).toFixed(2);
+                        
+                            vm.totalLeaveBalance = userObj.totalBalance;
+                            vm.myleavesInfo = userObj.leavesInfo;
+                            vm.timesheetInfo = userObj.timesheets;
+                            // debugger;
+                        }
+                    });
+                    console.log("vm.timesheetInfo : ", vm.timesheetInfo);
+                    // console.log("vm.myleavesInfo : ", vm.myleavesInfo);
+                    // console.log("vm.totalLeaveBalance : ", vm.totalLeaveBalance);
+                }
+            }, function(error) {
+                console.log(error);
+            });
+        }
+
+        function initController() {
+            
+            UserService.GetAll().then(function(users) {
+                vm.users = users;
+                getUserLeaves();
+                // getMyLeaves();
+            });
+        };
+        initController();  
+        
+        vm.cancel = function() {
+            $uibModalInstance.dismiss('cancel');
+        };
+
+    };
 
     function UserAddLeavesModel($uibModalInstance, UserService, user, ProjectService, noty) {
         var vm = this;
@@ -472,6 +560,29 @@
 
         }
         
+        vm.viewTimeoffLeavesModel = function(userObj) {
+            var user = {};
+            if (userObj) {
+                user = userObj;
+                user.isCreditedLeave = true;
+            }
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'team/viewTimeoffLeavesModel.html',
+                controller: 'Team.UserTimeoffLeavesModel',
+                controllerAs: 'vm',
+                size: 'md',
+                resolve: {
+                    user: function() {
+                        return user;
+                    }
+                }
+            });
+
+        }
+
         vm.viewAddLeavesModel = function(userObj) {
             var user = {};
             if (userObj) {
