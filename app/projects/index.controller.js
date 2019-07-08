@@ -740,16 +740,6 @@
             //return activeProjectsArr.length>0;
         };
 
-        vm.billedUsersfilterFn = function(item) {
-            if(item && item.billDates && item.billDates.length>0) {
-                return !item.billDates[0].end;
-            }
-        };
-
-        vm.filterFn = function(item) {
-            return !item.end;
-            };
-
         function getProjectUsers() {
             ProjectService.getProjectUsers().then(function(response) {
                 vm.projects = response;
@@ -823,6 +813,13 @@
             }
             if (searchObj.businessUnit && searchObj.businessUnit.length > 0 && searchObj.businessUnit != "All") {
                 output = $filter('filter')(output, { businessUnit: searchObj.businessUnit });
+            }
+            if (searchObj.projectAssignStatus && searchObj.projectAssignStatus != "All") {
+                if(searchObj.projectAssignStatus == "Active"){
+                    //output = $filter('filter')(output, { isActive: true});
+                }else if(searchObj.projectAssignStatus == "Inactive"){
+                    //output = $filter('filter')(output, { isActive: false});
+                }
             }
             return output;
         }

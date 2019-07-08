@@ -16,8 +16,8 @@
                         <th width="240px">
                             Project Name <br/>
                             <div style="display: inline-flex">
-                                    <input type="text" style="margin-top: 4px;" ng-model="vm.search.projectName" class="form-control" />
-                                    <select class="form-control" style="margin-top: 4px; width: 80px;" ng-model="vm.search.projectStatus" ng-options="option as option for option in ['Active', 'Inactive', 'All']"></select>
+                                <input type="text" style="margin-top: 4px; margin-right: 4px;" ng-model="vm.search.projectName" class="form-control" />
+                                <select class="form-control" style="margin-top: 4px; width: 80px;" ng-model="vm.search.projectStatus" ng-options="option as option for option in ['Active', 'Inactive', 'All']"></select>
                             </div>
                         </th>
                         <th width="100px">
@@ -32,7 +32,10 @@
                             <table class="table">
                                 <tr>
                                     <td width="50px"></td>
-                                    <td width="150px">Resource Name</td>
+                                    <td width="150px">
+                                        Resource Name
+                                        <select class="form-control" style="margin-top: 4px; width: 80px;" ng-model="vm.search.projectAssignStatus" ng-options="option as option for option in ['Active', 'Inactive', 'All']"></select>
+                                    </td>
                                     <td width="550px">
                                         <div class="row">
                                             <div class="col-md-3">Start Date</div>
@@ -52,7 +55,7 @@
                         <td>{{$index+1}}</td>
                         <td>
                             {{project.projectName}}
-                            <br/> Owner: {{project.ownerName}}
+                            <br/> <strong>Owner:</strong> {{project.ownerName}}
                         </td>
                         <td>{{project.businessUnit}}</td>
                         <td>{{project.projectType}}</td>
