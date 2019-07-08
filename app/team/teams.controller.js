@@ -125,7 +125,7 @@
                             userObj.totalTimeOffHours = userObj.totalTimeOffHours;
                             userObj.timeoffDays = parseFloat((userObj.totalTimeOffHours/8)).toFixed(2);
                             userObj.timeoffDays = parseFloat(userObj.timeoffDays);
-                            userObj.totalBalance = parseFloat(userObj.totalAccruedLeaves + userObj.totalCreditedLeaves - userObj.totalDeductedLOP - userObj.timeoffDays).toFixed(2);
+                            userObj.totalBalance = parseFloat(userObj.totalAccruedLeaves + userObj.totalCreditedLeaves + userObj.totalDeductedLOP - userObj.timeoffDays).toFixed(2);
                         
                             vm.totalLeaveBalance = userObj.totalBalance;
                             vm.myleavesInfo = userObj.leavesInfo;
@@ -209,7 +209,7 @@
                             userObj.totalTimeOffHours = userObj.totalTimeOffHours;
                             userObj.timeoffDays = parseFloat((userObj.totalTimeOffHours/8)).toFixed(2);
                             userObj.timeoffDays = parseFloat(userObj.timeoffDays);
-                            userObj.totalBalance = parseFloat(userObj.totalAccruedLeaves + userObj.totalCreditedLeaves - userObj.totalDeductedLOP - userObj.timeoffDays).toFixed(2);
+                            userObj.totalBalance = parseFloat(userObj.totalAccruedLeaves + userObj.totalCreditedLeaves + userObj.totalDeductedLOP - userObj.timeoffDays).toFixed(2);
                         
                             vm.totalLeaveBalance = userObj.totalBalance;
                             vm.myleavesInfo = userObj.leavesInfo;
@@ -489,7 +489,7 @@
                             userObj.totalTimeOffHours = userSheet.totalTimeOffHours;
                             userObj.timeoffDays = parseFloat((userObj.totalTimeOffHours/8)).toFixed(2);
                             userObj.timeoffDays = parseFloat(userObj.timeoffDays);
-                            userObj.totalBalance = parseFloat(userObj.totalAccruedLeaves + userObj.totalCreditedLeaves - userObj.totalDeductedLOP - userObj.timeoffDays).toFixed(2);
+                            userObj.totalBalance = parseFloat(userObj.totalAccruedLeaves + userObj.totalCreditedLeaves + userObj.totalDeductedLOP - userObj.timeoffDays).toFixed(2);
                         }
                     });
                 }
