@@ -15,8 +15,10 @@
                         <th width="40px">S.No</th>
                         <th width="240px">
                             Project Name <br/>
-                            <input type="text" style="margin-top: 4px;" ng-model="vm.search.projectName" class="form-control" />
-                            <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.projectStatus" ng-options="option as option for option in ['Active', 'Inactive', 'All']"></select>
+                            <div style="display: inline-flex">
+                                    <input type="text" style="margin-top: 4px;" ng-model="vm.search.projectName" class="form-control" />
+                                    <select class="form-control" style="margin-top: 4px; width: 80px;" ng-model="vm.search.projectStatus" ng-options="option as option for option in ['Active', 'Inactive', 'All']"></select>
+                            </div>
                         </th>
                         <th width="100px">
                             Business Unit <br/>

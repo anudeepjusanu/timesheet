@@ -697,7 +697,7 @@
         vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training", "Skill Up"];
         vm.search = {
             projectName: "",
-            projectStatus: "All",
+            projectStatus: "Active",
             projectType: "all",
             businessUnit: "All"
         };
