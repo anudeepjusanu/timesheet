@@ -701,6 +701,28 @@
             businessUnit: "All"
         };
 
+        vm.userColumns = {
+            "projectName": {label: "Project Name", selected: true},
+            "businessUnit": {label: "Business Unit", selected: true},
+            "projectType": {label: "Project Type", selected: true},
+            "ownerName": {label: "Owner Name", selected: true},
+            "userName": {label: "User Name", selected: true},
+            "start": {label: "Start Date", selected: true},
+            "end": {label: "End Date", selected: true},
+            "allocatedHours": {label: "Allocated Hours", selected: true},
+            "billableLimit": {label: "Billable Limit", selected: true},
+            "userResourceType": {label: "Resource Type", selected: true},
+            "isActive": {label: "Status", selected: true},
+        };
+        vm.sorting = function(orderBy) {
+            if (vm.search.orderBy == orderBy) {
+                vm.search.sortDESC = !vm.search.sortDESC;
+            } else {
+                vm.search.sortDESC = false;
+            }
+            vm.search.orderBy = orderBy;
+        };
+
         vm.activeProjectsfilterFn = function(item) {
             var activeProjectsArr = [];
             if(item) {
@@ -962,15 +984,8 @@
 
                             vm.projectOwnersArr.push(projectObj.ownerName);
                             vm.projectNamesArr.push(projectObj.projectName);
-                            // console.log("vm.projectOwnersArr : " , vm.projectOwnersArr);
-                            // console.log("vm.projectNamesArr : " , vm.projectNamesArr);
                            
                         })
-                        // vm.projectOwnersArr.push(projectOwnersArr.ownerName);
-                        // vm.projectNamesArr.push(projectNamesArr.projectName);
-                        // console.log("vm.projectOwnersArr : " , vm.projectOwnersArr);
-                        // console.log("vm.projectNamesArr : " , vm.projectNamesArr);
-        
                     }, function(error) {
                         console.log(error);
                     });
@@ -987,7 +1002,6 @@
             });
             getAllUsers();
             getProjectUsers();
-            // getUserProjects();
         }
     };
 

@@ -852,12 +852,9 @@
         function getAllUsers() {
             UserService.GetAll().then(function(users) {
                 vm.users = users;
-                // vm.users.push(vm.allSkills);
-                debugger;
                 _.each(vm.users, function(userObj) {
                     if (!(userObj.profileImgUrl) || userObj.profileImgUrl == "") {
                         userObj.profileImgUrl = '/app/app-content/assets/user.jpg';
-                        // userObj.push(vm.allSkills);
                     }
                     if (userObj.reportingTo) {
                         var reportUser = _.find(vm.users, { _id: userObj.reportingTo });
@@ -947,19 +944,19 @@
         vm.selectedSkill = {
             "skillName":"", "skillLevel":""
         } 
-
-        vm.allSkills = [
-            {"skillName": "HTML5", "skillLevel": ""},
-            {"skillName": "Javascript", "skillLevel": ""},
-            {"skillName": "CSS3", "skillLevel": ""},
-            {"skillName": "Bootstrap", "skillLevel": ""},
-            {"skillName": "Java", "skillLevel": ""},
-            {"skillName": "PHP", "skillLevel": ""},
-            {"skillName": "Angularjs", "skillLevel": ""},
-            {"skillName": "Mongo", "skillLevel": ""},
-            {"skillName": "Python", "skillLevel": ""},
-            {"skillName": "DevOps", "skillLevel": ""}
-        ];
+        vm.allSkills = user.allSkills;
+        // vm.allSkills = [
+        //     {"skillName": "HTML5", "skillLevel": ""},
+        //     {"skillName": "Javascript", "skillLevel": ""},
+        //     {"skillName": "CSS3", "skillLevel": ""},
+        //     {"skillName": "Bootstrap", "skillLevel": ""},
+        //     {"skillName": "Java", "skillLevel": ""},
+        //     {"skillName": "PHP", "skillLevel": ""},
+        //     {"skillName": "Angularjs", "skillLevel": ""},
+        //     {"skillName": "Mongo", "skillLevel": ""},
+        //     {"skillName": "Python", "skillLevel": ""},
+        //     {"skillName": "DevOps", "skillLevel": ""}
+        // ];
 
         vm.skillLevels = [
             {"id":"Beginner","skillLevel": "Beginner"},
@@ -971,8 +968,11 @@
         vm.newSkills = [];
 
         vm.selectUserSkillForAddition = function() {
-            vm.selectedSkill.skillName = event.target.text;
-            vm.selectedSkill.skillLevel = vm.selectedSkill.skillLevel;
+            var selectedValueObj = _.find(vm.allSkills, { "skillName": event.target.text });
+            if(selectedValueObj) {
+                vm.selectedSkill.skillName = selectedValueObj.skillName;
+                vm.selectedSkill.skillLevel = selectedValueObj.skillLevel;
+            }
         }
 
         vm.addOtherSkill = function() {
@@ -996,8 +996,8 @@
                             });
                         }
                 }
-                vm.selectedSkill.skillName = '';
-                vm.selectedSkill.skillLevel = '';
+                // vm.selectedSkill.skillName = '';
+                // vm.selectedSkill.skillLevel = '';
             }
         }
 
@@ -1039,7 +1039,6 @@
         }
 
         vm.saveUser = function(userForm) {
-            debugger;
             if (userForm.$valid) {
 
                 var obj ={};
@@ -1056,7 +1055,7 @@
                         obj = {"name": vm.userObj.name}
                     });
                     obj.allSkills = vm.allSkills;
-                    vm.userObj.push(vm.allSkills);
+                    //vm.userObj.push(vm.allSkills);
                 }
 
                 UserService.UpdateEmployeeInfo(vm.userObj._id, obj).then(function(response) {
