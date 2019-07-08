@@ -125,16 +125,13 @@
                             userObj.totalTimeOffHours = userObj.totalTimeOffHours;
                             userObj.timeoffDays = parseFloat((userObj.totalTimeOffHours/8)).toFixed(2);
                             userObj.timeoffDays = parseFloat(userObj.timeoffDays);
-                            userObj.totalBalance = parseFloat(userObj.totalAccruedLeaves + userObj.totalCreditedLeaves + userObj.totalDeductedLOP - userObj.timeoffDays).toFixed(2);
+                            userObj.totalBalance = parseFloat(userObj.totalAccruedLeaves + userObj.totalCreditedLeaves - userObj.totalDeductedLOP - userObj.timeoffDays).toFixed(2);
                         
                             vm.totalLeaveBalance = userObj.totalBalance;
                             vm.myleavesInfo = userObj.leavesInfo;
                             vm.timesheetInfo = userObj.timesheets;
                         }
                     });
-                    // console.log("vm.leaveDetails : ", vm.leaveDetails);
-                    // console.log("vm.myleavesInfo : ", vm.myleavesInfo);
-                    // console.log("vm.totalLeaveBalance : ", vm.totalLeaveBalance);
                 }
             }, function(error) {
                 console.log(error);
@@ -212,12 +209,20 @@
                             userObj.totalTimeOffHours = userObj.totalTimeOffHours;
                             userObj.timeoffDays = parseFloat((userObj.totalTimeOffHours/8)).toFixed(2);
                             userObj.timeoffDays = parseFloat(userObj.timeoffDays);
-                            userObj.totalBalance = parseFloat(userObj.totalAccruedLeaves + userObj.totalCreditedLeaves + userObj.totalDeductedLOP - userObj.timeoffDays).toFixed(2);
+                            userObj.totalBalance = parseFloat(userObj.totalAccruedLeaves + userObj.totalCreditedLeaves - userObj.totalDeductedLOP - userObj.timeoffDays).toFixed(2);
                         
                             vm.totalLeaveBalance = userObj.totalBalance;
                             vm.myleavesInfo = userObj.leavesInfo;
+                            _.each(userObj.timesheets, function(eachMonthObj){
+                                if(eachMonthObj) {
+                                    var leaveWeek = new Date(eachMonthObj.weekDate);
+                                    eachMonthObj.weekDate = leaveWeek.toDateString();
+                                    var monthNum  = leaveWeek.getMonth()+1;
+                                    var yearMonth = String(leaveWeek.getFullYear()+"-"+(monthNum>9?monthNum:"0"+monthNum));
+                                    eachMonthObj.week = yearMonth;
+                                }
+                            })
                             vm.timesheetInfo = userObj.timesheets;
-                            // debugger;
                         }
                     });
                     console.log("vm.timesheetInfo : ", vm.timesheetInfo);
@@ -484,7 +489,7 @@
                             userObj.totalTimeOffHours = userSheet.totalTimeOffHours;
                             userObj.timeoffDays = parseFloat((userObj.totalTimeOffHours/8)).toFixed(2);
                             userObj.timeoffDays = parseFloat(userObj.timeoffDays);
-                            userObj.totalBalance = parseFloat(userObj.totalAccruedLeaves + userObj.totalCreditedLeaves + userObj.totalDeductedLOP - userObj.timeoffDays).toFixed(2);
+                            userObj.totalBalance = parseFloat(userObj.totalAccruedLeaves + userObj.totalCreditedLeaves - userObj.totalDeductedLOP - userObj.timeoffDays).toFixed(2);
                         }
                     });
                 }
