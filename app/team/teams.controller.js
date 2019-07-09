@@ -250,10 +250,13 @@
 
     };
 
-    function UserAddLeavesModel($uibModalInstance, UserService, user, ProjectService, noty) {
+    function UserAddLeavesModel($uibModalInstance, UserService, TimesheetService, user, ProjectService, noty) {
         var vm = this;
         vm.enableSaveBtn = true;
         vm.alerts = [];
+        user.yearMonth = '';
+        user.creditedLeaves = '';
+        user.creditedLeavesComment = '';
         vm.user = user;
 
         var now = new Date();
@@ -270,29 +273,39 @@
             navYear += 1;
         }
         vm.financialYear = fYear;
-
-        vm.yearMonthSelected = false;     
-        vm.dateOptions = {
-            dateDisabled: function(data) {
-                var date = data.date,
-                    mode = data.mode;
-                return mode === 'day' && (date.getDay() != 5);
-            },
-            formatYear: 'yy',
-            maxDate: new Date(2020, 5, 22),
-            startingDay: 1
-        };
+        vm.yearMonthSelected = false;            
         vm.monthOptions = {
             datepickerMode: "month", // Remove Single quotes
-            minMode: 'month'
+            minMode: 'month',
+            maxDate: new Date()
         };
         vm.format = 'yyyy-MM';
+
+        vm.yearMonthSelect = function(obj) {
+            TimesheetService.usersLeaveBalance(vm.financialYear).then(function(response) {
+                if(response){ 
+                    _.each(response, function(eachObj){
+                        if(eachObj) {
+                            var currentUserObj = _.find(response, {userId:vm.user._id});
+                            if(currentUserObj){
+                                var leaveDate = user.yearMonth;
+                                var monthNum  = leaveDate.getMonth()+1;
+                                var yearMonth = String(leaveDate.getFullYear()+"-"+(monthNum>9?monthNum:"0"+monthNum));
+                                var foundObj = _.find(currentUserObj.leavesInfo, {yearMonth:yearMonth})
+                                user.creditedLeaves = foundObj.creditedLeaves;
+                                user.creditedLeavesComment = foundObj.creditedLeavesComment;
+                            }
+                            
+                        }
+                    });
+                }
+            });
+        }
 
         vm.ok = function(form) {
             if (form.$valid) {
                 vm.enableSaveBtn = false;
                 if (vm.user) {
-
                     if(vm.user.yearMonth) {
                         var monthNum  = vm.user.yearMonth.getMonth()+1;
                         var yearMonth = String(vm.user.yearMonth.getFullYear()+"-"+(monthNum>9?monthNum:"0"+monthNum));
@@ -331,10 +344,13 @@
         };
     };
 
-    function UserLOPLeavesModel($uibModalInstance, UserService, user, ProjectService, noty) {
+    function UserLOPLeavesModel($uibModalInstance, UserService, TimesheetService, user, ProjectService, noty) {
         var vm = this;
         vm.enableSaveBtn = true;
         vm.alerts = [];
+        user.yearMonth = '';
+        user.deductedLOP = '';
+        user.deductedLOPComment = '';
         vm.user = user;
 
         var now = new Date();
@@ -351,23 +367,35 @@
             navYear += 1;
         }
         vm.financialYear = fYear;
-
         vm.yearMonthSelected = false;     
-        vm.dateOptions = {
-            dateDisabled: function(data) {
-                var date = data.date,
-                    mode = data.mode;
-                return mode === 'day' && (date.getDay() != 5);
-            },
-            formatYear: 'yy',
-            maxDate: new Date(2020, 5, 22),
-            startingDay: 1
-        };
+       
         vm.monthOptions = {
             datepickerMode: "month",
-            minMode: 'month'
+            minMode: 'month',
+            maxDate: new Date()
         };
         vm.format = 'yyyy-MM';
+
+        vm.yearMonthSelectDeduct = function() {
+            TimesheetService.usersLeaveBalance(vm.financialYear).then(function(response) {
+                if(response){ 
+                    _.each(response, function(eachObj){
+                        if(eachObj) {
+                            var currentUserObj = _.find(response, {userId:vm.user._id});
+                            if(currentUserObj){
+                                var leaveDate = user.yearMonth;
+                                var monthNum  = leaveDate.getMonth()+1;
+                                var yearMonth = String(leaveDate.getFullYear()+"-"+(monthNum>9?monthNum:"0"+monthNum));
+                                var foundObj = _.find(currentUserObj.leavesInfo, {yearMonth:yearMonth})
+                                user.deductedLOP = foundObj.deductedLOP;
+                                user.deductedLOPComment = foundObj.deductedLOPComment;
+                            }
+                            
+                        }
+                    });
+                }
+            });
+        }
 
         vm.ok = function(form) {
             if (form.$valid) {
@@ -544,7 +572,7 @@
         vm.viewLeavesModel = function(userObj) {
             var user = {};
             if (userObj) {
-                user = userObj;
+                user = userObj;              
                 user.isCreditedLeave = true;
             }
 
