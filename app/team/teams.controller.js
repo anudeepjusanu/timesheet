@@ -143,7 +143,6 @@
             UserService.GetAll().then(function(users) {
                 vm.users = users;
                 getUserLeaves();
-                // getMyLeaves();
             });
         };
         initController();  
@@ -225,9 +224,6 @@
                             vm.timesheetInfo = userObj.timesheets;
                         }
                     });
-                    console.log("vm.timesheetInfo : ", vm.timesheetInfo);
-                    // console.log("vm.myleavesInfo : ", vm.myleavesInfo);
-                    // console.log("vm.totalLeaveBalance : ", vm.totalLeaveBalance);
                 }
             }, function(error) {
                 console.log(error);
@@ -239,7 +235,6 @@
             UserService.GetAll().then(function(users) {
                 vm.users = users;
                 getUserLeaves();
-                // getMyLeaves();
             });
         };
         initController();  
@@ -252,7 +247,7 @@
 
     function UserAddLeavesModel($uibModalInstance, UserService, TimesheetService, user, ProjectService, noty) {
         var vm = this;
-        vm.enableSaveBtn = true;
+        vm.enableSaveBtn = false;
         vm.alerts = [];
         user.yearMonth = '';
         user.creditedLeaves = '';
@@ -304,7 +299,7 @@
 
         vm.ok = function(form) {
             if (form.$valid) {
-                vm.enableSaveBtn = false;
+                vm.enableSaveBtn = true;
                 if (vm.user) {
                     if(vm.user.yearMonth) {
                         var monthNum  = vm.user.yearMonth.getMonth()+1;
@@ -322,14 +317,14 @@
                     UserService.updateUserLeaveBalance(vm.user._id, obj).then(function(response) {
                         if(response) {                        
                             noty.showSuccess("New Leave has been added successfully!");
-                            vm.enableSaveBtn = true;
+                            vm.enableSaveBtn = false;
                             $uibModalInstance.close(obj);
                     }
                     }, function(error) {
                         if (error) {
                             vm.alerts.push({ msg: error, type: 'danger' });
                         }
-                        vm.enableSaveBtn = true;
+                        vm.enableSaveBtn = false;
                         $uibModalInstance.close(obj);
                     });
                 } 
@@ -346,7 +341,7 @@
 
     function UserLOPLeavesModel($uibModalInstance, UserService, TimesheetService, user, ProjectService, noty) {
         var vm = this;
-        vm.enableSaveBtn = true;
+        vm.enableSaveBtn = false;
         vm.alerts = [];
         user.yearMonth = '';
         user.deductedLOP = '';
@@ -399,7 +394,7 @@
 
         vm.ok = function(form) {
             if (form.$valid) {
-                vm.enableSaveBtn = false;
+                vm.enableSaveBtn = true;
                 if (vm.user) {
 
                     if(vm.user.yearMonth) {
@@ -418,14 +413,14 @@
                     UserService.updateUserLeaveBalance(vm.user._id, obj).then(function(response) {
                         if(response) {                        
                             noty.showSuccess("Deducted LOP has been added successfully!");
-                            vm.enableSaveBtn = true;
+                            vm.enableSaveBtn = false;
                             $uibModalInstance.close(obj);
                         }
                     }, function(error) {
                         if (error) {
                             vm.alerts.push({ msg: error, type: 'danger' });
                         }
-                        vm.enableSaveBtn = true;
+                        vm.enableSaveBtn = false;
                         $uibModalInstance.close(obj);
                     });
                 } 
