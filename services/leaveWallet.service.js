@@ -72,10 +72,10 @@ function updateUserLeaveBalance(userId, leaveWalletData){
         yearMonth: leaveWalletData.yearMonth,
         yearMonthNumber: leaveWalletData.yearMonth.replace('-', '')
     };
-    if(leaveWalletData.creditedLeaves){
+    if(leaveWalletData.creditedLeaves || leaveWalletData.creditedLeaves===0){
         leaveData.creditedLeaves = leaveWalletData.creditedLeaves;
         leaveData.creditedLeavesComment = (leaveWalletData.creditedLeavesComment)?leaveWalletData.creditedLeavesComment:"";
-    }else if(leaveWalletData.deductedLOP){
+    }else if(leaveWalletData.deductedLOP || leaveWalletData.deductedLOP===0){
         leaveData.deductedLOP = leaveWalletData.deductedLOP;
         leaveData.deductedLOPComment = (leaveWalletData.deductedLOPComment)?leaveWalletData.deductedLOPComment:"";
     }
