@@ -56,6 +56,7 @@
     function Controller(UserService, TimesheetService, ProjectService, $filter, _, $scope, FlashService, NgTableParams, noty, $uibModal) {
         var vm = this;
         vm.user = null;
+        vm.selectedData = [];
         //vm.timesheets = [];
         vm.projects = [];
         vm.post = post;
@@ -78,7 +79,8 @@
             projectId: "",
             businessUnit: "All",
             resourceType: "",
-            timesheetStatus: "",
+            status:"",
+           // timesheetStatus: "",
             isFilled: "",
             timesheetResult: {
                 headCount: 0
@@ -97,6 +99,12 @@
             { "resourceTypeId": "intern", "resourceTypeVal": "Intern" },
             { "resourceTypeId": "bench", "resourceTypeVal": "Bench" }
         ];
+        vm.timesheetStatusSelected = [
+            { "timesheetStatusId": "", "timesheetStatusVal": "All" },
+            { "timesheetStatusId": "approved", "timesheetStatusVal": "Approved" },
+            { "timesheetStatusId": "pending", "timesheetStatusVal": "Pending" },
+            // { "timesheetStatusId": "rejected", "timesheetStatusVal": "Rejected" },
+        ]
         vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training", "Skill Up"];
         vm.alerts = [];
         vm.currentWeek = new Date();
@@ -198,7 +206,9 @@
         $scope.$watch('vm.search.timesheetStatus', function(newVal) {
             vm.tblUsers = timesheetFilter();
         });
-
+        $scope.$watch('vm.search.status', function(newVal) {
+            vm.tblUsers = timesheetFilter();
+        });
         $scope.$watch('vm.search.isFilled', function(newVal) {
             vm.tblUsers = timesheetFilter();
         });
@@ -227,12 +237,22 @@
                 });
             }
             if (searchObj.resourceType && searchObj.resourceType.length > 0) {
+                console.log(searchObj);
                 output = $filter('filter')(output, function(item) {
+
                     item.projects = $filter('filter')(item.projects, { resourceType: searchObj.resourceType });
                     return (item.projects.length > 0);
                 });
             }
+            if (searchObj.status && searchObj.status.length > 0) {
+                output = $filter('filter')(output, function(item) {
+
+                    item.projects = $filter('filter')(item.projects, { sheetStatus: searchObj.status });
+                    return (item.projects.length > 0);
+                });
+            }
             if (searchObj.timesheetStatus && searchObj.timesheetStatus.length > 0) {
+                console.log(searchObj);
                 var timesheetStatus = null;
                 if (searchObj.timesheetStatus == 'approved') {
                     timesheetStatus = true;
@@ -330,6 +350,7 @@
                 }
                 vm.users = _.sortBy(vm.users, ['userName']);
                 TimesheetService.getReportByWeek(filterDate).then(function(timesheets) {
+                    vm.selectedData = timesheets;
                     _.each(timesheets, function(timesheet) {
                         var userObj = _.find(vm.users, { userId: timesheet.userId });
                         if (userObj) {
@@ -393,6 +414,7 @@
                         });
                     }
                 });
+                console.log(vm.selectedData);
             });
         };
 
@@ -1662,6 +1684,7 @@
 
                 vm.timesheetList = [];
                 _.each(vm.currentProject.users, function(user) {
+                    console.log(vm.currentProject.users,"Billable hours");
                     user.timesheet = [];
                     _.each(response, function(timesheet) {
                         if (timesheet.userId == user.userId) {
@@ -1828,7 +1851,22 @@
                 });
             });
         };
+// vm.changeStatus  =function(status){
+//     console.log(status, "htcgkjgfdfgh");
+//         if(status == "Approved"){
+//             vm.tblUsers = [];
+//           //  UserService.GetAll().then(function(users) {
+//                 for(var i=0; i <vm.selectedData.length;i++){
+//                     if(vm.selectedData.projects[i].sheetStatus == "Approved"){
+//                         vm.tblUsers.push(vm.selectedData.projects[i]);
+//                     }
+//                 }
+//                // vm.tblUsers = Activeusers;
+//           //  });
+//         }
+//         console.log(vm.tblUsers);
 
+//     }
         function init(){
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;

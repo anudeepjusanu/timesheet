@@ -74,7 +74,8 @@
                                     <td width="60px;"></td>
                                     <td width="60px;"></td>
                                     <td width="60px;"></td>
-                                    <td width="60px;"></td>
+                                    <td width="100px;">                        
+                                    <select class="form-control" value="All" ng-model="vm.search.status" ng-options="status.timesheetStatusId as status.timesheetStatusVal for status in vm.timesheetStatusSelected"></select></td>
                                 </tr>
                             </table>
                         </td>

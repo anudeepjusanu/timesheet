@@ -1,6 +1,14 @@
 <!-- PAGE TITLE -->
+<style>
+    
+    .btn{
+        border-radius:20px;
+    }
+   
+</style>
 <div class="page-title">
-    <h2><span class="fa fa-users"></span> Address Book <small>{{vm.users.length}} contacts</small></h2>
+    <h2><span class="fa fa-users"></span> Address Book 
+    </h2>
 </div>
 <!-- END PAGE TITLE -->
 <ul class="breadcrumb">
@@ -23,8 +31,23 @@
                                     <input type="text" class="form-control" placeholder="Who are you looking for?" ng-model="vm.searchText" />
                                 </div>
                             </div>
+                            <toggle ng-init="toggleValue = true" ng-model="toggleValue" ng-change="vm.changeStatus(toggleValue)" on="Active" off="Inactive" style="float:left;margin-left:20px;margin-right:10px;border-radius: 20px;"></toggle>
+                            <h4 style="margin-top:6px;">{{vm.users.length}} Associates</h4>
+                            <!-- <div class="col-md-6 col-xs-12">
+                                <label class="switch">
+                                    <input type="checkbox" class="switch" ng-model="vm.employee.isActive" />
+                                    <span></span>
+                                </label>
+                                <span class="help-block">I want to opt out of timesheet notifications</span>-->
+                            </div>
+                            <!-- <select ng-change="vm.changeStatus(selectedOption)" ng-model = "selectedOption" ng-class="form-control input-sm" style="float:right;width:150px;height:35px;margin-bottom:20px;margin-right:20px;" >
+                                     <option>Active</option>
+                                     <option>Inactive</option>
+                       
+                    </select> -->
                         </div>
                     </form>
+                   
                 </div>
             </div>
         </div>

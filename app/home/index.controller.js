@@ -308,6 +308,7 @@
         function getUsers() {
             UserService.getUsers().then(function(users) {
                 vm.users = users;
+                console.log(vm.users.length);
                 getAllReports();
                 getMyReport();
             })
@@ -495,7 +496,6 @@
                     utilizationData.push(utilizationVal);
                 });
                 vm.utilizationHoursChart.data.push(utilizationData);
-
                 vm.utzOrganizationHeadCountChart.labels = [];
                 vm.utzOrganizationHeadCountChart.data = [];
                 var utilizationData = [];
@@ -543,6 +543,7 @@
                 }
                 TimesheetService.userTakenLeaveBalance(vm.user._id).then(function(response) {
                     if(response){
+                        // vm.leaveWalletBalance.sickLeaveDays = parseFloat(response.sickLeaveDays);
                         vm.leaveWalletBalance.timeoffHours = parseFloat(response.timeoffHours);
                         vm.leaveWalletBalance.timeoffDays = parseFloat(response.timeoffDays);
                         vm.leaveWalletBalance.leaveBalance = parseFloat(vm.leaveWalletBalance.accruedLeaves + vm.leaveWalletBalance.creditedLeaves - response.timeoffDays - vm.leaveWalletBalance.deductedLOP).toFixed(2);              
@@ -584,11 +585,11 @@
     }
 
     function AdminUsersController(UserService, $filter, ReportService, _, $scope, FlashService, NgTableParams) {
+        
+       
         var vm = this;
-
         vm.user = null;
         vm.deleteUser = deleteUser;
-
         vm.tableParams = new NgTableParams({
             count: 100 // hides pager
         }, {
@@ -600,10 +601,16 @@
                 getAllUsers();
             });
         }
-
+       
         function getAllUsers(week) {
+            var Activeusers = [];
             UserService.GetAll().then(function(users) {
-                vm.users = users;
+                for(var i=0; i <users.length;i++){
+                    if(users[i].isActive === true){
+                        Activeusers.push(users[i]);
+                    }
+                }
+                vm.users = Activeusers;
                 _.each(vm.users, function(userObj) {
                     if (!(userObj.profileImgUrl) || userObj.profileImgUrl == "") {
                         userObj.profileImgUrl = '/app/app-content/assets/user.jpg';
@@ -614,7 +621,32 @@
                 });
             });
         };
-
+        vm.changeStatus = function(event){
+            if(event == true){
+                var Activeusers = [];
+                UserService.GetAll().then(function(users) {
+                    for(var i=0; i <users.length;i++){
+                        if(users[i].isActive === true){
+                            Activeusers.push(users[i]);
+                        }
+                    }
+                    vm.users = Activeusers;
+                   
+                });
+            }
+            else
+            {
+                var InActiveusers = [];
+                UserService.GetAll().then(function(users) {
+                    for(var i=0; i <users.length;i++){
+                        if(users[i].isActive === false){
+                            InActiveusers.push(users[i]);
+                        }
+                    }
+                    vm.users = InActiveusers;                 
+                });
+            }
+        }
         initController();
 
         function initController() {
@@ -1342,6 +1374,7 @@
     }
 
     function UserInfoController(UserService, $stateParams, $state, _, noty, ProjectService) {
+       console.log("User Info Controller");
         var vm = this;
         vm.updateUser = updateUser;
         vm.addProject = addProject;

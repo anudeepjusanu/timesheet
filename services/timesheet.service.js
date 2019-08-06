@@ -941,13 +941,19 @@ function userTakenLeaveBalance(userId, financialYear=null) {
         }
     };
     var userSheetBalance = {
+        sickLeaveHours: 0.00,
+        sickLeaveDays: 0.00,
         timeoffHours: 0.00,
         timeoffDays: 0.00
     };
     db.timesheets.find(queryStr).toArray(function(err, sheets) {
         _.each(sheets, function(sheetObj) {
-            userSheetBalance.timeoffHours += sheetObj.timeoffHours;
+            _.each(sheetObj.projects, function(projectObj) {
+                userSheetBalance.sickLeaveHours += sheetObj.sickLeaveHours;
+                userSheetBalance.timeoffHours += sheetObj.timeoffHours;
+            });
         });
+        userSheetBalance.sickLeaveDays = parseFloat(userSheetBalance.timeoffHours/8).toFixed(2);
         userSheetBalance.timeoffDays = parseFloat(userSheetBalance.timeoffHours/8).toFixed(2);
         deferred.resolve(userSheetBalance);
     });

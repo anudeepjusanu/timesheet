@@ -1,7 +1,4 @@
-﻿
-
-
-<div class="content-wrapper">
+﻿<div class="content-wrapper">
     <!-- Content Header (Page header) -->
   
     <div class="table-responsive">
@@ -12,6 +9,7 @@
                 <tr>
                     <th>Year-Month</th>
                     <th>Accrued</th>
+                    <!-- <th>Sick</th> -->
                     <th>Taken</th>
                     <th>LOP</th>
                     <!-- <th>Balance</th> -->
@@ -21,6 +19,7 @@
                 <tr ng-repeat="myleave in vm.myleaves">
                     <td>{{myleave.yearMonth}}</td>
                     <td>{{myleave.accruedLeaves}}</td>
+                    <!-- <td>-</td> -->
                     <td>{{myleave.takenLeaves}}</td>
                     <td>{{myleave.deductedLOP}}</td>
                     <!-- <td>{{myleave.monthBalance}}</td> -->
