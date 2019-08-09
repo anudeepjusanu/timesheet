@@ -65,9 +65,8 @@
                             if(myLeaveObj){
                                 var timeoffHours = parseFloat(leaveObj.timeoffHours/8);
                                 myLeaveObj.takenLeaves += timeoffHours;
-                                myLeaveObj.takenLeaves = parseFloat(parseFloat(myLeaveObj.takenLeaves).toFixed(2));
+                                //myLeaveObj.takenLeaves = parseFloat(myLeaveObj.takenLeaves).toFixed(2);
                                 myLeaveObj.monthBalance = parseFloat(myLeaveObj.accruedLeaves + myLeaveObj.creditedLeaves - myLeaveObj.takenLeaves - myLeaveObj.deductedLOP).toFixed(2);
-        
                                 vm.totalLeaveBalance = myLeaveObj.monthBalance;
                             }
                         });
