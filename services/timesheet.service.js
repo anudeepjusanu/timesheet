@@ -905,8 +905,16 @@ function userTakenLeaves(userId, financialYear=null) {
     var userSheets = [];
     db.timesheets.find(queryStr).toArray(function(err, sheets) {
         _.each(sheets, function(sheetObj) {
+            sheetObj.sheetTimeoffHours = 0;
+            sheetObj.sheetSickLeaveHours = 0;
+            _.each(sheetObj.projects, function(projectObj){
+                sheetObj.sheetTimeoffHours += projectObj.timeoffHours;
+                sheetObj.sheetSickLeaveHours += projectObj.sickLeaveHours;
+            });
             userSheets.push({
-                timeoffHours: sheetObj.timeoffHours,
+                totalTimeoffHours: sheetObj.timeoffHours,
+                timeoffHours: sheetObj.sheetTimeoffHours,
+                sickLeaveHours: sheetObj.sheetSickLeaveHours,
                 week: sheetObj.week,
                 weekDate: sheetObj.weekDate,
                 totalHours: sheetObj.totalHours,

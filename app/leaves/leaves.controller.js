@@ -63,9 +63,7 @@
                             var yearMonth = String(leaveWeek.getFullYear()+"-"+(monthNum>9?monthNum:"0"+monthNum));
                             var myLeaveObj = _.find(vm.myleaves, {yearMonth: yearMonth});
                             if(myLeaveObj){
-                                var timeoffHours = parseFloat(leaveObj.timeoffHours/8);
-                                myLeaveObj.takenLeaves += timeoffHours;
-                                //myLeaveObj.takenLeaves = parseFloat(myLeaveObj.takenLeaves).toFixed(2);
+                                myLeaveObj.takenLeaves += parseFloat(leaveObj.timeoffHours/8);
                                 myLeaveObj.monthBalance = parseFloat(myLeaveObj.accruedLeaves + myLeaveObj.creditedLeaves - myLeaveObj.takenLeaves - myLeaveObj.deductedLOP).toFixed(2);
                                 vm.totalLeaveBalance = myLeaveObj.monthBalance;
                             }
