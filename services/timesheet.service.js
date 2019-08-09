@@ -944,17 +944,21 @@ function userTakenLeaveBalance(userId, financialYear=null) {
         sickLeaveHours: 0.00,
         sickLeaveDays: 0.00,
         timeoffHours: 0.00,
-        timeoffDays: 0.00
+        timeoffDays: 0.00,
+        totalTimeoffHours: 0.00,
+        totalTimeoffDays: 0.00
     };
     db.timesheets.find(queryStr).toArray(function(err, sheets) {
         _.each(sheets, function(sheetObj) {
             _.each(sheetObj.projects, function(projectObj) {
-                userSheetBalance.sickLeaveHours += sheetObj.sickLeaveHours;
-                userSheetBalance.timeoffHours += sheetObj.timeoffHours;
+                userSheetBalance.sickLeaveHours += projectObj.sickLeaveHours;
+                userSheetBalance.timeoffHours += projectObj.timeoffHours;
             });
+            userSheetBalance.totalTimeoffHours += sheetObj.timeoffHours;
         });
         userSheetBalance.sickLeaveDays = parseFloat(userSheetBalance.timeoffHours/8).toFixed(2);
         userSheetBalance.timeoffDays = parseFloat(userSheetBalance.timeoffHours/8).toFixed(2);
+        userSheetBalance.totalTimeoffDays = parseFloat(userSheetBalance.totalTimeoffHours/8).toFixed(2);
         deferred.resolve(userSheetBalance);
     });
     return deferred.promise;
