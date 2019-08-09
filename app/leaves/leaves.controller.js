@@ -43,9 +43,12 @@
 
         function getMyLeaves(){
             UserService.getMyLeaveWallet().then(function(myleaves) {
+                vm.totalLeaveBalance = 0.00;
                 vm.myleaves = myleaves;
                 _.each(vm.myleaves, function(leaveObj){
                     leaveObj.takenLeaves = 0.00;
+                    leaveObj.timeoffLeaves = 0.00;
+                    leaveObj.sickLeaves = 0.00;
                     leaveObj.monthBalance = 0.00;
                     if(leaveObj) {
                         vm.myleaves.accruedLeaves = leaveObj.accruedLeaves;
@@ -53,7 +56,7 @@
                         vm.myleaves.deductedLOP = leaveObj.deductedLOP; 
                     }
                     vm.myleaves.accruedLeaves += leaveObj.accruedLeaves;
-                    vm.totalLeaveBalance = leaveObj.accruedLeaves + leaveObj.creditedLeaves - leaveObj.deductedLOP;
+                    vm.totalLeaveBalance += leaveObj.accruedLeaves + leaveObj.creditedLeaves + leaveObj.deductedLOP;
                 });
                 TimesheetService.userTakenLeaves(vm.user._id).then(function(leavesData) {
                     if(leavesData){
@@ -63,12 +66,19 @@
                             var yearMonth = String(leaveWeek.getFullYear()+"-"+(monthNum>9?monthNum:"0"+monthNum));
                             var myLeaveObj = _.find(vm.myleaves, {yearMonth: yearMonth});
                             if(myLeaveObj){
-                                myLeaveObj.takenLeaves += parseFloat(leaveObj.timeoffHours/8);
+                                myLeaveObj.takenLeaves += parseFloat(leaveObj.totalTimeoffHours/8);
+                                myLeaveObj.timeoffLeaves += parseFloat(leaveObj.timeoffHours/8);
+                                myLeaveObj.sickLeaves += parseFloat(leaveObj.sickLeaveHours/8);
                                 myLeaveObj.monthBalance = parseFloat(myLeaveObj.accruedLeaves + myLeaveObj.creditedLeaves - myLeaveObj.takenLeaves - myLeaveObj.deductedLOP).toFixed(2);
-                                vm.totalLeaveBalance = myLeaveObj.monthBalance;
+                                vm.totalLeaveBalance = vm.totalLeaveBalance - (myLeaveObj.timeoffLeaves + myLeaveObj.sickLeaves);
                             }
                         });
                     }
+                    vm.totalLeaveBalance = parseFloat(vm.totalLeaveBalance).toFixed(2);
+                    _.each(vm.myleaves, function(leaveObj){
+                        leaveObj.timeoffLeaves = parseFloat(leaveObj.timeoffLeaves).toFixed(2);
+                        leaveObj.sickLeaves = parseFloat(leaveObj.sickLeaves).toFixed(2);
+                    });
                 });
             });
             
