@@ -19,6 +19,8 @@
    
     function Controller(UserService, ProjectService, $filter, _, FlashService, NgTableParams, $uibModal, noty) {
         var vm = this;
+        vm.enddateselect = 'all';
+        vm.isEnddateActive = '';
         vm.user = {};
         vm.clients = [];
         vm.projects = [];
@@ -686,7 +688,9 @@
     function UsersController(UserService, ProjectService, _, $uibModal) {
         var vm = this;
         vm.user = {};
+        vm.allProjects = [];
         vm.projects = [];
+        vm.isEndDateActive = 'all';
         vm.projectTypes = [
             { projectTypeId: "all", projectTypeName: "All" },
             { projectTypeId: "billed", projectTypeName: "Billed" },
@@ -724,15 +728,43 @@
             vm.search.orderBy = orderBy;
         };
 
+        vm.onEndDateChange = function() {
+            if (vm.isEndDateActive === 'all') {
+                vm.projects = vm.allProjects.map(function(project) {                    
+                    project.users = project.users.map(function(user){
+                        user.isActive = false;
+                        if (Array.isArray(user.billDates)) {
+                            for (let val of user.billDates) {
+                                if (val.hasOwnProperty('end')) {
+                                    if (val.end === '') {
+                                        user.isActive = true;
+                                    }
+                                }
+                            }
+                        }
+                        return user;
+                    });
+                    return project;
+                }).map(function(project) {
+                    project.isProjectInActive = project.users.every(user => !user.isActive);
+                    return project;
+                });
+            } else if (vm.isEndDateActive === 'active'){
+                vm.projects = vm.projects.filter(function(project) {
+                    return !project.isProjectInActive;
+                });
+            }
+        }
+
         vm.activeProjectsfilterFn = function(item) {
             var activeProjectsArr = [];
             if(item) {
                 _.each(item.users, function(billDatesArr) {
                     _.each(billDatesArr.billDates, function(billDatesObj){
-                        var currentDate = new Date();
-                        if(!billDatesObj.end || (billDatesObj.end > currentDate)) {
-                            activeProjectsArr.push(billDatesObj.end);    
-                        }
+var currentDate = new Date();
+                         if(!billDatesObj.end || (billDatesObj.end > currentDate)) {
+                             activeProjectsArr.push(billDatesObj.end);
+                         }
                     })
                 })            
             }
@@ -741,8 +773,63 @@
         };
 
         function getProjectUsers() {
+            vm.Users = [];
+            vm.BillDates = [];
             ProjectService.getProjectUsers().then(function(response) {
-                vm.projects = response;
+                vm.allProjects = response;
+                vm.projects = response.map(function(project) {                    
+                    project.users = project.users.map(function(user){
+                        user.isActive = false;
+                        if (Array.isArray(user.billDates)) {
+                            for (let val of user.billDates) {
+                                if (val.hasOwnProperty('end')) {
+                                    if (val.end === '') {
+                                        user.isActive = true;
+                                    }
+                                }
+                            }
+                        }
+                        return user;
+                    });
+                    return project;
+                }).map(function(project) {
+                    project.isProjectInActive = project.users.every(user => !user.isActive);
+                    return project;
+                });
+                
+                // .reduce(
+                //     function(i, c) {
+                //         return i.concat(c);
+                //     } , []
+                // );
+
+                // usersList = _.uniqBy(usersList, 'userId');
+
+                // console.log(projectsWithOnlyActiveUsers,"List of users");
+              //  dateusers = vm.projects;
+              //  console.log(dateusers, "dte users");
+            //   for(var i=0;i < vm.projects.length;i++){
+            //       vm.Users.push(vm.projects[i].users);
+            //      // return vm.Users;
+            //   } 
+
+            // //   console.log(vm.Users,"latest users");
+            //   for(var k=0;k < vm.Users.length;k++){
+            //     vm.BillDates.push(vm.Users[k].userName);
+            // }
+            //     // console.log(vm.BillDates,"BillDates");
+            //   //  console.log(vm.projects[1].users[0].billDates[0].end, "Date"); 
+            //     var TempArr = [];
+            //     var currentDate = new Date();
+            //     for(var i=0;i<vm.projects.length;i++){
+            //         console.log("for loop");
+            //         console.log(vm.projects[i].users[i].billDates.end, "if condition");
+            //         if(vm.projects[i].users[i].billDates[i].end < currentDate){
+            //         TempArr.push(vm.projects[i].users[i].billDates[i].end);
+            //         }
+                    
+            //     }
+            //     console.log(TempArr,"TempArr");
             }, function(error) {
                 console.log(error);
             });
@@ -785,7 +872,7 @@
         function initController() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
-                if (vm.user.admin !== true) {
+                              if (vm.user.admin !== true) {
 
                 }
             });
@@ -960,7 +1047,6 @@
                         vm.users = users;
                         var projectOwnersArr = [];
                         var projectNamesArr = [];
-                        debugger;
                         if (vm.users) {
                             _.each(users, function(user) {
                                 if(user && user.projects) {

@@ -39,7 +39,12 @@
                                     <td width="550px">
                                         <div class="row">
                                             <div class="col-md-3">Start Date</div>
-                                            <div class="col-md-3">End Date</div>
+                                            <div class="col-md-3">End Date
+                                                <select class="form-control" style="margin-top: 4px; width: 80px;" ng-model="vm.isEndDateActive" ng-change="vm.onEndDateChange()">
+                                                    <option value="all">All</option>
+                                                    <option value="active">Active</option>
+                                                </select>
+                                            </div>
                                             <div class="col-md-2">Allocated Hours</div>
                                             <div class="col-md-2">Billable Limit</div>
                                             <div class="col-md-2">Resource Type</div>
@@ -50,7 +55,7 @@
                             </table>
                         </th>
                     </tr>
-                    <tr ng-repeat="project in vm.projects | searchProjectUser:vm.search | orderBy:'name'"
+                    <tr ng-repeat="project in vm.projects | orderBy:'name'"
                         ng-show="project.users">
                         <td>{{$index+1}}</td>
                         <td>
@@ -61,13 +66,17 @@
                         <td>{{project.projectType}}</td>
                         <td>
                             <table class="table">
-                                <tr ng-repeat="user in project.users">
+                                <tr ng-repeat="user in project.users" ng-if="(vm.isEndDateActive === 'all') || (vm.isEndDateActive === 'active' && user.isActive)">
                                     <td width="60px">{{$index+1}}</td>
                                     <td width="150px">{{user.userName}}</td>
                                     <td width="600px">
                                         <div class="row" ng-repeat="billDate in user.billDates | filter: vm.filterFn">
                                             <div class="col-md-3">{{billDate.start | date : 'mediumDate'}}</div>
-                                            <div class="col-md-3">{{billDate.end | date : 'mediumDate'}}</div>
+                                            <div class="col-md-3">
+                                                <span ng-if="vm.isEndDateActive === 'all'">
+                                                    {{billDate.end | date : 'mediumDate'}}
+                                                </span>
+                                            </div>
                                             <div class="col-md-2">{{billDate.allocatedHours}}</div>
                                             <div class="col-md-2">{{billDate.billableMaxHours}}</div>
                                             <div class="col-md-2">
@@ -76,11 +85,14 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td><a class="btn btn-primary btn-xs" ng-click="vm.viewAssignUser(project, user)">Edit</a></td>
-                                </tr>
-                                <tr>
+                                    <td>
+                                        <a class="btn btn-primary btn-xs" ng-click="vm.viewAssignUser(project, user)">Edit</a>
+                                    </td>
                                     <td><a class="btn btn-primary btn-xs" ng-click="vm.viewAssignUser(project)">Add</a></td>
+
                                 </tr>
+                                <!-- <tr>
+                                </tr> -->
                             </table>
                         </td>
                     </tr>
