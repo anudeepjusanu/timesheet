@@ -70,15 +70,15 @@
                                 myLeaveObj.timeoffLeaves += parseFloat(leaveObj.timeoffHours/8);
                                 myLeaveObj.sickLeaves += parseFloat(leaveObj.sickLeaveHours/8);
                                 myLeaveObj.monthBalance = parseFloat(myLeaveObj.accruedLeaves + myLeaveObj.creditedLeaves - myLeaveObj.takenLeaves - myLeaveObj.deductedLOP).toFixed(2);
-                                vm.totalLeaveBalance = vm.totalLeaveBalance - (myLeaveObj.timeoffLeaves + myLeaveObj.sickLeaves);
                             }
                         });
                     }
-                    vm.totalLeaveBalance = parseFloat(vm.totalLeaveBalance).toFixed(2);
                     _.each(vm.myleaves, function(leaveObj){
+			vm.totalLeaveBalance = vm.totalLeaveBalance - (leaveObj.timeoffLeaves + leaveObj.sickLeaves);
                         leaveObj.timeoffLeaves = parseFloat(leaveObj.timeoffLeaves).toFixed(2);
                         leaveObj.sickLeaves = parseFloat(leaveObj.sickLeaves).toFixed(2);
                     });
+		    vm.totalLeaveBalance = parseFloat(vm.totalLeaveBalance).toFixed(2);
                 });
             });
             
