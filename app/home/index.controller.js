@@ -543,10 +543,9 @@
                 }
                 TimesheetService.userTakenLeaveBalance(vm.user._id).then(function(response) {
                     if(response){
-                        // vm.leaveWalletBalance.sickLeaveDays = parseFloat(response.sickLeaveDays);
-                        vm.leaveWalletBalance.timeoffHours = parseFloat(response.timeoffHours);
-                        vm.leaveWalletBalance.timeoffDays = parseFloat(response.timeoffDays);
-                        vm.leaveWalletBalance.leaveBalance = parseFloat(vm.leaveWalletBalance.accruedLeaves + vm.leaveWalletBalance.creditedLeaves - response.timeoffDays - vm.leaveWalletBalance.deductedLOP).toFixed(2);              
+                        vm.leaveWalletBalance.timeoffHours = parseFloat(response.totalTimeoffHours);
+                        vm.leaveWalletBalance.timeoffDays = parseFloat(response.totalTimeoffDays);
+                        vm.leaveWalletBalance.leaveBalance = parseFloat(vm.leaveWalletBalance.accruedLeaves + vm.leaveWalletBalance.creditedLeaves - response.totalTimeoffDays - vm.leaveWalletBalance.deductedLOP).toFixed(2);              
                     }
                 }).catch(function(error) {});
             }).catch(function(error) {

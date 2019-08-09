@@ -956,7 +956,7 @@ function userTakenLeaveBalance(userId, financialYear=null) {
             });
             userSheetBalance.totalTimeoffHours += sheetObj.timeoffHours;
         });
-        userSheetBalance.sickLeaveDays = parseFloat(userSheetBalance.timeoffHours/8).toFixed(2);
+        userSheetBalance.sickLeaveDays = parseFloat(userSheetBalance.sickLeaveHours/8).toFixed(2);
         userSheetBalance.timeoffDays = parseFloat(userSheetBalance.timeoffHours/8).toFixed(2);
         userSheetBalance.totalTimeoffDays = parseFloat(userSheetBalance.totalTimeoffHours/8).toFixed(2);
         deferred.resolve(userSheetBalance);
