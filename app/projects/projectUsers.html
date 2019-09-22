@@ -40,7 +40,7 @@
                                         <div class="row">
                                             <div class="col-md-3">Start Date</div>
                                             <div class="col-md-3">End Date
-                                                <select class="form-control" style="margin-top: 4px; width: 80px;" ng-model="vm.isEndDateActive" ng-change="vm.onEndDateChange()">
+                                                <select class="form-control" style="margin-top: 4px; width: 80px;" ng-model="vm.isEndDateActive">
                                                     <option value="all">All</option>
                                                     <option value="active">Active</option>
                                                 </select>
@@ -55,8 +55,7 @@
                             </table>
                         </th>
                     </tr>
-                    <tr ng-repeat="project in vm.projects | orderBy:'name'"
-                        ng-show="project.users">
+                    <tr ng-repeat="project in vm.projects | searchProjectUser:vm.search | orderBy:'name'" ng-show="project.users">
                         <td>{{$index+1}}</td>
                         <td>
                             {{project.projectName}}

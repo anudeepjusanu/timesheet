@@ -761,15 +761,14 @@
             if(item) {
                 _.each(item.users, function(billDatesArr) {
                     _.each(billDatesArr.billDates, function(billDatesObj){
-var currentDate = new Date();
-                         if(!billDatesObj.end || (billDatesObj.end > currentDate)) {
-                             activeProjectsArr.push(billDatesObj.end);
-                         }
+                        var currentDate = new Date();
+                        if(!billDatesObj.end || (billDatesObj.end > currentDate)) {
+                            activeProjectsArr.push(billDatesObj.end);
+                        }
                     })
                 })            
             }
             return true;
-            //return activeProjectsArr.length>0;
         };
 
         function getProjectUsers() {
@@ -796,40 +795,6 @@ var currentDate = new Date();
                     project.isProjectInActive = project.users.every(user => !user.isActive);
                     return project;
                 });
-                
-                // .reduce(
-                //     function(i, c) {
-                //         return i.concat(c);
-                //     } , []
-                // );
-
-                // usersList = _.uniqBy(usersList, 'userId');
-
-                // console.log(projectsWithOnlyActiveUsers,"List of users");
-              //  dateusers = vm.projects;
-              //  console.log(dateusers, "dte users");
-            //   for(var i=0;i < vm.projects.length;i++){
-            //       vm.Users.push(vm.projects[i].users);
-            //      // return vm.Users;
-            //   } 
-
-            // //   console.log(vm.Users,"latest users");
-            //   for(var k=0;k < vm.Users.length;k++){
-            //     vm.BillDates.push(vm.Users[k].userName);
-            // }
-            //     // console.log(vm.BillDates,"BillDates");
-            //   //  console.log(vm.projects[1].users[0].billDates[0].end, "Date"); 
-            //     var TempArr = [];
-            //     var currentDate = new Date();
-            //     for(var i=0;i<vm.projects.length;i++){
-            //         console.log("for loop");
-            //         console.log(vm.projects[i].users[i].billDates.end, "if condition");
-            //         if(vm.projects[i].users[i].billDates[i].end < currentDate){
-            //         TempArr.push(vm.projects[i].users[i].billDates[i].end);
-            //         }
-                    
-            //     }
-            //     console.log(TempArr,"TempArr");
             }, function(error) {
                 console.log(error);
             });
