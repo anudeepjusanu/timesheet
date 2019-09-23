@@ -13,7 +13,7 @@
                 <table class="table table-condensed table-bordered table-striped" export-table>
                     <tr>
                         <th width="40px">S.No</th>
-                        <th width="100px">
+                        <th style="min-width: 100px;">
                             User Name <br/>
                             <input type="text" style="margin-top: 4px;" ng-model="vm.search.userName" class="form-control" />
                         </th>
@@ -25,7 +25,10 @@
                             <table class="table">
                                 <tr>
                                     <th width="40px">S.No</th>
-                                    <td width="150px">Project Name</td>
+                                    <td width="150px">
+                                        Project Name
+                                        <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.projectAssignStatus" ng-options="opt as opt for opt in ['All', 'Active', 'Inactive']"></select>
+                                    </td>
                                     <td width="100px">Project Owner</td>
                                     <td width="500px">
                                         <div class="row">
@@ -41,8 +44,7 @@
                             </table>
                         </th>
                     </tr>
-                    <tr ng-repeat="user in vm.users | filter: vm.activeProjectsfilterFn | searchUserProject:vm.search | orderBy:'userName'"
-                        >
+                    <tr ng-repeat="user in vm.users | searchUserProject:vm.search | orderBy:'userName'">
                         <td>{{$index+1}}</td>
                         <td>{{user.userName}}</td>
                         <td>{{user.userResourceType}}</td>

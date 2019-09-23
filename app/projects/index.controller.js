@@ -883,7 +883,8 @@
         vm.users = [];
         vm.search = {
             userName: "",
-            userResourceType: ""
+            userResourceType: "",
+            projectAssignStatus: "Active"
         };
 
         function getUserProjects() {
@@ -894,21 +895,20 @@
             });
         }
 
-        vm.activeProjectsfilterFn = function(item) {
-            var activeProjectsArr = [];
-           
-            if(item) {
-                _.each(item.projects, function(billDatesArr) {
-                    _.each(billDatesArr.billDates, function(billDatesObj){
-                        var currentDate = new Date();                       
-                        if(!billDatesObj.end || (billDatesObj.end > currentDate)) {
-                            activeProjectsArr.push(billDatesObj.end);    
-                        }
-                    })
-                })            
-            }
-            return activeProjectsArr.length>0;
-        };
+        // vm.activeProjectsfilterFn = function(item) {
+        //     var activeProjectsArr = [];   
+        //     if(item) {
+        //         _.each(item.projects, function(billDatesArr) {
+        //             _.each(billDatesArr.billDates, function(billDatesObj){
+        //                 var currentDate = new Date();                       
+        //                 if(!billDatesObj.end || (billDatesObj.end > currentDate)) {
+        //                     activeProjectsArr.push(billDatesObj.end);    
+        //                 }
+        //             })
+        //         })            
+        //     }
+        //     return activeProjectsArr.length>0;
+        // };
 
         vm.billedUsersfilterFn = function(item) {
             var activeProjectsArr = [];
@@ -929,7 +929,7 @@
 
         vm.filterFn = function(item) {
             return !item.end;
-            };
+        };
 
         vm.viewAssignUser = function(user, project) {
             user.isNew = false;
@@ -984,9 +984,15 @@
                 output = $filter('filter')(output, { userName: searchObj.userName });
             }
             if (searchObj.userResourceType && searchObj.userResourceType.length > 0) {
-                // console.log(searchObj.userResourceType);
                 output = $filter('filter')(output, function(item) {
                     return (searchObj.userResourceType == item.userResourceType);
+                });
+            }
+            if (searchObj.projectAssignStatus && searchObj.projectAssignStatus != "All") {
+                _.each(output, function(userObj){
+                    userObj.projects = $filter('filter')(userObj.projects, function(item) {
+                        return true;
+                    });
                 });
             }
             return output;
