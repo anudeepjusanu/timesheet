@@ -14,7 +14,6 @@
         .controller('Projects.UserProjectsController', UserProjectsController)
         .controller('Projects.projectHierarchyController', projectHierarchyController)
         .filter('searchProjectUser', searchProjectUser)
-        .filter('searchUserProject', searchUserProject)
         .filter('searchProject', searchProject)
    
     function Controller(UserService, ProjectService, $filter, _, FlashService, NgTableParams, $uibModal, noty) {
@@ -877,10 +876,11 @@
         }
     }
 
-    function UserProjectsController(UserService, ProjectService, _, $uibModal) {
+    function UserProjectsController(UserService, ProjectService, _, $scope, $uibModal, $filter) {
         var vm = this;
         vm.user = {};
         vm.users = [];
+        vm.allUsers = [];
         vm.search = {
             userName: "",
             userResourceType: "",
@@ -889,47 +889,51 @@
 
         function getUserProjects() {
             ProjectService.getUserProjects().then(function(response) {
-                vm.users = response;
+                vm.allUsers = response;
+                vm.searchUserProject();
             }, function(error) {
                 console.log(error);
             });
         }
 
-        // vm.activeProjectsfilterFn = function(item) {
-        //     var activeProjectsArr = [];   
-        //     if(item) {
-        //         _.each(item.projects, function(billDatesArr) {
-        //             _.each(billDatesArr.billDates, function(billDatesObj){
-        //                 var currentDate = new Date();                       
-        //                 if(!billDatesObj.end || (billDatesObj.end > currentDate)) {
-        //                     activeProjectsArr.push(billDatesObj.end);    
-        //                 }
-        //             })
-        //         })            
-        //     }
-        //     return activeProjectsArr.length>0;
-        // };
+        $scope.$watch('vm.search.userName', function(newVal) {
+            vm.searchUserProject();
+        });
+        $scope.$watch('vm.search.userResourceType', function(newVal) {
+            vm.searchUserProject();
+        });
+        $scope.$watch('vm.search.projectAssignStatus', function(newVal) {
+            vm.searchUserProject();
+        });
 
-        vm.billedUsersfilterFn = function(item) {
-            var activeProjectsArr = [];
-            if(item && item.billDates && item.billDates.length>0) {
-                if(item && item.billDates && item.billDates.length>1) {
-                _.each(item.billDates, function(billDatesObj) {
-                    var currentDate = new Date();
-                       
-                    if(!billDatesObj.end || (billDatesObj.end > currentDate)) {
-                        activeProjectsArr.push(billDatesObj.end);    
-                    }
-                })
-                return activeProjectsArr.length>0;
+        vm.searchUserProject = function() {
+            var output = angular.copy(vm.allUsers);
+            var currentDate = new Date();
+            if (vm.search.userName && vm.search.userName.length > 0) {
+                output = $filter('filter')(output, { userName: vm.search.userName });
             }
-                return !item.billDates[0].end;
+            if (vm.search.userResourceType && vm.search.userResourceType.length > 0) {
+                output = $filter('filter')(output, function(item) {
+                    return (vm.search.userResourceType == item.userResourceType);
+                });
             }
-        };
-
-        vm.filterFn = function(item) {
-            return !item.end;
-        };
+            if (vm.search.projectAssignStatus && vm.search.projectAssignStatus == "Active") {
+                _.each(output, function(userObj){
+                    userObj.projects = $filter('filter')(userObj.projects, function(projectObj) {
+                        projectObj.billDates = $filter('filter')(projectObj.billDates, function(item) {
+                            item.start = (item.start)?new Date(item.start):"";
+                            item.end = (item.end)?new Date(item.end):"";
+                            if((currentDate >= item.start  && item.end == "") || (currentDate >= item.start  && currentDate <= item.end) || (item.start == ""  && currentDate <= item.end) ){
+                                return true;
+                            }
+                            return false;
+                        });
+                        return (projectObj.billDates && projectObj.billDates.length>0);
+                    });
+                });
+            }
+            vm.users = output;
+        }
 
         vm.viewAssignUser = function(user, project) {
             user.isNew = false;
@@ -976,29 +980,7 @@
             getUserProjects();
         }
     };
-
-    function searchUserProject($filter) {
-        return function(input, searchObj) {
-            var output = input;
-            if (searchObj.userName && searchObj.userName.length > 0) {
-                output = $filter('filter')(output, { userName: searchObj.userName });
-            }
-            if (searchObj.userResourceType && searchObj.userResourceType.length > 0) {
-                output = $filter('filter')(output, function(item) {
-                    return (searchObj.userResourceType == item.userResourceType);
-                });
-            }
-            if (searchObj.projectAssignStatus && searchObj.projectAssignStatus != "All") {
-                _.each(output, function(userObj){
-                    userObj.projects = $filter('filter')(userObj.projects, function(item) {
-                        return true;
-                    });
-                });
-            }
-            return output;
-        }
-    }
-
+    
     function projectHierarchyController(UserService, ProjectService, _, $uibModal) {
         var vm = this;
         vm.user = {};
