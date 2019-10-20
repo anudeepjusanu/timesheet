@@ -740,6 +740,9 @@
         $scope.$watch('vm.searchObj.projectName', function(newVal) {
             vm.searchProjectUser();
         });
+        $scope.$watch('vm.searchObj.projectStatus', function(newVal) {
+            vm.searchProjectUser();
+        });
         $scope.$watch('vm.searchObj.businessUnit', function(newVal) {
             vm.searchProjectUser();
         });
