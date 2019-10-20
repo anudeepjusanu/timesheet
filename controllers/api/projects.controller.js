@@ -205,6 +205,7 @@ function getProjectUsers(req, res) {
                                         userId: userObj._id,
                                         userName: userObj.name,
                                         username: userObj.username,
+                                        isActive: userObj.isActive,
                                         allocatedHours: assignPrj.allocatedHours,
                                         billDates: assignPrj.billDates
                                     });

@@ -308,7 +308,6 @@
         function getUsers() {
             UserService.getUsers().then(function(users) {
                 vm.users = users;
-                console.log(vm.users.length);
                 getAllReports();
                 getMyReport();
             })

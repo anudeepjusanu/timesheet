@@ -730,25 +730,7 @@
             vm.Users = [];
             vm.BillDates = [];
             ProjectService.getProjectUsers().then(function(response) {
-                vm.allProjects = response.map(function(project) {                    
-                    project.users = project.users.map(function(user){
-                        user.isActive = false;
-                        if (Array.isArray(user.billDates)) {
-                            for (let val of user.billDates) {
-                                if (val.hasOwnProperty('end')) {
-                                    if (val.end === '') {
-                                        user.isActive = true;
-                                    }
-                                }
-                            }
-                        }
-                        return user;
-                    });
-                    return project;
-                }).map(function(project) {
-                    project.isProjectInActive = project.users.every(user => !user.isActive);
-                    return project;
-                });
+                vm.allProjects = response;
                 vm.searchProjectUser();
             }, function(error) {
                 console.log(error);
@@ -803,6 +785,11 @@
                         projectObj.users = $filter('filter')(projectObj.users, { isActive: false});
                     });
                 }
+                _.each(output, function(projectObj){
+                    projectObj.users = $filter('filter')(projectObj.users, function(userObj){
+                        return (userObj.billDates && userObj.billDates.length>0);
+                    });
+                });
             }
             if (vm.searchObj.projectAssignStatus && vm.searchObj.projectAssignStatus == "Active") {
                 _.each(output, function(projectObj){
@@ -815,6 +802,11 @@
                                 (billDateObj.end == "" && billDateObj.start <= currentDate) ||
                                 (billDateObj.end != "" && billDateObj.start != "" && billDateObj.start <= currentDate && billDateObj.end >= currentDate));
                         });
+                    });
+                });
+                _.each(output, function(projectObj){
+                    projectObj.users = $filter('filter')(projectObj.users, function(userObj){
+                        return (userObj.billDates && userObj.billDates.length>0);
                     });
                 });
             }
@@ -995,7 +987,6 @@
                                _.each(user.projects, function(project) {
                                 projectOwnersArr.push(project.ownerName);
                                 projectNamesArr.push(project.projectName);
-                                console.log("owners and projects names : " , projectNamesArr,projectOwnersArr)
                                })
                             }
                             });
