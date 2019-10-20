@@ -16,17 +16,17 @@
                         <th width="240px">
                             Project Name <br/>
                             <div style="display: inline-flex">
-                                <input type="text" style="margin-top: 4px; margin-right: 4px;" ng-model="vm.search.projectName" class="form-control" />
-                                <select class="form-control" style="margin-top: 4px; width: 80px;" ng-model="vm.search.projectStatus" ng-options="option as option for option in ['Active', 'Inactive', 'All']"></select>
+                                <input type="text" style="margin-top: 4px; margin-right: 4px;" ng-model="vm.searchObj.projectName" class="form-control" />
+                                <select class="form-control" style="margin-top: 4px; width: 80px;" ng-model="vm.searchObj.projectStatus" ng-options="option as option for option in ['Active', 'Inactive', 'All']"></select>
                             </div>
                         </th>
                         <th width="100px">
                             Business Unit <br/>
-                            <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.businessUnit" ng-options="option as option for option in vm.projectBusinessUnits"></select>
+                            <select class="form-control" style="margin-top: 4px;" ng-model="vm.searchObj.businessUnit" ng-options="option as option for option in vm.projectBusinessUnits"></select>
                         </th>
                         <th width="100px">
                             Project Type <br/>
-                            <select class="form-control" style="margin-top: 4px;" ng-model="vm.search.projectType" ng-options="prj.projectTypeId as prj.projectTypeName for prj in vm.projectTypes"></select>
+                            <select class="form-control" style="margin-top: 4px;" ng-model="vm.searchObj.projectType" ng-options="prj.projectTypeId as prj.projectTypeName for prj in vm.projectTypes"></select>
                         </th>
                         <th>
                             <table class="table">
@@ -34,15 +34,13 @@
                                     <td width="50px"></td>
                                     <td width="150px">
                                         Resource Name
-                                        <select class="form-control" style="margin-top: 4px; width: 80px;" ng-model="vm.search.projectAssignStatus" ng-options="option as option for option in ['Active', 'Inactive', 'All']"></select>
+                                        <select class="form-control" style="margin-top: 4px; width: 80px;" ng-model="vm.searchObj.userStatus" ng-options="option as option for option in ['All', 'Active', 'Inactive']"></select>
                                     </td>
                                     <td width="550px">
                                         <div class="row">
                                             <div class="col-md-3">Start Date</div>
                                             <div class="col-md-3">End Date
-                                                <select class="form-control" style="margin-top: 4px; width: 80px;" ng-model="vm.isEndDateActive">
-                                                    <option value="all">All</option>
-                                                    <option value="active">Active</option>
+                                                <select class="form-control" style="margin-top: 4px; width: 80px;" ng-model="vm.searchObj.projectAssignStatus" ng-options="option as option for option in ['All', 'Active']">
                                                 </select>
                                             </div>
                                             <div class="col-md-2">Allocated Hours</div>
@@ -55,7 +53,7 @@
                             </table>
                         </th>
                     </tr>
-                    <tr ng-repeat="project in vm.projects | searchProjectUser:vm.search | orderBy:'name'" ng-show="project.users">
+                    <tr ng-repeat="project in vm.projects | orderBy:'name'" ng-show="project.users">
                         <td>{{$index+1}}</td>
                         <td>
                             {{project.projectName}}
@@ -65,16 +63,14 @@
                         <td>{{project.projectType}}</td>
                         <td>
                             <table class="table">
-                                <tr ng-repeat="user in project.users" ng-if="(vm.isEndDateActive === 'all') || (vm.isEndDateActive === 'active' && user.isActive)">
+                                <tr ng-repeat="user in project.users">
                                     <td width="60px">{{$index+1}}</td>
                                     <td width="150px">{{user.userName}}</td>
                                     <td width="600px">
-                                        <div class="row" ng-repeat="billDate in user.billDates | filter: vm.filterFn">
+                                        <div class="row" ng-repeat="billDate in user.billDates">
                                             <div class="col-md-3">{{billDate.start | date : 'mediumDate'}}</div>
                                             <div class="col-md-3">
-                                                <span ng-if="vm.isEndDateActive === 'all'">
-                                                    {{billDate.end | date : 'mediumDate'}}
-                                                </span>
+                                                <span> {{billDate.end | date : 'mediumDate'}} </span>
                                             </div>
                                             <div class="col-md-2">{{billDate.allocatedHours}}</div>
                                             <div class="col-md-2">{{billDate.billableMaxHours}}</div>
@@ -88,10 +84,7 @@
                                         <a class="btn btn-primary btn-xs" ng-click="vm.viewAssignUser(project, user)">Edit</a>
                                     </td>
                                     <td><a class="btn btn-primary btn-xs" ng-click="vm.viewAssignUser(project)">Add</a></td>
-
                                 </tr>
-                                <!-- <tr>
-                                </tr> -->
                             </table>
                         </td>
                     </tr>

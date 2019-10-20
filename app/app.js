@@ -191,7 +191,7 @@
             .state('projectUsers', {
                 url: '/projects/projectUsers',
                 templateUrl: 'projects/projectUsers.html',
-                controller: 'Projects.UsersController',
+                controller: 'Projects.ProjectUsersController',
                 controllerAs: 'vm',
                 parent: 'layout',
                 data: { activeTab: 'projectUsers' }

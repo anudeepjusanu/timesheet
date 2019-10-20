@@ -10,10 +10,9 @@
         .controller('Projects.AssignUserModel', AssignUserModel)
         .controller('Projects.ClientModel', ClientModel)
         .controller('Projects.ClientsController', ClientsController)
-        .controller('Projects.UsersController', UsersController)
+        .controller('Projects.ProjectUsersController', ProjectUsersController)
         .controller('Projects.UserProjectsController', UserProjectsController)
         .controller('Projects.projectHierarchyController', projectHierarchyController)
-        .filter('searchProjectUser', searchProjectUser)
         .filter('searchProject', searchProject)
    
     function Controller(UserService, ProjectService, $filter, _, FlashService, NgTableParams, $uibModal, noty) {
@@ -684,12 +683,11 @@
         }
     };
 
-    function UsersController(UserService, ProjectService, _, $uibModal) {
+    function ProjectUsersController($scope, UserService, ProjectService, _, $filter, $uibModal) {
         var vm = this;
         vm.user = {};
         vm.allProjects = [];
         vm.projects = [];
-        vm.isEndDateActive = 'all';
         vm.projectTypes = [
             { projectTypeId: "all", projectTypeName: "All" },
             { projectTypeId: "billed", projectTypeName: "Billed" },
@@ -698,13 +696,14 @@
             { projectTypeId: "sales", projectTypeName: "Sales" }
         ];
         vm.projectBusinessUnits = ["All", "Launchpad", "Enterprise", "Operations", "Sales&Marketing", "SAS Products", "R&D", "iCancode-Training", "WL-Training", "Skill Up"];
-        vm.search = {
+        vm.searchObj = {
             projectName: "",
             projectStatus: "Active",
             projectType: "all",
-            businessUnit: "All"
+            businessUnit: "All",
+            userStatus: "Active",
+            projectAssignStatus: "Active"
         };
-
         vm.userColumns = {
             "projectName": {label: "Project Name", selected: true},
             "businessUnit": {label: "Business Unit", selected: true},
@@ -727,55 +726,11 @@
             vm.search.orderBy = orderBy;
         };
 
-        vm.onEndDateChange = function() {
-            if (vm.isEndDateActive === 'all') {
-                vm.projects = vm.allProjects.map(function(project) {                    
-                    project.users = project.users.map(function(user){
-                        user.isActive = false;
-                        if (Array.isArray(user.billDates)) {
-                            for (let val of user.billDates) {
-                                if (val.hasOwnProperty('end')) {
-                                    if (val.end === '') {
-                                        user.isActive = true;
-                                    }
-                                }
-                            }
-                        }
-                        return user;
-                    });
-                    return project;
-                }).map(function(project) {
-                    project.isProjectInActive = project.users.every(user => !user.isActive);
-                    return project;
-                });
-            } else if (vm.isEndDateActive === 'active'){
-                vm.projects = vm.projects.filter(function(project) {
-                    return !project.isProjectInActive;
-                });
-            }
-        }
-
-        vm.activeProjectsfilterFn = function(item) {
-            var activeProjectsArr = [];
-            if(item) {
-                _.each(item.users, function(billDatesArr) {
-                    _.each(billDatesArr.billDates, function(billDatesObj){
-                        var currentDate = new Date();
-                        if(!billDatesObj.end || (billDatesObj.end > currentDate)) {
-                            activeProjectsArr.push(billDatesObj.end);
-                        }
-                    })
-                })            
-            }
-            return true;
-        };
-
         function getProjectUsers() {
             vm.Users = [];
             vm.BillDates = [];
             ProjectService.getProjectUsers().then(function(response) {
-                vm.allProjects = response;
-                vm.projects = response.map(function(project) {                    
+                vm.allProjects = response.map(function(project) {                    
                     project.users = project.users.map(function(user){
                         user.isActive = false;
                         if (Array.isArray(user.billDates)) {
@@ -794,9 +749,76 @@
                     project.isProjectInActive = project.users.every(user => !user.isActive);
                     return project;
                 });
+                vm.searchProjectUser();
             }, function(error) {
                 console.log(error);
             });
+        }
+
+        $scope.$watch('vm.searchObj.projectName', function(newVal) {
+            vm.searchProjectUser();
+        });
+        $scope.$watch('vm.searchObj.businessUnit', function(newVal) {
+            vm.searchProjectUser();
+        });
+        $scope.$watch('vm.searchObj.projectType', function(newVal) {
+            vm.searchProjectUser();
+        });
+        $scope.$watch('vm.searchObj.userStatus', function(newVal) {
+            vm.searchProjectUser();
+        });
+        $scope.$watch('vm.searchObj.projectAssignStatus', function(newVal) {
+            vm.searchProjectUser();
+        });
+
+        vm.searchProjectUser = function() {
+            var output = angular.copy(vm.allProjects);
+            var currentDate = new Date();
+            
+            if (vm.searchObj.projectName && vm.searchObj.projectName.length > 0) {
+                output = $filter('filter')(output, { projectName: vm.searchObj.projectName });
+            }
+            if (vm.searchObj.projectStatus && vm.searchObj.projectStatus != "All") {
+                if(vm.searchObj.projectStatus == "Active"){
+                    output = $filter('filter')(output, { isActive: true});
+                }else if(vm.searchObj.projectStatus == "Inactive"){
+                    output = $filter('filter')(output, { isActive: false});
+                }
+            }
+            if (vm.searchObj.projectType && vm.searchObj.projectType.length > 0 && vm.searchObj.projectType != 'all') {
+                output = $filter('filter')(output, function(item) {
+                    return (vm.searchObj.projectType == item.projectType);
+                });
+            }
+            if (vm.searchObj.businessUnit && vm.searchObj.businessUnit.length > 0 && vm.searchObj.businessUnit != "All") {
+                output = $filter('filter')(output, { businessUnit: vm.searchObj.businessUnit });
+            }
+            if (vm.searchObj.userStatus && vm.searchObj.userStatus != "All") {
+                if(vm.searchObj.userStatus == "Active"){
+                    _.each(output, function(projectObj){
+                        projectObj.users = $filter('filter')(projectObj.users, { isActive: true});
+                    });
+                }else if(vm.searchObj.userStatus == "Inactive"){
+                    _.each(output, function(projectObj){
+                        projectObj.users = $filter('filter')(projectObj.users, { isActive: false});
+                    });
+                }
+            }
+            if (vm.searchObj.projectAssignStatus && vm.searchObj.projectAssignStatus == "Active") {
+                _.each(output, function(projectObj){
+                    _.each(projectObj.users, function(userObj){
+                        userObj.billDates = $filter('filter')(userObj.billDates, function(billDateObj){
+                            billDateObj.start = (billDateObj.start!="")?new Date(billDateObj.start):"";
+                            billDateObj.end = (billDateObj.end!="")?new Date(billDateObj.end):"";
+                            return ((billDateObj.start == "" && billDateObj.end == "") ||
+                                (billDateObj.start == "" && billDateObj.end >= currentDate) ||
+                                (billDateObj.end == "" && billDateObj.start <= currentDate) ||
+                                (billDateObj.end != "" && billDateObj.start != "" && billDateObj.start <= currentDate && billDateObj.end >= currentDate));
+                        });
+                    });
+                });
+            }
+            vm.projects = output;
         }
             
         vm.viewAssignUser = function(project, user) {
@@ -830,51 +852,18 @@
                 getProjectUsers();
             });
         }
-
         initController();
 
         function initController() {
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
-                              if (vm.user.admin !== true) {
-
+                if (vm.user.admin !== true) {
+                    $state.go('home');
                 }
             });
             getProjectUsers();
         }
     };
-
-    function searchProjectUser($filter) {
-        return function(input, searchObj) {
-            var output = input;
-            if (searchObj.projectName && searchObj.projectName.length > 0) {
-                output = $filter('filter')(output, { projectName: searchObj.projectName });
-            }
-            if (searchObj.projectStatus && searchObj.projectStatus != "All") {
-                if(searchObj.projectStatus == "Active"){
-                    output = $filter('filter')(output, { isActive: true});
-                }else if(searchObj.projectStatus == "Inactive"){
-                    output = $filter('filter')(output, { isActive: false});
-                }
-            }
-            if (searchObj.projectType && searchObj.projectType.length > 0 && searchObj.projectType != 'all') {
-                output = $filter('filter')(output, function(item) {
-                    return (searchObj.projectType == item.projectType);
-                });
-            }
-            if (searchObj.businessUnit && searchObj.businessUnit.length > 0 && searchObj.businessUnit != "All") {
-                output = $filter('filter')(output, { businessUnit: searchObj.businessUnit });
-            }
-            if (searchObj.projectAssignStatus && searchObj.projectAssignStatus != "All") {
-                if(searchObj.projectAssignStatus == "Active"){
-                    //output = $filter('filter')(output, { isActive: true});
-                }else if(searchObj.projectAssignStatus == "Inactive"){
-                    //output = $filter('filter')(output, { isActive: false});
-                }
-            }
-            return output;
-        }
-    }
 
     function UserProjectsController(UserService, ProjectService, _, $scope, $uibModal, $filter) {
         var vm = this;
@@ -974,7 +963,7 @@
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
                 if (vm.user.admin !== true) {
-
+                    $state.go('home');
                 }
             });
             getUserProjects();
@@ -1041,13 +1030,12 @@
             UserService.GetCurrent().then(function(user) {
                 vm.user = user;
                 if (vm.user.admin !== true) {
-
+                    $state.go('home');
                 }
             });
             getAllUsers();
             getProjectUsers();
         }
     };
-
-
+    
 })();
