@@ -1658,7 +1658,7 @@
                 ProjectService.getAssignedUsers(vm.currentProject._id).then(function(response) {
                     //Removing users with expired end date
                     _.remove(response, function(user) {
-                        if (user.billDates) {
+                        if (user.billDates && user.billDates.length > 0) {
                             var endDate = user.billDates[user.billDates.length - 1].end;
                             if (endDate && currentDay > new Date(endDate)) {
                                 return user;

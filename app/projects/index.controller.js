@@ -298,8 +298,8 @@
         vm.projectObj = projectObj;
         vm.assignedUsers = [];
 
-        function getProjectAssignedUsers(projectId) {
-            ProjectService.getAssignedUsers(projectId).then(function(response) {
+        function getProjectAssignedUsersWithWorkedHours(projectId) {
+            ProjectService.getAssignedUsersWithWorkedHours(projectId).then(function(response) {
                 vm.assignedUsers = response;
             }, function(error) {
                 console.log(error);

@@ -14,6 +14,7 @@
         service.update = update;
         service.delete = del;
         service.getAssignedUsers = getAssignedUsers;
+        service.getAssignedUsersWithWorkedHours = getAssignedUsersWithWorkedHours;
         service.assignUsers = assignUsers;
         service.assignUser = assignUser;
         service.unassignUser = unassignUser;
@@ -50,6 +51,10 @@
 
         function getAssignedUsers(_id) {
             return $http.get('/api/projects/assignedUsers/' + _id).then(handleSuccess, handleError);
+        }
+
+        function getAssignedUsersWithWorkedHours(_id) {
+            return $http.get('/api/projects/assignedUsersWithWorkedHours/' + _id).then(handleSuccess, handleError);
         }
 
         function assignUsers(_id, users) {

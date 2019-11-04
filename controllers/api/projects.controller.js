@@ -16,6 +16,7 @@ router.post('/', addProject);
 router.put('/:_id', updateProject);
 router.delete('/:_id', deleteProject);
 router.get('/assignedUsers/:_id', getAssignedUsers);
+router.get('/assignedUsersWithWorkedHours/:_id', getAssignedUsersWithWorkedHours);
 router.post('/assignedUsers/:_id', assignedUsers);
 router.post('/assignUser/:_id', addAssignUser);
 router.delete('/assignUser/:_id/:_userId', unassignUser);
@@ -87,6 +88,20 @@ function getProjectById(req, res) {
 
 function getAssignedUsers(req, res) {
     projectService.getAssignedUsers(req.params._id)
+        .then(function(users) {
+            if (users) {
+                res.send(users);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function(err) {
+            res.status(400).send(err);
+        });
+}
+
+function getAssignedUsersWithWorkedHours(req, res) {
+    projectService.getAssignedUsersWithWorkedHours(req.params._id)
         .then(function(users) {
             if (users) {
                 res.send(users);
@@ -205,7 +220,6 @@ function getProjectUsers(req, res) {
                                         userId: userObj._id,
                                         userName: userObj.name,
                                         username: userObj.username,
-                                        isActive: userObj.isActive,
                                         allocatedHours: assignPrj.allocatedHours,
                                         billDates: assignPrj.billDates
                                     });

@@ -21,6 +21,7 @@ service.delete = del;
 service.getProjectById = getProjectById;
 service.getAllProjects = getAllProjects;
 service.getAssignedUsers = getAssignedUsers;
+service.getAssignedUsersWithWorkedHours = getAssignedUsersWithWorkedHours;
 service.assignUsers = assignUsers;
 service.assignUser = assignUser;
 service.unassignUser = unassignUser;
@@ -160,6 +161,41 @@ function getAssignedUsers(projectId) {
         } else {
             // project not found
             deferred.resolve();
+        }
+    });
+    return deferred.promise;
+}
+
+function getAssignedUsersWithWorkedHours(projectId) {
+    var deferred = Q.defer();
+    db.users.find({ "projects.projectId": { "$in": [projectId] } }).toArray(function(err, users) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+        if (users) {
+            var assignedUsers = [];
+            _.each(users, function(user) {
+                var userProject = _.find(user.projects, { "projectId": projectId });
+                userProject.billDates = (userProject.billDates)?userProject.billDates:[];
+                _.each(userProject.billDates, function(billDate){
+                    billDate.workedHours = 0;
+                    billDate.sheets = [];
+                    db.timesheets.find({ "weekDate": {$gte: new Date(billDate.start), $lt: new Date(billDate.end)}, "projects.projectId": { "$in": [projectId] } }).toArray(function(err, sheets) {
+                        billDate.sheets = sheets;
+                        _.each(sheets, function(sheet){
+                            var billProject = _.find(sheet.projects, { "projectId": projectId });
+                            billDate.workedHours += billProject.projectHours;
+                        });
+                    });
+                });
+                assignedUsers.push({
+                    projectId: projectId,
+                    userId: user._id,
+                    userName: user.name,
+                    billDates: userProject.billDates
+                });
+            });
+            deferred.resolve(assignedUsers);
+        } else {
+            deferred.resolve([]);
         }
     });
     return deferred.promise;

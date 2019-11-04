@@ -61,6 +61,15 @@
                     <table class="table table-condensed table-striped">
                         <tr ng-repeat="user in vm.assignedUsers">
                             <td>{{user.userName}}</td>
+                            <td>
+                                <table>
+                                    <tr ng-repeat="billDate in user.billDates">
+                                        <td width="80px">{{billDate.start|date : "dd.MM.y"}} </td>
+                                        <td width="80px">{{billDate.end|date : "dd.MM.y"||"--"}} </td>
+                                        <td width="100px">{{billDate.resourceType}} </td>
+                                    </tr>
+                                </table>
+                            </td>
                         </tr>
                     </table>
                 </td>
