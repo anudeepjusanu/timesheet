@@ -1665,8 +1665,6 @@
                             }
                         }
                     });
-                    console.log(vm.timesheets);
-                    console.log(response);
                     if (response && response.length) {
                         vm.timesheets[response[0].projectId]["users"] = response;
                         getHoursByWeek(vm.currentWeek, vm.currentProject._id);
@@ -1681,10 +1679,8 @@
             var filterDate = $filter('date')(week, "yyyy-Www").toString();
             TimesheetService.projectHours(filterDate, projectId).then(function(response) {
 
-
                 vm.timesheetList = [];
                 _.each(vm.currentProject.users, function(user) {
-                    console.log(vm.currentProject.users,"Billable hours");
                     user.timesheet = [];
                     _.each(response, function(timesheet) {
                         if (timesheet.userId == user.userId) {
@@ -1696,9 +1692,10 @@
                                 if (!project.sheetStatus) {
                                     project.sheetStatus = 'Pending';
                                 }
-                                if (project.billableHours != 0) {
+                                if (project.billableHours > 0 || project.sickLeaveHours > 0 || project.timeoffHours > 0) {
                                     user.timesheet.push(project);
                                 }
+                                console.log(project);
                             });
                         }
                     });
