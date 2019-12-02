@@ -185,23 +185,6 @@ function remindAll(req, res) {
 function teamRemindAll(req, res) {
     timesheetService.getTimesheetApproveProjectOwners(req.params.week).then(function(timesheets) {
         var output = [];
-        var myaddress = {
-            "useAuth" : true,
-            "serviceUrl" : "https://smba.trafficmanager.net/apis/",
-            "bot" : {
-                "name" : "Wavelabs Bot",
-                "id" : "28:c8fc3ad9-72cb-46ff-b5f1-09432ed9b7db"
-            },
-            "conversation" : {
-                "id" : "29:1rJ0cAsaQqgabXbAZXEGeHNKhWV4fWT9NWOsHZVIYGhc"
-            },
-            "user" : {
-                "name" : "Lal Bahadur Sastry Chintaluri",
-                "id" : "29:1rJ0cAsaQqgabXbAZXEGeHNKhWV4fWT9NWOsHZVIYGhc"
-            },
-            "channelId" : "skype",
-            "id" : "1487824461927"
-        };
         _.each(timesheets, function(timesheetObj){
             var userObj = _.find(output, {userId: timesheetObj.user_info._id});
             if(userObj){
@@ -213,8 +196,7 @@ function teamRemindAll(req, res) {
                     week: timesheetObj.week,
                     userId: timesheetObj.user_info._id,
                     userName: timesheetObj.user_info.name,
-                    //address: timesheetObj.user_info.address,
-                    address: myaddress,
+                    address: timesheetObj.user_info.address,
                     projectName: [timesheetObj.projectName]
                 });    
             }
