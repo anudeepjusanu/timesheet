@@ -9,6 +9,7 @@ var connector = new builder.ChatConnector({
     appPassword: "Y1A0xm40NNkm1XpR0MNV3sz"
 });
 var bot = new builder.UniversalBot(connector);
+var _ = require('lodash');
 
 // routes
 router.post('/', createTimesheet);
@@ -20,6 +21,7 @@ router.get('/week/mine', getMyReport);
 router.get('/week/:weekId', getReportbyWeek);
 router.get('/remind/:id/:week', remind);
 router.get('/remind/all', remindAll);
+router.get('/teamRemind/all/:week', teamRemindAll);
 router.put('/admin/:id', adminUpdate);
 router.post('/month/report', getReportbyMonth);
 router.get('/userTakenLeaves/:userId', userTakenLeaves);
@@ -178,6 +180,42 @@ function remindAll(req, res) {
         .catch(function(err) {
             res.status(400).send(err);
         });
+}
+
+function teamRemindAll(req, res) {
+    timesheetService.getTimesheetApproveProjectOwners().then(function(timesheets) {
+        var output = [];
+        _.each(timesheets, function(timesheetObj){
+            var userObj = _.find(output, {userId: timesheetObj.user_info._id});
+            if(userObj){
+                if(!(userObj.projectName.indexOf(timesheetObj.projectName)>=0)){
+                    userObj.projectName.push(timesheetObj.projectName);
+                }
+            }else{
+                output.push({
+                    week: timesheetObj.week,
+                    userId: timesheetObj.user_info._id,
+                    userName: timesheetObj.user_info.name,
+                    address: timesheetObj.user_info.address,
+                    projectName: [timesheetObj.projectName]
+                });    
+            }
+        });
+        _.each(output, function(userObj){
+            var projectNames = "";
+            _.each(userObj.projectName, function(item){ projectNames += item+', '; });
+            var message = "Please approve weekly hours for "+userObj.week+" week ("+ projectNames +") at http://timesheet.wavelabs.in , Ignore if already updated";
+            var msg = new builder.Message()
+                        .address(userObj.address)
+                        .text(message);
+                bot.send(msg, function(err) {
+                    // Return success/failure
+                });
+        });
+        res.send(output);
+    }).catch(function(err) {
+        res.status(400).send(err);
+    });
 }
 
 function adminUpdate(req, res) {

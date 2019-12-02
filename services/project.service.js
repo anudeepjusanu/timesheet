@@ -10,8 +10,9 @@ db.bind('users');
 db.bind('clients');
 db.bind('timesheets');
 
-//var mongoose = require('mongoose');
-//mongoose.connect(config.connectionString);
+var mongoose = require('mongoose');
+var projects = require("../models/project.model");
+mongoose.connect(config.connectionString);
 
 var service = {};
 
@@ -30,6 +31,7 @@ service.getClientById = getClientById;
 service.createClient = createClient;
 service.updateClient = updateClient;
 service.deleteClient = deleteClient;
+service.getProjectOwners = getProjectOwners;
 
 module.exports = service;
 
@@ -500,5 +502,18 @@ function deleteClient(_id) {
             deferred.resolve();
         });
 
+    return deferred.promise;
+}
+
+function getProjectOwners() {
+    var deferred = Q.defer();
+    projects.aggregate([
+        {$match: {isActive: true}},
+        {$project: {'projectName': true, 'ownerId': {'$toObjectId': '$ownerId'}, 'user_info.name': 1}},
+        {$lookup: {from: 'users', localField: 'ownerId', foreignField: '_id', as: 'user_info'}},
+    ]).exec(function(error, response){
+        if (error) deferred.reject(error);
+        deferred.resolve(response);
+    });
     return deferred.promise;
 }

@@ -61,6 +61,7 @@
         vm.projects = [];
         vm.post = post;
         vm.remind = remind;
+        vm.teamRemindAll = teamRemindAll;
         vm.getAllReports = getAllReports;
         vm.exportTable = exportTable;
         vm.remindAll = remindAll;
@@ -166,6 +167,14 @@
                         noty.showSuccess("User Reminded!");
                     });
                 }
+            });
+        }
+
+        function teamRemindAll() {
+            var week = $filter('date')(vm.currentWeek, "Www");
+            console.log("In teamRemindAll");
+            TimesheetService.teamRemindAll(week).then(function(response) {
+                noty.showSuccess("Team User Reminded!");
             });
         }
 

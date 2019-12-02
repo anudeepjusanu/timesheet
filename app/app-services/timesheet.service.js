@@ -16,6 +16,7 @@
         service.getReportByWeek = getReportByWeek;
         service.remind = remind;
         service.remindAll = remindAll;
+        service.teamRemindAll = teamRemindAll;
         service.adminUpdate = adminUpdate;
         service.getReportByMonth = getReportByMonth;
         service.getProjectsWithUserCount = getProjectsWithUserCount;
@@ -67,6 +68,10 @@
 
         function remindAll() {
             return $http.get('/api/timesheet/remind/all').then(handleSuccess, handleError);
+        }
+
+        function teamRemindAll(week) {
+            return $http.get('/api/timesheet/teamRemind/all/'+week).then(handleSuccess, handleError);
         }
 
         function adminUpdate(id, obj) {

@@ -9,6 +9,10 @@ db.bind('timesheets');
 db.bind('users');
 db.bind('projects');
 
+var mongoose = require('mongoose');
+var timesheet = require("../models/timesheet.model");
+mongoose.connect(config.connectionString);
+
 var service = {};
 
 service.createTimesheet = createTimesheet;
@@ -34,6 +38,7 @@ service.remindByProject = remindByProject;
 service.usersLeaveBalance = usersLeaveBalance;
 service.userTakenLeaves = userTakenLeaves;
 service.userTakenLeaveBalance = userTakenLeaveBalance;
+service.getTimesheetApproveProjectOwners = getTimesheetApproveProjectOwners;
 
 module.exports = service;
 
@@ -968,6 +973,24 @@ function userTakenLeaveBalance(userId, financialYear=null) {
         userSheetBalance.timeoffDays = parseFloat(userSheetBalance.timeoffHours/8).toFixed(2);
         userSheetBalance.totalTimeoffDays = parseFloat(userSheetBalance.totalTimeoffHours/8).toFixed(2);
         deferred.resolve(userSheetBalance);
+    });
+    return deferred.promise;
+}
+
+function getTimesheetApproveProjectOwners() {
+    var deferred = Q.defer();
+    timesheet.aggregate([
+        {$match: {week: '2019-W40', 'projects.sheetStatus': 'Pending'}},
+        {$unwind:{path:"$projects", preserveNullAndEmptyArrays: true}},
+        {$lookup: {from: 'projects', localField: 'projects.projectId', foreignField: '_id', as: 'project_info'}},
+        {$unwind:"$project_info"},
+        {$project:{week: 1, projectId: "$projects.projectId", projectName: "$projects.projectName", sheetStatus: "$projects.sheetStatus", 
+        ownerId: {'$toObjectId': '$project_info.ownerId'}, ownerName: "$project_info.ownerName", userName: "$user_info.name"}},
+        {$lookup: {from: 'users', localField: 'ownerId', foreignField: '_id', as: 'user_info'}},
+        {$unwind:"$user_info"},
+    ]).exec(function(error, response){
+        if (error) deferred.reject(error);
+        deferred.resolve(response);
     });
     return deferred.promise;
 }
