@@ -171,9 +171,8 @@
         }
 
         function teamRemindAll() {
-            var week = $filter('date')(vm.currentWeek, "Www");
-            console.log("In teamRemindAll");
-            TimesheetService.teamRemindAll(week).then(function(response) {
+            var weekNumber = $filter('date')(vm.currentWeek, "yyyy-Www");
+            TimesheetService.teamRemindAll(weekNumber).then(function(response) {
                 noty.showSuccess("Team User Reminded!");
             });
         }

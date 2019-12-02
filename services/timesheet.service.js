@@ -977,10 +977,10 @@ function userTakenLeaveBalance(userId, financialYear=null) {
     return deferred.promise;
 }
 
-function getTimesheetApproveProjectOwners() {
+function getTimesheetApproveProjectOwners(week) {
     var deferred = Q.defer();
     timesheet.aggregate([
-        {$match: {week: '2019-W40', 'projects.sheetStatus': 'Pending'}},
+        {$match: {week: week, 'projects.sheetStatus': 'Pending'}},
         {$unwind:{path:"$projects", preserveNullAndEmptyArrays: true}},
         {$lookup: {from: 'projects', localField: 'projects.projectId', foreignField: '_id', as: 'project_info'}},
         {$unwind:"$project_info"},
