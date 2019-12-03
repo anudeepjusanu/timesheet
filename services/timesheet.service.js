@@ -980,8 +980,8 @@ function userTakenLeaveBalance(userId, financialYear=null) {
 function getTimesheetApproveProjectOwners(week) {
     var deferred = Q.defer();
     timesheet.aggregate([
-        {$match: {week: week, 'projects.sheetStatus': 'Pending'}},
         {$unwind:{path:"$projects", preserveNullAndEmptyArrays: true}},
+        {$match: {week: week, 'projects.sheetStatus': 'Pending', $or: [{'projects.projectHours': {$gt: 0}}, {'projects.sickLeaveHours': {$gt: 0}}, {'projects.timeoffHours': {$gt: 0}}]}},
         {$lookup: {from: 'projects', localField: 'projects.projectId', foreignField: '_id', as: 'project_info'}},
         {$unwind:"$project_info"},
         {$project:{week: 1, projectId: "$projects.projectId", projectName: "$projects.projectName", sheetStatus: "$projects.sheetStatus", 
