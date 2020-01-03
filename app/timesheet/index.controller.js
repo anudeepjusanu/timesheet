@@ -659,16 +659,16 @@
         };
         vm.masterLeavesVals = [
             {id: 0, label: '0'},
-            {id: 0.5, label: '1/2 Day'},
-            {id: 1, label: '1 Day'},
-            {id: 1.5, label: '1 1/2 Days'},
-            {id: 2, label: '2 days'},
-            {id: 2.5, label: '2 1/2 days'},
-            {id: 3, label: '3'},
-            {id: 3.5, label: '3 1/2 days'},
-            {id: 4, label: '4 days'},
-            {id: 4.5, label: '4 1/2 days'},
-            {id: 5, label: '5 days'}
+            {id: 4, label: '0.5 Day'},
+            {id: 8, label: '1 Day'},
+            {id: 12, label: '1.5 Days'},
+            {id: 16, label: '2 days'},
+            {id: 20, label: '2.5 days'},
+            {id: 24, label: '3'},
+            {id: 28, label: '3.5 days'},
+            {id: 32, label: '4 days'},
+            {id: 36, label: '4.5 days'},
+            {id: 40, label: '5 days'}
         ];
 
         vm.alerts = [];

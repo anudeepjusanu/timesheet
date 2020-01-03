@@ -53,8 +53,16 @@
                                     ng-options="opt.id as opt.label for opt in vm.masterLeavesVals"></select>
                                     <!-- <input type="number" ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" min="0" max="40" class="form-control" ng-model="project.sickLeaveHours" ng-required="true" ng-change="vm.calTotalHours();" /> -->
                                 </td>
-                                <td><input type="number" ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" min="0" max="40" class="form-control" ng-model="project.timeoffHours" ng-required="true" ng-change="vm.calTotalHours();" /></td>
-                                <td><input type="number" ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" min="0" max="40" class="form-control" ng-model="project.corpHolidayHours" ng-required="true" ng-change="vm.calTotalHours();" /></td>
+                                <td>
+                                    <select ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" class="form-control" ng-model="project.timeoffHours" ng-required="true" ng-change="vm.calTotalHours();"
+                                    ng-options="opt.id as opt.label for opt in vm.masterLeavesVals"></select>
+                                    <!-- <input type="number" ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" min="0" max="40" class="form-control" ng-model="project.timeoffHours" ng-required="true" ng-change="vm.calTotalHours();" /> -->
+                                </td>
+                                <td>
+                                    <select ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" class="form-control" ng-model="project.corpHolidayHours" ng-required="true" ng-change="vm.calTotalHours();"
+                                    ng-options="opt.id as opt.label for opt in [{id: 0, label: '0'}, {id: 8, label: '1 Day'}, {id: 16, label: '2 Days', {id: 24, label: '3 Days'}]"></select>
+                                    <!-- <input type="number" ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" min="0" max="40" class="form-control" ng-model="project.corpHolidayHours" ng-required="true" ng-change="vm.calTotalHours();" /> -->
+                                </td>
                                 <td><input type="number" ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" min="0" max="40" class="form-control" ng-model="project.overtimeHours" readonly="readonly" /></td>
                                 <td><textarea class="form-control" ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" placeholder="Please enter your comment" rows="2" ng-model="project.projectComment"></textarea></td>
                             </tr>
