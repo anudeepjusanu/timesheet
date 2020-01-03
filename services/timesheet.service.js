@@ -893,7 +893,7 @@ function userTakenLeaves(userId, financialYear=null) {
         var endDate = new Date(financialYearArr[1], 3, 1);
     }else{
         var now = new Date();
-        var startYear = (now.getMonth()>=3)?now.getFullYear():now.getFullYear()+1; 
+        var startYear = (now.getMonth()>=3)?now.getFullYear():now.getFullYear()-1; 
         var startDate = new Date(startYear, 3, 1);
         var endDate = new Date((startYear+1), 3, 1);
     }
@@ -939,7 +939,7 @@ function userTakenLeaveBalance(userId, financialYear=null) {
         var endDate = new Date(financialYearArr[1], 3, 1);
     }else{
         var now = new Date();
-        var startYear = (now.getMonth()>=3)?now.getFullYear():now.getFullYear()+1; 
+        var startYear = (now.getMonth()>=3)?now.getFullYear():now.getFullYear()-1; 
         var startDate = new Date(startYear, 3, 1);
         var endDate = new Date((startYear+1), 3, 1);
     }

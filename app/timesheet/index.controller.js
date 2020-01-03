@@ -657,6 +657,19 @@
             maxDate: new Date(2020, 5, 22),
             startingDay: 1
         };
+        vm.masterLeavesVals = [
+            {id: 0, label: '0'},
+            {id: 0.5, label: '1/2 Day'},
+            {id: 1, label: '1 Day'},
+            {id: 1.5, label: '1 1/2 Days'},
+            {id: 2, label: '2 days'},
+            {id: 2.5, label: '2 1/2 days'},
+            {id: 3, label: '3'},
+            {id: 3.5, label: '3 1/2 days'},
+            {id: 4, label: '4 days'},
+            {id: 4.5, label: '4 1/2 days'},
+            {id: 5, label: '5 days'}
+        ];
 
         vm.alerts = [];
         vm.closeAlert = function(index) {
