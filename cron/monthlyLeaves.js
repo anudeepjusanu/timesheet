@@ -24,17 +24,22 @@ appConfigService.getSettings().then(function(response){
     db.users.find({isActive: true}).toArray(function(err, users) {
         _.each(users, function (userObj) {
             if(userObj.joinDate){
+                var acquire_leaves = parseFloat(acquire_leaves_month);
                 joinDate = new Date(userObj.joinDate);
                 var middleDate = new Date(nowDate.getFullYear(), nowDate.getMonth(), 15);
+                
                 if(middleDate>joinDate){
+                    if(month == 4 || month == 10){
+                        acquire_leaves += 1.00;
+                    }
                     var leaveWalletData = {
                         userId: userObj._id,
                         yearMonth: yearMonth,
                         yearMonthNumber: yearMonthNumber,
-                        accruedLeaves: acquire_leaves_month
+                        accruedLeaves: acquire_leaves
                     };
                     leaveWalletService.saveMonthlyLeaves(leaveWalletData).then(function(response){
-                       
+                    console.log(acquire_leaves);
                     }).catch(function(errors){
                         console.log(errors);
                     });
