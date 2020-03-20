@@ -28,7 +28,9 @@ appConfigService.getSettings().then(function(response){
                 joinDate = new Date(userObj.joinDate);
                 var middleDate = new Date(nowDate.getFullYear(), nowDate.getMonth(), 15);
 
-                if(nowDate > joinDate && (month == 10 || (month == 4 && nowDate.getFullYear()>joinDate.getFullYear()) || (month == 4 && joinDate.getMonth() < 9))){
+                if(nowDate > joinDate && (month == 10 || (month == 4 && nowDate.getFullYear()>joinDate.getFullYear())) ){
+                    acquire_leaves += 1.00;
+                }else if(nowDate.getFullYear()==joinDate.getFullYear() && month <= 9 && month == (joinDate.getMonth()+1) ){
                     acquire_leaves += 1.00;
                 }
 
