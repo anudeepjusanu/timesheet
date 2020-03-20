@@ -27,11 +27,12 @@ appConfigService.getSettings().then(function(response){
                 var acquire_leaves = parseFloat(acquire_leaves_month);
                 joinDate = new Date(userObj.joinDate);
                 var middleDate = new Date(nowDate.getFullYear(), nowDate.getMonth(), 15);
-                
+
+                if(nowDate > joinDate && (month == 10 || (month == 4 && nowDate.getFullYear()>joinDate.getFullYear()) || (month == 4 && joinDate.getMonth() < 9))){
+                    acquire_leaves += 1.00;
+                }
+
                 if(middleDate>joinDate){
-                    if(month == 4 || month == 10){
-                        acquire_leaves += 1.00;
-                    }
                     var leaveWalletData = {
                         userId: userObj._id,
                         yearMonth: yearMonth,
@@ -39,7 +40,7 @@ appConfigService.getSettings().then(function(response){
                         accruedLeaves: acquire_leaves
                     };
                     leaveWalletService.saveMonthlyLeaves(leaveWalletData).then(function(response){
-                    console.log(acquire_leaves);
+                        console.log(acquire_leaves);
                     }).catch(function(errors){
                         console.log(errors);
                     });
