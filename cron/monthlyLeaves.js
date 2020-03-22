@@ -24,16 +24,19 @@ appConfigService.getSettings().then(function(response){
     db.users.find({isActive: true}).toArray(function(err, users) {
         _.each(users, function (userObj) {
             if(userObj.joinDate){
-                var acquire_leaves = parseFloat(acquire_leaves_month);
+                var acquire_leaves = 0.00;
                 joinDate = new Date(userObj.joinDate);
                 var middleDate = new Date(nowDate.getFullYear(), nowDate.getMonth(), 15);
 
-                if(nowDate.getFullYear()>joinDate.getFullYear() && (month == 10 || (month == 4 && nowDate.getFullYear()>joinDate.getFullYear())) ){
-                    acquire_leaves += 1.00;
+                //joinDate = new Date(joinDate.getTime() + (60000 * 330));
+                if(nowDate>joinDate && (month == 10 || (month == 4 && nowDate.getFullYear()>joinDate.getFullYear())) ){
+                    acquire_leaves = 1.00;
                 }else if(nowDate.getFullYear()==joinDate.getFullYear() && month <= 9 && month == (joinDate.getMonth()+1) ){
-                    acquire_leaves += 1.00;
+                    acquire_leaves = 1.00;
+                }else if(nowDate.getFullYear()==joinDate.getFullYear() && month <= 9 && month == (joinDate.getMonth()+2) && joinDate.getDate()>=15){
+                    acquire_leaves = 1.00;
                 }
-
+                acquire_leaves += parseFloat(acquire_leaves_month);
                 if(middleDate>joinDate){
                     var leaveWalletData = {
                         userId: userObj._id,
