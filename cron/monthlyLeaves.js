@@ -38,14 +38,18 @@ let updateUserAcquireLeaves = async function(userObj, acquire_leaves_month){
     var acquire_leaves = 0.00;
     joinDate = new Date(userObj.joinDate);
     var middleDate = new Date(nowDate.getFullYear(), nowDate.getMonth(), 15);
+    var financeYearStart = new Date(nowDate.getFullYear(), 3, 1);
 
     //joinDate = new Date(joinDate.getTime() + (60000 * 330));
-    if(nowDate>joinDate && (month == 10 || (month == 4 && nowDate.getFullYear()>joinDate.getFullYear())) ){
+    if(nowDate>joinDate && (month == 10 || (month == 4 && financeYearStart>joinDate)) ){
         acquire_leaves = 1.00;
+        console.log("Case 01");
     }else if(nowDate.getFullYear()==joinDate.getFullYear() && month <= 9 && month == (joinDate.getMonth()+1) ){
         acquire_leaves = 1.00;
+        console.log("Case 02");
     }else if(nowDate.getFullYear()==joinDate.getFullYear() && month <= 9 && month == (joinDate.getMonth()+2) && joinDate.getDate()>=15){
         acquire_leaves = 1.00;
+        console.log("Case 03");
     }
     acquire_leaves += parseFloat(acquire_leaves_month);
     
@@ -59,12 +63,6 @@ let updateUserAcquireLeaves = async function(userObj, acquire_leaves_month){
 
         await leaveWalletService.saveMonthlyLeaves(leaveWalletData).then(function(response){
             console.log("EMP ID", userObj.employeeId, " ", acquire_leaves);
-        }).catch(function(errors){
-            console.log(errors);
-        });
-    }else if(joinDate > nowDate){
-        await leaveWalletService.delMonthlyLeaves(userObj._id, yearMonth).then(function(response){
-            console.log("Del EMP ID", userObj.employeeId);
         }).catch(function(errors){
             console.log(errors);
         });
