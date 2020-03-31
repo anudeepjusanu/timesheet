@@ -985,7 +985,7 @@ function userTakenLeaveBalance(userId, financialYear=null) {
         {$match: queryStr},
         {$lookup: {from: 'users', localField: 'userId', foreignField: '_id', as: 'user_info'}},
         {$unwind:"$user_info"},
-        {$project: {week: 1, userId: 1, weekDate: 1, userResourceType: 1, totalHours: 1, totalBillableHours: 1, timeoffHours: 1, sickLeaveHours: 1, userJoinDate: "$user_info.joinDate"} }
+        {$project: {week: 1, userId: 1, weekDate: 1, userResourceType: 1, totalHours: 1, totalBillableHours: 1, timeoffHours: 1, sickLeaveHours: 1, projects: 1, userJoinDate: "$user_info.joinDate"} }
     ]).exec(function(err, sheets){
         _.each(sheets, function(sheetObj) {
             var weekDate = new Date(sheetObj.weekDate);

@@ -47,12 +47,11 @@ function getUserLeaveWallet(userId, fananceYear = null){
     if(fananceYear !== null){
         fananceYear = fananceYear.split("-");
         fananceYear = parseInt(fananceYear[0]);
-        var startYearMonth = fananceYear + "04";
-        var endYearMonth = (fananceYear+1) + "03";
     }else{
-        var startYearMonth = ((nowDate.getMonth()>=3)?nowDate.getFullYear():(nowDate.getFullYear()-1)) + "04";
-        var endYearMonth = ((nowDate.getMonth()>=3)?(nowDate.getFullYear()-1):nowDate.getFullYear()) + "03";
+        fananceYear = (nowDate.getMonth()>=3)?nowDate.getFullYear():(nowDate.getFullYear()-1);
     }
+    var startYearMonth = parseInt(fananceYear + "04");
+    var endYearMonth = parseInt((fananceYear+1) + "03");
     var deferred = Q.defer();
     leaveWallet.find({userId: new ObjectId(userId), yearMonthNumber: {$gte: startYearMonth, $lte: endYearMonth}}, function(error, response){
         if (error) deferred.reject(error);
@@ -66,12 +65,11 @@ function getUserLeaveWalletBalance(userId, fananceYear = null){
     if(fananceYear !== null){
         fananceYear = fananceYear.split("-");
         fananceYear = parseInt(fananceYear[0]);
-        var startYearMonth = fananceYear + "04";
-        var endYearMonth = (fananceYear+1) + "03";
     }else{
-        var startYearMonth = ((nowDate.getMonth()>=3)?nowDate.getFullYear():(nowDate.getFullYear()-1)) + "04";
-        var endYearMonth = ((nowDate.getMonth()>=3)?(nowDate.getFullYear()-1):nowDate.getFullYear()) + "03";
+        fananceYear = (nowDate.getMonth()>=3)?nowDate.getFullYear():(nowDate.getFullYear()-1);
     }
+    var startYearMonth = parseInt(fananceYear + "04");
+    var endYearMonth = parseInt((fananceYear+1) + "03");
     var leaveWalletBalance = {
         accruedLeaves: 0.00,
         creditedLeaves: 0.00,
@@ -130,8 +128,8 @@ function usersLeaveBalance(financialYear) {
         }
     };
     var users = [];
-    var startYearMonth = 201904;
-    var endYearMonth = 202003;
+    var startYearMonth = financialYearArr[0] + "04";
+    var endYearMonth = financialYearArr[1] + "03";
     var deferred = Q.defer();
     leaveWallet.find({yearMonthNumber: {$gte: startYearMonth, $lte: endYearMonth}}, function(error, response){
         if (error) deferred.reject(error);
