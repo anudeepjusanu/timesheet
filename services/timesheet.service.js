@@ -853,30 +853,39 @@ function usersLeaveBalance(financialYear) {
         }
     };
     var users = [];
-    db.timesheets.find(queryStr).toArray(function(err, sheets) {
+    timesheet.aggregate([
+        {$match: queryStr},
+        {$lookup: {from: 'users', localField: 'userId', foreignField: '_id', as: 'user_info'}},
+        {$unwind:"$user_info"},
+        {$project: {week: 1, userId: 1, weekDate: 1, userResourceType: 1, totalHours: 1, totalBillableHours: 1, timeoffHours: 1, sickLeaveHours: 1, userJoinDate: "$user_info.joinDate"} }
+    ]).exec(function(err, sheets){
         _.each(sheets, function(sheetObj) {
-            var userObj = _.find(users, {_id: sheetObj.userId});
-            if(userObj){
-                userObj.timesheets.push({
-                    timeoffHours: sheetObj.timeoffHours,
-                    week: sheetObj.week,
-                    weekDate: sheetObj.weekDate,
-                    totalHours: sheetObj.totalHours,
-                    totalBillableHours: sheetObj.totalBillableHours 
-                });
-            }else{
-                var userObj = {
-                    _id: sheetObj.userId,
-                    userResourceType: sheetObj.userResourceType,
-                    timesheets: [{
+            var weekDate = new Date(sheetObj.weekDate);
+            var userJoinDate = new Date(sheetObj.userJoinDate);
+            if(weekDate > userJoinDate && userSheet.userResourceType != "Intern"){
+                var userObj = _.find(users, {_id: sheetObj.userId});
+                if(userObj){
+                    userObj.timesheets.push({
                         timeoffHours: sheetObj.timeoffHours,
                         week: sheetObj.week,
                         weekDate: sheetObj.weekDate,
                         totalHours: sheetObj.totalHours,
-                        totalBillableHours: sheetObj.totalBillableHours
-                    }]
+                        totalBillableHours: sheetObj.totalBillableHours 
+                    });
+                }else{
+                    var userObj = {
+                        _id: sheetObj.userId,
+                        userResourceType: sheetObj.userResourceType,
+                        timesheets: [{
+                            timeoffHours: sheetObj.timeoffHours,
+                            week: sheetObj.week,
+                            weekDate: sheetObj.weekDate,
+                            totalHours: sheetObj.totalHours,
+                            totalBillableHours: sheetObj.totalBillableHours
+                        }]
+                    }
+                    users.push(userObj);
                 }
-                users.push(userObj);
             }
         });
         deferred.resolve(users);
@@ -908,23 +917,33 @@ function userTakenLeaves(userId, financialYear=null) {
         }
     };
     var userSheets = [];
-    db.timesheets.find(queryStr).toArray(function(err, sheets) {
+    timesheet.aggregate([
+        {$match: queryStr},
+        {$lookup: {from: 'users', localField: 'userId', foreignField: '_id', as: 'user_info'}},
+        {$unwind:"$user_info"},
+        {$project: {week: 1, userId: 1, weekDate: 1, userResourceType: 1, totalHours: 1, totalBillableHours: 1, timeoffHours: 1, sickLeaveHours: 1, projects: 1, userJoinDate: "$user_info.joinDate"} }
+    ]).exec(function(err, sheets){
+    //db.timesheets.find(queryStr).toArray(function(err, sheets) {
         _.each(sheets, function(sheetObj) {
-            sheetObj.sheetTimeoffHours = 0;
-            sheetObj.sheetSickLeaveHours = 0;
-            _.each(sheetObj.projects, function(projectObj){
-                sheetObj.sheetTimeoffHours += projectObj.timeoffHours;
-                sheetObj.sheetSickLeaveHours += projectObj.sickLeaveHours;
-            });
-            userSheets.push({
-                totalTimeoffHours: sheetObj.timeoffHours,
-                timeoffHours: sheetObj.sheetTimeoffHours,
-                sickLeaveHours: sheetObj.sheetSickLeaveHours,
-                week: sheetObj.week,
-                weekDate: sheetObj.weekDate,
-                totalHours: sheetObj.totalHours,
-                totalBillableHours: sheetObj.totalBillableHours 
-            });
+            var weekDate = new Date(sheetObj.weekDate);
+            var userJoinDate = new Date(sheetObj.userJoinDate);
+            if(weekDate > userJoinDate && sheetObj.userResourceType != "Intern"){
+                sheetObj.sheetTimeoffHours = 0;
+                sheetObj.sheetSickLeaveHours = 0;
+                _.each(sheetObj.projects, function(projectObj){
+                    sheetObj.sheetTimeoffHours += projectObj.timeoffHours;
+                    sheetObj.sheetSickLeaveHours += projectObj.sickLeaveHours;
+                });
+                userSheets.push({
+                    totalTimeoffHours: sheetObj.timeoffHours,
+                    timeoffHours: sheetObj.sheetTimeoffHours,
+                    sickLeaveHours: sheetObj.sheetSickLeaveHours,
+                    week: sheetObj.week,
+                    weekDate: sheetObj.weekDate,
+                    totalHours: sheetObj.totalHours,
+                    totalBillableHours: sheetObj.totalBillableHours 
+                });
+            }
         });
         deferred.resolve(userSheets);
     });
@@ -954,6 +973,7 @@ function userTakenLeaveBalance(userId, financialYear=null) {
         }
     };
     var userSheetBalance = {
+        userId: null,
         sickLeaveHours: 0.00,
         sickLeaveDays: 0.00,
         timeoffHours: 0.00,
@@ -961,13 +981,23 @@ function userTakenLeaveBalance(userId, financialYear=null) {
         totalTimeoffHours: 0.00,
         totalTimeoffDays: 0.00
     };
-    db.timesheets.find(queryStr).toArray(function(err, sheets) {
+    timesheet.aggregate([
+        {$match: queryStr},
+        {$lookup: {from: 'users', localField: 'userId', foreignField: '_id', as: 'user_info'}},
+        {$unwind:"$user_info"},
+        {$project: {week: 1, userId: 1, weekDate: 1, userResourceType: 1, totalHours: 1, totalBillableHours: 1, timeoffHours: 1, sickLeaveHours: 1, userJoinDate: "$user_info.joinDate"} }
+    ]).exec(function(err, sheets){
         _.each(sheets, function(sheetObj) {
-            _.each(sheetObj.projects, function(projectObj) {
-                userSheetBalance.sickLeaveHours += projectObj.sickLeaveHours;
-                userSheetBalance.timeoffHours += projectObj.timeoffHours;
-            });
-            userSheetBalance.totalTimeoffHours += sheetObj.timeoffHours;
+            var weekDate = new Date(sheetObj.weekDate);
+            var userJoinDate = new Date(sheetObj.userJoinDate);
+            if(weekDate > userJoinDate && sheetObj.userResourceType != "Intern"){
+                userSheetBalance.userId = sheetObj.userId;
+                _.each(sheetObj.projects, function(projectObj) {
+                    userSheetBalance.sickLeaveHours += projectObj.sickLeaveHours;
+                    userSheetBalance.timeoffHours += projectObj.timeoffHours;
+                });
+                userSheetBalance.totalTimeoffHours += sheetObj.timeoffHours;
+            }
         });
         userSheetBalance.sickLeaveDays = parseFloat(userSheetBalance.sickLeaveHours/8).toFixed(2);
         userSheetBalance.timeoffDays = parseFloat(userSheetBalance.timeoffHours/8).toFixed(2);

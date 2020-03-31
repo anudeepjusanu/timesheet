@@ -74,11 +74,11 @@
                         });
                     }
                     _.each(vm.myleaves, function(leaveObj){
-			vm.totalLeaveBalance = vm.totalLeaveBalance - (leaveObj.timeoffLeaves + leaveObj.sickLeaves);
+			            vm.totalLeaveBalance = vm.totalLeaveBalance - (leaveObj.timeoffLeaves + leaveObj.sickLeaves);
                         leaveObj.timeoffLeaves = parseFloat(leaveObj.timeoffLeaves).toFixed(2);
                         leaveObj.sickLeaves = parseFloat(leaveObj.sickLeaves).toFixed(2);
                     });
-		    vm.totalLeaveBalance = parseFloat(vm.totalLeaveBalance).toFixed(2);
+		            vm.totalLeaveBalance = parseFloat(vm.totalLeaveBalance).toFixed(2);
                 });
             });
             

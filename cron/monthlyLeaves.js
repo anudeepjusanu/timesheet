@@ -10,7 +10,7 @@ db.bind('users');
 db.bind('timesheets');
 
 var acquire_leaves_month = 0;
-var nowDate = new Date();
+var nowDate = new Date(2019, 3, 1);
 var month = nowDate.getMonth() + 1;
 var yearMonth = nowDate.getFullYear()+"-"+String(month<10?"0"+month:month);
 var yearMonthNumber = nowDate.getFullYear()+String(month<10?"0"+month:month);

@@ -4,6 +4,7 @@ var Q = require('q');
 var mongoose = require("mongoose");
 var ObjectId = require('mongoose').Types.ObjectId; 
 var leaveWallet = require("../models/leaveWallet.model");
+var timesheet = require("../models/timesheet.model");
 mongoose.connect(config.connectionString);
 var mongo = require('mongoskin');
 var db = mongo.db(config.connectionString, { native_parser: true });
@@ -155,23 +156,32 @@ function usersLeaveBalance(financialYear) {
                 });
             });
         }
-        db.timesheets.find(queryStr).toArray(function(err, sheets) {
+        timesheet.aggregate([
+            {$match: queryStr},
+            {$lookup: {from: 'users', localField: 'userId', foreignField: '_id', as: 'user_info'}},
+            {$unwind:"$user_info"},
+            {$project: {week: 1, userId: 1, weekDate: 1, userResourceType: 1, totalHours: 1, totalBillableHours: 1, timeoffHours: 1, sickLeaveHours: 1, userJoinDate: "$user_info.joinDate"} }
+        ]).exec(function(err, sheets){
             var userGroupSheets = _.groupBy(sheets, 'userId');
             _.each(userGroupSheets, function(userSheets, userId){
                 var userObj = _.find(users, {userId: userId});
                 var userTimesheets = [];
                 var totalTimeOffHours = 0.00;
                 _.each(userSheets, function(userSheet){
-                    totalTimeOffHours += userSheet.timeoffHours;
-                    userTimesheets.push({
-                        _id: userSheet._id,
-                        week: userSheet.week,
-                        weekDate: userSheet.weekDate,
-                        userResourceType: userSheet.userResourceType,
-                        timeoffHours: userSheet.timeoffHours,
-                        totalHours: userSheet.totalHours,
-                        totalBillableHours: userSheet.totalBillableHours,
-                    });
+                    var weekDate = new Date(userSheet.weekDate);
+                    var userJoinDate = new Date(userSheet.userJoinDate);
+                    if(weekDate > userJoinDate && userSheet.userResourceType != "Intern"){
+                        totalTimeOffHours += userSheet.timeoffHours;
+                        userTimesheets.push({
+                            _id: userSheet._id,
+                            week: userSheet.week,
+                            weekDate: userSheet.weekDate,
+                            userResourceType: userSheet.userResourceType,
+                            timeoffHours: userSheet.timeoffHours,
+                            totalHours: userSheet.totalHours,
+                            totalBillableHours: userSheet.totalBillableHours,
+                        });
+                    }
                 });
                 if(userObj){
                     userObj.timesheets = userTimesheets;
