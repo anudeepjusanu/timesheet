@@ -13,6 +13,7 @@ db.bind('users');
 var service = {};
 
 service.saveMonthlyLeaves = saveMonthlyLeaves;
+service.delMonthlyLeaves = delMonthlyLeaves;
 service.getUserLeaveWallet = getUserLeaveWallet;
 service.getUserLeaveWalletBalance = getUserLeaveWalletBalance;
 service.updateUserLeaveBalance = updateUserLeaveBalance;
@@ -31,9 +32,26 @@ function saveMonthlyLeaves(leaveWalletData){
     return deferred.promise;
 }
 
-function getUserLeaveWallet(userId){
-    var startYearMonth = 201904;
-    var endYearMonth = 202003;
+function delMonthlyLeaves(userId, yearMonth){
+    var deferred = Q.defer();
+    leaveWallet.findOneAndRemove({userId: userId, yearMonth: yearMonth}).exec(function(error, response){
+        if (error) deferred.reject(error);
+        deferred.resolve(response);
+    });
+    return deferred.promise;
+}
+
+function getUserLeaveWallet(userId, fananceYear = null){
+    var nowDate = new Date();
+    if(fananceYear !== null){
+        fananceYear = fananceYear.split("-");
+        fananceYear = parseInt(fananceYear[0]);
+        var startYearMonth = fananceYear + "04";
+        var endYearMonth = (fananceYear+1) + "03";
+    }else{
+        var startYearMonth = ((nowDate.getMonth()>=3)?nowDate.getFullYear():(nowDate.getFullYear()-1)) + "04";
+        var endYearMonth = ((nowDate.getMonth()>=3)?(nowDate.getFullYear()-1):nowDate.getFullYear()) + "03";
+    }
     var deferred = Q.defer();
     leaveWallet.find({userId: new ObjectId(userId), yearMonthNumber: {$gte: startYearMonth, $lte: endYearMonth}}, function(error, response){
         if (error) deferred.reject(error);
@@ -42,9 +60,17 @@ function getUserLeaveWallet(userId){
     return deferred.promise;
 }
 
-function getUserLeaveWalletBalance(userId){
-    var startYearMonth = 201904;
-    var endYearMonth = 202003;
+function getUserLeaveWalletBalance(userId, fananceYear = null){
+    var nowDate = new Date();
+    if(fananceYear !== null){
+        fananceYear = fananceYear.split("-");
+        fananceYear = parseInt(fananceYear[0]);
+        var startYearMonth = fananceYear + "04";
+        var endYearMonth = (fananceYear+1) + "03";
+    }else{
+        var startYearMonth = ((nowDate.getMonth()>=3)?nowDate.getFullYear():(nowDate.getFullYear()-1)) + "04";
+        var endYearMonth = ((nowDate.getMonth()>=3)?(nowDate.getFullYear()-1):nowDate.getFullYear()) + "03";
+    }
     var leaveWalletBalance = {
         accruedLeaves: 0.00,
         creditedLeaves: 0.00,

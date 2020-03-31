@@ -6,7 +6,6 @@ var connector = new builder.ChatConnector({
 var bot = new builder.UniversalBot(connector);
 var _ = require('lodash');
 
-
 var myTestAddress = {
     "useAuth" : true,
     "serviceUrl" : "https://smba.trafficmanager.net/apis/",
@@ -24,9 +23,10 @@ var myTestAddress = {
     "channelId" : "skype",
     "id" : "1487824461927"
 };
-
-var message = "Please approve weekly hours for "+userObj.week+" week ("+ projectNames +") at http://timesheet.wavelabs.in , Ignore if already updated";
-var msg = new builder.Message().address(myTestAddress).text(message);
+var now = new Date();
+var message = "Now : "+now.toLocaleDateString(now.getTimezoneOffset());
+console.log(message);
+/*var msg = new builder.Message().address(myTestAddress).text(message);
     bot.send(msg, function(res) {
         // Return success/failure
-    });
+    });*/
