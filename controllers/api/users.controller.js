@@ -29,7 +29,7 @@ router.get('/userPoolLogs/:_id', userPoolLogs);
 router.get('/createPassword/:_id', createPassword);
 router.put('/updatePushToken/:_id', updatePushToken);
 router.post('/remind/user/:_id', remindByMessage);
-router.get('/myLeaveWallet', getMyLeaveWallet);
+router.get('/myLeaveWallet/:financeYear', getMyLeaveWallet);
 router.get('/myLeaveWalletBalance', getMyLeaveWalletBalance);
 
 
@@ -268,7 +268,7 @@ function remindByMessage(req, res) {
 
 function getMyLeaveWallet(req, res){
     var userId = req.user.sub;
-    leaveWalletService.getUserLeaveWallet(userId).then(function(response) {
+    leaveWalletService.getUserLeaveWallet(userId, req.params.financeYear).then(function(response) {
         if (response) {
             res.send(response);
         } else {

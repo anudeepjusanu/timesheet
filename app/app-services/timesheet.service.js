@@ -124,8 +124,8 @@
             return $http.get('/api/leaves/usersLeaveBalance/' + financialYear, {}).then(handleSuccess, handleError);
         }
 
-        function userTakenLeaves(userId) {
-            return $http.get('/api/timesheet/userTakenLeaves/' + userId, {}).then(handleSuccess, handleError);
+        function userTakenLeaves(userId, financialYear) {
+            return $http.get('/api/timesheet/userTakenLeaves/' + userId + '/' + financialYear, {}).then(handleSuccess, handleError);
         }
 
         function userTakenLeaveBalance(userId) {

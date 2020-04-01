@@ -109,8 +109,8 @@
             return $http.post('/api/users/remind/user/' + userId, message).then(handleSuccess, handleError);
         }
 
-        function getMyLeaveWallet() {
-            return $http.get('/api/users/myLeaveWallet/').then(handleSuccess, handleError);
+        function getMyLeaveWallet(financeYear) {
+            return $http.get('/api/users/myLeaveWallet/'+financeYear).then(handleSuccess, handleError);
         }
 
         function getMyLeaveWalletBalance() {

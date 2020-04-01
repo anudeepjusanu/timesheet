@@ -25,6 +25,7 @@ router.get('/teamRemind/all/:week', teamRemindAll);
 router.put('/admin/:id', adminUpdate);
 router.post('/month/report', getReportbyMonth);
 router.get('/userTakenLeaves/:userId', userTakenLeaves);
+router.get('/userTakenLeaves/:userId/:financeYear', userTakenLeaves);
 router.get('/userTakenLeaveBalance/:userId', userTakenLeaveBalance);
 router.get('/utilizationByMonth/:monthId/:yearId', utilizationByMonth);
 router.get('/allUserHoursByWeek/:weekId', allUserHoursByWeek);
@@ -362,7 +363,7 @@ function remindByProject(req, res) {
 }
 
 function userTakenLeaves(req, res) {
-    timesheetService.userTakenLeaves(req.params.userId)
+    timesheetService.userTakenLeaves(req.params.userId, req.params.financeYear)
         .then(function(response) {
             res.send(response);
         })
