@@ -116,11 +116,10 @@ function userTakenLeaveBalance(leaveWalletData, financialYear=null, userObj) {
         userSheetBalance.totalTimeoffDays = parseFloat(userSheetBalance.totalTimeoffHours/8);
 
         leaveWalletService.getUserLeaveWalletBalance(leaveWalletData.userId, financialYear).then(function(lastLeaveWallet){
-            var userLeaveBalance = lastLeaveWallet.accruedLeaves + lastLeaveWallet.creditedLeaves - userSheetBalance.totalTimeoffDays;
+            var userLeaveBalance = lastLeaveWallet.accruedLeaves + lastLeaveWallet.creditedLeaves + lastLeaveWallet.deductedLOP - userSheetBalance.totalTimeoffDays;
             userLeaveBalance = userLeaveBalance>0?(userLeaveBalance>=5?5.00:userLeaveBalance):0.00;
 
             leaveWalletData.creditedLeaves = parseFloat(parseFloat(userLeaveBalance).toFixed(2));
-            console.log(leaveWalletData);
             leaveWalletService.saveMonthlyLeaves(leaveWalletData).then(function(response){
                 deferred.resolve(leaveWalletData.userId, leaveWalletData);
             }).catch(function(errors){
