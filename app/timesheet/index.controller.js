@@ -1720,10 +1720,8 @@
                         }
                     });
                 });
-                console.log(vm.currentProject.users);
                 _.remove(vm.currentProject.users, function(userObj){
                     var haveCurrentProject = _.find(userObj.timesheet, {"projectId": projectId});
-                    console.log(haveCurrentProject, (typeof haveCurrentProject === 'undefined'));
                     return (typeof haveCurrentProject === 'undefined');
                 });
             });
