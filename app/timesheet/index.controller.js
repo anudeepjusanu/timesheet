@@ -1685,10 +1685,6 @@
                                 return user;
                             }
                         }
-                        var haveProject = _.find(user.timesheet, {"projectId": vm.currentProject._id});
-                        if(!haveProject){
-                            return true;
-                        }
                     });
                     if (response && response.length) {
                         vm.timesheets[response[0].projectId]["users"] = response;
@@ -1720,11 +1716,15 @@
                                 if (project.billableHours > 0 || project.sickLeaveHours > 0 || project.timeoffHours > 0) {
                                     user.timesheet.push(project);
                                 }
-                                console.log(project);
                             });
                         }
                     });
-
+                });
+                console.log(vm.currentProject.users);
+                _.remove(vm.currentProject.users, function(userObj){
+                    var haveCurrentProject = _.find(userObj.timesheet, {"projectId": projectId});
+                    console.log(haveCurrentProject, (typeof haveCurrentProject === 'undefined'));
+                    return (typeof haveCurrentProject === 'undefined');
                 });
             });
         };
