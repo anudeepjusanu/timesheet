@@ -1685,6 +1685,10 @@
                                 return user;
                             }
                         }
+                        var haveProject = _.find(user.timesheet, {"projectId": vm.currentProject._id});
+                        if(!haveProject){
+                            return true;
+                        }
                     });
                     if (response && response.length) {
                         vm.timesheets[response[0].projectId]["users"] = response;
