@@ -33,6 +33,11 @@ app.get('/msteams', function(req, res) {
     res.json(users);
 });
 
+msbot.dialog('/', function (session) {
+    session.sendTyping();
+    console.log(session);
+});
+
 msbot.on('contactRelationUpdate', function(message) {
     if (message.action === 'add') {
         var name = message.user ? message.user.name : null;
