@@ -57,7 +57,9 @@ bot.on('deleteUserData', function (message) {
 bot.dialog('/', function (session) {
     session.sendTyping();
     //console.log(session.message);
+    console.log(session.message.text.toLowerCase());
     if (session.message.text.toLowerCase().indexOf('migrate') == 0) {
+        console.log("MIGRATION START")
         session.beginDialog('/migrateAccount');
     }
     else if (session.message.text.toLowerCase().indexOf('hello') == 0) {
