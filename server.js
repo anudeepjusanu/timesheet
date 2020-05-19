@@ -17,13 +17,13 @@ app.use(express.static(__dirname + '/public'));
 
 
 var connector = new builder.ChatConnector({
-    appId: "c8fc3ad9-72cb-46ff-b5f1-09432ed9b7db",
-    appPassword: "Y1A0xm40NNkm1XpR0MNV3sz"
+    appId: "03d79ab1-9dce-411e-8a3c-80244fad94ac",
+    appPassword: "cnaHHT2706]?;@fcfkKOCP8"
 });
 var bot = new builder.UniversalBot(connector);
 
 // use JWT auth to secure the api
-app.use('/api', expressJwt({ secret: config.secret }).unless({ path: ['/api/users/authenticate', '/api/users/register', '/api/messages'] }));
+app.use('/api', expressJwt({ secret: config.secret }).unless({ path: ['/api/users/authenticate', '/api/users/register', '/api/messages', '/api/users/bot'] }));
 
 app.post('/api/messages', connector.listen());
 app.get('/api/messages', function (req, res) {

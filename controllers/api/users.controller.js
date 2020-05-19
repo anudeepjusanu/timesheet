@@ -31,13 +31,14 @@ router.put('/updatePushToken/:_id', updatePushToken);
 router.post('/remind/user/:_id', remindByMessage);
 router.get('/myLeaveWallet/:financeYear', getMyLeaveWallet);
 router.get('/myLeaveWalletBalance', getMyLeaveWalletBalance);
+router.get('/bot', getBotMigration);
 
 
 module.exports = router;
 
 function authenticateUser(req, res) {
     userService.authenticate(req.body.username, req.body.password)
-        .then(function(token) {
+        .then(function (token) {
             if (token) {
                 // authentication successful
                 res.send({ token: token });
@@ -46,7 +47,7 @@ function authenticateUser(req, res) {
                 res.status(401).send('Username or password is incorrect');
             }
         })
-        .catch(function(err) {
+        .catch(function (err) {
             res.status(400).send(err);
         });
 }
@@ -55,7 +56,7 @@ function loginAsUser(req, res) {
     delete req.session.token;
     delete req.session.success;
     userService.loginAsUser(req.body.username)
-        .then(function(token) {
+        .then(function (token) {
             if (token) {
                 req.session.token = token;
                 // authentication successful
@@ -65,45 +66,45 @@ function loginAsUser(req, res) {
                 res.status(401).send('Username or password is incorrect');
             }
         })
-        .catch(function(err) {
+        .catch(function (err) {
             res.status(400).send(err);
         });
 }
 
 function registerUser(req, res) {
     userService.create(req.body)
-        .then(function() {
+        .then(function () {
             res.sendStatus(200);
         })
-        .catch(function(err) {
+        .catch(function (err) {
             res.status(400).send(err);
         });
 }
 
 function getCurrentUser(req, res) {
     userService.getById(req.user.sub)
-        .then(function(user) {
+        .then(function (user) {
             if (user) {
                 res.send(user);
             } else {
                 res.sendStatus(404);
             }
         })
-        .catch(function(err) {
+        .catch(function (err) {
             res.status(400).send(err);
         });
 }
 
 function getUser(req, res) {
     userService.getUserById(req.params._id)
-        .then(function(user) {
+        .then(function (user) {
             if (user) {
                 res.send(user);
             } else {
                 res.sendStatus(404);
             }
         })
-        .catch(function(err) {
+        .catch(function (err) {
             res.status(400).send(err);
         });
 }
@@ -116,30 +117,30 @@ function updateUser(req, res) {
     }
 
     userService.update(userId, req.body)
-        .then(function() {
+        .then(function () {
             res.sendStatus(200);
         })
-        .catch(function(err) {
+        .catch(function (err) {
             res.status(400).send(err);
         });
 }
 
 function deleteUser(req, res) {
     userService.delete(req.params._id)
-        .then(function() {
+        .then(function () {
             res.sendStatus(200);
         })
-        .catch(function(err) {
+        .catch(function (err) {
             res.status(400).send(err);
         });
 }
 
 function adminAccess(req, res) {
     userService.adminAccess(req.params._id)
-        .then(function() {
+        .then(function () {
             res.sendStatus(200);
         })
-        .catch(function(err) {
+        .catch(function (err) {
             res.status(400).send(err);
         });
 }
@@ -147,78 +148,78 @@ function adminAccess(req, res) {
 
 function getAllUsers(req, res) {
     userService.getAll()
-        .then(function(user) {
+        .then(function (user) {
             if (user) {
                 res.send(user);
             } else {
                 res.sendStatus(404);
             }
         })
-        .catch(function(err) {
+        .catch(function (err) {
             res.status(400).send(err);
         });
 }
 
 function getUsers(req, res) {
     userService.getUsers()
-        .then(function(user) {
+        .then(function (user) {
             if (user) {
                 res.send(user);
             } else {
                 res.sendStatus(404);
             }
         })
-        .catch(function(err) {
+        .catch(function (err) {
             res.status(400).send(err);
         });
 }
 
 function adminUpdate(req, res) {
     userService.adminUpdate(req.user.sub, req.params._id, req.body)
-        .then(function(user) {
+        .then(function (user) {
             if (user) {
                 res.send(user);
             } else {
                 res.sendStatus(404);
             }
         })
-        .catch(function(err) {
+        .catch(function (err) {
             res.status(400).send(err);
         });
 }
 
 function releaseToPool(req, res) {
-    userService.releaseToPool(req.params._id, req.body).then(function(response) {
+    userService.releaseToPool(req.params._id, req.body).then(function (response) {
         if (response) {
             res.send(response);
         } else {
             res.sendStatus(404);
         }
-    }).catch(function(err) {
+    }).catch(function (err) {
         res.status(400).send(err);
     });
 }
 
 function releaseFromPool(req, res) {
-    userService.releaseFromPool(req.params._id, req.body).then(function(response) {
+    userService.releaseFromPool(req.params._id, req.body).then(function (response) {
         if (response) {
             res.send(response);
         } else {
             res.sendStatus(404);
         }
-    }).catch(function(err) {
+    }).catch(function (err) {
         res.status(400).send(err);
     });
 }
 
 function userPoolLogs(req, res) {
-    userService.userPoolLogs(req.params._id).then(function(response) {
+    userService.userPoolLogs(req.params._id).then(function (response) {
         if (response) {
             res.send(response);
         } else {
             res.sendStatus(404);
         }
-    }).catch(function(err) {
+    }).catch(function (err) {
         res.status(400).send(err);
     });
 }
@@ -227,9 +228,9 @@ function createPassword(req, res) {
     var obj = {
         "password": "1234"
     }
-    userService.createPassword(req.params._id, obj).then(function(response) {
+    userService.createPassword(req.params._id, obj).then(function (response) {
         res.send("ok");
-    }).catch(function(err) {
+    }).catch(function (err) {
         res.status(400).send(err);
     });
 };
@@ -238,22 +239,22 @@ function createPassword(req, res) {
 function updatePushToken(req, res) {
     var userId = req.user.sub;
     userService.updatePushToken(userId, req.body)
-        .then(function() {
+        .then(function () {
             res.sendStatus(200);
         })
-        .catch(function(err) {
+        .catch(function (err) {
             res.status(400).send(err);
         });
 };
 
 function remindByMessage(req, res) {
     userService.getById(req.params._id)
-        .then(function(user) {
+        .then(function (user) {
             if (user) {
                 var msg = new builder.Message()
                     .address(user.address)
                     .text("Hi " + user.name + " " + req.body.message);
-                bot.send(msg, function(err) {
+                bot.send(msg, function (err) {
                     // Return success/failure
                     res.sendStatus(200);
                 });
@@ -261,33 +262,46 @@ function remindByMessage(req, res) {
                 res.sendStatus(404);
             }
         })
-        .catch(function(err) {
+        .catch(function (err) {
             res.status(400).send(err);
         });
 }
 
-function getMyLeaveWallet(req, res){
+function getMyLeaveWallet(req, res) {
     var userId = req.user.sub;
-    leaveWalletService.getUserLeaveWallet(userId, req.params.financeYear).then(function(response) {
+    leaveWalletService.getUserLeaveWallet(userId, req.params.financeYear).then(function (response) {
         if (response) {
             res.send(response);
         } else {
             res.sendStatus(404);
         }
-    }).catch(function(err) {
+    }).catch(function (err) {
         res.status(400).send(err);
     });
 }
 
-function getMyLeaveWalletBalance(req, res){
+function getMyLeaveWalletBalance(req, res) {
     var userId = req.user.sub;
-    leaveWalletService.getUserLeaveWalletBalance(userId).then(function(response) {
+    leaveWalletService.getUserLeaveWalletBalance(userId).then(function (response) {
         if (response) {
             res.send(response);
         } else {
             res.sendStatus(404);
         }
-    }).catch(function(err) {
+    }).catch(function (err) {
+        res.status(400).send(err);
+    });
+}
+
+
+function getBotMigration(req, res) {
+    userService.botMigration(req.query.migrate).then(function (response) {
+        if (response) {
+            res.send(response);
+        } else {
+            res.sendStatus(404);
+        }
+    }).catch(function (err) {
         res.status(400).send(err);
     });
 }

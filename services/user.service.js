@@ -29,6 +29,7 @@ service.userPoolLogs = userPoolLogs;
 service.updatePushToken = updatePushToken;
 service.migrateAccount = migrateAccount;
 service.getUserbyName = getUserbyName;
+service.botMigration = botMigration;
 module.exports = service;
 
 function authenticate(username, password) {
@@ -482,6 +483,33 @@ function getUserbyName(name) {
             deferred.resolve(user);
         } else {
             deferred.reject('Please contact admin for the migration');
+        }
+    });
+    return deferred.promise;
+}
+
+
+function botMigration(migrated) {
+    var deferred = Q.defer();
+    db.users.find().toArray(function (err, users) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+
+        if (users) {
+            var usersList;
+
+            if (migrated === 'true') {
+                usersList = _.filter(users, function (e) {
+                    return e.migrated;
+                });
+            } else {
+                usersList = _.filter(users, function (e) {
+                    return !e.migrated;
+                });
+            }
+            deferred.resolve(usersList);
+        } else {
+            // user not found
+            deferred.resolve();
         }
     });
     return deferred.promise;
