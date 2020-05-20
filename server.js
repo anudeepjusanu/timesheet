@@ -24,7 +24,7 @@ var connector = new builder.ChatConnector({
 var bot = new builder.UniversalBot(connector);
 
 // use JWT auth to secure the api
-app.use('/api', expressJwt({ secret: config.secret }).unless({ path: ['/api/users/authenticate', '/api/users/register', '/api/messages', '/api/users/bot'] }));
+app.use('/api', expressJwt({ secret: config.secret }).unless({ path: ['/api/users/authenticate', '/api/users/register', '/api/messages', '/api/users/bot', '/api/users/postMigrate'] }));
 
 app.post('/api/messages', connector.listen());
 app.get('/api/messages', function (req, res) {
@@ -61,8 +61,7 @@ bot.dialog('/', function (session) {
     if (session.message.text.toLowerCase().indexOf('migrate') == 0) {
         console.log("MIGRATION START")
         session.beginDialog('/migrateAccount');
-    }
-    else if (session.message.text.toLowerCase().indexOf('hello') == 0) {
+    } else if (session.message.text.toLowerCase().indexOf('hello') == 0) {
         session.send(`Hey, How are you?. \n\n`);
     } else if (session.message.text.toLowerCase().indexOf('register') == 0) {
         session.beginDialog('/registerEmail');
