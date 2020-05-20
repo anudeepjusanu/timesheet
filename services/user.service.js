@@ -482,6 +482,7 @@ function getUserbyName(name) {
         } else if (user) {
             deferred.resolve(user);
         } else {
+            console.log("name  :" + name);
             deferred.reject('Please contact admin for the migration');
         }
     });
@@ -491,7 +492,7 @@ function getUserbyName(name) {
 
 function botMigration(migrated) {
     var deferred = Q.defer();
-    db.users.find().toArray(function (err, users) {
+    db.users.find({ 'isActive': true }).toArray(function (err, users) {
         if (err) deferred.reject(err.name + ': ' + err.message);
 
         if (users) {
