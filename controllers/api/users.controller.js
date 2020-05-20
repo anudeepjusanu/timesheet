@@ -32,6 +32,7 @@ router.post('/remind/user/:_id', remindByMessage);
 router.get('/myLeaveWallet/:financeYear', getMyLeaveWallet);
 router.get('/myLeaveWalletBalance', getMyLeaveWalletBalance);
 router.get('/bot', getBotMigration);
+router.post('/bot', postBotMigration);
 
 
 module.exports = router;
@@ -304,4 +305,24 @@ function getBotMigration(req, res) {
     }).catch(function (err) {
         res.status(400).send(err);
     });
+}
+
+function postBotMigration(req, res) {
+    userService.getById(req.query.userId)
+        .then(function (user) {
+            if (user) {
+                var msg = new builder.Message()
+                    .address(user.address)
+                    .text("Hi " + user.name + ", Please migrate to MS teams ");
+                bot.send(msg, function (err) {
+                    // Return success/failure
+                    res.sendStatus(200);
+                });
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
 }
