@@ -32,7 +32,7 @@ router.post('/remind/user/:_id', remindByMessage);
 router.get('/myLeaveWallet/:financeYear', getMyLeaveWallet);
 router.get('/myLeaveWalletBalance', getMyLeaveWalletBalance);
 router.get('/bot', getBotMigration);
-router.get('/postMigrate', postBotMigration);
+router.post('/bot', postBotMigration);
 
 
 module.exports = router;
