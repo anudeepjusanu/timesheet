@@ -17,6 +17,94 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const messaging = firebase.messaging();
+        messaging.requestPermission()
+            .then(function () {
+                console.log('Notification permission granted.');
+                // TODO(developer): Retrieve an Instance ID token for use with FCM.
+                if (isTokenSentToServer()) {
+                    console.log('Token already saved.');
+                } else {
+                    getRegToken();
+                }
+            })
+            .catch(function (err) {
+                console.log('Unable to get permission to notify.', err);
+            });
+        function getRegToken(argument) {
+            messaging.getToken()
+                .then(function (currentToken) {
+                    if (currentToken) {
+                        //saveToken(currentToken);
+                        var token = currentToken;
+                        var device_id = 'TEST';
+                        console.log(token, device_id);
+                        saveToken(token, device_id);
+                    } else {
+                        console.log('No Instance ID token available. Request permission to generate one.');
+                        //setTokenSentToServer(false);
+                    }
+                })
+                .catch(function (err) {
+                    console.log('An error occurred while retrieving token. ', err);
+                    // setTokenSentToServer(false);
+                });
+        }
+        function setTokenSentToServer(token, device_id) {
+            window.localStorage.setItem('sentToServer', sent ? 1 : 0);
+        }
+        function saveToken(currentToken, deviceid) {
+            document.getElementById("token").innerHTML(currentToken);
+            // $.ajax({
+            //     url: 'server url',
+            //     method: 'post',
+            //     data: { 'device_id': deviceid, 'token': currentToken }
+            // }).done(function (result) {
+            //     console.log(result);
+            // })
+        }
+        messaging.onMessage(function (payload) {
+            console.log("Message received. ", payload);
+            var notificationTitle = payload.data.title;
+            const notificationOptions = {
+                body: payload.data.body,
+                icon: payload.data.icon,
+                image: payload.data.image,
+                click_action: "https://www.examples.com/" + payload.data.url, // To handle notification click when notification is moved to notification tray
+                data: {
+                    click_action: "https://www.examples.com/" + payload.data.url
+                }
+            };
+            var notification = new Notification(notificationTitle, notificationOptions);
+        });
+
+        messaging.setBackgroundMessageHandler(function (payload) {
+            console.log('[firebase-messaging-sw.js] Received background message ', payload);
+            // Customize notification here
+            const notificationTitle = payload.data.title;
+            const notificationOptions = {
+                body: payload.data.body,
+                icon: payload.data.icon,
+                image: payload.data.image,
+                click_action: "https://www.examples.com/" + payload.data.url, // To handle notification click when notification is moved to notification tray
+                data: {
+                    click_action: "https://www.examples.com/" + payload.data.url
+                }
+            };
+            self.addEventListener('notificationclick', function (event) {
+                console.log(event.notification.data.click_action);
+                if (!event.action) {
+                    // Was a normal notification click
+                    console.log('Notification Click.');
+                    self.clients.openWindow(event.notification.data.click_action, '_blank')
+                    event.notification.close();
+                    return;
+                } else {
+                    event.notification.close();
+                }
+            });
+            return self.registration.showNotification(notificationTitle,
+                notificationOptions);
+        });
     </script>
 </head>
 
