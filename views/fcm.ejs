@@ -1,0 +1,37 @@
+﻿<html>
+
+<head>
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-messaging.js"></script>
+    <script type="text/javascript">
+        var firebaseConfig = {
+            apiKey: "AIzaSyCsIfP1-W5_zQSBa5fDziZ4oheVt0qi8Q0",
+            authDomain: "mobileappointapp.firebaseapp.com",
+            databaseURL: "https://mobileappointapp.firebaseio.com",
+            projectId: "mobileappointapp",
+            storageBucket: "mobileappointapp.appspot.com",
+            messagingSenderId: "846797286924",
+            appId: "1:846797286924:web:5c235f0d8d00b9a4610829",
+            measurementId: "G-0DZDJ3FQPE"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
+    </script>
+</head>
+
+<body>
+    <h1>Welcome</h1>
+    <div id="token"></div>
+    <div id="msg"></div>
+    <div id="notis"></div>
+    <div id="err"></div>
+    <script>
+        MsgElem = document.getElementById("msg")
+        TokenElem = document.getElementById("token")
+        NotisElem = document.getElementById("notis")
+        ErrElem = document.getElementById("err")
+    </script>
+</body>
+
+</html>

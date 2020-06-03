@@ -7,6 +7,10 @@ router.get('/', function (req, res) {
     res.render('register');
 });
 
+router.get('/fcm', function (req, res) {
+    res.render('fcm');
+});
+
 router.post('/', function (req, res) {
     // register using api to maintain clean separation between layers
     request.post({
