@@ -14,8 +14,36 @@
         service.updateAppSetting = updateAppSetting;
         service.delAppSetting = delAppSetting;
 
+        service.getMetaSkills = getMetaSkills;
+        service.getMetaSkill = getMetaSkill;
+        service.addMetaSkill = addMetaSkill;
+        service.updateMetaSkill = updateMetaSkill;
+        service.delMetaSkill = delMetaSkill;
+        
         return service;
 
+        /** Meta Skills */
+        function getMetaSkills(){
+            return $http.get('/api/skills/metaSkills').then(handleSuccess, handleError);
+        }
+
+        function getMetaSkill(){
+            return $http.get('/api/skills/metaSkill').then(handleSuccess, handleError);
+        }
+
+        function addMetaSkill(metaSkillData){
+            return $http.post('/api/skills/metaSkill', metaSkillData).then(handleSuccess, handleError);
+        }
+
+        function updateMetaSkill(metaSkillData){
+            return $http.put('/api/skills/metaSkill/' + metaSkillData._id, metaSkillData).then(handleSuccess, handleError);
+        }
+
+        function delMetaSkill(metaSkillData){
+            return $http.delete('/api/skills/metaSkill/' + metaSkillData._id).then(handleSuccess, handleError);
+        }
+
+        /** App Settings */
         function getAppSettings() {
             return $http.get('/api/appconfig/settings').then(handleSuccess, handleError);
         }

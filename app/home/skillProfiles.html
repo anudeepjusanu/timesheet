@@ -1,0 +1,82 @@
+<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+    close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+    {{alert.msg}}</div>
+<div class="content-wrapper">
+    <div class="" ng-if="vm.user.admin">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Skill Profiles</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-condensed table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px;">#</th>
+                            <th style="width: 180px;" ng-show="vm.userColumns['name'].selected" class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='name'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='name'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('name');">Profile Name</a>
+                            </th>
+                            <th>Technical Skills</th>
+                            <th style="width: 140px;" ng-show="vm.userColumns['userResourceType'].selected">Type</th>
+                            <th style="width: 140px;" ng-show="vm.userColumns['isActive'].selected">Status</th>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td ng-show="vm.userColumns['name'].selected">
+                                <input class="form-control" type="text" ng-model="vm.search.userName" />
+                            </td>
+                            <td>
+                                <input class="form-control" type="text" ng-model="vm.search.skillName" />
+                            </td>
+                            <td ng-show="vm.userColumns['userResourceType'].selected"><select class="form-control"
+                                    ng-model="vm.search.userResourceType"
+                                    ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'Billable',label:'Billable'}, {id:'Non-billable',label:'Non-billable'}, {id:'Trainee',label:'Trainee'}, {id:'Intern',label:'Intern'}, {id:'Sales',label:'Sales'}, {id:'Operations',label:'Operations'}, {id:'Leadership',label:'Leadership'}]"></select>
+                            </td>
+                            <td ng-show="vm.userColumns['isActive'].selected">
+                                <select class="form-control" ng-model="vm.search.isActive"
+                                    ng-click="vm.getAllUserSkillProfiles();"
+                                    ng-options="opt.id as opt.label for opt in [{id:'', label:'All'}, {id:'true', label:'Active'}, {id:'false', label:'Inactive'}]"></select>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="user in vm.users | allUserSearch:vm.search | orderBy:vm.search.orderBy:vm.search.sortDESC">
+                            <td>{{$index + 1}}</td>
+                            <td ng-show="vm.userColumns['name'].selected" style="width:100px;">
+                                <div class="user-imagee" style="text-align: center;padding: 0px">
+                                    <img ng-src="{{user.profileImgUrl}}" width="75" height="75"
+                                        onerror="this.src='/app/app-content/assets/user.jpg'" alt="{{user.name}}" />
+                                    <br />
+                                    <span>{{user.name}}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <a class="btn btn-primary btn-rounded pull-right" ng-click="vm.viewUserSkillProfile(user)" ng-show="vm.user.admin">Add</a>
+                                <table class="table table-condensed table-striped">
+                                    <tr ng-repeat="userSkill in user.userSkills">
+                                        <td>{{userSkill.skillName}}</td>
+                                        <td>{{userSkill.skillVersion}}</td>
+                                        <td>{{userSkill.skillLevel}}</td>
+                                        <td style="width: 110px;">
+                                            <a class="btn btn-primary btn-icon btn-rounded" ng-click="vm.viewUserSkillProfile(user, userSkill)" ng-show="vm.user.admin">
+                                                <span class="fa fa-pencil"></span>
+                                            </a>
+                                            <a class="btn btn-primary btn-icon btn-rounded" ng-click="vm.delUserSkillProfile(userSkill)" ng-show="vm.user.admin">
+                                                <span class="fa fa-times"></span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td ng-show="vm.userColumns['userResourceType'].selected">{{user.userResourceType}}</td>
+                            <td ng-show="vm.userColumns['isActive'].selected">
+                                <span ng-if="user.isActive==true">Active</span>
+                                <span ng-if="user.isActive==false">Inactive</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

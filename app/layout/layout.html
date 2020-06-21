@@ -71,8 +71,8 @@
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'projectHierarchy'}">
                 <a ui-sref="projectHierarchy"><img class="fa" src="app-content/assets/operator-with-headset.png"> <span class="xn-text">Project Hierarchy</span></a>
             </li>
-            <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'skillsProfile'}">
-                <a ui-sref="skillsProfile"><img class="fa" src="app-content/assets/operator-with-headset.png"> <span class="xn-text">Skills Profile</span></a>
+            <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'skillProfiles'}">
+                <a ui-sref="skillProfiles"><img class="fa" src="app-content/assets/operator-with-headset.png"> <span class="xn-text">Skill Profiles</span></a>
             </li>
 
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'poolUsers'}">
@@ -87,12 +87,18 @@
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'clients'}">
                 <a ui-sref="clients"><span class="fa fa-tags"></span> <span class="xn-text">Clients</span></a>
             </li>
-            <!-- <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'leaves'}">
-                <a ui-sref="leaves"><span class="fa fa-tags"></span> <span class="xn-text">Leaves</span></a>
-            </li> -->
-            <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'appsettings'}">
-                <a ui-sref="appsettings"><span class="fa fa-tags"></span> <span class="xn-text">App Settings</span></a>
+            <li class="xn-openable" ng-if="vm.user.admin===true">
+                <a><span class="fa fa-tags"></span> <span class="xn-text">Manage App</span></a>
+                <ul>
+                    <li class="" ng-class="{active: activeTab === 'appsettings'}">
+                        <a ui-sref="appsettings"><span class="fa fa-tags"></span> <span class="xn-text">App Settings</span></a>
+                    </li>
+                    <li class="" ng-class="{active: activeTab === 'metaSkills'}">
+                        <a ui-sref="metaSkills"><span class="fa fa-tags"></span> <span class="xn-text">Manage Skills</span></a>
+                    </li>
+                </ul>
             </li>
+
             <li class="" ng-class="{active: activeTab === 'account'}">
                 <a ui-sref="account"><span class="fa fa-cogs"></span> <span class="xn-text">Settings</span></a>
             </li>

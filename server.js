@@ -244,6 +244,7 @@ app.use('/api/projects', require('./controllers/api/projects.controller'));
 app.use('/api/surveys', require('./controllers/api/surveys.controller'));
 app.use('/api/appconfig', require('./controllers/api/appconfig.controller'));
 app.use('/api/leaves', require('./controllers/api/leaves.controller'));
+app.use('/api/skills', require('./controllers/api/skills.controller'));
 
 // make '/app' default route
 app.get('/', function (req, res) {

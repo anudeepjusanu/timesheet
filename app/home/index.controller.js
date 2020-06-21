@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
     'use strict';
 
     angular
@@ -7,38 +7,38 @@
         .controller('Home.SidebarController', SidebarController)
         .controller('Home.AdminUsersController', AdminUsersController)
         .controller('Home.AllUsersController', AllUsersController)
-        .controller('Home.SkillsProfileController', SkillsProfileController)
-        .controller('Home.UpdateSkillsProfileController',UpdateSkillsProfileController)
+        .controller('Home.SkillProfilesController', SkillProfilesController)
+        .controller('Home.UpdateSkillProfileController', UpdateSkillProfileController)
         .controller('Home.AdminController', AdminController)
         .controller('Home.UserInfoController', UserInfoController)
         .controller('Home.UserModelController', UserModelController)
         .controller('Home.ReleaseUserModelController', ReleaseUserModelController)
         .controller('Home.PoolUsersController', PoolUsersController)
         .controller('Home.PoolLogsController', PoolLogsController)
-        .filter('allUserSearch', function($filter) {
-            return function(input, searchObj) {
+        .filter('allUserSearch', function ($filter) {
+            return function (input, searchObj) {
                 var output = input;
                 if (searchObj.userName && searchObj.userName.length > 0) {
                     output = $filter('filter')(output, { name: searchObj.userName });
                 }
                 if (searchObj.userResourceType && searchObj.userResourceType.length > 0) {
-                    output = $filter('filter')(output, function(item) {
+                    output = $filter('filter')(output, function (item) {
                         return (searchObj.userResourceType == item.userResourceType);
                     });
                 }
                 if (searchObj.employeeCategory && searchObj.employeeCategory.length > 0 && searchObj.employeeCategory != "All") {
-                    output = $filter('filter')(output, function(item) {
+                    output = $filter('filter')(output, function (item) {
                         return (searchObj.employeeCategory == item.employeeCategory);
                     });
                 }
                 if (searchObj.isAdmin === true || searchObj.isAdmin === false) {
-                    output = $filter('filter')(output, function(item) {
+                    output = $filter('filter')(output, function (item) {
                         return (searchObj.isAdmin == item.admin);
                     });
                 }
                 if (searchObj.poolSinceDays && searchObj.poolSinceDays.length > 0 && searchObj.poolSinceDays != "All") {
-                    output = $filter('filter')(output, function(item) {
-                        return ((searchObj.poolSinceDays == "L30" && item.poolSinceDays <= 30) || 
+                    output = $filter('filter')(output, function (item) {
+                        return ((searchObj.poolSinceDays == "L30" && item.poolSinceDays <= 30) ||
                             (searchObj.poolSinceDays == "L60" && item.poolSinceDays <= 60) ||
                             (searchObj.poolSinceDays == "L90" && item.poolSinceDays <= 90) ||
                             (searchObj.poolSinceDays == "G90" && item.poolSinceDays > 90)
@@ -46,7 +46,7 @@
                     });
                 }
                 if (searchObj.isActive == 'true' || searchObj.isActive == 'false') {
-                    output = $filter('filter')(output, function(item, index) {
+                    output = $filter('filter')(output, function (item, index) {
                         if (searchObj.isActive == 'true') {
                             return (item.isActive === true);
                         } else if (searchObj.isActive == 'false') {
@@ -60,7 +60,7 @@
                 return output;
             }
         })
-    
+
     function Controller(UserService, TimesheetService, ProjectService, $filter, _, $interval, $window) {
         var vm = this;
         var currentDate;
@@ -75,7 +75,7 @@
             "October", "November", "December"
         ];
         vm.dateOptions = {
-            dateDisabled: function(data) {
+            dateDisabled: function (data) {
                 var date = data.date,
                     mode = data.mode;
                 return mode === 'day' && (date.getDay() != 5);
@@ -299,14 +299,14 @@
             currentDate = $filter('date')(new Date(), "yyyy-Www").toString();
         }
 
-        var tick = function() {
+        var tick = function () {
             vm.date = new Date();
         }
         tick();
         $interval(tick, 1000);
 
         function getUsers() {
-            UserService.getUsers().then(function(users) {
+            UserService.getUsers().then(function (users) {
                 vm.users = users;
                 getAllReports();
                 getMyReport();
@@ -314,7 +314,7 @@
         };
 
         function getAllReports() {
-            TimesheetService.getReportByWeek(currentDate).then(function(reports) {
+            TimesheetService.getReportByWeek(currentDate).then(function (reports) {
                 vm.totalHours = _.sum(_.map(reports, 'totalHours'));
                 vm.currentCapacity = vm.users.length * 40;
                 var leave = vm.currentCapacity - vm.totalHours;
@@ -324,36 +324,36 @@
         };
 
         function getMyReport() {
-            TimesheetService.getMine().then(function(reports) {
+            TimesheetService.getMine().then(function (reports) {
                 vm.myHours = _.sum(_.map(reports, 'totalHours'));
             });
         };
 
         function getProjectsWithUserCount() {
-            TimesheetService.getProjectsWithUserCount().then(function(projects) {
+            TimesheetService.getProjectsWithUserCount().then(function (projects) {
                 vm.projects = projects;
             });
         };
 
-        vm.getAllUserHoursByWeek = function() {
+        vm.getAllUserHoursByWeek = function () {
             var week = $filter('date')(new Date(vm.manpowerChart.weekDate), "yyyy-Www").toString();
-            TimesheetService.allUserHoursByWeek(week).then(function(manpowerData) {
+            TimesheetService.allUserHoursByWeek(week).then(function (manpowerData) {
                 vm.manpowerChart.labels = [];
                 vm.manpowerChart.data = [];
-                _.each(manpowerData.resourceTypes, function(resourceTypeObj) {
+                _.each(manpowerData.resourceTypes, function (resourceTypeObj) {
                     vm.manpowerChart.labels.push(resourceTypeObj.resourceType + ' (' + resourceTypeObj.projectUserCount + ')');
                     vm.manpowerChart.data.push(resourceTypeObj.projectHours);
                 });
             });
         };
 
-        vm.getProjectUserHoursByWeek = function() {
+        vm.getProjectUserHoursByWeek = function () {
             if (vm.projectManpower.projectId) {
                 var week = $filter('date')(new Date(vm.projectManpower.weekDate), "yyyy-Www").toString();
-                TimesheetService.projectUserHoursByWeek(week, vm.projectManpower.projectId).then(function(manpowerData) {
+                TimesheetService.projectUserHoursByWeek(week, vm.projectManpower.projectId).then(function (manpowerData) {
                     vm.projectManpower.labels = [];
                     vm.projectManpower.data = [];
-                    _.each(manpowerData.resourceTypes, function(resourceTypeObj) {
+                    _.each(manpowerData.resourceTypes, function (resourceTypeObj) {
                         vm.projectManpower.labels.push(resourceTypeObj.resourceType + ' (' + resourceTypeObj.projectUserCount + ')');
                         vm.projectManpower.data.push(resourceTypeObj.projectHours);
                     });
@@ -361,24 +361,24 @@
             }
         };
 
-        vm.getAllUserHoursByMonth = function() {
+        vm.getAllUserHoursByMonth = function () {
             vm.utilizationByMonth();
             vm.monthHoursChart.monthName = vm.monthNames[vm.monthHoursChart.weekDate.getMonth()];
-            TimesheetService.allUserHoursByMonth(vm.monthHoursChart.weekDate.getMonth(), vm.monthHoursChart.weekDate.getFullYear()).then(function(manpowerData) {
+            TimesheetService.allUserHoursByMonth(vm.monthHoursChart.weekDate.getMonth(), vm.monthHoursChart.weekDate.getFullYear()).then(function (manpowerData) {
                 manpowerData = _.sortBy(manpowerData, 'week');
                 vm.monthHoursChart.labels = [];
                 vm.monthHoursChart.data = [];
                 vm.monthHoursChart.series = [];
-                _.each(manpowerData[0].resourceTypes, function(resourceTypeObj) {
+                _.each(manpowerData[0].resourceTypes, function (resourceTypeObj) {
                     //vm.monthHoursChart.series.push(resourceTypeObj.resourceType + '('+ resourceTypeObj.projectUserCount +')');
                     vm.monthHoursChart.series.push(resourceTypeObj.resourceType);
                 });
-                _.each(manpowerData, function(manpower) {
+                _.each(manpowerData, function (manpower) {
                     vm.monthHoursChart.labels.push(manpower.week + "(" + manpower.totalHours + ")");
                 });
-                _.each(vm.monthHoursChart.series, function(resourceTypeVal) {
+                _.each(vm.monthHoursChart.series, function (resourceTypeVal) {
                     var dataObj = [];
-                    _.each(manpowerData, function(manpowerObj) {
+                    _.each(manpowerData, function (manpowerObj) {
                         var resourceTypeObj = _.find(manpowerObj.resourceTypes, { "resourceType": resourceTypeVal });
                         if (resourceTypeObj) {
                             dataObj.push(resourceTypeObj.projectHours);
@@ -390,15 +390,15 @@
                 vm.monthHeadCountChart.labels = [];
                 vm.monthHeadCountChart.data = [];
                 vm.monthHeadCountChart.series = [];
-                _.each(manpowerData[0].resourceTypes, function(resourceTypeObj) {
+                _.each(manpowerData[0].resourceTypes, function (resourceTypeObj) {
                     vm.monthHeadCountChart.series.push(resourceTypeObj.resourceType);
                 });
-                _.each(manpowerData, function(manpower) {
+                _.each(manpowerData, function (manpower) {
                     vm.monthHeadCountChart.labels.push(manpower.week + "(" + manpower.totalUserCount + ")");
                 });
-                _.each(vm.monthHeadCountChart.series, function(resourceTypeVal) {
+                _.each(vm.monthHeadCountChart.series, function (resourceTypeVal) {
                     var dataObj = [];
-                    _.each(manpowerData, function(manpowerObj) {
+                    _.each(manpowerData, function (manpowerObj) {
                         var resourceTypeObj = _.find(manpowerObj.resourceTypes, { "resourceType": resourceTypeVal });
                         if (resourceTypeObj) {
                             dataObj.push(resourceTypeObj.projectUserCount);
@@ -436,9 +436,9 @@
             }
         };*/
 
-        vm.utilizationByMonth = function() {
+        vm.utilizationByMonth = function () {
             vm.monthHoursChart.monthName = vm.monthNames[vm.monthHoursChart.weekDate.getMonth()];
-            TimesheetService.utilizationByMonth(vm.monthHoursChart.weekDate.getMonth(), vm.monthHoursChart.weekDate.getFullYear()).then(function(resultData) {
+            TimesheetService.utilizationByMonth(vm.monthHoursChart.weekDate.getMonth(), vm.monthHoursChart.weekDate.getFullYear()).then(function (resultData) {
                 resultData = _.sortBy(resultData, 'week');
 
                 vm.utzHeadCountChart.labels = [];
@@ -446,7 +446,7 @@
                 var enterpriseData = [];
                 var lanchpadData = [];
                 var noBillableProjectData = [];
-                _.each(resultData, function(weekData) {
+                _.each(resultData, function (weekData) {
                     vm.utzHeadCountChart.labels.push(weekData.week + "(" + weekData.weekHeadCount + ")");
                     enterpriseData.push(weekData.enterpriseHeadCount);
                     lanchpadData.push(weekData.launchpadHeadCount);
@@ -460,7 +460,7 @@
                 vm.utzHoursChart.data = [];
                 var enterpriseData = [];
                 var lanchpadData = [];
-                _.each(resultData, function(weekData) {
+                _.each(resultData, function (weekData) {
                     vm.utzHoursChart.labels.push(weekData.week + "(" + weekData.weekBillableHours + ")");
                     enterpriseData.push(weekData.enterpriseBillableHours);
                     lanchpadData.push(weekData.launchpadBillableHours);
@@ -471,7 +471,7 @@
                 vm.utilizationHeadCountChart.labels = [];
                 vm.utilizationHeadCountChart.data = [];
                 var utilizationData = [];
-                _.each(resultData, function(weekData) {
+                _.each(resultData, function (weekData) {
                     vm.utilizationHeadCountChart.labels.push(weekData.week);
                     var utilizationVal = (weekData.enterpriseHeadCount / weekData.weekHeadCount) * 100;
                     if (isNaN(utilizationVal)) {
@@ -485,7 +485,7 @@
                 vm.utilizationHoursChart.labels = [];
                 vm.utilizationHoursChart.data = [];
                 var utilizationData = [];
-                _.each(resultData, function(weekData) {
+                _.each(resultData, function (weekData) {
                     vm.utilizationHoursChart.labels.push(weekData.week);
                     var utilizationVal = (weekData.enterpriseBillableHours / weekData.weekBillableHours) * 100;
                     if (isNaN(utilizationVal)) {
@@ -498,7 +498,7 @@
                 vm.utzOrganizationHeadCountChart.labels = [];
                 vm.utzOrganizationHeadCountChart.data = [];
                 var utilizationData = [];
-                _.each(resultData, function(weekData) {
+                _.each(resultData, function (weekData) {
                     vm.utzOrganizationHeadCountChart.labels.push(weekData.week);
                     var utilizationVal = (weekData.haveBillableProjectHeadCount / weekData.weekHeadCount) * 100;
                     if (isNaN(utilizationVal)) {
@@ -514,49 +514,49 @@
 
         function savePushToken() {
             UserService.updatePushToken(vm.user)
-                .then(function() {
+                .then(function () {
                     //noty.showSuccess("Updated Successfully")
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     //FlashService.Error(error);
                 });
         }
 
         function savePushToken() {
             UserService.updatePushToken(vm.user)
-                .then(function() {
+                .then(function () {
                     //noty.showSuccess("Updated Successfully")
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     //FlashService.Error(error);
                 });
         }
 
         function getMyLeaveWalletBalnce() {
-            UserService.getMyLeaveWalletBalance().then(function(response) {
-                if(response){
+            UserService.getMyLeaveWalletBalance().then(function (response) {
+                if (response) {
                     vm.leaveWalletBalance.accruedLeaves = parseFloat(response.accruedLeaves);
                     vm.leaveWalletBalance.creditedLeaves = parseFloat(response.creditedLeaves);
                     vm.leaveWalletBalance.deductedLOP = parseFloat(response.deductedLOP);
                     vm.leaveWalletBalance.leaveBalance = (vm.leaveWalletBalance.accruedLeaves + vm.leaveWalletBalance.creditedLeaves - vm.leaveWalletBalance.deductedLOP);
                 }
-                TimesheetService.userTakenLeaveBalance(vm.user._id).then(function(response) {
-                    if(response){
+                TimesheetService.userTakenLeaveBalance(vm.user._id).then(function (response) {
+                    if (response) {
                         vm.leaveWalletBalance.timeoffHours = parseFloat(response.totalTimeoffHours);
                         vm.leaveWalletBalance.timeoffDays = parseFloat(response.totalTimeoffDays);
-                        vm.leaveWalletBalance.leaveBalance = parseFloat(vm.leaveWalletBalance.accruedLeaves + vm.leaveWalletBalance.creditedLeaves - response.totalTimeoffDays - vm.leaveWalletBalance.deductedLOP).toFixed(2);              
+                        vm.leaveWalletBalance.leaveBalance = parseFloat(vm.leaveWalletBalance.accruedLeaves + vm.leaveWalletBalance.creditedLeaves - response.totalTimeoffDays - vm.leaveWalletBalance.deductedLOP).toFixed(2);
                     }
-                }).catch(function(error) {});
-            }).catch(function(error) {
+                }).catch(function (error) { });
+            }).catch(function (error) {
                 //FlashService.Error(error);
             });
-            
+
         }
 
-        var init = function() {
+        var init = function () {
             getUsers();
             getProjectsWithUserCount();
-            UserService.GetCurrent().then(function(user) {
+            UserService.GetCurrent().then(function (user) {
                 vm.user = user;
                 if (vm.user.admin) {
                     vm.getAllUserHoursByWeek();
@@ -577,14 +577,14 @@
         var vm = this;
         vm.user = null;
 
-        UserService.GetCurrent().then(function(user) {
+        UserService.GetCurrent().then(function (user) {
             vm.user = user;
         });
     }
 
     function AdminUsersController(UserService, $filter, ReportService, _, $scope, FlashService, NgTableParams) {
-        
-       
+
+
         var vm = this;
         vm.user = null;
         vm.deleteUser = deleteUser;
@@ -595,21 +595,21 @@
         });
 
         function deleteUser(id) {
-            UserService.Delete(id).then(function(users) {
+            UserService.Delete(id).then(function (users) {
                 getAllUsers();
             });
         }
-       
+
         function getAllUsers(week) {
             var Activeusers = [];
-            UserService.GetAll().then(function(users) {
-                for(var i=0; i <users.length;i++){
-                    if(users[i].isActive === true){
+            UserService.GetAll().then(function (users) {
+                for (var i = 0; i < users.length; i++) {
+                    if (users[i].isActive === true) {
                         Activeusers.push(users[i]);
                     }
                 }
                 vm.users = Activeusers;
-                _.each(vm.users, function(userObj) {
+                _.each(vm.users, function (userObj) {
                     if (!(userObj.profileImgUrl) || userObj.profileImgUrl == "") {
                         userObj.profileImgUrl = '/app/app-content/assets/user.jpg';
                     }
@@ -619,36 +619,35 @@
                 });
             });
         };
-        vm.changeStatus = function(event){
-            if(event == true){
+        vm.changeStatus = function (event) {
+            if (event == true) {
                 var Activeusers = [];
-                UserService.GetAll().then(function(users) {
-                    for(var i=0; i <users.length;i++){
-                        if(users[i].isActive === true){
+                UserService.GetAll().then(function (users) {
+                    for (var i = 0; i < users.length; i++) {
+                        if (users[i].isActive === true) {
                             Activeusers.push(users[i]);
                         }
                     }
                     vm.users = Activeusers;
-                   
+
                 });
             }
-            else
-            {
+            else {
                 var InActiveusers = [];
-                UserService.GetAll().then(function(users) {
-                    for(var i=0; i <users.length;i++){
-                        if(users[i].isActive === false){
+                UserService.GetAll().then(function (users) {
+                    for (var i = 0; i < users.length; i++) {
+                        if (users[i].isActive === false) {
                             InActiveusers.push(users[i]);
                         }
                     }
-                    vm.users = InActiveusers;                 
+                    vm.users = InActiveusers;
                 });
             }
         }
         initController();
 
         function initController() {
-            UserService.GetCurrent().then(function(user) {
+            UserService.GetCurrent().then(function (user) {
                 vm.user = user;
                 getAllUsers();
                 if (vm.user.admin) {
@@ -674,20 +673,20 @@
             sortDESC: false
         };
         vm.userColumns = {
-            "name": {label: "Name", selected: true},
-            "userResourceType": {label: "Type", selected: true},
-            "phone": {label: "Mobile", selected: false},
-            "employeeId": {label: "Employee ID", selected: true},
-            "joinDate": {label: "Join Date", selected: true},
-            "employeeCategory": {label: "Category", selected: true},
-            "employeeType": {label: "Employee Type", selected: false},
-            "reportingTo": {label: "Reporting To", selected: false},
-            "isAdmin": {label: "Is Admin", selected: false},
-            "userRole": {label: "Role", selected: false},
-            "isActive": {label: "Status", selected: true}
+            "name": { label: "Name", selected: true },
+            "userResourceType": { label: "Type", selected: true },
+            "phone": { label: "Mobile", selected: false },
+            "employeeId": { label: "Employee ID", selected: true },
+            "joinDate": { label: "Join Date", selected: true },
+            "employeeCategory": { label: "Category", selected: true },
+            "employeeType": { label: "Employee Type", selected: false },
+            "reportingTo": { label: "Reporting To", selected: false },
+            "isAdmin": { label: "Is Admin", selected: false },
+            "userRole": { label: "Role", selected: false },
+            "isActive": { label: "Status", selected: true }
         };
 
-        vm.sorting = function(orderBy) {
+        vm.sorting = function (orderBy) {
             if (vm.search.orderBy == orderBy) {
                 vm.search.sortDESC = !vm.search.sortDESC;
             } else {
@@ -697,15 +696,15 @@
         };
 
         function deleteUser(id) {
-            UserService.Delete(id).then(function(users) {
+            UserService.Delete(id).then(function (users) {
                 getAllUsers();
             });
         }
 
         function getAllUsers() {
-            UserService.GetAll().then(function(users) {
+            UserService.GetAll().then(function (users) {
                 vm.users = users;
-                _.each(vm.users, function(userObj) {
+                _.each(vm.users, function (userObj) {
                     if (!(userObj.profileImgUrl) || userObj.profileImgUrl == "") {
                         userObj.profileImgUrl = '/app/app-content/assets/user.jpg';
                     }
@@ -717,7 +716,7 @@
             });
         }
 
-        vm.viewUser = function(user) {
+        vm.viewUser = function (user) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -727,13 +726,13 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    user: function() {
+                    user: function () {
                         return user;
                     },
-                    reportUsers: function() {
+                    reportUsers: function () {
                         var reportUsers = [];
                         reportUsers.push({ id: null, name: "None" });
-                        _.each(vm.users, function(userObj) {
+                        _.each(vm.users, function (userObj) {
                             if (userObj.isActive === true && user._id != userObj._id && userObj.userRole && userObj.userRole == "manager") {
                                 reportUsers.push({ id: userObj._id, name: userObj.name });
                             }
@@ -743,14 +742,14 @@
                 }
             });
 
-            modalInstance.result.then(function(userObj) {
+            modalInstance.result.then(function (userObj) {
                 getAllUsers();
-            }, function() {
+            }, function () {
                 getAllUsers();
             });
         }
 
-        vm.viewReleaseToPool = function(user) {
+        vm.viewReleaseToPool = function (user) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -760,19 +759,19 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    user: function() {
+                    user: function () {
                         return user;
                     }
                 }
             });
-            modalInstance.result.then(function(userObj) {
+            modalInstance.result.then(function (userObj) {
                 getAllUsers();
-            }, function() {
+            }, function () {
                 getAllUsers();
             });
         }
 
-        vm.viewReleaseFromPool = function(user) {
+        vm.viewReleaseFromPool = function (user) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -782,35 +781,35 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    user: function() {
+                    user: function () {
                         return user;
                     }
                 }
             });
-            modalInstance.result.then(function(userObj) {
+            modalInstance.result.then(function (userObj) {
                 getAllUsers();
-            }, function() {
+            }, function () {
                 getAllUsers();
             });
         }
 
-        vm.stopPropagation = function(e){
+        vm.stopPropagation = function (e) {
             e.stopPropagation();
         }
 
-        vm.loginAsUser = function(userObj){
+        vm.loginAsUser = function (userObj) {
             console.log(userObj);
-            UserService.loginAsUser({username: userObj.username}).then(function(data) {
+            UserService.loginAsUser({ username: userObj.username }).then(function (data) {
                 if (data && data.token) {
                     $window.jwtToken = data.token;
                     $http.defaults.headers.common['Authorization'] = 'Bearer ' + $window.jwtToken;
-                    $timeout(function() {
+                    $timeout(function () {
                         //$state.go('home');
                         console.log(window.location.origin);
                         window.location = window.location.origin + '/app/';
                     });
                 }
-            }, function(error) {
+            }, function (error) {
                 console.log(error);
                 noty.showError(error)
             });
@@ -819,7 +818,7 @@
         initController();
 
         function initController() {
-            UserService.GetCurrent().then(function(user) {
+            UserService.GetCurrent().then(function (user) {
                 vm.user = user;
                 getAllUsers();
                 if (vm.user.admin) {
@@ -831,10 +830,12 @@
         }
     }
 
-    function SkillsProfileController(UserService, _, $uibModal, $state, $window, $http, $timeout) {
+    function SkillProfilesController(UserService, AppConfigService, _, $uibModal, $state, $window, $http, $timeout, noty) {
         var vm = this;
         vm.user = null;
         vm.users = [];
+        vm.metaSkills = [];
+
         vm.search = {
             userName: "",
             userResourceType: "",
@@ -844,27 +845,15 @@
             orderBy: 'name',
             sortDESC: false
         };
+
         vm.userColumns = {
-            "name": {label: "Name", selected: true},
-            "userResourceType": {label: "Type", selected: true},
-            "isAdmin": {label: "Is Admin", selected: false},
-            "isActive": {label: "Status", selected: true}
+            "name": { label: "Name", selected: true },
+            "userResourceType": { label: "Type", selected: true },
+            "isAdmin": { label: "Is Admin", selected: false },
+            "isActive": { label: "Status", selected: true }
         };
 
-        vm.allSkills = [
-            {"skillName": "HTML5", "skillLevel": ""},
-            {"skillName": "Javascript", "skillLevel": ""},
-            {"skillName": "CSS3", "skillLevel": ""},
-            {"skillName": "Bootstrap", "skillLevel": ""},
-            {"skillName": "Java", "skillLevel": ""},
-            {"skillName": "PHP", "skillLevel": ""},
-            {"skillName": "Angularjs", "skillLevel": ""},
-            {"skillName": "Mongo", "skillLevel": ""},
-            {"skillName": "Python", "skillLevel": ""},
-            {"skillName": "DevOps", "skillLevel": ""}
-        ];
-
-        vm.sorting = function(orderBy) {
+        vm.sorting = function (orderBy) {
             if (vm.search.orderBy == orderBy) {
                 vm.search.sortDESC = !vm.search.sortDESC;
             } else {
@@ -873,241 +862,140 @@
             vm.search.orderBy = orderBy;
         };
 
-        function deleteUser(id) {
-            UserService.Delete(id).then(function(users) {
-                getAllUsers();
-            });
-        }
-
-        function getAllUsers() {
-            UserService.GetAll().then(function(users) {
-                vm.users = users;
-                _.each(vm.users, function(userObj) {
-                    if (!(userObj.profileImgUrl) || userObj.profileImgUrl == "") {
-                        userObj.profileImgUrl = '/app/app-content/assets/user.jpg';
-                    }
-                    if (userObj.reportingTo) {
-                        var reportUser = _.find(vm.users, { _id: userObj.reportingTo });
-                        userObj.reportingUserName = reportUser.name;
-                    }
-                });
-            });
-        }
-
-        vm.UpdateUserSkillsProfile = function(user) {
+        vm.viewUserSkillProfile = function (userObj, userSkillObj) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
-                templateUrl: 'home/editSkillsProfile.html',
-                controller: 'Home.UpdateSkillsProfileController',
+                templateUrl: 'home/editSkillProfile.html',
+                controller: 'Home.UpdateSkillProfileController',
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    user: function() {
-                        return user;
+                    metaSkills: function(){
+                        return vm.metaSkills;
                     },
-                    reportUsers: function() {
-                        var reportUsers = [];
-                        reportUsers.push({ id: null, name: "None" });
-                        _.each(vm.users, function(userObj) {
-                            if (userObj.isActive === true && user._id != userObj._id && userObj.userRole && userObj.userRole == "manager") {
-                                reportUsers.push({ id: userObj._id, name: userObj.name });
-                            }
-                        });
-                        return reportUsers;
+                    userObj: function () {
+                        return userObj;
+                    },
+                    userSkillObj: function () {
+                        return userSkillObj;
                     }
                 }
             });
 
-            modalInstance.result.then(function(userObj) {
-                getAllUsers();
-            }, function() {
-                getAllUsers();
+            modalInstance.result.then(function (userObj) {
+                vm.getAllUserSkillProfiles();
+            }, function () {
+                vm.getAllUserSkillProfiles();
             });
         }
 
-        vm.stopPropagation = function(e){
+        vm.delUserSkillProfile = function(userSkillObj){
+            if(confirm("Do you want to delete this skill ?")){
+                UserService.deleteUserSkill(userSkillObj._id).then(function (response) {
+                    noty.showSuccess("User skill has been deleted successfully!");
+                    vm.getAllUserSkillProfiles();
+                }, function (error) {
+                    if (error) {
+                        vm.alerts.push({ msg: error, type: 'danger' });
+                    }
+                    vm.getAllUserSkillProfiles();
+                });
+            }
+        }
+
+        vm.stopPropagation = function (e) {
             e.stopPropagation();
         }
 
+        vm.getAllUserSkillProfiles = function () {
+            UserService.getAllUserSkillProfiles().then(function (data) {
+                if (data.users) {
+                    vm.users = data.users;
+                }
+            }, function (error) {
+                noty.showError(error)
+            });
+        }
+        
+        vm.getMetaSkills = function() {
+            AppConfigService.getMetaSkills().then(function (data) {
+                if (data.metaSkills) {
+                    vm.metaSkills = data.metaSkills;
+                    vm.metaSkills.push({skillName: "Other"});
+                }
+            }, function (errors) {
+                console.log(errors);
+            });
+        }
+        
         initController();
-
         function initController() {
-            UserService.GetCurrent().then(function(user) {
+            UserService.GetCurrent().then(function (user) {
                 vm.user = user;
-                getAllUsers();
                 if (vm.user.admin) {
                     vm.isAdmin = true;
                 } else {
                     vm.isAdmin = false;
+                    $state.go('home');
                 }
+                vm.getAllUserSkillProfiles();
+                vm.getMetaSkills();
             });
         }
     }
 
-    function UpdateSkillsProfileController(UserService, $filter, noty, $uibModalInstance, user, reportUsers) {
+    function UpdateSkillProfileController(UserService, userObj, metaSkills, userSkillObj, noty, $uibModalInstance) {
         var vm = this;
-        vm.userObj = user;
+        vm.userObj = userObj;
+        vm.metaSkills = metaSkills;
+        vm.userSkillObj = {};
         vm.alerts = [];
-        vm.userRoles = [];
-        vm.reportUsers = reportUsers;
-        vm.enableSaveBtn = true;
-        vm.closeAlert = function(index) {
+        vm.closeAlert = function (index) {
             vm.alerts.splice(index, 1);
         }
-        vm.joinDateOpened = false;
-        vm.dateOptions = {
-            formatYear: 'yy',
-            maxDate: new Date(2020, 5, 22),
-            startingDay: 1
-        };
-        vm.employeeTypes = [
-            {id: "InternalEmployee", label: "Internal Employee"},
-            {id: "InternalContractor", label: "Internal Contractor"},
-            {id: "ExternalContractor", label: "External Contractor"}
-        ]
-        if(vm.userObj.joinDate){
-            vm.userObj.joinDate = new Date(vm.userObj.joinDate);
-        }
-
-        vm.selectedSkill = {
-            "skillName":"", "skillLevel":""
-        } 
-        vm.allSkills = user.allSkills;
-        // vm.allSkills = [
-        //     {"skillName": "HTML5", "skillLevel": ""},
-        //     {"skillName": "Javascript", "skillLevel": ""},
-        //     {"skillName": "CSS3", "skillLevel": ""},
-        //     {"skillName": "Bootstrap", "skillLevel": ""},
-        //     {"skillName": "Java", "skillLevel": ""},
-        //     {"skillName": "PHP", "skillLevel": ""},
-        //     {"skillName": "Angularjs", "skillLevel": ""},
-        //     {"skillName": "Mongo", "skillLevel": ""},
-        //     {"skillName": "Python", "skillLevel": ""},
-        //     {"skillName": "DevOps", "skillLevel": ""}
-        // ];
-
-        vm.skillLevels = [
-            {"id":"Beginner","skillLevel": "Beginner"},
-            {"id":"Intermediate","skillLevel": "Intermediate"},
-            {"id":"Advance","skillLevel": "Advance"},
-            {"id":"Expert","skillLevel": "Expert"}
-        ]
-
-        vm.newSkills = [];
-
-        vm.selectUserSkillForAddition = function() {
-            var selectedValueObj = _.find(vm.allSkills, { "skillName": event.target.text });
-            if(selectedValueObj) {
-                vm.selectedSkill.skillName = selectedValueObj.skillName;
-                vm.selectedSkill.skillLevel = selectedValueObj.skillLevel;
-            }
-        }
-
-        vm.addOtherSkill = function() {
-            if(vm.otherSkill) {
-                vm.newSkills.push({
-                    "skillName": vm.otherSkill,
-                    "skillLevel": ""
-                });
-                vm.otherSkill = '';
-            }
-        }
-
-        vm.addSelectedSkill = function() {
-            if(vm.selectedSkill.skillName) {
-                if(vm.newSkills){
-                    var existSkillName = _.find(vm.newSkills, { "skillName": vm.selectedSkill.skillName });
-                        if (!existSkillName) { //avoid duplicate record
-                            vm.newSkills.push({ 
-                                "skillName": vm.selectedSkill.skillName,
-                                "skillLevel": vm.selectedSkill.skillLevel
-                            });
-                        }
-                }
-                // vm.selectedSkill.skillName = '';
-                // vm.selectedSkill.skillLevel = '';
-            }
-        }
-
-        vm.selectedSkillForDelete = {
-            "skillName": "", "skillLevel": ""
-        } 
-
-        vm.selectUserSkillForDeletion = function() {
-            vm.selectedSkillForDelete.skillName = event.target.childNodes[0].data.trim();
-        }
-
-        vm.deleteSelectedSkill = function() {	
-            if(vm.selectedSkillForDelete.skillName) {
-               
-                if(vm.newSkills){
-                    var foundSkillName = _.find(vm.newSkills, { "skillName": vm.selectedSkillForDelete.skillName });
-                    var index =  vm.newSkills.indexOf(foundSkillName, 1);
-                    if(index == -1) {
-                        index = index + 1;
-                    }
-                }
-                vm.newSkills.splice(index, 1);
-                vm.selectedSkillForDelete.skillName = '';
-                vm.selectedSkillForDelete.skillLevel = '';
-            } 
-        }
-        
-        vm.updateOptionLevel = function() {
-            var skillName = event.target.parentElement.firstChild.data.trim();
-            var skillLevel = event.target.value;
-           
-            if(vm.newSkills){
-                var foundSkillObj = _.find(vm.newSkills, { "skillName": skillName });               
-                   var index =  vm.newSkills.indexOf(foundSkillObj, 1);
-                   if(index == -1) { index = index + 1; }  
-                   foundSkillObj.skillLevel = skillLevel;
-                   vm.newSkills[index] = foundSkillObj;
-            }
-        }
-
-        vm.saveUser = function(userForm) {
-            if (userForm.$valid) {
-
-                var obj ={};
-                if(vm.newSkills){
-                    _.each(vm.newSkills, function(userObj) {                        
-                        var foundSkillObj = _.find(vm.allSkills, { "skillName": userObj.skillName });
-                        var index =  vm.allSkills.indexOf(foundSkillObj, 1);
-                        if(index == -1) { index = index + 1; }      
-                        vm.allSkills.splice(index, 1);
-                        vm.allSkills.push({
-                            skillName: userObj.skillName,
-                            skillLevel: userObj.skillLevel
-                        });                       
-                        obj = {"name": vm.userObj.name}
-                    });
-                    obj.allSkills = vm.allSkills;
-                    //vm.userObj.push(vm.allSkills);
-                }
-
-                UserService.UpdateEmployeeInfo(vm.userObj._id, obj).then(function(response) {
-                    noty.showSuccess("User Skill Profile have been updated successfully!");
-                    $uibModalInstance.close();
-                }, function(error) {
-                    if (error) {
-                        vm.alerts.push({ msg: error, type: 'danger' });
-                    }
-                });
-            }
-        }
-        vm.employeeCategories = ["C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10"];
-
-        vm.closeUser = function() {
+        vm.closeUser = function () {
             $uibModalInstance.close();
+        }
+        vm.metaSkillLevels = ["Basic", "Intermediate", "Advanced", "Expert"];
+        if(userSkillObj){
+            vm.userSkillObj = userSkillObj;
+        }
+
+        vm.saveUserSkillProfile = function (userForm) {
+            if (userForm.$valid) {
+                var userSkillObj = { 
+                    userId: vm.userObj._id,
+                    skillName: vm.userSkillObj.skillName,
+                    skillVersion: vm.userSkillObj.skillVersion,
+                    skillLevel: vm.userSkillObj.skillLevel,
+                };
+                if(vm.userSkillObj._id){
+                    UserService.updateUserSkill(vm.userSkillObj._id, userSkillObj).then(function (response) {
+                        noty.showSuccess("User skill has been updated successfully!");
+                        $uibModalInstance.close();
+                    }, function (error) {
+                        if (error) {
+                            vm.alerts.push({ msg: error, type: 'danger' });
+                        }
+                    });
+                } else {
+                    UserService.addUserSkill(userSkillObj).then(function (response) {
+                        noty.showSuccess("User skill has been added successfully!");
+                        $uibModalInstance.close();
+                    }, function (error) {
+                        if (error) {
+                            vm.alerts.push({ msg: error, type: 'danger' });
+                        }
+                    });
+                }
+            }
         }
 
         init();
-
         function init() {
-            vm.userRoles = UserService.getUserRoles();
+            
         }
     }
 
@@ -1118,7 +1006,7 @@
         vm.userRoles = [];
         vm.reportUsers = reportUsers;
         vm.enableSaveBtn = true;
-        vm.closeAlert = function(index) {
+        vm.closeAlert = function (index) {
             vm.alerts.splice(index, 1);
         }
         vm.joinDateOpened = false;
@@ -1128,14 +1016,14 @@
             startingDay: 1
         };
         vm.employeeTypes = [
-            {id: "InternalEmployee", label: "Internal Employee"},
-            {id: "InternalContractor", label: "Internal Contractor"},
-            {id: "ExternalContractor", label: "External Contractor"}
+            { id: "InternalEmployee", label: "Internal Employee" },
+            { id: "InternalContractor", label: "Internal Contractor" },
+            { id: "ExternalContractor", label: "External Contractor" }
         ]
-        if(vm.userObj.joinDate){
+        if (vm.userObj.joinDate) {
             vm.userObj.joinDate = new Date(vm.userObj.joinDate);
         }
-        vm.saveUser = function(userForm) {
+        vm.saveUser = function (userForm) {
             if (userForm.$valid) {
                 var obj = {
                     "name": vm.userObj.name,
@@ -1152,10 +1040,10 @@
                     "profileImgUrl": vm.userObj.profileImgUrl,
                     "isActive": vm.userObj.isActive
                 }
-                UserService.UpdateEmployeeInfo(vm.userObj._id, obj).then(function(response) {
+                UserService.UpdateEmployeeInfo(vm.userObj._id, obj).then(function (response) {
                     noty.showSuccess("User has been updated successfully!");
                     $uibModalInstance.close();
-                }, function(error) {
+                }, function (error) {
                     if (error) {
                         vm.alerts.push({ msg: error, type: 'danger' });
                     }
@@ -1164,7 +1052,7 @@
         }
         vm.employeeCategories = ["C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10"];
 
-        vm.closeUser = function() {
+        vm.closeUser = function () {
             $uibModalInstance.close();
         }
 
@@ -1185,21 +1073,21 @@
             startingDay: 1
         };
         vm.sinceDateOpened = false;
-        vm.closeAlert = function(index) {
+        vm.closeAlert = function (index) {
             vm.alerts.splice(index, 1);
         }
 
-        vm.toPool = function(userForm) {
+        vm.toPool = function (userForm) {
             if (userForm.$valid) {
                 var obj = {
                     "resourceInPool": true,
                     "poolSinceDate": vm.userObj.poolSinceDate,
                     "poolName": vm.userObj.poolName
                 }
-                UserService.releaseToPool(vm.userObj._id, obj).then(function(response) {
+                UserService.releaseToPool(vm.userObj._id, obj).then(function (response) {
                     noty.showSuccess("User has been release to pool successfully!");
                     $uibModalInstance.close();
-                }, function(error) {
+                }, function (error) {
                     if (error) {
                         vm.alerts.push({ msg: error, type: 'danger' });
                     }
@@ -1207,18 +1095,18 @@
             }
         }
 
-        vm.fromPool = function(userForm) {
-            UserService.releaseFromPool(vm.userObj._id).then(function(response) {
+        vm.fromPool = function (userForm) {
+            UserService.releaseFromPool(vm.userObj._id).then(function (response) {
                 noty.showSuccess("User has been release from pool successfully!");
                 $uibModalInstance.close();
-            }, function(error) {
+            }, function (error) {
                 if (error) {
                     vm.alerts.push({ msg: error, type: 'danger' });
                 }
             });
         }
 
-        vm.closeUser = function() {
+        vm.closeUser = function () {
             $uibModalInstance.close();
         }
 
@@ -1301,7 +1189,7 @@
         };
 
         function getSheet(id) {
-            ReportService.Get(id).then(function(response) {
+            ReportService.Get(id).then(function (response) {
                 if (response.project) {
                     var projects = response.project.split(',');
                     vm.obj.selected = [];
@@ -1335,19 +1223,19 @@
                 obj.project = projects.toString();
 
                 if (vm.isNew) {
-                    ReportService.Create(obj).then(function(response) {
+                    ReportService.Create(obj).then(function (response) {
                         vm.alerts.push({ msg: "Thank you for the update", type: 'success' });
                         $state.go('home');
-                    }, function(error) {
+                    }, function (error) {
                         if (error) {
                             vm.alerts.push({ msg: error, type: 'danger' });
                         }
                     });
                 } else {
-                    ReportService.adminUpdate($stateParams.id, obj).then(function(response) {
+                    ReportService.adminUpdate($stateParams.id, obj).then(function (response) {
                         vm.alerts.push({ msg: "Updated Successfully", type: 'success' });
                         $state.go('home');
-                    }, function(error) {
+                    }, function (error) {
                         if (error) {
                             vm.alerts.push({ msg: error, type: 'danger' });
                         }
@@ -1372,7 +1260,6 @@
     }
 
     function UserInfoController(UserService, $stateParams, $state, _, noty, ProjectService) {
-       console.log("User Info Controller");
         var vm = this;
         vm.updateUser = updateUser;
         vm.addProject = addProject;
@@ -1400,18 +1287,18 @@
         };
 
         function getEmployeeInfo() {
-            UserService.GetEmployeeInfo($stateParams.id).then(function(employee) {
+            UserService.GetEmployeeInfo($stateParams.id).then(function (employee) {
                 vm.employee = employee;
                 if (!vm.employee.project) {
                     vm.employee.project = [];
                 } else {
-                    _.each(vm.employee.project, function(item) {
+                    _.each(vm.employee.project, function (item) {
                         item.opened = false;
                         item.startDate = new Date(item.startDate);
                         if (!item.date) {
                             item.date = [];
                         } else {
-                            _.each(item.date, function(dates) {
+                            _.each(item.date, function (dates) {
                                 dates.startOpened = false;
                                 dates.endOpened = false;
                                 if (dates.start)
@@ -1421,8 +1308,8 @@
                             });
                         }
                     });
-                    _.each(vm.projects, function(project) {
-                        _.each(vm.employee.project, function(item) {
+                    _.each(vm.projects, function (project) {
+                        _.each(vm.employee.project, function (item) {
                             if (item._id == project._id) {
                                 item.clientName = project;
                             }
@@ -1434,10 +1321,10 @@
         };
 
         function getAllProjects() {
-            ProjectService.getAll().then(function(projects) {
+            ProjectService.getAll().then(function (projects) {
                 vm.projects = projects;
                 getEmployeeInfo();
-            }, function(error) {
+            }, function (error) {
                 console.log("Error loading projects");
             })
         }
@@ -1481,9 +1368,9 @@
 
         function updateUser(userForm) {
             if (userForm.$valid) {
-                _.each(vm.employee.project, function(project) {
+                _.each(vm.employee.project, function (project) {
                     delete project.opened;
-                    _.each(project.date, function(item) {
+                    _.each(project.date, function (item) {
                         delete item.startOpened;
                         delete item.endOpened;
                     });
@@ -1498,7 +1385,7 @@
                     "isActive": vm.employee.isActive
                 }
                 var projectObj = [];
-                _.each(vm.employee.project, function(project) {
+                _.each(vm.employee.project, function (project) {
                     projectObj.push({
                         "_id": project.clientName._id,
                         "projectName": project.projectName,
@@ -1510,10 +1397,10 @@
                 });
                 obj.project = projectObj;
 
-                UserService.UpdateEmployeeInfo($stateParams.id, obj).then(function(employee) {
+                UserService.UpdateEmployeeInfo($stateParams.id, obj).then(function (employee) {
                     noty.showSuccess("Employee updated Successfully");
                     $state.go('users');
-                }, function(error) {
+                }, function (error) {
                     noty.showError("Something went wrong!");
                 });
             } else {
@@ -1522,7 +1409,7 @@
         }
 
         function init() {
-            UserService.GetCurrent().then(function(user) {
+            UserService.GetCurrent().then(function (user) {
                 vm.user = user;
                 if (vm.user.admin && $stateParams.id) {
                     vm.isAdmin = true;
@@ -1549,7 +1436,7 @@
             sortDESC: false
         };
 
-        vm.sorting = function(orderBy) {
+        vm.sorting = function (orderBy) {
             if (vm.search.orderBy == orderBy) {
                 vm.search.sortDESC = !vm.search.sortDESC;
             } else {
@@ -1558,10 +1445,10 @@
             vm.search.orderBy = orderBy;
         };
 
-        vm.getAllUsers = function() {
+        vm.getAllUsers = function () {
             vm.users = [];
-            UserService.GetAll().then(function(users) {
-                _.each(users, function(userObj) {
+            UserService.GetAll().then(function (users) {
+                _.each(users, function (userObj) {
                     if (userObj.isActive == true) {
                         if (vm.showAllUsers === true) {
                             userObj.poolSince = vm.calWeeksSinceNow(userObj.poolSinceDate);
@@ -1582,7 +1469,7 @@
             });
         }
 
-        vm.viewUserPoolLog = function(user) {
+        vm.viewUserPoolLog = function (user) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -1592,19 +1479,19 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    user: function() {
+                    user: function () {
                         return user;
                     }
                 }
             });
-            modalInstance.result.then(function(userObj) {
+            modalInstance.result.then(function (userObj) {
 
-            }, function() {
+            }, function () {
 
             });
         }
 
-        vm.viewReleaseToPool = function(user) {
+        vm.viewReleaseToPool = function (user) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -1614,19 +1501,19 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    user: function() {
+                    user: function () {
                         return user;
                     }
                 }
             });
-            modalInstance.result.then(function(userObj) {
+            modalInstance.result.then(function (userObj) {
                 vm.getAllUsers();
-            }, function() {
+            }, function () {
                 vm.getAllUsers();
             });
         }
 
-        vm.viewReleaseFromPool = function(user) {
+        vm.viewReleaseFromPool = function (user) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -1636,19 +1523,19 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    user: function() {
+                    user: function () {
                         return user;
                     }
                 }
             });
-            modalInstance.result.then(function(userObj) {
+            modalInstance.result.then(function (userObj) {
                 vm.getAllUsers();
-            }, function() {
+            }, function () {
                 vm.getAllUsers();
             });
         }
 
-        vm.calWeeksSinceNow = function(sinceDate) {
+        vm.calWeeksSinceNow = function (sinceDate) {
             if (sinceDate && sinceDate.length > 0) {
                 var oneDay = 24 * 60 * 60 * 1000;
                 var oneWeek = 7 * 24 * 60 * 60 * 1000;
@@ -1661,7 +1548,7 @@
             }
         }
 
-        vm.calDaysSinceNow = function(sinceDate) {
+        vm.calDaysSinceNow = function (sinceDate) {
             if (sinceDate && sinceDate.length > 0) {
                 var oneDay = 24 * 60 * 60 * 1000;
                 var oneWeek = 7 * 24 * 60 * 60 * 1000;
@@ -1677,7 +1564,7 @@
         initController();
 
         function initController() {
-            UserService.GetCurrent().then(function(user) {
+            UserService.GetCurrent().then(function (user) {
                 vm.user = user;
                 if (vm.user.admin) {
                     vm.isAdmin = true;
@@ -1696,16 +1583,16 @@
 
         function getUserPoolLogs(userId) {
             vm.logs = [];
-            UserService.userPoolLogs(vm.user._id).then(function(logs) {
+            UserService.userPoolLogs(vm.user._id).then(function (logs) {
                 vm.logs = logs;
             });
         }
 
-        vm.close = function() {
+        vm.close = function () {
             $uibModalInstance.close();
         }
 
-        vm.calWeeksSinceEnd = function(sinceDate, endDate) {
+        vm.calWeeksSinceEnd = function (sinceDate, endDate) {
             if (sinceDate && sinceDate.length > 0) {
                 var oneDay = 24 * 60 * 60 * 1000;
                 var oneWeek = 7 * 24 * 60 * 60 * 1000;

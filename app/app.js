@@ -132,13 +132,13 @@
                 parent: 'layout',
                 data: { activeTab: 'home' }
             })
-            .state('skillsProfile', {
-                url: '/userSkillsProfile',
-                templateUrl: 'home/skillsProfile.html',
-                controller: 'Home.SkillsProfileController',
+            .state('skillProfiles', {
+                url: '/userSkillProfiles',
+                templateUrl: 'home/skillProfiles.html',
+                controller: 'Home.SkillProfilesController',
                 controllerAs: 'vm',
                 parent: 'layout',
-                data: { activeTab: 'skillsProfile' }
+                data: { activeTab: 'skillProfiles' }
             })
             .state('account', {
                 url: '/account',
@@ -286,6 +286,14 @@
                 controllerAs: 'vm',
                 parent: 'layout',
                 data: { activeTab: 'appsettings' }
+            })
+            .state('metaSkills', {
+                url: '/appConfig/metaSkills',
+                templateUrl: 'appconfig/metaSkills.html',
+                controller: 'AppConfig.MetaSkillsController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'metaSkills' }
             })
         ChartJsProvider.setOptions({ colors: ['#1caf9a', '#273541'] });
     }

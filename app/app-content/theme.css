@@ -8998,3 +8998,7 @@ li.ext_zip {
 .user-name {
     float: left;
 }
+
+.btn-icon span{
+    margin: 0px!important;
+}

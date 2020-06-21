@@ -1,0 +1,38 @@
+﻿<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+    close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+    {{alert.msg}}
+</div>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="">
+        <!-- START DEFAULT TABLE EXPORT -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="page-title">
+                    <h2><span class="fa fa-congs"></span> Meta Skills </h2>
+                    <a class="pull-right btn btn-primary" ng-click="vm.viewMetaSkillModel();" ng-if="vm.user.admin">Add
+                        New</a>
+                </div>
+            </div>
+            <div class="panel-body panel-body-table">
+                <table class="table table-condensed table-bordered table-striped" export-table>
+                    <tr>
+                        <th style="width: 80px;">S.No</th>
+                        <th>Skill Name</th>
+                        <th style="width: 240px;">Created On</th>
+                        <th style="width: 160px;" ng-if="vm.user.admin">Action</th>
+                    </tr>
+                    <tr ng-repeat="metaSkill in vm.metaSkills | orderBy:'skillName'">
+                        <td>{{$index+1}}</td>
+                        <td>{{metaSkill.skillName}}</td>
+                        <td>{{metaSkill.createdOn}}</td>
+                        <td ng-if="vm.user.admin">
+                            <a class="btn btn-primary btn-xs" ng-click="vm.viewMetaSkillModel(metaSkill)">Edit</a>
+                            <a class="btn btn-primary btn-xs" ng-click="vm.delMetaSkill(metaSkill)">Delete</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

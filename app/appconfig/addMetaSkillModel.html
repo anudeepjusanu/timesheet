@@ -1,0 +1,23 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">
+        <span ng-if="vm.metaSkill.isNew">Add Meta Skill</span>
+        <span ng-if="vm.metaSkill.isNew===false">Edit Meta Skill</span>
+    </h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
+    <div class="row">
+        <form class="form-horizontal" name="vm.metaSkillForm">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Skill Name</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" ng-model="vm.metaSkill.skillName" ng-required="true" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-disabled="!vm.enableSaveBtn" ng-click="vm.ok(vm.metaSkillForm)">Save</button>
+    <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
+</div>

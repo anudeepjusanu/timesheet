@@ -31,6 +31,11 @@
         service.getMyLeaveWalletBalance = getMyLeaveWalletBalance;
         service.updateUserLeaveBalance = updateUserLeaveBalance;
 
+        service.getAllUserSkillProfiles = getAllUserSkillProfiles;
+        service.addUserSkill = addUserSkill;
+        service.updateUserSkill = updateUserSkill;
+        service.deleteUserSkill = deleteUserSkill;
+
         return service;
 
         function login(loginObj) {
@@ -119,6 +124,23 @@
 
         function updateUserLeaveBalance(_id,obj) {
             return $http.post('/api/leaves/updateUserLeaveBalance/' + _id, obj).then(handleSuccess, handleError);
+        }
+
+
+        function getAllUserSkillProfiles() {
+            return $http.get('/api/skills/allUserSkills/').then(handleSuccess, handleError);
+        }
+
+        function addUserSkill(userSkillData) {
+            return $http.post('/api/skills/userSkill/', userSkillData).then(handleSuccess, handleError);
+        }
+
+        function updateUserSkill(userSkillId, userSkillData) {
+            return $http.put('/api/skills/userSkill/'+userSkillId, userSkillData).then(handleSuccess, handleError);
+        }
+
+        function deleteUserSkill(userSkillId) {
+            return $http.delete('/api/skills/userSkill/'+userSkillId).then(handleSuccess, handleError);
         }
 
         // private functions

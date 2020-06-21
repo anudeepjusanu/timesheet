@@ -1,0 +1,40 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">User Skills</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+        close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
+    <form class="form-horizontal" name="userSkillForm">
+        <div class="form-group required">
+            <label class="col-md-3 col-xs-12 control-label">Employee Name</label>
+            <div class="col-md-6 col-xs-12">
+                <input type="text" required="true" ng-model="vm.userObj.name" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group required">
+            <label class="col-md-3 col-xs-12 control-label">Skill Name</label>
+            <div class="col-md-6 col-xs-12">
+                <select class="form-control" ng-model="vm.userSkillObj.skillName" ng-required="true"
+                    ng-options="getMetaSkill.skillName as getMetaSkill.skillName for getMetaSkill in vm.metaSkills"></select>
+                <input type="text" ng-show="vm.userSkillObj.skillName=='Other'" ng-model="vm.userSkillObj.otherSkillName" placeholder="Skill Name" class="form-control" maxlength="20" style="margin-top: 18px;" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-3 col-xs-12 control-label">Version</label>
+            <div class="col-md-6 col-xs-12">
+                <input type="text" ng-model="vm.userSkillObj.skillVersion" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group required">
+            <label class="col-md-3 col-xs-12 control-label">Skill Level</label>
+            <div class="col-md-6 col-xs-12">
+                <select class="form-control" ng-model="vm.userSkillObj.skillLevel" ng-required="true"
+                    ng-options="metaSkillLevel as metaSkillLevel for metaSkillLevel in vm.metaSkillLevels"></select>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="vm.saveUserSkillProfile(userSkillForm);">Save</button>
+    <button class="btn btn-warning" type="button" ng-click="vm.closeUser()">Cancel</button>
+</div>
