@@ -37,39 +37,45 @@
                     });
                 }
                 if (searchObj.skillName && searchObj.skillName.length > 0) {
-                    var skillNameWords = String(searchObj.skillName).split(" ");
-                    var metaSkillLevels = ["basic", "intermediate", "advanced", "expert"];
-                    var skillLevelCriteria = "";
-                    _.each(skillNameWords, function (skillNameWord) {
-                        skillLevelCriteria = metaSkillLevels.indexOf(skillNameWord.toLowerCase());
-                        if (skillLevelCriteria >= 0) {
-                            skillLevelCriteria = metaSkillLevels[skillLevelCriteria];
-                            skillLevelCriteria = String(skillLevelCriteria).charAt(0).toUpperCase() + String(skillLevelCriteria).substring(1);
-                            return true;
-                        } else {
-                            skillLevelCriteria = "";
-                        }
-                    });
-                    output = $filter('filter')(output, function (item, index) {
-                        if (item.userSkills && item.userSkills.length > 0) {
-                            var haveRecords = false;
-                            _.each(skillNameWords, function (skillNameWord) {
-                                if (skillLevelCriteria != "") {
-                                    var skillNameSearch = $filter('filter')(item.userSkills, { 'skillName': skillNameWord, 'skillLevel': skillLevelCriteria });
-                                } else {
-                                    var skillNameSearch = $filter('filter')(item.userSkills, { 'skillName': skillNameWord });
-                                }
-                                if (skillNameSearch.length > 0) {
-                                    haveRecords = true;
-                                    return;
-                                }
-                            });
-                            if (haveRecords) {
+                    var searchCriterias = String(searchObj.skillName).toLowerCase().split(" and ");
+                    _.each(searchCriterias, function (searchCriteria) {
+                        searchCriteria = String(searchCriteria).trim();
+                        var skillNameWords = searchCriteria.split(" ");
+                        var metaSkillLevels = ["basic", "intermediate", "advanced", "expert"];
+                        var skillLevelCriteria = "";
+                        _.each(skillNameWords, function (skillNameWord) {
+                            skillLevelCriteria = metaSkillLevels.indexOf(skillNameWord.toLowerCase());
+                            if (skillLevelCriteria >= 0) {
+                                skillLevelCriteria = metaSkillLevels[skillLevelCriteria];
+                                skillLevelCriteria = String(skillLevelCriteria).charAt(0).toUpperCase() + String(skillLevelCriteria).substring(1);
                                 return true;
+                            } else {
+                                skillLevelCriteria = "";
                             }
-                        }
-                        return false;
+                        });
+                        output = $filter('filter')(output, function (item, index) {
+                            if (item.userSkills && item.userSkills.length > 0) {
+                                var haveRecords = false;
+                                _.each(skillNameWords, function (skillNameWord) {
+                                    if (skillLevelCriteria != "") {
+                                        var skillNameSearch = $filter('filter')(item.userSkills, { 'skillName': skillNameWord, 'skillLevel': skillLevelCriteria });
+                                    } else {
+                                        var skillNameSearch = $filter('filter')(item.userSkills, { 'skillName': skillNameWord });
+                                    }
+                                    if (skillNameSearch.length > 0) {
+                                        haveRecords = true;
+                                        return;
+                                    }
+                                });
+                                if (haveRecords) {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        });
+
                     });
+
                 }
                 if (searchObj.isActive == 'true' || searchObj.isActive == 'false') {
                     output = $filter('filter')(output, function (item, index) {
