@@ -36,13 +36,39 @@
                         return (searchObj.isAdmin == item.admin);
                     });
                 }
-                if (searchObj.poolSinceDays && searchObj.poolSinceDays.length > 0 && searchObj.poolSinceDays != "All") {
-                    output = $filter('filter')(output, function (item) {
-                        return ((searchObj.poolSinceDays == "L30" && item.poolSinceDays <= 30) ||
-                            (searchObj.poolSinceDays == "L60" && item.poolSinceDays <= 60) ||
-                            (searchObj.poolSinceDays == "L90" && item.poolSinceDays <= 90) ||
-                            (searchObj.poolSinceDays == "G90" && item.poolSinceDays > 90)
-                        );
+                if (searchObj.skillName && searchObj.skillName.length > 0) {
+                    var skillNameWords = String(searchObj.skillName).split(" ");
+                    var metaSkillLevels = ["basic", "intermediate", "advanced", "expert"];
+                    var skillLevelCriteria = "";
+                    _.each(skillNameWords, function (skillNameWord) {
+                        skillLevelCriteria = metaSkillLevels.indexOf(skillNameWord.toLowerCase());
+                        if (skillLevelCriteria >= 0) {
+                            skillLevelCriteria = metaSkillLevels[skillLevelCriteria];
+                            skillLevelCriteria = String(skillLevelCriteria).charAt(0).toUpperCase() + String(skillLevelCriteria).substring(1);
+                            return true;
+                        } else {
+                            skillLevelCriteria = "";
+                        }
+                    });
+                    output = $filter('filter')(output, function (item, index) {
+                        if (item.userSkills && item.userSkills.length > 0) {
+                            var haveRecords = false;
+                            _.each(skillNameWords, function (skillNameWord) {
+                                if (skillLevelCriteria != "") {
+                                    var skillNameSearch = $filter('filter')(item.userSkills, { 'skillName': skillNameWord, 'skillLevel': skillLevelCriteria });
+                                } else {
+                                    var skillNameSearch = $filter('filter')(item.userSkills, { 'skillName': skillNameWord });
+                                }
+                                if (skillNameSearch.length > 0) {
+                                    haveRecords = true;
+                                    return;
+                                }
+                            });
+                            if (haveRecords) {
+                                return true;
+                            }
+                        }
+                        return false;
                     });
                 }
                 if (searchObj.isActive == 'true' || searchObj.isActive == 'false') {
@@ -54,7 +80,6 @@
                         } else {
                             return true;
                         }
-
                     });
                 }
                 return output;
@@ -872,7 +897,7 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    metaSkills: function(){
+                    metaSkills: function () {
                         return vm.metaSkills;
                     },
                     userObj: function () {
@@ -891,8 +916,8 @@
             });
         }
 
-        vm.delUserSkillProfile = function(userSkillObj){
-            if(confirm("Do you want to delete this skill ?")){
+        vm.delUserSkillProfile = function (userSkillObj) {
+            if (confirm("Do you want to delete this skill ?")) {
                 UserService.deleteUserSkill(userSkillObj._id).then(function (response) {
                     noty.showSuccess("User skill has been deleted successfully!");
                     vm.getAllUserSkillProfiles();
@@ -918,18 +943,18 @@
                 noty.showError(error)
             });
         }
-        
-        vm.getMetaSkills = function() {
+
+        vm.getMetaSkills = function () {
             AppConfigService.getMetaSkills().then(function (data) {
                 if (data.metaSkills) {
                     vm.metaSkills = data.metaSkills;
-                    vm.metaSkills.push({skillName: "Other"});
+                    vm.metaSkills.push({ skillName: "Other" });
                 }
             }, function (errors) {
                 console.log(errors);
             });
         }
-        
+
         initController();
         function initController() {
             UserService.GetCurrent().then(function (user) {
@@ -959,19 +984,19 @@
             $uibModalInstance.close();
         }
         vm.metaSkillLevels = ["Basic", "Intermediate", "Advanced", "Expert"];
-        if(userSkillObj){
+        if (userSkillObj) {
             vm.userSkillObj = userSkillObj;
         }
 
         vm.saveUserSkillProfile = function (userForm) {
             if (userForm.$valid) {
-                var userSkillObj = { 
+                var userSkillObj = {
                     userId: vm.userObj._id,
                     skillName: vm.userSkillObj.skillName,
                     skillVersion: vm.userSkillObj.skillVersion,
                     skillLevel: vm.userSkillObj.skillLevel,
                 };
-                if(vm.userSkillObj._id){
+                if (vm.userSkillObj._id) {
                     UserService.updateUserSkill(vm.userSkillObj._id, userSkillObj).then(function (response) {
                         noty.showSuccess("User skill has been updated successfully!");
                         $uibModalInstance.close();
@@ -995,7 +1020,7 @@
 
         init();
         function init() {
-            
+
         }
     }
 
