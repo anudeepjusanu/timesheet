@@ -40,6 +40,7 @@
                     var searchCriterias = String(searchObj.skillName).toLowerCase().split(" and ");
                     _.each(searchCriterias, function (searchCriteria) {
                         searchCriteria = String(searchCriteria).trim();
+                        searchCriteria.replace(" or ", " ");
                         var skillNameWords = searchCriteria.split(" ");
                         var metaSkillLevels = ["basic", "intermediate", "advanced", "expert"];
                         var skillLevelCriteria = "";
