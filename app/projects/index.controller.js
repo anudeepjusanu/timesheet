@@ -148,7 +148,7 @@
         };
         vm.dateOptions = {
             formatYear: 'yy',
-            maxDate: new Date(2020, 5, 22),
+            maxDate: new Date(2030, 12, 31),
             startingDay: 1
         };
         vm.alerts = [];
@@ -497,7 +497,7 @@
         };
         vm.dateOptions = {
             formatYear: 'yy',
-            maxDate: new Date(2020, 5, 22),
+            maxDate: new Date(2030, 12, 31),
             startingDay: 1
         };
 

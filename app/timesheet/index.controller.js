@@ -126,7 +126,7 @@
         vm.dateOptions = {
             dateDisabled: disabled,
             formatYear: 'yy',
-            maxDate: new Date(2020, 5, 22),
+            maxDate: new Date(2030, 12, 31),
             startingDay: 1
         };
 
@@ -654,7 +654,7 @@
                 return mode === 'day' && (date.getDay() != 5);
             },
             formatYear: 'yy',
-            maxDate: new Date(2020, 5, 22),
+            maxDate: new Date(2030, 12, 31),
             startingDay: 1
         };
         vm.masterLeavesVals = [
@@ -978,7 +978,7 @@
                 return mode === 'day' && (date.getDay() != 5);
             },
             formatYear: 'yy',
-            maxDate: new Date(2020, 5, 22),
+            maxDate: new Date(2030, 12, 31),
             startingDay: 1
         }
 
@@ -1605,7 +1605,7 @@
         vm.dateOptions = {
             dateDisabled: disabled,
             formatYear: 'yy',
-            maxDate: new Date(2020, 5, 22),
+            maxDate: new Date(2030, 12, 31),
             startingDay: 1
         };
         vm.currentProject = {};
