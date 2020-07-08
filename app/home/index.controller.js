@@ -1062,7 +1062,7 @@
                     "phone": vm.userObj.phone,
                     "username": vm.userObj.username,
                     "employeeId": vm.userObj.employeeId,
-                    "joinDate": vm.userObj.joinDate,
+                    "joinDate": $filter('date')(vm.userObj.joinDate, "yyyy-MM-dd"),
                     "designation": vm.userObj.designation,
                     "userResourceType": vm.userObj.userResourceType,
                     "employeeType": vm.userObj.employeeType,

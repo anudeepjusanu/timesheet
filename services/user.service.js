@@ -323,7 +323,9 @@ function adminUpdate(id, userId, userParam) {
     });
 
     function update_user(userId, userParam) {
-
+        if(userParam.joinDate){
+            userParam.joinDate = new Date(userParam.joinDate);
+        }
         db.users.update({ _id: mongo.helper.toObjectID(userId) }, { $set: userParam },
             function (err, doc) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
