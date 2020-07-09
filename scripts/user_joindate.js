@@ -13,12 +13,12 @@ var service = {};
 db.users.find({}).toArray(function(err, users) {
     _.each(users, function (userObj) {
         if(userObj.employeeId){
-            console.log(userObj.joinDate, typeof userObj.joinDate);
             if(typeof userObj.joinDate == "string"){
-                db.users.update({_id: mongo.helper.toObjectID(userObj._id)}, {'$set': {joinDate: new Date(userObj.joinDate)}}, function (err, userResponse) {
-                    if (err) deferred.reject(err.name + ': ' + err.message);
-                    console.log(userObj.employeeId + " ");
-                });
+                console.log(userObj.joinDate, typeof userObj.joinDate);
+                // db.users.update({_id: mongo.helper.toObjectID(userObj._id)}, {'$set': {joinDate: new Date(userObj.joinDate)}}, function (err, userResponse) {
+                //     if (err) deferred.reject(err.name + ': ' + err.message);
+                //     console.log(userObj.employeeId + " ");
+                // });
             }
         }
     });
