@@ -15,7 +15,8 @@ fs.createReadStream('./employee_names.csv').pipe(csv()).on('data', (row) => {
     userNames.push(row);
 }).on('end', () => {
     console.log('CSV file successfully processed');
-    db.users.find({}).toArray(function (err, users) {
+    //console.log(userNames);
+    db.users.find({isActive: true}).toArray(function (err, users) {
         _.each(users, function (userObj) {
             if (userObj.employeeId) {
                 var csvUser = _.find(userNames, {"employeeId": userObj.employeeId});
