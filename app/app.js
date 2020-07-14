@@ -295,6 +295,22 @@
                 parent: 'layout',
                 data: { activeTab: 'metaSkills' }
             })
+            .state('skillCategories', {
+                url: '/appConfig/skillCategories',
+                templateUrl: 'appconfig/skillCategories.html',
+                controller: 'AppConfig.SkillCategoriesController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'skillCategories' }
+            })
+            .state('inventories', {
+                url: '/inventory/inventories',
+                templateUrl: 'inventory/inventories.html',
+                controller: 'Inventory.IndexController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'inventories' }
+            })
         ChartJsProvider.setOptions({ colors: ['#1caf9a', '#273541'] });
     }
 

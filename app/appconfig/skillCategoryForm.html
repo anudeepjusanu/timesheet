@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">
+        <span ng-if="vm.skillCategory.isNew">Add Skill Category</span>
+        <span ng-if="vm.skillCategory.isNew===false">Edit Skill Category</span>
+    </h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+        close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
+    <div class="row">
+        <form class="form-horizontal" name="vm.skillCategoryForm">
+            <div class="form-group">
+                <label class="col-md-3 control-label">Skill Category Name</label>
+                <div class="col-md-9">
+                    <input type="text" class="form-control" ng-model="vm.skillCategory.skillCategoryName"
+                        ng-required="true" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-disabled="!vm.enableSaveBtn"
+        ng-click="vm.saveSkillCategory(vm.skillCategoryForm)">Save</button>
+    <button class="btn btn-warning" type="button" ng-click="vm.cancelSkillCategory()">Cancel</button>
+</div>

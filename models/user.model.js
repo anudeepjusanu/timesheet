@@ -12,6 +12,9 @@ var UserSchema = new Schema({
     },
     userId: String,
     name: String,
+    firstName: String,
+    lastName: String,
+    skillCategory: String,
     username: String,
     hash: String,
     projects: {

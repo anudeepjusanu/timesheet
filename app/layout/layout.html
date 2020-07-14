@@ -14,7 +14,8 @@
                 </a>
                 <div class="profile">
                     <div class="profile-image">
-                        <img ng-src="{{vm.user.profileImgUrl}}" src="app-content/assets/user.jpg" alt="{{vm.user.name}}" />
+                        <img ng-src="{{vm.user.profileImgUrl}}" src="app-content/assets/user.jpg"
+                            alt="{{vm.user.name}}" />
                     </div>
                     <div class="profile-data">
                         <div class="profile-data-name">{{vm.user.name}}</div>
@@ -36,65 +37,86 @@
                 <a ui-sref="home"><span class="fa fa-desktop"></span> <span class="xn-text">Dashboard</span></a>
             </li>
             <li class="" ng-class="{active: activeTab === 'myTimesheets'}">
-                <a ui-sref="myTimesheets"><span class="fa fa-file-excel-o"></span> 
+                <a ui-sref="myTimesheets"><span class="fa fa-file-excel-o"></span>
                     <span class="xn-text">My Timesheets</span></a>
             </li>
 
             <li class="" ng-class="{active: activeTab === 'myLeaves'}">
-                <a ui-sref="myLeaves"><span class="fa fa-file-excel-o"></span> 
+                <a ui-sref="myLeaves"><span class="fa fa-file-excel-o"></span>
                     <span class="xn-text">My Leaves</span>
                 </a>
             </li>
 
-            <li class="" ng-if="vm.user.admin===true || vm.user.userRole=='manager'" ng-class="{active: activeTab === 'timesheet'}">
-                <a ui-sref="timesheet"><span class="fa fa-file-excel-o"></span> <span class="xn-text">Timesheets</span></a>
+            <li class="" ng-if="vm.user.admin===true || vm.user.userRole=='manager'"
+                ng-class="{active: activeTab === 'timesheet'}">
+                <a ui-sref="timesheet"><span class="fa fa-file-excel-o"></span> <span
+                        class="xn-text">Timesheets</span></a>
             </li>
-            <li class="" ng-if="vm.user.admin===true || vm.user.userRole=='lead' || vm.user.userRole=='manager'" ng-class="{active: activeTab === 'timesheetApprove'}">
-                <a ui-sref="timesheetApprove"><span class="fa fa-file-excel-o"></span> <span class="xn-text">Team</span></a>
+            <li class="" ng-if="vm.user.admin===true || vm.user.userRole=='lead' || vm.user.userRole=='manager'"
+                ng-class="{active: activeTab === 'timesheetApprove'}">
+                <a ui-sref="timesheetApprove"><span class="fa fa-file-excel-o"></span> <span
+                        class="xn-text">Team</span></a>
             </li>
             <!-- <li class="" ng-if="vm.user.userRole=='lead' || vm.user.userRole=='manager' || vm.user.admin===true" ng-class="{active: activeTab === 'team'}">
                 <a ui-sref="team"><span class="fa fa-file-excel-o"></span> <span class="xn-text">My Projects</span></a>
             </li> -->
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'consolidatedTimesheet'}">
-                <a ui-sref="consolidatedTimesheet"><img class="fa" src="app-content/assets/progress-report.png"> <span class="xn-text">Consolidated Timesheet</span></a>
+                <a ui-sref="consolidatedTimesheet"><img class="fa" src="app-content/assets/progress-report.png"> <span
+                        class="xn-text">Consolidated Timesheet</span></a>
             </li>
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'leaveBalance'}">
-                <a ui-sref="leaveBalance"><img class="fa" src="app-content/assets/progress-report.png"> <span class="xn-text">Leave Balance</span></a>
+                <a ui-sref="leaveBalance"><img class="fa" src="app-content/assets/progress-report.png"> <span
+                        class="xn-text">Leave Balance</span></a>
             </li>
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'projectUsers'}">
-                <a ui-sref="projectUsers"><img class="fa" src="app-content/assets/user-group.png"> <span class="xn-text">Project Users</span></a>
+                <a ui-sref="projectUsers"><img class="fa" src="app-content/assets/user-group.png"> <span
+                        class="xn-text">Project Users</span></a>
             </li>
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'userProjects'}">
-                <a ui-sref="userProjects"><img class="fa" src="app-content/assets/operator-with-headset.png"> <span class="xn-text">User Projects</span></a>
+                <a ui-sref="userProjects"><img class="fa" src="app-content/assets/operator-with-headset.png"> <span
+                        class="xn-text">User Projects</span></a>
             </li>
 
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'projectHierarchy'}">
-                <a ui-sref="projectHierarchy"><img class="fa" src="app-content/assets/operator-with-headset.png"> <span class="xn-text">Project Hierarchy</span></a>
+                <a ui-sref="projectHierarchy"><img class="fa" src="app-content/assets/operator-with-headset.png"> <span
+                        class="xn-text">Project Hierarchy</span></a>
             </li>
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'skillProfiles'}">
-                <a ui-sref="skillProfiles"><img class="fa" src="app-content/assets/operator-with-headset.png"> <span class="xn-text">Skill Profiles</span></a>
+                <a ui-sref="skillProfiles"><img class="fa" src="app-content/assets/operator-with-headset.png"> <span
+                        class="xn-text">Skill Profiles</span></a>
             </li>
 
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'poolUsers'}">
-                <a ui-sref="poolUsers"><img class="fa" src="app-content/assets/sleepy-man.png"> <span class="xn-text">Resource Pool</span></a>
+                <a ui-sref="poolUsers"><img class="fa" src="app-content/assets/sleepy-man.png"> <span
+                        class="xn-text">Resource Pool</span></a>
             </li>
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'allUsers'}">
                 <a ui-sref="allUsers"><span class="fa fa-users"></span> <span class="xn-text">All Users</span></a>
             </li>
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'projects'}">
-                <a ui-sref="projects"><img class="fa" src="app-content/assets/project.png"> <span class="xn-text">Projects</span></a>
+                <a ui-sref="projects"><img class="fa" src="app-content/assets/project.png"> <span
+                        class="xn-text">Projects</span></a>
             </li>
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'clients'}">
                 <a ui-sref="clients"><span class="fa fa-tags"></span> <span class="xn-text">Clients</span></a>
+            </li>
+            <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'inventories'}">
+                <a ui-sref="inventories"><span class="fa fa-list"></span> <span class="xn-text">Inventories</span></a>
             </li>
             <li class="xn-openable" ng-if="vm.user.admin===true">
                 <a><span class="fa fa-tags"></span> <span class="xn-text">Manage App</span></a>
                 <ul>
                     <li class="" ng-class="{active: activeTab === 'appsettings'}">
-                        <a ui-sref="appsettings"><span class="fa fa-tags"></span> <span class="xn-text">App Settings</span></a>
+                        <a ui-sref="appsettings"><span class="fa fa-tags"></span> <span class="xn-text">App
+                                Settings</span></a>
                     </li>
                     <li class="" ng-class="{active: activeTab === 'metaSkills'}">
-                        <a ui-sref="metaSkills"><span class="fa fa-tags"></span> <span class="xn-text">Manage Skills</span></a>
+                        <a ui-sref="metaSkills"><span class="fa fa-tags"></span> <span class="xn-text">Manage
+                                Skills</span></a>
+                    </li>
+                    <li class="" ng-class="{active: activeTab === 'skillCategories'}">
+                        <a ui-sref="skillCategories"><span class="fa fa-tags"></span> <span class="xn-text">Manage
+                                Skill Categories</span></a>
                     </li>
                 </ul>
             </li>

@@ -21,7 +21,7 @@ function getAllUserSkills() {
         var aggregateQuery = [
             { $match: {} },
             { $lookup: { from: "userskills", localField: "_id", foreignField: "userId", as: "userSkills" } },
-            { $project: { name: 1, username: 1, profileImgUrl: 1, userResourceType: 1, userSkills: 1, isActive: 1 } }
+            { $project: { name: 1, username: 1, profileImgUrl: 1, userResourceType: 1, skillCategory: 1, userSkills: 1, isActive: 1 } }
         ];
         UserModel.aggregate(aggregateQuery).exec().then((data) => {
             resolve(data);

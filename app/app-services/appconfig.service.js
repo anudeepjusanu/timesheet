@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
     'use strict';
 
     angular
@@ -19,28 +19,55 @@
         service.addMetaSkill = addMetaSkill;
         service.updateMetaSkill = updateMetaSkill;
         service.delMetaSkill = delMetaSkill;
-        
+
+        service.getSkillCategories = getSkillCategories;
+        service.getSkillCategory = getSkillCategory;
+        service.addSkillCategory = addSkillCategory;
+        service.updateSkillCategory = updateSkillCategory;
+        service.delSkillCategory = delSkillCategory;
+
         return service;
 
         /** Meta Skills */
-        function getMetaSkills(){
+        function getMetaSkills() {
             return $http.get('/api/skills/metaSkills').then(handleSuccess, handleError);
         }
 
-        function getMetaSkill(){
+        function getMetaSkill() {
             return $http.get('/api/skills/metaSkill').then(handleSuccess, handleError);
         }
 
-        function addMetaSkill(metaSkillData){
+        function addMetaSkill(metaSkillData) {
             return $http.post('/api/skills/metaSkill', metaSkillData).then(handleSuccess, handleError);
         }
 
-        function updateMetaSkill(metaSkillData){
+        function updateMetaSkill(metaSkillData) {
             return $http.put('/api/skills/metaSkill/' + metaSkillData._id, metaSkillData).then(handleSuccess, handleError);
         }
 
-        function delMetaSkill(metaSkillData){
+        function delMetaSkill(metaSkillData) {
             return $http.delete('/api/skills/metaSkill/' + metaSkillData._id).then(handleSuccess, handleError);
+        }
+
+        /** Skill Categories */
+        function getSkillCategories() {
+            return $http.get('/api/skills/skillCategories').then(handleSuccess, handleError);
+        }
+
+        function getSkillCategory() {
+            return $http.get('/api/skills/skillCategory').then(handleSuccess, handleError);
+        }
+
+        function addSkillCategory(skillCategoryData) {
+            return $http.post('/api/skills/skillCategory', skillCategoryData).then(handleSuccess, handleError);
+        }
+
+        function updateSkillCategory(skillCategoryData) {
+            return $http.put('/api/skills/skillCategory/' + skillCategoryData._id, skillCategoryData).then(handleSuccess, handleError);
+        }
+
+        function delSkillCategory(skillCategoryData) {
+            return $http.delete('/api/skills/skillCategory/' + skillCategoryData._id).then(handleSuccess, handleError);
         }
 
         /** App Settings */
@@ -49,7 +76,7 @@
         }
 
         function getAppSetting(keyName) {
-            return $http.get('/api/appconfig/setting/'+keyName).then(handleSuccess, handleError);
+            return $http.get('/api/appconfig/setting/' + keyName).then(handleSuccess, handleError);
         }
 
         function addAppSetting(paramObj) {
@@ -59,9 +86,9 @@
         function updateAppSetting(paramObj) {
             return $http.put('/api/appconfig/setting/', paramObj).then(handleSuccess, handleError);
         }
-        
+
         function delAppSetting(keyName) {
-            return $http.delete('/api/appconfig/setting/'+keyName).then(handleSuccess, handleError);
+            return $http.delete('/api/appconfig/setting/' + keyName).then(handleSuccess, handleError);
         }
 
         // private functions

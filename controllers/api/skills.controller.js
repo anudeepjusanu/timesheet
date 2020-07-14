@@ -2,6 +2,7 @@
 var express = require('express');
 var router = express.Router();
 const metaSkills = require('../../services/metaSkills.service');
+const skillCategories = require('../../services/skillCategories.service');
 const userSkill = require('../../services/userSkills.service');
 
 // routes
@@ -15,6 +16,12 @@ router.get('/metaSkill/:_id', getMetaSkill);
 router.post('/metaSkill', addMetaSkill);
 router.put('/metaSkill/:_id', updateMetaSkill);
 router.delete('/metaSkill/:_id', delMetaSkill);
+
+router.get('/skillCategories', getSkillCategories);
+router.get('/skillCategory/:_id', getSkillCategory);
+router.post('/skillCategory', addSkillCategory);
+router.put('/skillCategory/:_id', updateSkillCategory);
+router.delete('/skillCategory/:_id', delSkillCategory);
 
 module.exports = router;
 
@@ -86,6 +93,47 @@ function updateMetaSkill(req, res) {
 function delMetaSkill(req, res) {
     metaSkills.delMetaSkill(req.params._id,).then(data => {
         res.send({ metaSkill: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
+
+/** Skill Category */
+function getSkillCategories(req, res) {
+    skillCategories.getSkillCategories().then(data => {
+        res.send({ skillCategories: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
+
+function getSkillCategory(req, res) {
+    skillCategories.getSkillCategory(req.query._id).then(data => {
+        res.send({ skillCategory: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
+
+function addSkillCategory(req, res) {
+    skillCategories.addSkillCategory({ skillCategoryName: req.body.skillCategoryName }).then(data => {
+        res.send({ skillCategory: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
+
+function updateSkillCategory(req, res) {
+    skillCategories.updateSkillCategory(req.body._id, { skillCategoryName: req.body.skillCategoryName }).then(data => {
+        res.send({ skillCategory: data, req: req.query });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
+
+function delSkillCategory(req, res) {
+    skillCategories.delSkillCategory(req.params._id,).then(data => {
+        res.send({ skillCategory: data });
     }).catch(error => {
         res.status(400).send(error);
     });

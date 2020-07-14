@@ -2,22 +2,22 @@
 var _ = require('lodash');
 var Q = require('q');
 var mongoose = require("mongoose");
-var metaSkills = require("../models/metaSkills.model");
+var skillCategories = require("../models/skillCategories.model");
 mongoose.connect(config.connectionString);
 
 var service = {};
 
-service.getMetaSkills = getMetaSkills;
-service.getMetaSkill = getMetaSkill;
-service.addMetaSkill = addMetaSkill;
-service.updateMetaSkill = updateMetaSkill;
-service.delMetaSkill = delMetaSkill;
+service.getSkillCategories = getSkillCategories;
+service.getSkillCategory = getSkillCategory;
+service.addSkillCategory = addSkillCategory;
+service.updateSkillCategory = updateSkillCategory;
+service.delSkillCategory = delSkillCategory;
 
 module.exports = service;
 
-function getMetaSkills() {
+function getSkillCategories() {
     return new Promise((resolve, reject) => {
-        metaSkills.find().lean().exec().then((data) => {
+        skillCategories.find().lean().exec().then((data) => {
             resolve(data);
         }).catch((error) => {
             reject({ error: error.errmsg });
@@ -25,9 +25,9 @@ function getMetaSkills() {
     });
 }
 
-function getMetaSkill(metaSkillId) {
+function getSkillCategory(skillCategoryId) {
     return new Promise((resolve, reject) => {
-        metaSkills.findOne({ _id: mongoose.Types.ObjectId(metaSkillId) }).lean().exec().then((data) => {
+        skillCategories.findOne({ _id: mongoose.Types.ObjectId(skillCategoryId) }).lean().exec().then((data) => {
             resolve(data);
         }).catch((error) => {
             reject({ error: error.errmsg });
@@ -35,10 +35,10 @@ function getMetaSkill(metaSkillId) {
     });
 }
 
-function addMetaSkill(metaSkillData) {
+function addSkillCategory(skillCategoryData) {
     return new Promise((resolve, reject) => {
-        metaSkillObj = new metaSkills(metaSkillData);
-        metaSkillObj.save(function (error, data) {
+        skillCategoryObj = new skillCategories(skillCategoryData);
+        skillCategoryObj.save(function (error, data) {
             if (error) {
                 reject({ error: error.errmsg });
             }
@@ -48,9 +48,9 @@ function addMetaSkill(metaSkillData) {
 }
 
 
-function updateMetaSkill(metaSkillId, metaSkill) {
+function updateSkillCategory(skillCategoryId, skillCategory) {
     return new Promise((resolve, reject) => {
-        metaSkills.updateOne({ _id: mongoose.Types.ObjectId(metaSkillId) }, metaSkill).exec().then((data) => {
+        skillCategories.updateOne({ _id: mongoose.Types.ObjectId(skillCategoryId) }, skillCategory).exec().then((data) => {
             console.log(data);
             resolve(data);
         }).catch((error) => {
@@ -59,9 +59,9 @@ function updateMetaSkill(metaSkillId, metaSkill) {
     });
 }
 
-function delMetaSkill(metaSkillId) {
+function delSkillCategory(skillCategoryId) {
     return new Promise((resolve, reject) => {
-        metaSkills.deleteOne({ _id: mongoose.Types.ObjectId(metaSkillId) }).lean().exec().then((data) => {
+        skillCategories.deleteOne({ _id: mongoose.Types.ObjectId(skillCategoryId) }).lean().exec().then((data) => {
             console.log(data);
             resolve(data);
         }).catch((error) => {

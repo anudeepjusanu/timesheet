@@ -16,6 +16,7 @@
                                 ng-class="{'sorting_asc':vm.search.orderBy=='name'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='name'&&vm.search.sortDESC===true}">
                                 <a ng-click="vm.sorting('name');">Profile Name</a>
                             </th>
+                            <th>Category</th>
                             <th>Technical Skills</th>
                             <th style="width: 140px;" ng-show="vm.userColumns['userResourceType'].selected">Type</th>
                             <th style="width: 140px;" ng-show="vm.userColumns['isActive'].selected">Status</th>
@@ -40,7 +41,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="user in vm.users | allUserSearch:vm.search | orderBy:vm.search.orderBy:vm.search.sortDESC">
+                        <tr
+                            ng-repeat="user in vm.users | allUserSearch:vm.search | orderBy:vm.search.orderBy:vm.search.sortDESC">
                             <td>{{$index + 1}}</td>
                             <td ng-show="vm.userColumns['name'].selected" style="width:100px;">
                                 <div class="user-imagee" style="text-align: center;padding: 0px">
@@ -50,18 +52,23 @@
                                     <span>{{user.name}}</span>
                                 </div>
                             </td>
+                            <td>{{user.skillCategory}}</td>
                             <td>
-                                <a class="btn btn-primary btn-rounded pull-right" ng-click="vm.viewUserSkillProfile(user)" ng-show="vm.user.admin">Add</a>
+                                <a class="btn btn-primary btn-rounded pull-right"
+                                    ng-click="vm.viewUserSkillProfile(user)" ng-show="vm.user.admin">Add</a>
                                 <table class="table table-condensed table-striped">
                                     <tr ng-repeat="userSkill in user.userSkills">
                                         <td>{{userSkill.skillName}}</td>
                                         <td>{{userSkill.skillVersion}}</td>
                                         <td>{{userSkill.skillLevel}}</td>
                                         <td style="width: 110px;">
-                                            <a class="btn btn-primary btn-icon btn-rounded" ng-click="vm.viewUserSkillProfile(user, userSkill)" ng-show="vm.user.admin">
+                                            <a class="btn btn-primary btn-icon btn-rounded"
+                                                ng-click="vm.viewUserSkillProfile(user, userSkill)"
+                                                ng-show="vm.user.admin">
                                                 <span class="fa fa-pencil"></span>
                                             </a>
-                                            <a class="btn btn-primary btn-icon btn-rounded" ng-click="vm.delUserSkillProfile(userSkill)" ng-show="vm.user.admin">
+                                            <a class="btn btn-primary btn-icon btn-rounded"
+                                                ng-click="vm.delUserSkillProfile(userSkill)" ng-show="vm.user.admin">
                                                 <span class="fa fa-times"></span>
                                             </a>
                                         </td>
