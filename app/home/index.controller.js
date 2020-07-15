@@ -36,6 +36,9 @@
                         return (searchObj.isAdmin == item.admin);
                     });
                 }
+                if (searchObj.skillCategory && searchObj.skillCategory.length > 0 && searchObj.skillCategory != "All") {
+                    output = $filter('filter')(output, { skillCategory: searchObj.skillCategory });
+                }
                 if (searchObj.skillName && searchObj.skillName.length > 0) {
                     var searchCriterias = String(searchObj.skillName).toLowerCase().split(" and ");
                     _.each(searchCriterias, function (searchCriteria) {
