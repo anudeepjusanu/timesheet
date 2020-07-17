@@ -1088,6 +1088,7 @@
                     "userRole": vm.userObj.userRole,
                     "reportingTo": vm.userObj.reportingTo,
                     "employeeCategory": vm.userObj.employeeCategory,
+                    "skillCategory": vm.userObj.skillCategory,
                     "profileImgUrl": vm.userObj.profileImgUrl,
                     "isActive": vm.userObj.isActive
                 }
