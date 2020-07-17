@@ -36,6 +36,18 @@
                         return (searchObj.isAdmin == item.admin);
                     });
                 }
+                if (searchObj.resourceStatus && searchObj.resourceStatus.length > 0) {
+                    if (searchObj.resourceStatus === "available") {
+                        output = $filter('filter')(output, function (item) {
+                            return (item.resourceInPool === true);
+                        });
+                    } else if (searchObj.resourceStatus === "assigned") {
+                        output = $filter('filter')(output, function (item) {
+                            return (item.resourceInPool !== true);
+                        });
+                    }
+                }
+
                 if (searchObj.skillCategory && searchObj.skillCategory.length > 0 && searchObj.skillCategory != "All") {
                     output = $filter('filter')(output, { skillCategory: searchObj.skillCategory });
                 }
@@ -885,6 +897,7 @@
             "name": { label: "Name", selected: true },
             "userResourceType": { label: "Type", selected: true },
             "isAdmin": { label: "Is Admin", selected: false },
+            "resourceStatus": { label: "Resource Status", selected: true },
             "isActive": { label: "Status", selected: true }
         };
 
@@ -964,6 +977,9 @@
                 console.log(errors);
             });
         }
+
+
+
 
         initController();
         function initController() {

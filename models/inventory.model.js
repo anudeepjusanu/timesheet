@@ -14,7 +14,10 @@ var InventrySchema = new Schema({
     location: { type: String },
     hostName: { type: String },
     clientId: { type: String },
-    userId: { type: mongoose.ObjectId },
+    userId: {
+        type: mongoose.ObjectId,
+        default: null
+    },
 
     currentStatus: { type: String, default: 'Available' },
     deviceBrand: { type: String },

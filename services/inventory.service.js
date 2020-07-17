@@ -13,6 +13,7 @@ service.getInventory = getInventory;
 service.addInventory = addInventory;
 service.updateInventory = updateInventory;
 service.deleteInventory = deleteInventory;
+service.assignUser = assignUser;
 
 module.exports = service;
 
@@ -20,7 +21,9 @@ function getInventories() {
     return new Promise((resolve, reject) => {
         var aggregateQuery = [
             { $match: {} },
-            { $lookup: { from: "User", localField: "userId", foreignField: "_id", as: "User" } }
+            { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "assignedUser" } },
+            { $unwind: { path: "$assignedUser", preserveNullAndEmptyArrays: true } },
+            //{ $project: {} }
         ];
         InventoryModel.aggregate(aggregateQuery).exec().then((data) => {
             resolve(data);
@@ -80,5 +83,38 @@ function deleteInventory(InventoryId) {
         }).catch((error) => {
             reject({ error: error.errmsg });
         });
+    });
+}
+
+function assignUser(InventoryId, assignData) {
+    return new Promise((resolve, reject) => {
+        var pdata = {
+            userId: null
+        }
+        if (assignData.userId) {
+            pdata.userId = mongoose.Types.ObjectId(assignData.userId);
+            pdata.currentStatus = "Assigned";
+        } else {
+            pdata.currentStatus = "Available";
+        }
+        InventoryModel.updateOne({ _id: mongoose.Types.ObjectId(InventoryId) }, pdata).exec().then((data) => {
+            resolve(data);
+        }).catch((error) => {
+            reject({ error: error.errmsg });
+        });
+        // InventoryModel.findById(assignData.userId, function (err, InventoryObj) {
+        //     if (err) return handleError(err);
+        //     // InventoryObj.history.push({
+        //     //     inventoryAction: "Assign",
+        //     //     prevValue: InventoryObj.userId,
+        //     //     newValue: pdata.userId,
+        //     //     comment: pdata.userId
+        //     // });
+        //     InventoryObj.userId = pdata.userId;
+        //     InventoryObj.save(function (error) {
+        //         if (error) reject({ error });
+        //         resolve(InventoryObj);
+        //     });
+        // });
     });
 }

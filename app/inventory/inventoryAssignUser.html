@@ -1,0 +1,42 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title"> {{ (vm.assignObj&&vm.assignObj._id)?"Edit":"Add" }} Inventory</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+        close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
+    <form class="form-horizontal" name="inventoryForm">
+        <div class="form-group required">
+            <label class="col-md-3 col-xs-12 control-label">User</label>
+            <div class="col-md-6 col-xs-12">
+                <select class="form-control" ng-model="vm.assignObj.userId"
+                    ng-options="opt._id as opt.name for opt in vm.activeUsers"></select>
+            </div>
+        </div>
+        <!-- <div class="form-group">
+            <label class="col-md-3 col-xs-12 control-label">Purchase Date</label>
+            <div class="col-md-6 col-xs-12">
+                <p class="input-group">
+                    <input type="text" id="purchaseDate" class="form-control" uib-datepicker-popup
+                        ng-model="vm.assignObj.purchaseDate" is-open="vm.purchaseDateOpened"
+                        datepicker-options="vm.dateOptions" close-text="Close" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default"
+                            ng-click="vm.purchaseDateOpened=!vm.purchaseDateOpened"><i
+                                class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </p>
+            </div>
+        </div> -->
+        <div class="form-group">
+            <label class="col-md-3 col-xs-12 control-label">Comment</label>
+            <div class="col-md-6 col-xs-12">
+                <textarea type="text" ng-model="vm.assignObj.Comment" class="form-control"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-disabled="!vm.enableSaveBtn"
+        ng-click="vm.saveAssignUser(inventoryForm);">Save</button>
+    <button class="btn btn-warning" type="button" ng-click="vm.closeAssignUser()">Cancel</button>
+</div>

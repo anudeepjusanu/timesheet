@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title"> Inventory History</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+        close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
+    <table class="table table-condensed table-bordered table-striped" export-table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Status</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in vm.inventoryObj.history">
+                <td>{{$index + 1}}</td>
+                <td>{{item.deviceId}}</td>
+                <td>{{item.deviceType}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="vm.closeHistory()">Cancel</button>
+</div>

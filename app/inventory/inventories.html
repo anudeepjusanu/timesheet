@@ -34,13 +34,28 @@
                                 <a ng-click="vm.sorting('deviceId');">Device ID</a>
                             </th>
                             <th class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='deviceType'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='deviceType'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('deviceType');">Device Type</a>
+                            </th>
+                            <th class="sorting"
                                 ng-class="{'sorting_asc':vm.search.orderBy=='deviceName'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='deviceName'&&vm.search.sortDESC===true}">
                                 <a ng-click="vm.sorting('deviceName');">Device Name</a>
                             </th>
+                            <th class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='userId'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='userId'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('userId');">Assigned</a>
+                            </th>
                             <th>Status</th>
+                            <th style="width:160px;">Action</th>
                         </tr>
                         <tr>
                             <td></td>
+                            <td><input class="form-control" type="text" ng-model="vm.search.deviceId" /></td>
+                            <td><input class="form-control" type="text" ng-model="vm.search.deviceType" /></td>
+                            <td><input class="form-control" type="text" ng-model="vm.search.deviceName" /></td>
+                            <td>
+                                <!-- <input class="form-control" type="text" ng-model="vm.search.userName" /> -->
+                            </td>
                             <td></td>
                             <td></td>
                         </tr>
@@ -50,8 +65,27 @@
                             ng-repeat="inventory in vm.inventories | InventorySearch:vm.search | orderBy:vm.search.orderBy:vm.search.sortDESC">
                             <td>{{$index + 1}}</td>
                             <td>{{inventory.deviceId}}</td>
+                            <td>{{inventory.deviceType}}</td>
                             <td>{{inventory.deviceName}}</td>
+                            <td>
+                                {{inventory.assignedUser.name}}
+                                <a class="btn btn-link pull-right" ng-click="vm.inventoryAssignUser(inventory)">
+                                    <span class="fa fa-user"></span>
+                                </a>
+                            </td>
                             <td>{{inventory.currentStatus}}</td>
+                            <td class="">
+                                <a class="btn btn-primary btn-icon btn-rounded" ng-click="vm.viewHistory(inventory)">
+                                    <span class="fa fa-history"></span>
+                                </a>
+                                <a class="btn btn-primary btn-icon btn-rounded"
+                                    ng-click="vm.viewInventoryForm(inventory)" ng-show="vm.user.admin">
+                                    <span class="fa fa-pencil"></span>
+                                </a>
+                                <a class="btn btn-primary btn-icon btn-rounded">
+                                    <span class="fa fa-times"></span>
+                                </a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

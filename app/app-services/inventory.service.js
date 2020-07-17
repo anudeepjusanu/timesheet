@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -12,7 +12,8 @@
         service.addInventory = addInventory;
         service.updateInventory = updateInventory;
         service.delInventory = delInventory;
-        
+        service.assignUser = assignUser;
+
         return service;
 
         function getInventories() {
@@ -20,7 +21,7 @@
         }
 
         function getInventory(inventoryId) {
-            return $http.get('/api/inventory/inventory/'+inventoryId).then(handleSuccess, handleError);
+            return $http.get('/api/inventory/inventory/' + inventoryId).then(handleSuccess, handleError);
         }
 
         function addInventory(inventoryObj) {
@@ -33,6 +34,10 @@
 
         function delInventory(inventoryId) {
             return $http.delete('/api/inventory/inventory/' + inventoryId).then(handleSuccess, handleError);
+        }
+
+        function assignUser(inventoryId, assignObj) {
+            return $http.put('/api/inventory/assignUser/' + inventoryId, assignObj).then(handleSuccess, handleError);
         }
 
         // private functions

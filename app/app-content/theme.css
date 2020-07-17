@@ -9002,3 +9002,7 @@ li.ext_zip {
 .btn-icon span{
     margin: 0px!important;
 }
+
+a.btn-icon {
+    margin: 0px 4px 0px 4px;
+}

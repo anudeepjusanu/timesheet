@@ -5,6 +5,8 @@
         .module('app')
         .controller('Inventory.IndexController', InventoryController)
         .controller('Inventory.InventoryModel', InventoryModel)
+        .controller('Inventory.AssignUserModel', AssignUserModel)
+        .controller('Inventory.HistoryModel', HistoryModel)
         .filter('InventorySearch', function ($filter) {
             return function (input, searchObj) {
                 var output = input;
@@ -25,7 +27,7 @@
             }
         });
 
-    function InventoryController(UserService, InventoryService, _, $uibModal, $state) {
+    function InventoryController(UserService, InventoryService, _, $uibModal, $filter, $state) {
         var vm = this;
         vm.users = [];
         vm.inventories = [];
@@ -46,7 +48,6 @@
 
         function getInventories() {
             InventoryService.getInventories().then(function (response) {
-                console.log(response);
                 vm.inventories = response.inventories;
             }, function (error) {
                 console.log(error);
@@ -79,9 +80,54 @@
             });
         }
 
+        vm.inventoryAssignUser = function (inventoryObj) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'inventory/inventoryAssignUser.html',
+                controller: 'Inventory.AssignUserModel',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    inventoryObj: function () {
+                        return inventoryObj;
+                    },
+                    usersList: function () {
+                        return vm.users;
+                    }
+                }
+            }).result.then(function (userObj) {
+                getInventories();
+            }, function () {
+                getInventories();
+            });
+        }
+
+        vm.viewHistory = function (inventoryObj) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'inventory/inventoryHistory.html',
+                controller: 'Inventory.HistoryModel',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    inventoryObj: function () {
+                        return inventoryObj;
+                    }
+                }
+            }).result.then(function (userObj) {
+                getInventories();
+            }, function () {
+                getInventories();
+            });
+        }
+
         var getActiveUsers = function () {
             UserService.GetAll().then(function (users) {
-                vm.users = users;
+                vm.users = $filter('filter')(users, { isActive: true });
             });
         }
 
@@ -100,19 +146,14 @@
         vm.enableSaveBtn = true;
         vm.alerts = [];
         vm.inventoryObj = inventoryObj;
-        vm.activeUsers = usersList;
+        vm.activeUsers = [...usersList];
         vm.dateOptions = {
             formatYear: 'yy',
             startingDay: 1
         };
-
-        vm.myleaves = [];
-        vm.myleavesInfo = [];
-        vm.totalLeaveBalance = 0;
-        vm.leaveDetails = [];
+        console.log(usersList);
 
         vm.saveInventory = function (inventoryForm) {
-            console.log(inventoryForm);
             if (inventoryForm.$valid) {
                 if (vm.inventoryObj._id) {
                     InventoryService.updateInventory(vm.inventoryObj._id, vm.inventoryObj).then(function (response) {
@@ -142,6 +183,68 @@
             vm.alerts.splice(index, 1);
         }
         vm.closeInventory = function () {
+            $uibModalInstance.close();
+        }
+
+        function initController() {
+
+        };
+        initController();
+    };
+
+    function AssignUserModel($uibModalInstance, UserService, InventoryService, inventoryObj, usersList, noty) {
+        var vm = this;
+        vm.enableSaveBtn = true;
+        vm.alerts = [];
+        vm.inventoryObj = inventoryObj;
+        vm.assignObj = {
+            userId: null
+        };
+        vm.activeUsers = usersList;
+        vm.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+        vm.activeUsers.unshift({ _id: "", name: "None" });
+        if (vm.inventoryObj.userId) {
+            vm.assignObj.userId = vm.inventoryObj.userId;
+        }
+
+        vm.saveAssignUser = function (inventoryForm) {
+            if (inventoryForm.$valid) {
+                if (vm.inventoryObj._id) {
+                    InventoryService.assignUser(vm.inventoryObj._id, vm.assignObj).then(function (response) {
+                        noty.showSuccess("Device has been assigned successfully!");
+                        $uibModalInstance.close();
+                    }, function (error) {
+                        if (error) {
+                            vm.alerts.push({ msg: error, type: 'danger' });
+                        }
+                    });
+                }
+            } else {
+                vm.alerts.push({ msg: "Please enter valid data", type: 'danger' });
+            }
+        }
+
+        vm.closeAlert = function (index) {
+            vm.alerts.splice(index, 1);
+        }
+        vm.closeAssignUser = function () {
+            $uibModalInstance.close();
+        }
+
+        function initController() {
+
+        };
+        initController();
+    };
+
+    function HistoryModel($uibModalInstance, inventoryObj, noty) {
+        var vm = this;
+        vm.inventoryObj = inventoryObj;
+
+        vm.closeHistory = function () {
             $uibModalInstance.close();
         }
 

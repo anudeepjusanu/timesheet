@@ -19,6 +19,8 @@
                             <th style="width: 140px;">Category</th>
                             <th>Technical Skills</th>
                             <th style="width: 140px;" ng-show="vm.userColumns['userResourceType'].selected">Type</th>
+                            <th style="width: 140px;" ng-show="vm.userColumns['resourceStatus'].selected">Resource
+                                Status</th>
                             <th style="width: 140px;" ng-show="vm.userColumns['isActive'].selected">Status</th>
                         </tr>
                         <tr>
@@ -35,6 +37,10 @@
                             <td ng-show="vm.userColumns['userResourceType'].selected"><select class="form-control"
                                     ng-model="vm.search.userResourceType"
                                     ng-options="opt.id as opt.label for opt in [{id:'',label:'All'}, {id:'Billable',label:'Billable'}, {id:'Non-billable',label:'Non-billable'}, {id:'Trainee',label:'Trainee'}, {id:'Intern',label:'Intern'}, {id:'Sales',label:'Sales'}, {id:'Operations',label:'Operations'}, {id:'Leadership',label:'Leadership'}]"></select>
+                            </td>
+                            <td>
+                                <select class="form-control" ng-model="vm.search.resourceStatus"
+                                    ng-options="opt.id as opt.label for opt in [{id:'', label:'All'}, {id:'available', label:'Available'}, {id:'assigned', label:'Assigned'}]"></select>
                             </td>
                             <td ng-show="vm.userColumns['isActive'].selected">
                                 <select class="form-control" ng-model="vm.search.isActive"
@@ -79,6 +85,7 @@
                                 </table>
                             </td>
                             <td ng-show="vm.userColumns['userResourceType'].selected">{{user.userResourceType}}</td>
+                            <td ng-show="vm.userColumns['resourceStatus'].selected">{{user.poolName}}</td>
                             <td ng-show="vm.userColumns['isActive'].selected">
                                 <span ng-if="user.isActive==true">Active</span>
                                 <span ng-if="user.isActive==false">Inactive</span>

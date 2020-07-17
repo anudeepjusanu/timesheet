@@ -9,6 +9,7 @@ router.get('/inventory/:_id', getInventory);
 router.post('/inventory/', addInventory);
 router.put('/inventory/:_id', updateInventory);
 router.delete('/inventory/:_id', delInventory);
+router.put('/assignUser/:_id', assignUser);
 
 module.exports = router;
 
@@ -47,6 +48,14 @@ function updateInventory(req, res) {
 
 function delInventory(req, res) {
     InventoryService.delInventory(req.params._id,).then(data => {
+        res.send({ inventory: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
+
+function assignUser(req, res) {
+    InventoryService.assignUser(req.params._id, req.body).then(data => {
         res.send({ inventory: data });
     }).catch(error => {
         res.status(400).send(error);
