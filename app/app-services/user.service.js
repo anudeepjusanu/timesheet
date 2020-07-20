@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
     'use strict';
 
     angular
@@ -103,7 +103,12 @@
         }
 
         function getUserRoles() {
-            return [{ id: "employee", name: "Employee" }, { id: "lead", name: "Lead" }, { id: "manager", name: "Manager" }];
+            return [
+                { id: "employee", name: "Employee" },
+                { id: "lead", name: "Lead" },
+                { id: "manager", name: "Manager" },
+                { id: "itsupport", name: "IT Support" }
+            ];
         }
 
         function updatePushToken(user) {
@@ -115,14 +120,14 @@
         }
 
         function getMyLeaveWallet(financeYear) {
-            return $http.get('/api/users/myLeaveWallet/'+financeYear).then(handleSuccess, handleError);
+            return $http.get('/api/users/myLeaveWallet/' + financeYear).then(handleSuccess, handleError);
         }
 
         function getMyLeaveWalletBalance() {
             return $http.get('/api/users/myLeaveWalletBalance/').then(handleSuccess, handleError);
         }
 
-        function updateUserLeaveBalance(_id,obj) {
+        function updateUserLeaveBalance(_id, obj) {
             return $http.post('/api/leaves/updateUserLeaveBalance/' + _id, obj).then(handleSuccess, handleError);
         }
 
@@ -136,11 +141,11 @@
         }
 
         function updateUserSkill(userSkillId, userSkillData) {
-            return $http.put('/api/skills/userSkill/'+userSkillId, userSkillData).then(handleSuccess, handleError);
+            return $http.put('/api/skills/userSkill/' + userSkillId, userSkillData).then(handleSuccess, handleError);
         }
 
         function deleteUserSkill(userSkillId) {
-            return $http.delete('/api/skills/userSkill/'+userSkillId).then(handleSuccess, handleError);
+            return $http.delete('/api/skills/userSkill/' + userSkillId).then(handleSuccess, handleError);
         }
 
         // private functions

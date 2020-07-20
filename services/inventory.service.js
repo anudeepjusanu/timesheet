@@ -23,6 +23,7 @@ function getInventories() {
             { $match: {} },
             { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "assignedUser" } },
             { $unwind: { path: "$assignedUser", preserveNullAndEmptyArrays: true } },
+            { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "assignedUser" } }
             //{ $project: {} }
         ];
         InventoryModel.aggregate(aggregateQuery).exec().then((data) => {
@@ -97,24 +98,21 @@ function assignUser(InventoryId, assignData) {
         } else {
             pdata.currentStatus = "Available";
         }
-        InventoryModel.updateOne({ _id: mongoose.Types.ObjectId(InventoryId) }, pdata).exec().then((data) => {
-            resolve(data);
-        }).catch((error) => {
-            reject({ error: error.errmsg });
+
+        InventoryModel.findById(InventoryId, function (err, InventoryObj) {
+            if (err) return handleError(err);
+            console.log(InventoryObj);
+            InventoryObj.history.push({
+                inventoryAction: "Assign",
+                prevValue: InventoryObj.userId,
+                newValue: pdata.userId,
+                comment: assignData.comment
+            });
+            InventoryObj.userId = pdata.userId;
+            InventoryObj.save(function (error) {
+                if (error) reject({ error });
+                resolve(InventoryObj);
+            });
         });
-        // InventoryModel.findById(assignData.userId, function (err, InventoryObj) {
-        //     if (err) return handleError(err);
-        //     // InventoryObj.history.push({
-        //     //     inventoryAction: "Assign",
-        //     //     prevValue: InventoryObj.userId,
-        //     //     newValue: pdata.userId,
-        //     //     comment: pdata.userId
-        //     // });
-        //     InventoryObj.userId = pdata.userId;
-        //     InventoryObj.save(function (error) {
-        //         if (error) reject({ error });
-        //         resolve(InventoryObj);
-        //     });
-        // });
     });
 }

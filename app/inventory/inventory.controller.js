@@ -200,7 +200,7 @@
         vm.assignObj = {
             userId: null
         };
-        vm.activeUsers = usersList;
+        vm.activeUsers = [...usersList];
         vm.dateOptions = {
             formatYear: 'yy',
             startingDay: 1

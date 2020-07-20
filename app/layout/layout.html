@@ -100,9 +100,11 @@
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'clients'}">
                 <a ui-sref="clients"><span class="fa fa-tags"></span> <span class="xn-text">Clients</span></a>
             </li>
-            <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'inventories'}">
+            <li class="" ng-if="vm.user.admin===true || vm.user.userRole==='itsupport'"
+                ng-class="{active: activeTab === 'inventories'}">
                 <a ui-sref="inventories"><span class="fa fa-list"></span> <span class="xn-text">Inventories</span></a>
             </li>
+
             <li class="xn-openable" ng-if="vm.user.admin===true">
                 <a><span class="fa fa-tags"></span> <span class="xn-text">Manage App</span></a>
                 <ul>

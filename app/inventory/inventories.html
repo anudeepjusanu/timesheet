@@ -79,12 +79,13 @@
                                     <span class="fa fa-history"></span>
                                 </a>
                                 <a class="btn btn-primary btn-icon btn-rounded"
-                                    ng-click="vm.viewInventoryForm(inventory)" ng-show="vm.user.admin">
+                                    ng-click="vm.viewInventoryForm(inventory)"
+                                    ng-show="vm.user.admin || vm.user.userRole==='itsupport'">
                                     <span class="fa fa-pencil"></span>
                                 </a>
-                                <a class="btn btn-primary btn-icon btn-rounded">
+                                <!-- <a class="btn btn-primary btn-icon btn-rounded">
                                     <span class="fa fa-times"></span>
-                                </a>
+                                </a> -->
                             </td>
                         </tr>
                     </tbody>

@@ -8,15 +8,21 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>Status</th>
-                <th>Status</th>
+                <th>Action</th>
+                <th>Old Value</th>
+                <th>New Value</th>
+                <th>Comment</th>
+                <th>Updated On</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="item in vm.inventoryObj.history">
                 <td>{{$index + 1}}</td>
-                <td>{{item.deviceId}}</td>
-                <td>{{item.deviceType}}</td>
+                <td>{{item.inventoryAction}}</td>
+                <td>{{item.prevValue}}</td>
+                <td>{{item.newValue}}</td>
+                <td>{{item.comment}}</td>
+                <td>{{item.updatedOn | date : 'medium'}}</td>
             </tr>
         </tbody>
     </table>

@@ -5,17 +5,21 @@ var _ = require('lodash');
 var mongoose = require("mongoose");
 var InventoryModel = require("../models/inventory.model");
 var UserModel = require("../models/user.model");
+const { async } = require('q');
 mongoose.connect(config.connectionString);
 
 var devices = [];
+var users = [];
 
 fs.createReadStream('./wavelabs_hardware.csv').pipe(csv()).on('data', (row) => {
     devices.push(row);
-}).on('end', () => {
+}).on('end', async () => {
     console.log('CSV file successfully processed');
 
+    users = await UserModel.find({}).exec();
+
     _.each(devices, function (deviceObj) {
-        console.log(deviceObj);
+        //console.log(deviceObj);
         var devicedata = {
             deviceId: deviceObj.deviceId,
             deviceType: deviceObj.deviceType,
@@ -33,6 +37,12 @@ fs.createReadStream('./wavelabs_hardware.csv').pipe(csv()).on('data', (row) => {
             purchaseDate: deviceObj.purhaseDate
         };
 
+        var assignedUser = _.find(users, { employeeId: deviceObj.employeeId });
+        if (assignedUser) {
+            devicedata.userId = assignedUser._id;
+            devicedata.currentStatus = 'Assigned';
+        }
+
         InventoryModel.findOne({ deviceId: deviceObj.deviceId }).exec().then((response) => {
             if (response === null) {
                 var inventoryObj = new InventoryModel(devicedata);
@@ -41,10 +51,9 @@ fs.createReadStream('./wavelabs_hardware.csv').pipe(csv()).on('data', (row) => {
                     //console.log("New :", inventory);
                 });
             } else {
+
                 InventoryModel.updateOne({ deviceId: deviceObj.deviceId }, devicedata).exec().then((data) => {
-
                 }).catch((error) => {
-
                 });
             }
 
