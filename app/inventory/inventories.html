@@ -8,18 +8,18 @@
                 <h3 class="panel-title">Inventories</h3>
                 <a class="btn btn-primary btn-rounded pull-right" ng-click="vm.viewInventoryForm();"
                     ng-show="vm.user.admin">Add</a>
-                <!-- <div class="dropdown pull-right">
+                <div class="dropdown pull-right">
                     <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
                         Columns<b class="caret"></b>
                     </a>
                     <div class="dropdown-menu dropdown-menu-form" role="menu" ng-click="vm.stopPropagation($event)">
-                        <div class="dropdown-item" ng-repeat="column in vm.userColumns">
+                        <div class="dropdown-item" ng-repeat="column in vm.inventoryColumns">
                             <label class="checkbox">
-                                <input type="checkbox" ng-model="column.selected"/> {{column.label}}
+                                <input type="checkbox" ng-model="column.selected" /> {{column.label}}
                             </label>
                         </div>
                     </div>
-                </div> -->
+                </div>
                 <!-- <div class="pull-right">
                     <button class="btn btn-primary" ng-click="vm.exportTable()">Export</button> &nbsp; &nbsp;
                 </div> -->
@@ -29,34 +29,106 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th class="sorting"
+                            <th ng-show="vm.inventoryColumns['deviceId'].selected" style="width:120px;" class="sorting"
                                 ng-class="{'sorting_asc':vm.search.orderBy=='deviceId'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='deviceId'&&vm.search.sortDESC===true}">
                                 <a ng-click="vm.sorting('deviceId');">Device ID</a>
                             </th>
-                            <th class="sorting"
+                            <th ng-show="vm.inventoryColumns['deviceType'].selected" style="width:120px;"
+                                class="sorting"
                                 ng-class="{'sorting_asc':vm.search.orderBy=='deviceType'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='deviceType'&&vm.search.sortDESC===true}">
                                 <a ng-click="vm.sorting('deviceType');">Device Type</a>
                             </th>
-                            <th class="sorting"
+                            <th ng-show="vm.inventoryColumns['deviceName'].selected" class="sorting"
                                 ng-class="{'sorting_asc':vm.search.orderBy=='deviceName'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='deviceName'&&vm.search.sortDESC===true}">
                                 <a ng-click="vm.sorting('deviceName');">Device Name</a>
                             </th>
-                            <th class="sorting"
+                            <th ng-show="vm.inventoryColumns['userId'].selected" class="sorting"
                                 ng-class="{'sorting_asc':vm.search.orderBy=='userId'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='userId'&&vm.search.sortDESC===true}">
                                 <a ng-click="vm.sorting('userId');">Assigned</a>
                             </th>
-                            <th>Status</th>
-                            <th style="width:160px;">Action</th>
+                            <th ng-show="vm.inventoryColumns['deviceStatus'].selected">Device Status</th>
+                            <th ng-show="vm.inventoryColumns['location'].selected" class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='location'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='location'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('location');">Location</a>
+                            </th>
+                            <th ng-show="vm.inventoryColumns['hostname'].selected" class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='hostname'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='hostname'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('hostname');">Hostname</a>
+                            </th>
+                            <th ng-show="vm.inventoryColumns['deviceBrand'].selected" class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='deviceBrand'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='deviceBrand'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('deviceBrand');">Brand</a>
+                            </th>
+                            <th ng-show="vm.inventoryColumns['deviceModel'].selected" class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='deviceModel'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='deviceModel'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('deviceModel');">Model</a>
+                            </th>
+                            <th ng-show="vm.inventoryColumns['deviceSerial'].selected" class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='deviceSerial'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='deviceSerial'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('deviceSerial');">Serial</a>
+                            </th>
+                            <th ng-show="vm.inventoryColumns['deviceOS'].selected" class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='deviceOS'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='deviceOS'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('deviceOS');">OS</a>
+                            </th>
+                            <th ng-show="vm.inventoryColumns['deviceCPU'].selected" class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='deviceCPU'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='deviceCPU'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('deviceCPU');">CPU</a>
+                            </th>
+                            <th ng-show="vm.inventoryColumns['deviceRAM'].selected" style="width:120px;" class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='deviceRAM'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='deviceRAM'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('deviceRAM');">RAM</a>
+                            </th>
+                            <th ng-show="vm.inventoryColumns['purchaseDate'].selected" style="width:120px;"
+                                class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='purchaseDate'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='purchaseDate'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('purchaseDate');">Purchase Date</a>
+                            </th>
+                            <th style="width:120px;">Action</th>
                         </tr>
                         <tr>
                             <td></td>
-                            <td><input class="form-control" type="text" ng-model="vm.search.deviceId" /></td>
-                            <td><input class="form-control" type="text" ng-model="vm.search.deviceType" /></td>
-                            <td><input class="form-control" type="text" ng-model="vm.search.deviceName" /></td>
-                            <td>
-                                <!-- <input class="form-control" type="text" ng-model="vm.search.userName" /> -->
+                            <td ng-show="vm.inventoryColumns['deviceId'].selected">
+                                <input class="form-control" type="text" ng-model="vm.search.deviceId" />
                             </td>
-                            <td></td>
+                            <td ng-show="vm.inventoryColumns['deviceType'].selected">
+                                <input class="form-control" type="text" ng-model="vm.search.deviceType" />
+                            </td>
+                            <td ng-show="vm.inventoryColumns['deviceName'].selected">
+                                <input class="form-control" type="text" ng-model="vm.search.deviceName" />
+                            </td>
+                            <td ng-show="vm.inventoryColumns['userId'].selected">
+                                <input class="form-control" type="text" ng-model="vm.search.userName" />
+                            </td>
+                            <td ng-show="vm.inventoryColumns['deviceStatus'].selected">
+                                <select class="form-control" ng-model="vm.search.deviceStatus"
+                                    ng-options="opt as opt for opt in ['All', 'Working', 'Assigned', 'Available', 'Repair', 'Scrap']"></select>
+                            </td>
+                            <td ng-show="vm.inventoryColumns['location'].selected">
+                                <input class="form-control" type="text" ng-model="vm.search.location" />
+                            </td>
+                            <td ng-show="vm.inventoryColumns['hostname'].selected">
+                                <input class="form-control" type="text" ng-model="vm.search.hostname" />
+                            </td>
+                            <td ng-show="vm.inventoryColumns['deviceBrand'].selected">
+                                <input class="form-control" type="text" ng-model="vm.search.deviceBrand" />
+                            </td>
+                            <td ng-show="vm.inventoryColumns['deviceModel'].selected">
+                                <input class="form-control" type="text" ng-model="vm.search.deviceModel" />
+                            </td>
+                            <td ng-show="vm.inventoryColumns['deviceSerial'].selected">
+                                <input class="form-control" type="text" ng-model="vm.search.deviceSerial" />
+                            </td>
+                            <td ng-show="vm.inventoryColumns['deviceOS'].selected">
+                                <input class="form-control" type="text" ng-model="vm.search.deviceOS" />
+                            </td>
+                            <td ng-show="vm.inventoryColumns['deviceCPU'].selected">
+                                <input class="form-control" type="text" ng-model="vm.search.deviceCPU" />
+                            </td>
+                            <td ng-show="vm.inventoryColumns['deviceRAM'].selected">
+                                <input class="form-control" type="text" ng-model="vm.search.deviceRAM" />
+                            </td>
+                            <td ng-show="vm.inventoryColumns['purchaseDate'].selected"></td>
                             <td></td>
                         </tr>
                     </thead>
@@ -64,16 +136,30 @@
                         <tr
                             ng-repeat="inventory in vm.inventories | InventorySearch:vm.search | orderBy:vm.search.orderBy:vm.search.sortDESC">
                             <td>{{$index + 1}}</td>
-                            <td>{{inventory.deviceId}}</td>
-                            <td>{{inventory.deviceType}}</td>
-                            <td>{{inventory.deviceName}}</td>
-                            <td>
-                                {{inventory.assignedUser.name}}
+                            <td ng-show="vm.inventoryColumns['deviceId'].selected">{{inventory.deviceId}}</td>
+                            <td ng-show="vm.inventoryColumns['deviceType'].selected">{{inventory.deviceType}}</td>
+                            <td ng-show="vm.inventoryColumns['deviceName'].selected">{{inventory.deviceName}}</td>
+                            <td ng-show="vm.inventoryColumns['userId'].selected">
+                                {{inventory.userName}}
                                 <a class="btn btn-link pull-right" ng-click="vm.inventoryAssignUser(inventory)">
                                     <span class="fa fa-user"></span>
                                 </a>
                             </td>
-                            <td>{{inventory.currentStatus}}</td>
+                            <td ng-show="vm.inventoryColumns['deviceStatus'].selected">
+                                {{inventory.deviceStatus}}
+                                <a class="btn btn-link pull-right" ng-click="vm.inventoryAssignUser(inventory)">
+                                    <span class="fa fa-user"></span>
+                                </a>
+                            </td>
+                            <td ng-show="vm.inventoryColumns['location'].selected">{{inventory.location}}</td>
+                            <td ng-show="vm.inventoryColumns['hostname'].selected">{{inventory.hostname}}</td>
+                            <td ng-show="vm.inventoryColumns['deviceBrand'].selected">{{inventory.deviceBrand}}</td>
+                            <td ng-show="vm.inventoryColumns['deviceModel'].selected">{{inventory.deviceModel}}</td>
+                            <td ng-show="vm.inventoryColumns['deviceSerial'].selected">{{inventory.deviceSerial}}</td>
+                            <td ng-show="vm.inventoryColumns['deviceOS'].selected">{{inventory.deviceOS}}</td>
+                            <td ng-show="vm.inventoryColumns['deviceCPU'].selected">{{inventory.deviceCPU}}</td>
+                            <td ng-show="vm.inventoryColumns['deviceRAM'].selected">{{inventory.deviceRAM}}</td>
+                            <td ng-show="vm.inventoryColumns['purchaseDate'].selected">{{inventory.purchaseDate}}</td>
                             <td class="">
                                 <a class="btn btn-primary btn-icon btn-rounded" ng-click="vm.viewHistory(inventory)">
                                     <span class="fa fa-history"></span>

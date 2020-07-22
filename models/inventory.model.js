@@ -19,7 +19,7 @@ var InventrySchema = new Schema({
         default: null
     },
 
-    currentStatus: { type: String, default: 'Available' },
+    deviceStatus: { type: String, default: 'Available' },
     deviceBrand: { type: String },
     deviceModel: { type: String },
     deviceSerial: { type: String },

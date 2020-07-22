@@ -22,8 +22,7 @@ function getInventories() {
         var aggregateQuery = [
             { $match: {} },
             { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "assignedUser" } },
-            { $unwind: { path: "$assignedUser", preserveNullAndEmptyArrays: true } },
-            { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "assignedUser" } }
+            { $unwind: { path: "$assignedUser", preserveNullAndEmptyArrays: true } }
             //{ $project: {} }
         ];
         InventoryModel.aggregate(aggregateQuery).exec().then((data) => {

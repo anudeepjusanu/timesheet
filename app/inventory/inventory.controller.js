@@ -6,22 +6,30 @@
         .controller('Inventory.IndexController', InventoryController)
         .controller('Inventory.InventoryModel', InventoryModel)
         .controller('Inventory.AssignUserModel', AssignUserModel)
+        .controller('Inventory.ChangeStatusModel', ChangeStatusModel)
         .controller('Inventory.HistoryModel', HistoryModel)
         .filter('InventorySearch', function ($filter) {
             return function (input, searchObj) {
                 var output = input;
-                if (searchObj.userName && searchObj.userName.length > 0) {
-                    output = $filter('filter')(output, { name: searchObj.userName });
-                }
-                if (searchObj.userResourceType && searchObj.userResourceType.length > 0) {
-                    output = $filter('filter')(output, function (item) {
-                        return (searchObj.userResourceType == item.userResourceType);
-                    });
-                }
-                if (searchObj.employeeCategory && searchObj.employeeCategory.length > 0 && searchObj.employeeCategory != "All") {
-                    output = $filter('filter')(output, function (item) {
-                        return (searchObj.employeeCategory == item.employeeCategory);
-                    });
+                var filterFields = ['deviceId', 'deviceType', 'deviceName', 'userName', 'location', 'hostname', 'deviceBrand',
+                    'deviceModel', 'deviceSerial', 'deviceOS', 'deviceCPU', 'deviceRAM'];
+                _.each(filterFields, function (filterField) {
+                    if (searchObj[filterField] && searchObj[filterField].length > 0) {
+                        var searchQuery = {};
+                        searchQuery[filterField] = searchObj[filterField];
+                        output = $filter('filter')(output, searchQuery);
+                    }
+                });
+                if (searchObj.deviceStatus && searchObj.deviceStatus.length > 0 && searchObj.deviceStatus != "All") {
+                    if (searchObj.deviceStatus == "Working") {
+                        output = $filter('filter')(output, function (item) {
+                            return (item.deviceStatus == "Available" || item.deviceStatus == "Assigned");
+                        });
+                    } else {
+                        output = $filter('filter')(output, function (item) {
+                            return (item.deviceStatus == searchObj.deviceStatus);
+                        });
+                    }
                 }
                 return output;
             }
@@ -45,10 +53,31 @@
             }
             vm.search.orderBy = orderBy;
         };
+        vm.inventoryColumns = {
+            "deviceId": { label: "Device ID", selected: true },
+            "deviceType": { label: "Device Type", selected: true },
+            "deviceName": { label: "Device Name", selected: false },
+            "userId": { label: "User", selected: true },
+            "deviceStatus": { label: "Device Status", selected: true },
+            "location": { label: "Location", selected: false },
+            "hostname": { label: "Hostname", selected: false },
+            "deviceBrand": { label: "Brand", selected: false },
+            "deviceModel": { label: "Model", selected: false },
+            "deviceSerial": { label: "Serial", selected: false },
+            "deviceOS": { label: "OS", selected: false },
+            "deviceCPU": { label: "CPU", selected: false },
+            "deviceRAM": { label: "RAM", selected: false },
+            "purchaseDate": { label: "purchaseDate", selected: false },
+        };
 
         function getInventories() {
             InventoryService.getInventories().then(function (response) {
                 vm.inventories = response.inventories;
+                _.each(vm.inventories, function (inventoryObj) {
+                    if (inventoryObj.assignedUser && inventoryObj.assignedUser.name) {
+                        inventoryObj.userName = inventoryObj.assignedUser.name;
+                    }
+                });
             }, function (error) {
                 console.log(error);
             });
@@ -104,6 +133,30 @@
             });
         }
 
+        vm.inventoryChangeStatus = function (inventoryObj) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'inventory/inventoryStatus.html',
+                controller: 'Inventory.AssignUserModel',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    inventoryObj: function () {
+                        return inventoryObj;
+                    },
+                    usersList: function () {
+                        return vm.users;
+                    }
+                }
+            }).result.then(function (userObj) {
+                getInventories();
+            }, function () {
+                getInventories();
+            });
+        }
+
         vm.viewHistory = function (inventoryObj) {
             var modalInstance = $uibModal.open({
                 animation: true,
@@ -129,6 +182,10 @@
             UserService.GetAll().then(function (users) {
                 vm.users = $filter('filter')(users, { isActive: true });
             });
+        }
+
+        vm.stopPropagation = function (e) {
+            e.stopPropagation();
         }
 
         function initController() {
@@ -193,6 +250,54 @@
     };
 
     function AssignUserModel($uibModalInstance, UserService, InventoryService, inventoryObj, usersList, noty) {
+        var vm = this;
+        vm.enableSaveBtn = true;
+        vm.alerts = [];
+        vm.inventoryObj = inventoryObj;
+        vm.assignObj = {
+            userId: null
+        };
+        vm.activeUsers = [...usersList];
+        vm.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+        vm.activeUsers.unshift({ _id: "", name: "None" });
+        if (vm.inventoryObj.userId) {
+            vm.assignObj.userId = vm.inventoryObj.userId;
+        }
+
+        vm.saveAssignUser = function (inventoryForm) {
+            if (inventoryForm.$valid) {
+                if (vm.inventoryObj._id) {
+                    InventoryService.assignUser(vm.inventoryObj._id, vm.assignObj).then(function (response) {
+                        noty.showSuccess("Device has been assigned successfully!");
+                        $uibModalInstance.close();
+                    }, function (error) {
+                        if (error) {
+                            vm.alerts.push({ msg: error, type: 'danger' });
+                        }
+                    });
+                }
+            } else {
+                vm.alerts.push({ msg: "Please enter valid data", type: 'danger' });
+            }
+        }
+
+        vm.closeAlert = function (index) {
+            vm.alerts.splice(index, 1);
+        }
+        vm.closeAssignUser = function () {
+            $uibModalInstance.close();
+        }
+
+        function initController() {
+
+        };
+        initController();
+    };
+
+    function ChangeStatusModel($uibModalInstance, InventoryService, inventoryObj, usersList, noty) {
         var vm = this;
         vm.enableSaveBtn = true;
         vm.alerts = [];

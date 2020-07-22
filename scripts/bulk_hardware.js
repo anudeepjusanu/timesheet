@@ -27,7 +27,7 @@ fs.createReadStream('./wavelabs_hardware.csv').pipe(csv()).on('data', (row) => {
             location: deviceObj.location,
             hostname: deviceObj.hostname,
             client: deviceObj.client,
-            currentStatus: deviceObj.isAvailable,
+            deviceStatus: deviceObj.isAvailable,
             deviceBrand: deviceObj.brand,
             deviceModel: deviceObj.model,
             deviceSerial: deviceObj.serial,
@@ -53,7 +53,9 @@ fs.createReadStream('./wavelabs_hardware.csv').pipe(csv()).on('data', (row) => {
             } else {
 
                 InventoryModel.updateOne({ deviceId: deviceObj.deviceId }, devicedata).exec().then((data) => {
+
                 }).catch((error) => {
+
                 });
             }
 

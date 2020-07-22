@@ -6,10 +6,31 @@
         close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
     <form class="form-horizontal" name="inventoryForm">
         <div class="form-group required">
+            <label class="col-md-3 col-xs-12 control-label">Action</label>
+            <div class="col-md-6 col-xs-12">
+                <select class="form-control" ng-model="vm.assignObj.action"
+                    ng-options="opt as opt for opt in ['Assign', 'Unassign', 'Repair', 'Repair Done', 'Scrap']"></select>
+            </div>
+        </div>
+        <div ng-if="vm.assignObj.action=='Assign'" class="form-group required">
             <label class="col-md-3 col-xs-12 control-label">User</label>
             <div class="col-md-6 col-xs-12">
                 <select class="form-control" ng-model="vm.assignObj.userId"
                     ng-options="opt._id as opt.name for opt in vm.activeUsers"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-3 col-xs-12 control-label">Date</label>
+            <div class="col-md-6 col-xs-12">
+                <p class="input-group">
+                    <input type="text" id="effDate" class="form-control" uib-datepicker-popup
+                        ng-model="vm.assignObj.effDate" is-open="vm.effDateOpened" datepicker-options="vm.dateOptions"
+                        close-text="Close" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.effDateOpened=!vm.effDateOpened"><i
+                                class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </p>
             </div>
         </div>
         <div class="form-group">
