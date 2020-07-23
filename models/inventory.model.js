@@ -36,6 +36,7 @@ var InventrySchema = new Schema({
         inventoryAction: String,
         prevValue: String,
         newValue: String,
+        affectedDate: { type: Date, default: Date.now },
         comment: String,
         updatedBy: { type: mongoose.ObjectId },
         updatedOn: { type: Date, default: Date.now }

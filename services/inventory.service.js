@@ -14,6 +14,7 @@ service.addInventory = addInventory;
 service.updateInventory = updateInventory;
 service.deleteInventory = deleteInventory;
 service.assignUser = assignUser;
+service.changeStatus = changeStatus;
 
 module.exports = service;
 
@@ -91,27 +92,62 @@ function assignUser(InventoryId, assignData) {
         var pdata = {
             userId: null
         }
+        var inventoryAction = "Assign";
         if (assignData.userId) {
             pdata.userId = mongoose.Types.ObjectId(assignData.userId);
-            pdata.currentStatus = "Assigned";
+            pdata.deviceStatus = "Assigned";
         } else {
-            pdata.currentStatus = "Available";
+            pdata.deviceStatus = "Available";
+            inventoryAction = "Unassign";
         }
 
         InventoryModel.findById(InventoryId, function (err, InventoryObj) {
             if (err) return handleError(err);
-            console.log(InventoryObj);
             InventoryObj.history.push({
-                inventoryAction: "Assign",
+                inventoryAction: inventoryAction,
                 prevValue: InventoryObj.userId,
                 newValue: pdata.userId,
                 comment: assignData.comment
             });
             InventoryObj.userId = pdata.userId;
+            InventoryObj.deviceStatus = pdata.deviceStatus;
             InventoryObj.save(function (error) {
                 if (error) reject({ error });
                 resolve(InventoryObj);
             });
         });
+    });
+}
+
+function changeStatus(InventoryId, inventoryData) {
+    return new Promise((resolve, reject) => {
+
+        if (["Repair", "Repair Done", "Scrap"].includes(inventoryData.deviceStatus)) {
+            InventoryModel.findById(InventoryId, function (err, InventoryObj) {
+                if (err) return handleError(err);
+
+                if (inventoryData.deviceStatus == "Repair Done") {
+                    if (InventoryObj.userId && String(InventoryObj.userId).length > 0) {
+                        inventoryData.deviceStatus = "Assigned";
+                    } else {
+                        inventoryData.deviceStatus = "Available";
+                    }
+                }
+                InventoryObj.history.push({
+                    inventoryAction: "Status Change",
+                    prevValue: InventoryObj.deviceStatus,
+                    newValue: inventoryData.deviceStatus,
+                    affectedDate: inventoryData.affectedDate,
+                    comment: inventoryData.comment
+                });
+                InventoryObj.deviceStatus = inventoryData.deviceStatus;
+                InventoryObj.save(function (error) {
+                    if (error) reject(error);
+                    resolve(InventoryObj);
+                });
+            });
+        } else {
+            reject({ message: "Invalid device status value!" });
+        }
     });
 }

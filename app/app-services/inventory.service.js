@@ -13,6 +13,7 @@
         service.updateInventory = updateInventory;
         service.delInventory = delInventory;
         service.assignUser = assignUser;
+        service.changeStatus = changeStatus;
 
         return service;
 
@@ -38,6 +39,10 @@
 
         function assignUser(inventoryId, assignObj) {
             return $http.put('/api/inventory/assignUser/' + inventoryId, assignObj).then(handleSuccess, handleError);
+        }
+
+        function changeStatus(inventoryId, inventoryObj) {
+            return $http.put('/api/inventory/changeStatus/' + inventoryId, inventoryObj).then(handleSuccess, handleError);
         }
 
         // private functions

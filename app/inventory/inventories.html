@@ -141,14 +141,14 @@
                             <td ng-show="vm.inventoryColumns['deviceName'].selected">{{inventory.deviceName}}</td>
                             <td ng-show="vm.inventoryColumns['userId'].selected">
                                 {{inventory.userName}}
-                                <a class="btn btn-link pull-right" ng-click="vm.inventoryAssignUser(inventory)">
+                                <!-- <a class="btn btn-link pull-right" ng-click="vm.inventoryAssignUser(inventory)">
                                     <span class="fa fa-user"></span>
-                                </a>
+                                </a> -->
                             </td>
                             <td ng-show="vm.inventoryColumns['deviceStatus'].selected">
                                 {{inventory.deviceStatus}}
-                                <a class="btn btn-link pull-right" ng-click="vm.inventoryAssignUser(inventory)">
-                                    <span class="fa fa-user"></span>
+                                <a class="btn btn-link pull-right" ng-click="vm.inventoryChangeStatus(inventory)">
+                                    <span class="fa fa-gear"></span>
                                 </a>
                             </td>
                             <td ng-show="vm.inventoryColumns['location'].selected">{{inventory.location}}</td>
@@ -162,7 +162,7 @@
                             <td ng-show="vm.inventoryColumns['purchaseDate'].selected">{{inventory.purchaseDate}}</td>
                             <td class="">
                                 <a class="btn btn-primary btn-icon btn-rounded" ng-click="vm.viewHistory(inventory)">
-                                    <span class="fa fa-history"></span>
+                                    <span class="fa fa-comment"></span>
                                 </a>
                                 <a class="btn btn-primary btn-icon btn-rounded"
                                     ng-click="vm.viewInventoryForm(inventory)"

@@ -139,7 +139,7 @@
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
                 templateUrl: 'inventory/inventoryStatus.html',
-                controller: 'Inventory.AssignUserModel',
+                controller: 'Inventory.ChangeStatusModel',
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
@@ -297,14 +297,12 @@
         initController();
     };
 
-    function ChangeStatusModel($uibModalInstance, InventoryService, inventoryObj, usersList, noty) {
+    function ChangeStatusModel($uibModalInstance, InventoryService, inventoryObj, usersList, $filter, noty) {
         var vm = this;
         vm.enableSaveBtn = true;
         vm.alerts = [];
         vm.inventoryObj = inventoryObj;
-        vm.assignObj = {
-            userId: null
-        };
+        vm.deviceObj = {};
         vm.activeUsers = [...usersList];
         vm.dateOptions = {
             formatYear: 'yy',
@@ -312,14 +310,32 @@
         };
         vm.activeUsers.unshift({ _id: "", name: "None" });
         if (vm.inventoryObj.userId) {
-            vm.assignObj.userId = vm.inventoryObj.userId;
+            vm.deviceObj.userId = vm.inventoryObj.userId;
         }
+        vm.deviceObj.action = (vm.inventoryObj.deviceStatus == "Assigned") ? 'Assign' : vm.inventoryObj.deviceStatus;
 
-        vm.saveAssignUser = function (inventoryForm) {
+        vm.saveInventoryStatus = function (inventoryForm) {
             if (inventoryForm.$valid) {
-                if (vm.inventoryObj._id) {
-                    InventoryService.assignUser(vm.inventoryObj._id, vm.assignObj).then(function (response) {
+                console.log(vm.inventoryObj);
+                console.log(vm.deviceObj);
+                vm.deviceObj.affectedDate = new Date(vm.deviceObj.affDate);
+                vm.deviceObj.affectedDate = $filter('date')(vm.deviceObj.affectedDate, "yyyy-MM-dd");
+                if (vm.inventoryObj._id && (vm.deviceObj.action == "Assign" || vm.deviceObj.action == "Unassign")) {
+                    if (vm.deviceObj.action == "Unassign") {
+                        vm.deviceObj.userId = "";
+                    }
+                    InventoryService.assignUser(vm.inventoryObj._id, vm.deviceObj).then(function (response) {
                         noty.showSuccess("Device has been assigned successfully!");
+                        $uibModalInstance.close();
+                    }, function (error) {
+                        if (error) {
+                            vm.alerts.push({ msg: error, type: 'danger' });
+                        }
+                    });
+                } else {
+                    vm.deviceObj.deviceStatus = vm.deviceObj.action;
+                    InventoryService.changeStatus(vm.inventoryObj._id, vm.deviceObj).then(function (response) {
+                        noty.showSuccess("Device status has been changed successfully!");
                         $uibModalInstance.close();
                     }, function (error) {
                         if (error) {
