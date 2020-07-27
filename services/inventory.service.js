@@ -15,6 +15,7 @@ service.updateInventory = updateInventory;
 service.deleteInventory = deleteInventory;
 service.assignUser = assignUser;
 service.changeStatus = changeStatus;
+service.getMyInventories = getMyInventories;
 
 module.exports = service;
 
@@ -149,5 +150,16 @@ function changeStatus(InventoryId, inventoryData) {
         } else {
             reject({ message: "Invalid device status value!" });
         }
+    });
+}
+
+function getMyInventories(userId) {
+    return new Promise((resolve, reject) => {
+        InventoryModel.find({ userId: mongoose.Types.ObjectId(userId) }).exec().then((data) => {
+            resolve(data);
+        }).catch((error) => {
+            console.log(error);
+            reject({ error: (error.errmsg ? error.errmsg : "Unexpected error") });
+        });
     });
 }

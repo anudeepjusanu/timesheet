@@ -143,6 +143,7 @@
             timeoffHours: 0.00,
             timeoffDays: 0.00
         };
+        vm.inventories = [];
         vm.chartColors = ['#803690', '#00ADF9', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360', '#DCDCDC'];
         vm.hoursChart = {
             "options": {
@@ -597,7 +598,16 @@
             }).catch(function (error) {
                 //FlashService.Error(error);
             });
+        }
 
+        function getMyInventory() {
+            UserService.getMyInventory().then(function (response) {
+                if (response.inventories) {
+                    vm.inventories = response.inventories;
+                }
+            }).catch(function (error) {
+                //FlashService.Error(error);
+            });
         }
 
         var init = function () {
@@ -611,6 +621,7 @@
                     vm.utilizationByMonth();
                 }
                 getMyLeaveWalletBalnce();
+                getMyInventory();
                 if ($window && $window.pushToken && vm.user.pushToken != $window.pushToken) {
                     vm.user.pushToken = $window.pushToken;
                     savePushToken();

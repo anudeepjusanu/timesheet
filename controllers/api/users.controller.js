@@ -3,6 +3,7 @@ var express = require('express');
 var router = express.Router();
 var userService = require('services/user.service');
 var leaveWalletService = require('services/leaveWallet.service');
+const InventoryService = require('../../services/inventory.service');
 
 var builder = require('botbuilder');
 var connector = new builder.ChatConnector({
@@ -33,6 +34,7 @@ router.get('/myLeaveWallet/:financeYear', getMyLeaveWallet);
 router.get('/myLeaveWalletBalance', getMyLeaveWalletBalance);
 router.get('/bot', getBotMigration);
 router.post('/bot', postBotMigration);
+router.get('/myInventory', getMyInventories);
 
 
 module.exports = router;
@@ -325,4 +327,12 @@ function postBotMigration(req, res) {
         .catch(function (err) {
             res.status(400).send(err);
         });
+}
+
+function getMyInventories(req, res) {
+    InventoryService.getMyInventories(req.user.sub).then(data => {
+        res.send({ inventories: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
 }

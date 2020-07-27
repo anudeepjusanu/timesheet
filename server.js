@@ -24,7 +24,7 @@ var connector = new builder.ChatConnector({
 var bot = new builder.UniversalBot(connector);
 
 // use JWT auth to secure the api
-app.use('/api', expressJwt({ secret: config.secret }).unless({ path: ['/api/users/authenticate', '/api/users/register', '/api/messages', '/api/users/bot'] }));
+app.use('/api', expressJwt({ secret: config.secret }).unless({ path: ['/api/users/authenticate', '/api/users/register', '/api/messages', '/api/users/bot', '/api/chatbot'] }));
 
 app.post('/api/messages', connector.listen());
 app.get('/api/messages', function (req, res) {
@@ -246,6 +246,7 @@ app.use('/api/appconfig', require('./controllers/api/appconfig.controller'));
 app.use('/api/leaves', require('./controllers/api/leaves.controller'));
 app.use('/api/skills', require('./controllers/api/skills.controller'));
 app.use('/api/inventory', require('./controllers/api/inventory.controller'));
+app.use('/api/chatbot', require('./controllers/api/chatbot.controller'));
 
 // make '/app' default route
 app.get('/', function (req, res) {

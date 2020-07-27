@@ -44,7 +44,7 @@
                     </tbody>
                 </table>
                 <div style="padding-bottom: 3px;float: right;">
-                    <a  ui-sref="myLeaves">More details</a>
+                    <a ui-sref="myLeaves">More details</a>
                 </div>
             </div>
             <!-- END WIDGET SLIDER -->
@@ -60,6 +60,38 @@
     </div>
     <!-- END WIDGETS -->
     <div class="row">
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title-box">
+                        <h3>Inventory</h3>
+                    </div>
+                </div>
+                <div class="panel-body padding-0">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th width="120px;">Device ID</th>
+                                <th width="90px;">Type</th>
+                                <th>Device Info</th>
+                                <th>Serial</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="inventory in vm.inventories">
+                                <td><strong>{{inventory.deviceId}}</strong></td>
+                                <td><strong>{{inventory.deviceType}}</strong></td>
+                                <td>
+                                    <strong>{{inventory.deviceModel}}</strong>,
+                                    <strong>{{inventory.deviceBrand}}</strong>
+                                </td>
+                                <td><strong>{{inventory.deviceSerial}}</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
         <div class="col-md-4">
             <!-- START VISITORS BLOCK -->
             <div class="panel panel-default">
@@ -70,13 +102,17 @@
                     </div>
                 </div>
                 <div class="panel-body padding-0">
-                    <canvas class="chart chart-pie" chart-colors="vm.hoursChart.colors" chart-options="vm.hoursChart.options" chart-data="vm.hoursChart.data" chart-labels="vm.hoursChart.labels">
+                    <canvas class="chart chart-pie" chart-colors="vm.hoursChart.colors"
+                        chart-options="vm.hoursChart.options" chart-data="vm.hoursChart.data"
+                        chart-labels="vm.hoursChart.labels">
                     </canvas>
                 </div>
             </div>
             <!-- END VISITORS BLOCK -->
         </div>
-        <div class="col-md-8">
+    </div>
+    <div class="row">
+        <div class="col-md-12">
             <!-- START PROJECTS BLOCK -->
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -120,15 +156,22 @@
                         </div>
                         <div class="panel-controls pull-right" style="width: 140px;">
                             <p class="input-group">
-                                <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.manpowerChart.weekDate" is-open="vm.manpowerChart.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getAllUserHoursByWeek();" readonly />
+                                <input type="text" class="form-control" uib-datepicker-popup
+                                    ng-model="vm.manpowerChart.weekDate" is-open="vm.manpowerChart.opened"
+                                    datepicker-options="vm.dateOptions" ng-required="true" close-text="Close"
+                                    ng-change="vm.getAllUserHoursByWeek();" readonly />
                                 <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default" ng-click="vm.manpowerChart.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    <button type="button" class="btn btn-default"
+                                        ng-click="vm.manpowerChart.opened=true;"><i
+                                            class="glyphicon glyphicon-calendar"></i></button>
                                 </span>
                             </p>
                         </div>
                     </div>
                     <div class="panel-body padding-0">
-                        <canvas class="chart chart-pie" chart-colors="vm.manpowerChart.colors" chart-options="vm.manpowerChart.options" chart-data="vm.manpowerChart.data" chart-labels="vm.manpowerChart.labels">
+                        <canvas class="chart chart-pie" chart-colors="vm.manpowerChart.colors"
+                            chart-options="vm.manpowerChart.options" chart-data="vm.manpowerChart.data"
+                            chart-labels="vm.manpowerChart.labels">
                         </canvas>
                     </div>
                 </div>
@@ -142,18 +185,27 @@
                         </div>
                         <div class="panel-controls pull-right" style="width: 140px; margin-left: 10px">
                             <p class="input-group">
-                                <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.projectManpower.weekDate" is-open="vm.projectManpower.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getProjectUserHoursByWeek();" readonly />
+                                <input type="text" class="form-control" uib-datepicker-popup
+                                    ng-model="vm.projectManpower.weekDate" is-open="vm.projectManpower.opened"
+                                    datepicker-options="vm.dateOptions" ng-required="true" close-text="Close"
+                                    ng-change="vm.getProjectUserHoursByWeek();" readonly />
                                 <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default" ng-click="vm.projectManpower.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    <button type="button" class="btn btn-default"
+                                        ng-click="vm.projectManpower.opened=true;"><i
+                                            class="glyphicon glyphicon-calendar"></i></button>
                                 </span>
                             </p>
                         </div>
                         <div class="panel-controls pull-right" style="width: 200px;">
-                            <select class="form-control" ng-model="vm.projectManpower.projectId" ng-options="project.projectId as project.projectName for project in vm.projects" ng-change="vm.getProjectUserHoursByWeek();" ></select>
+                            <select class="form-control" ng-model="vm.projectManpower.projectId"
+                                ng-options="project.projectId as project.projectName for project in vm.projects"
+                                ng-change="vm.getProjectUserHoursByWeek();"></select>
                         </div>
                     </div>
                     <div class="panel-body padding-0">
-                        <canvas class="chart chart-pie" chart-colors="vm.projectManpower.colors" chart-options="vm.projectManpower.options" chart-data="vm.projectManpower.data" chart-labels="vm.projectManpower.labels">
+                        <canvas class="chart chart-pie" chart-colors="vm.projectManpower.colors"
+                            chart-options="vm.projectManpower.options" chart-data="vm.projectManpower.data"
+                            chart-labels="vm.projectManpower.labels">
                         </canvas>
                     </div>
                 </div>
@@ -169,15 +221,22 @@
                         </div>
                         <div class="panel-controls pull-right" style="width: 140px; margin-left: 10px;">
                             <p class="input-group">
-                                <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.monthHoursChart.weekDate" is-open="vm.monthHoursChart.opened" datepicker-options="vm.monthOptions" ng-required="true" close-text="Close" ng-change="vm.getAllUserHoursByMonth();" readonly />
+                                <input type="text" class="form-control" uib-datepicker-popup
+                                    ng-model="vm.monthHoursChart.weekDate" is-open="vm.monthHoursChart.opened"
+                                    datepicker-options="vm.monthOptions" ng-required="true" close-text="Close"
+                                    ng-change="vm.getAllUserHoursByMonth();" readonly />
                                 <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default" ng-click="vm.monthHoursChart.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    <button type="button" class="btn btn-default"
+                                        ng-click="vm.monthHoursChart.opened=true;"><i
+                                            class="glyphicon glyphicon-calendar"></i></button>
                                 </span>
                             </p>
                         </div>
                     </div>
                     <div class="panel-body padding-0">
-                        <canvas class="chart chart-bar" chart-colors="vm.monthHeadCountChart.colors" chart-options="vm.monthHeadCountChart.options" chart-data="vm.monthHeadCountChart.data" chart-labels="vm.monthHeadCountChart.labels" chart-series="vm.monthHeadCountChart.series">
+                        <canvas class="chart chart-bar" chart-colors="vm.monthHeadCountChart.colors"
+                            chart-options="vm.monthHeadCountChart.options" chart-data="vm.monthHeadCountChart.data"
+                            chart-labels="vm.monthHeadCountChart.labels" chart-series="vm.monthHeadCountChart.series">
                         </canvas>
                     </div>
                 </div>
@@ -191,15 +250,22 @@
                         </div>
                         <div class="panel-controls pull-right" style="width: 140px; margin-left: 10px;">
                             <p class="input-group">
-                                <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.monthHoursChart.weekDate" is-open="vm.monthHoursChart.opened" datepicker-options="vm.monthOptions" ng-required="true" close-text="Close" ng-change="vm.getAllUserHoursByMonth();" readonly />
+                                <input type="text" class="form-control" uib-datepicker-popup
+                                    ng-model="vm.monthHoursChart.weekDate" is-open="vm.monthHoursChart.opened"
+                                    datepicker-options="vm.monthOptions" ng-required="true" close-text="Close"
+                                    ng-change="vm.getAllUserHoursByMonth();" readonly />
                                 <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default" ng-click="vm.monthHoursChart.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    <button type="button" class="btn btn-default"
+                                        ng-click="vm.monthHoursChart.opened=true;"><i
+                                            class="glyphicon glyphicon-calendar"></i></button>
                                 </span>
                             </p>
                         </div>
                     </div>
                     <div class="panel-body padding-0">
-                        <canvas class="chart chart-bar" chart-colors="vm.monthHoursChart.colors" chart-options="vm.monthHoursChart.options" chart-data="vm.monthHoursChart.data" chart-labels="vm.monthHoursChart.labels" chart-series="vm.monthHoursChart.series">
+                        <canvas class="chart chart-bar" chart-colors="vm.monthHoursChart.colors"
+                            chart-options="vm.monthHoursChart.options" chart-data="vm.monthHoursChart.data"
+                            chart-labels="vm.monthHoursChart.labels" chart-series="vm.monthHoursChart.series">
                         </canvas>
                     </div>
                 </div>
@@ -248,7 +314,9 @@
                         </div>-->
                     </div>
                     <div class="panel-body padding-0">
-                        <canvas class="chart chart-bar" chart-colors="vm.utzHeadCountChart.colors" chart-options="vm.utzHeadCountChart.options" chart-data="vm.utzHeadCountChart.data" chart-labels="vm.utzHeadCountChart.labels" chart-series="vm.utzHeadCountChart.series">
+                        <canvas class="chart chart-bar" chart-colors="vm.utzHeadCountChart.colors"
+                            chart-options="vm.utzHeadCountChart.options" chart-data="vm.utzHeadCountChart.data"
+                            chart-labels="vm.utzHeadCountChart.labels" chart-series="vm.utzHeadCountChart.series">
                         </canvas>
                     </div>
                 </div>
@@ -270,7 +338,9 @@
                         </div>-->
                     </div>
                     <div class="panel-body padding-0">
-                        <canvas class="chart chart-bar" chart-colors="vm.utzHoursChart.colors" chart-options="vm.utzHoursChart.options" chart-data="vm.utzHoursChart.data" chart-labels="vm.utzHoursChart.labels" chart-series="vm.utzHoursChart.series">
+                        <canvas class="chart chart-bar" chart-colors="vm.utzHoursChart.colors"
+                            chart-options="vm.utzHoursChart.options" chart-data="vm.utzHoursChart.data"
+                            chart-labels="vm.utzHoursChart.labels" chart-series="vm.utzHoursChart.series">
                         </canvas>
                     </div>
                 </div>
@@ -286,7 +356,11 @@
                         </div>
                     </div>
                     <div class="panel-body padding-0">
-                        <canvas class="chart chart-bar" chart-colors="vm.utilizationHeadCountChart.colors" chart-options="vm.utilizationHeadCountChart.options" chart-data="vm.utilizationHeadCountChart.data" chart-labels="vm.utilizationHeadCountChart.labels" chart-series="vm.utilizationHeadCountChart.series">
+                        <canvas class="chart chart-bar" chart-colors="vm.utilizationHeadCountChart.colors"
+                            chart-options="vm.utilizationHeadCountChart.options"
+                            chart-data="vm.utilizationHeadCountChart.data"
+                            chart-labels="vm.utilizationHeadCountChart.labels"
+                            chart-series="vm.utilizationHeadCountChart.series">
                         </canvas>
                     </div>
                 </div>
@@ -300,7 +374,10 @@
                         </div>
                     </div>
                     <div class="panel-body padding-0">
-                        <canvas class="chart chart-bar" chart-colors="vm.utilizationHoursChart.colors" chart-options="vm.utilizationHoursChart.options" chart-data="vm.utilizationHoursChart.data" chart-labels="vm.utilizationHoursChart.labels" chart-series="vm.utilizationHoursChart.series">
+                        <canvas class="chart chart-bar" chart-colors="vm.utilizationHoursChart.colors"
+                            chart-options="vm.utilizationHoursChart.options" chart-data="vm.utilizationHoursChart.data"
+                            chart-labels="vm.utilizationHoursChart.labels"
+                            chart-series="vm.utilizationHoursChart.series">
                         </canvas>
                     </div>
                 </div>
@@ -316,7 +393,11 @@
                         </div>
                     </div>
                     <div class="panel-body padding-0">
-                        <canvas class="chart chart-bar" chart-colors="vm.utzOrganizationHeadCountChart.colors" chart-options="vm.utzOrganizationHeadCountChart.options" chart-data="vm.utzOrganizationHeadCountChart.data" chart-labels="vm.utilizationHeadCountChart.labels" chart-series="vm.utzOrganizationHeadCountChart.series">
+                        <canvas class="chart chart-bar" chart-colors="vm.utzOrganizationHeadCountChart.colors"
+                            chart-options="vm.utzOrganizationHeadCountChart.options"
+                            chart-data="vm.utzOrganizationHeadCountChart.data"
+                            chart-labels="vm.utilizationHeadCountChart.labels"
+                            chart-series="vm.utzOrganizationHeadCountChart.series">
                         </canvas>
                     </div>
                 </div>

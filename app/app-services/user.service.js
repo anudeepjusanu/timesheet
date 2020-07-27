@@ -30,6 +30,7 @@
         service.getMyLeaveWallet = getMyLeaveWallet;
         service.getMyLeaveWalletBalance = getMyLeaveWalletBalance;
         service.updateUserLeaveBalance = updateUserLeaveBalance;
+        service.getMyInventory = getMyInventory;
 
         service.getAllUserSkillProfiles = getAllUserSkillProfiles;
         service.addUserSkill = addUserSkill;
@@ -129,6 +130,10 @@
 
         function updateUserLeaveBalance(_id, obj) {
             return $http.post('/api/leaves/updateUserLeaveBalance/' + _id, obj).then(handleSuccess, handleError);
+        }
+
+        function getMyInventory() {
+            return $http.get('/api/users/myInventory/').then(handleSuccess, handleError);
         }
 
 
