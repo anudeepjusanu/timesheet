@@ -33,16 +33,26 @@
             <a ui-sref="home"><span class="fa fa-desktop"></span> <span class="xn-text">Dashboard</span></a>
         </li>
         <li class="" ng-class="{active: activeTab === 'myTimesheets'}">
-            <a ui-sref="myTimesheets"><span class="fa fa-file-excel-o"></span> <span class="xn-text">My Timesheets</span></a>
+            <a ui-sref="myTimesheets"><span class="fa fa-file-excel-o"></span>
+                <span class="xn-text">My Timesheets</span>
+            </a>
         </li>
-        <li class="" ng-if="vm.user.admin===true || vm.user.userRole=='manager'" ng-class="{active: activeTab === 'timesheet'}">
+        <li class="" ng-class="{active: activeTab === 'myReimbursements'}">
+            <a ui-sref="myReimbursements"><span class="fa fa-file-excel-o"></span>
+                <span class="xn-text">My Reimbursements</span>
+            </a>
+        </li>
+        <li class="" ng-if="vm.user.admin===true || vm.user.userRole=='manager'"
+            ng-class="{active: activeTab === 'timesheet'}">
             <a ui-sref="timesheet"><span class="fa fa-file-excel-o"></span> <span class="xn-text">Timesheets</span></a>
         </li>
         <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'consolidatedTimesheet'}">
-            <a ui-sref="consolidatedTimesheet"><span class="fa fa-calendar"></span> <span class="xn-text">Consolidated Timesheet</span></a>
+            <a ui-sref="consolidatedTimesheet"><span class="fa fa-calendar"></span> <span class="xn-text">Consolidated
+                    Timesheet</span></a>
         </li>
         <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'leaveBalance'}">
-            <a ui-sref="leaveBalance"><img class="fa" src="app-content/assets/progress-report.png"> <span class="xn-text">Leave Balance</span></a>
+            <a ui-sref="leaveBalance"><img class="fa" src="app-content/assets/progress-report.png"> <span
+                    class="xn-text">Leave Balance</span></a>
         </li>
         <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'projectUsers'}">
             <a ui-sref="projectUsers"><span class="fa fa-users"></span> <span class="xn-text">Project Users</span></a>
@@ -51,7 +61,8 @@
             <a ui-sref="userProjects"><span class="fa fa-users"></span> <span class="xn-text">User Projects</span></a>
         </li>
         <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'projectHierarchy'}">
-            <a ui-sref="projectHierarchy"><span class="fa fa-users"></span> <span class="xn-text">Project Hierarchy</span></a>
+            <a ui-sref="projectHierarchy"><span class="fa fa-users"></span> <span class="xn-text">Project
+                    Hierarchy</span></a>
         </li>
         <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'skillProfiles'}">
             <a ui-sref="skillProfiles"><span class="fa fa-users"></span> <span class="xn-text">Skill Profiles</span></a>

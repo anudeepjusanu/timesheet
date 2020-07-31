@@ -79,6 +79,11 @@
                                 ng-class="{'sorting_asc':vm.search.orderBy=='deviceRAM'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='deviceRAM'&&vm.search.sortDESC===true}">
                                 <a ng-click="vm.sorting('deviceRAM');">RAM</a>
                             </th>
+                            <th ng-show="vm.inventoryColumns['latestComment'].selected" style="width:120px;"
+                                class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='latestComment'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='latestComment'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('latestComment');">RAM</a>
+                            </th>
                             <th ng-show="vm.inventoryColumns['purchaseDate'].selected" style="width:120px;"
                                 class="sorting"
                                 ng-class="{'sorting_asc':vm.search.orderBy=='purchaseDate'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='purchaseDate'&&vm.search.sortDESC===true}">
@@ -128,6 +133,9 @@
                             <td ng-show="vm.inventoryColumns['deviceRAM'].selected">
                                 <input class="form-control" type="text" ng-model="vm.search.deviceRAM" />
                             </td>
+                            <td ng-show="vm.inventoryColumns['latestComment'].selected">
+                                <input class="form-control" type="text" ng-model="vm.search.latestComment" />
+                            </td>
                             <td ng-show="vm.inventoryColumns['purchaseDate'].selected"></td>
                             <td></td>
                         </tr>
@@ -159,6 +167,7 @@
                             <td ng-show="vm.inventoryColumns['deviceOS'].selected">{{inventory.deviceOS}}</td>
                             <td ng-show="vm.inventoryColumns['deviceCPU'].selected">{{inventory.deviceCPU}}</td>
                             <td ng-show="vm.inventoryColumns['deviceRAM'].selected">{{inventory.deviceRAM}}</td>
+                            <td ng-show="vm.inventoryColumns['latestComment'].selected">{{inventory.latestComment}}</td>
                             <td ng-show="vm.inventoryColumns['purchaseDate'].selected">{{inventory.purchaseDate}}</td>
                             <td class="">
                                 <a class="btn btn-primary btn-icon btn-rounded" ng-click="vm.viewHistory(inventory)">

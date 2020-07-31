@@ -51,11 +51,8 @@ function addInventory(InventoryData) {
         if (InventoryData.userId) {
             InventoryData.userId = mongoose.Types.ObjectId(InventoryData.userId);
         }
-        console.log(InventoryData);
         InventoryObj = new InventoryModel(InventoryData);
         InventoryObj.save(function (error, data) {
-            console.log(error);
-            console.log(data);
             if (error) {
                 reject({ error: error });
             } else {
@@ -112,6 +109,7 @@ function assignUser(InventoryId, assignData) {
             });
             InventoryObj.userId = pdata.userId;
             InventoryObj.deviceStatus = pdata.deviceStatus;
+            InventoryObj.latestComment = assignData.comment;
             InventoryObj.save(function (error) {
                 if (error) reject({ error });
                 resolve(InventoryObj);
@@ -142,6 +140,7 @@ function changeStatus(InventoryId, inventoryData) {
                     comment: inventoryData.comment
                 });
                 InventoryObj.deviceStatus = inventoryData.deviceStatus;
+                InventoryObj.latestComment = inventoryData.comment;
                 InventoryObj.save(function (error) {
                     if (error) reject(error);
                     resolve(InventoryObj);

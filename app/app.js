@@ -1,8 +1,8 @@
-﻿(function() {
+﻿(function () {
     'use strict';
 
     angular
-        .module('app', ['ui.router','ui.toggle','ui.select', 'ngSanitize', 'angular-loading-bar', 'ui.bootstrap', 'ngTable', 'notyModule', 'chart.js', 'angular.chips'])
+        .module('app', ['ui.router', 'ui.toggle', 'ui.select', 'ngSanitize', 'angular-loading-bar', 'ui.bootstrap', 'ngTable', 'notyModule', 'chart.js', 'angular.chips'])
         .config(config)
         .run(run)
         .constant('_',
@@ -212,7 +212,7 @@
                 parent: 'layout',
                 data: { activeTab: 'projectHierarchy' }
             })
-           
+
             .state('surveys', {
                 url: '/surveys',
                 templateUrl: 'surveys/index.html',
@@ -311,29 +311,45 @@
                 parent: 'layout',
                 data: { activeTab: 'inventories' }
             })
+            .state('myReimbursements', {
+                url: '/reimbursement/myReimbursements',
+                templateUrl: 'reimbursement/myReimbursements.html',
+                controller: 'Reimbursement.IndexController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'myReimbursements' }
+            })
+            .state('teamReimbursements', {
+                url: '/reimbursement/teamReimbursements',
+                templateUrl: 'reimbursement/teamReimbursements.html',
+                controller: 'Reimbursement.TeamReimbursementController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'myReimbursements' }
+            })
         ChartJsProvider.setOptions({ colors: ['#1caf9a', '#273541'] });
     }
 
     function run($http, $rootScope, $window, UserService, $timeout, $state) {
         // add JWT token as default auth header
         $http.defaults.headers.common['Authorization'] = 'Bearer ' + $window.jwtToken;
-        $rootScope.$on('$stateChangeStart', function(event, next, params) {
+        $rootScope.$on('$stateChangeStart', function (event, next, params) {
             if (!$window.jwtToken) {
                 if (next && next.name != 'login') {
                     event.preventDefault();
                     $state.go('login');
-                } else {}
+                } else { }
 
             } else {
                 if (next && next.name == 'login') {
                     event.preventDefault();
                     $state.go('home');
-                } else {}
+                } else { }
             }
         });
         // update active tab on state change
-        $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-            $timeout(function() {
+        $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+            $timeout(function () {
                 $window.dispatchEvent(new Event("resize"));
             }, 100);
             $rootScope.activeTab = toState.data.activeTab;
@@ -341,9 +357,9 @@
     }
 
     // manually bootstrap angular after the JWT token is retrieved from the server
-    $(function() {
+    $(function () {
         // get JWT token from server
-        $.get('/app/token', function(token) {
+        $.get('/app/token', function (token) {
             window.jwtToken = token;
             //console.log(token);
             angular.bootstrap(document, ['app']);

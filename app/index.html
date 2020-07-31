@@ -4,10 +4,12 @@
 <head>
     <meta charset="utf-8" />
     <title>Wavelabs</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/angular-bootstrap-toggle@0.4.0/dist/angular-bootstrap-toggle.min.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/angular-bootstrap-toggle@0.4.0/dist/angular-bootstrap-toggle.min.css">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />
     <link href="app-content/theme.css" rel="stylesheet" />
-    <link rel='stylesheet' href='bower_components/angular-loading-bar/build/loading-bar.min.css' type='text/css' media='all' />
+    <link rel='stylesheet' href='bower_components/angular-loading-bar/build/loading-bar.min.css' type='text/css'
+        media='all' />
     <link rel='stylesheet' href='bower_components/angular-ui-select/dist/select.css' type='text/css' />
     <link rel="stylesheet" href="app-content/ng-table.min.css">
     <link rel='stylesheet' href='bower_components/angular-chips/dist/main.css' type='text/css' />
@@ -23,14 +25,14 @@
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./service-worker.js', {
-                    scope: './'
-                })
-                .then(function(registration) {
-                    registration.onupdatefound = function() {
+                scope: './'
+            })
+                .then(function (registration) {
+                    registration.onupdatefound = function () {
                         if (navigator.serviceWorker.controller) {
                             var installingWorker = registration.installing;
 
-                            installingWorker.onstatechange = function() {
+                            installingWorker.onstatechange = function () {
                                 switch (installingWorker.state) {
                                     case 'installed':
                                         break;
@@ -38,12 +40,12 @@
                                         throw new Error('The installing ' +
                                             'service worker became redundant.');
                                     default:
-                                        // Ignore
+                                    // Ignore
                                 }
                             };
                         }
                     };
-                    registration.pushManager.getSubscription().then(function(sub) {
+                    registration.pushManager.getSubscription().then(function (sub) {
                         if (sub === null) {
                             // Update UI to ask user to register for Push
                             //console.log('Not subscribed to push service!');
@@ -52,18 +54,18 @@
                             //console.log('Subscription object: ', sub);
                         }
                     });
-                }).catch(function(e) {
+                }).catch(function (e) {
                     console.log("111");
                     console.error('Error during service worker registration:', e);
                 });
             navigator.serviceWorker.ready
-                .then(function(serviceWorkerRegistration) {
+                .then(function (serviceWorkerRegistration) {
                     return serviceWorkerRegistration.pushManager.subscribe({
                         userVisibleOnly: true,
                         //applicationServerKey: urlB64ToUint8Array("AAAAv49aHos:APA91bFfcl75Rs3We0HfnK6vF4klQN-LidZClqMiP3pirWC__Zz0xJYnsU8ECH4BX-4F9m0AzC-SUBrGb4B0zGkeTsOpdb_0K57F--iedSUow0NzM2OUAHSkn9TIdJ0trxpD0Bs8Sy6cNmK4GaFuYBNyDVb7nNkbnw")
                     });
                 })
-                .then(function(subscription) {
+                .then(function (subscription) {
                     //console.log(subscription.endpoint);
                     var endpointParts = subscription.endpoint.split('/')
                     var registrationId = endpointParts[endpointParts.length - 1];
@@ -121,7 +123,8 @@
     <script type="text/javascript" src="libs/js/demo_dashboard.js"></script>
     <!-- application scripts -->
     <script src="app.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/angular-bootstrap-toggle@0.4.0/dist/angular-bootstrap-toggle.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/angular-bootstrap-toggle@0.4.0/dist/angular-bootstrap-toggle.min.js"></script>
     <script src="app-services/user.service.js"></script>
     <script src="app-services/report.service.js"></script>
     <script src="app-services/flash.service.js"></script>
@@ -143,6 +146,7 @@
     <script src="appconfig/metaSkills.controller.js"></script>
     <script src="appconfig/skillCategories.controller.js"></script>
     <script src="inventory/inventory.controller.js"></script>
+    <script src="reimbursement/reimbursement.controller.js"></script>
 
 
     <!-- END SCRIPTS -->

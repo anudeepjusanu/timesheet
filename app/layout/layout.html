@@ -46,7 +46,10 @@
                     <span class="xn-text">My Leaves</span>
                 </a>
             </li>
-
+            <li class="" ng-class="{active: activeTab === 'myReimbursements'}">
+                <a ui-sref="myReimbursements"><span class="fa fa-file-excel-o"></span>
+                    <span class="xn-text">My Reimbursements</span></a>
+            </li>
             <li class="" ng-if="vm.user.admin===true || vm.user.userRole=='manager'"
                 ng-class="{active: activeTab === 'timesheet'}">
                 <a ui-sref="timesheet"><span class="fa fa-file-excel-o"></span> <span
@@ -56,6 +59,12 @@
                 ng-class="{active: activeTab === 'timesheetApprove'}">
                 <a ui-sref="timesheetApprove"><span class="fa fa-file-excel-o"></span> <span
                         class="xn-text">Team</span></a>
+            </li>
+            <li class="" ng-if="vm.user.admin===true || vm.user.userRole=='lead' || vm.user.userRole=='manager'"
+                ng-class="{active: activeTab === 'teamReimbursements'}">
+                <a ui-sref="teamReimbursements"><span class="fa fa-file-excel-o"></span>
+                    <span class="xn-text">Team Reimbursements</span>
+                </a>
             </li>
             <!-- <li class="" ng-if="vm.user.userRole=='lead' || vm.user.userRole=='manager' || vm.user.admin===true" ng-class="{active: activeTab === 'team'}">
                 <a ui-sref="team"><span class="fa fa-file-excel-o"></span> <span class="xn-text">My Projects</span></a>
@@ -104,7 +113,6 @@
                 ng-class="{active: activeTab === 'inventories'}">
                 <a ui-sref="inventories"><span class="fa fa-list"></span> <span class="xn-text">Inventories</span></a>
             </li>
-
             <li class="xn-openable" ng-if="vm.user.admin===true">
                 <a><span class="fa fa-tags"></span> <span class="xn-text">Manage App</span></a>
                 <ul>
