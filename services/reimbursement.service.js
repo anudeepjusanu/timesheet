@@ -17,6 +17,7 @@ service.deleteReimbursement = deleteReimbursement;
 service.getReimbursementItem = getReimbursementItem;
 service.addReimbursementItem = addReimbursementItem;
 service.updateReimbursementItem = updateReimbursementItem;
+service.updateReimbursementItemFile = updateReimbursementItemFile;
 service.deleteReimbursementItem = deleteReimbursementItem;
 
 module.exports = service;
@@ -104,8 +105,18 @@ function addReimbursementItem(reimbursementId, itemData) {
 function updateReimbursementItem(itemId, itemData) {
     return new Promise((resolve, reject) => {
         itemData._id = mongoose.Types.ObjectId(itemId);
+        var itemUpdate = {
+            'items.$.billDate': itemData.billDate,
+            'items.$.billCategory': itemData.billCategory,
+            'items.$.billDescription': itemData.billDescription,
+            'items.$.billAmount': itemData.billAmount,
+            'items.$.updatedOn': new Date()
+        }
+        if (itemData.billFile) {
+            itemUpdate['items.$.billFile'] = itemData.billFile;
+        }
         ReimbursementModel.updateOne({ 'items._id': mongoose.Types.ObjectId(itemId) },
-            { $set: { 'items.$': itemData } }).exec().then((data) => {
+            { $set: itemUpdate }).exec().then((data) => {
                 resolve(data);
             }).catch((error) => {
                 reject({ error: error.errmsg });
@@ -124,11 +135,11 @@ function deleteReimbursementItem(itemId) {
     });
 }
 
-function deleteReimbursementItem(itemId) {
+function updateReimbursementItemFile(itemId, fileData) {
     return new Promise((resolve, reject) => {
-        ReimbursementModel.updateOne({ 'items._id': mongoose.Types.ObjectId(itemId) },
-            { $pull: { 'items': { _id: mongoose.Types.ObjectId(itemId) } } }).exec().then((data) => {
-                resolve(data);
+        ReimbursementModel.findOneAndUpdate({ 'items._id': mongoose.Types.ObjectId(itemId) },
+            { $set: { 'items.$.billFile': fileData.filename } }).exec().then((data) => {
+                resolve(itemData);
             }).catch((error) => {
                 reject({ error: error.errmsg });
             });

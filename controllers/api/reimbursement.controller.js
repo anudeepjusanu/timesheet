@@ -1,9 +1,21 @@
 ﻿var config = require('config.json');
 var express = require('express');
 var router = express.Router();
+const path = require('path');
 const ReimbursementService = require('../../services/reimbursement.service');
-var multer = require('multer')
-var upload = multer({ dest: 'uploads/' })
+var multer = require('multer');
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'data/reimbursements/');
+    },
+
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+var upload = multer({
+    storage: storage
+});
 
 // routes
 router.get('/', getMyReimbursements);
@@ -13,8 +25,8 @@ router.put('/:_id', updateReimbursement);
 router.delete('/:_id', deleteReimbursement);
 
 router.get('/item/:itemId', getReimbursementItem);
-router.post('/item/:_id', addReimbursementItem);
-router.put('/item/:itemId', updateReimbursementItem);
+router.post('/item/:_id', upload.single('file'), addReimbursementItem);
+router.put('/item/:itemId', upload.single('file'), updateReimbursementItem);
 router.delete('/item/:itemId', deleteReimbursementItem);
 router.post('/itemFile/:_id', upload.single('file'), updateReimbursementItemFile);
 
@@ -72,6 +84,9 @@ function getReimbursementItem(req, res) {
 }
 
 function addReimbursementItem(req, res) {
+    if (req.file && req.file.filename) {
+        req.body.billFile = req.file.filename;
+    }
     ReimbursementService.addReimbursementItem(req.params._id, req.body).then(data => {
         res.send({ reimbursement: data });
     }).catch(error => {
@@ -80,6 +95,9 @@ function addReimbursementItem(req, res) {
 }
 
 function updateReimbursementItem(req, res) {
+    if (req.file && req.file.filename) {
+        req.body.billFile = req.file.filename;
+    }
     ReimbursementService.updateReimbursementItem(req.params.itemId, req.body).then(data => {
         res.send({ reimbursement: data });
     }).catch(error => {
@@ -96,11 +114,9 @@ function deleteReimbursementItem(req, res) {
 }
 
 function updateReimbursementItemFile(req, res) {
-    console.log(req);
-    res.send({ data: req.file });
-    // ReimbursementService.updateReimbursementItemFile(req.params._id, req.body).then(data => {
-    //     res.send({ reimbursement: data });
-    // }).catch(error => {
-    //     res.status(400).send(error);
-    // });
+    ReimbursementService.updateReimbursementItemFile(req.params._id, req.file).then(data => {
+        res.send({ reimbursement: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
 }

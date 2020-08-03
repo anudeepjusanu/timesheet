@@ -17,12 +17,15 @@ var ReimbursementSchema = new Schema({
     },
     status: { type: String, default: 'Draft' },
     purpose: { type: String },
+    reimbursementFrom: { type: String },
+    reimbursementTo: { type: String },
     createdBy: { type: mongoose.ObjectId },
     createdOn: { type: Date, default: Date.now },
     items: [{
         billDate: { type: Date, default: null },
         billCategory: { type: String },
         billDescription: { type: String },
+        billFile: { type: String },
         billAmount: { type: Number },
         createdOn: { type: Date, default: Date.now },
         updatedOn: { type: Date, default: Date.now }
