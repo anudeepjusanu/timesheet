@@ -247,6 +247,7 @@ app.use('/api/leaves', require('./controllers/api/leaves.controller'));
 app.use('/api/skills', require('./controllers/api/skills.controller'));
 app.use('/api/inventory', require('./controllers/api/inventory.controller'));
 app.use('/api/chatbot', require('./controllers/api/chatbot.controller'));
+app.use('/api/reimbursement', require('./controllers/api/reimbursement.controller'));
 
 // make '/app' default route
 app.get('/', function (req, res) {
