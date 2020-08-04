@@ -1,0 +1,41 @@
+<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+    close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+    {{alert.msg}}</div>
+<div class="content-wrapper">
+    <div class="" ng-if="vm.user.admin">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Employees Reimbursements</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-condensed table-bordered table-striped" export-table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Employee ID</th>
+                            <th>Applied Date</th>
+                            <th>Business Purpose</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Total Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    <tbody>
+                        <tr ng-repeat="item in vm.empReimbursementData">
+                            <!-- <tr> -->
+                            <td>{{item.Name}}</td>
+                            <td>{{item.EmployeeID}}</td>
+                            <td>{{item.AppliedDate}}</td>
+                            <td>{{item.BusinessPurpose}}</td>
+                            <td>{{item.FromDate}}</td>
+                            <td>{{item.ToDate}}</td>
+                            <td>{{item.TotalAmount}}</td>
+                            <td><span> <i style="float:right;margin-right:15px;cursor:pointer;" class="fa fa-eye"
+                                        ng-click="vm.openTeamReimbursementModal()"></i></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

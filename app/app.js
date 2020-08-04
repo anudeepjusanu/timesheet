@@ -319,13 +319,21 @@
                 parent: 'layout',
                 data: { activeTab: 'myReimbursements' }
             })
-            .state('teamReimbursements', {
-                url: '/reimbursement/teamReimbursements',
-                templateUrl: 'reimbursement/teamReimbursements.html',
-                controller: 'Reimbursement.TeamReimbursementController',
+            .state('addMyReimbursement', {
+                url: '/reimbursement/addMyReimbursement',
+                templateUrl: 'reimbursement/addMyReimbursement.html',
+                controller: 'Reimbursement.AddMyReimbursementController',
                 controllerAs: 'vm',
                 parent: 'layout',
                 data: { activeTab: 'myReimbursements' }
+            })
+            .state('teamReimbursements', {
+                url: '/reimbursement/teamReimbursements',
+                templateUrl: 'reimbursement/teamReimbursements.html',
+                controller: 'Reimbursement.TeamReimbursementsController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'teamReimbursements' }
             })
         ChartJsProvider.setOptions({ colors: ['#1caf9a', '#273541'] });
     }

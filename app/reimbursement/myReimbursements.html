@@ -1,0 +1,43 @@
+<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+    close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+    {{alert.msg}}</div>
+<div class="content-wrapper">
+    <div class="">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">My Reimbursements</h3>
+                <a class="btn btn-primary btn-rounded pull-right" ui-sref="addMyReimbursement">Add Reimbursement</a>
+            </div>
+            <div class="panel-body tab-content">
+                <table class="table table-condensed table-bordered table-striped" export-table>
+                    <thead>
+                        <tr>
+                            <th>Reimbursement Id</th>
+                            <th>Created On</th>
+                            <th>Manager Name</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <tr ng-repeat="reimbursement in vm.reimbursements | orderBy:'name'">
+                            <td>{{reimbursement._id}}</td>
+                            <td>{{reimbursement.createdOn}}</td>
+                            <td>Praveen Pallala</td>
+                            <td>2020-07-01</td>
+                            <td>2020-07-30</td>
+                            <td>{{reimbursement.totalCost}}</td>
+                            <td>{{reimbursement.status}}<span> <i style="float:right;margin-right:15px;cursor:pointer;"
+                                        class="fa fa-eye" ng-click="vm.openMyReimbursementStatus()"></i></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
