@@ -43,23 +43,24 @@ function getReimbursement(ReimbursementId) {
     });
 }
 
-function addReimbursement(ReimbursementData) {
+function addReimbursement(reimbursementData) {
     return new Promise((resolve, reject) => {
-        if (ReimbursementData.userId) {
-            ReimbursementData.userId = mongoose.Types.ObjectId(ReimbursementData.userId);
+        if (reimbursementData.userId) {
+            reimbursementData.userId = mongoose.Types.ObjectId(reimbursementData.userId);
         }
-        ReimbursementObj = new ReimbursementModel(ReimbursementData);
-        ReimbursementObj.save(function (error, data) {
+        reimbursementObj = new ReimbursementModel(reimbursementData);
+        reimbursementObj.save(function (error, data) {
             if (error) {
-                reject({ error: error });
+                reject({ error: error, reimbursementObj: reimbursementObj });
             } else {
-                ReimbursementModel.updateOne({ _id: mongoose.Types.ObjectId(ReimbursementModel._id) }, {
-                    $set: { "totalCost": { $sum: "$items.billAmount" } }
-                }).exec().then((response) => {
-                    resolve(data);
-                }).catch((error) => {
-                    reject({ error: error.errmsg });
-                });
+                resolve(data);
+                // ReimbursementModel.updateOne({ _id: mongoose.Types.ObjectId(ReimbursementModel._id) }, {
+                //     $set: { "totalCost": { $sum: "$items.billAmount" } }
+                // }).exec().then((response) => {
+                //     resolve(data);
+                // }).catch((error) => {
+                //     reject({ error: error.errmsg });
+                // });
             }
         });
     });

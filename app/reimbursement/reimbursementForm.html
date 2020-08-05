@@ -12,41 +12,41 @@
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-10">
-            <form class="form-horizontal" name="vm.assignForm">
+            <form class="form-horizontal" id="reimburseForm" name="vm.assignForm">
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Employee Name</label>
                     <div class="col-md-6 col-xs-12">
-                        <input type="text" required="true" ng-disabled="true" ng-model="vm.reimbursement.name"
+                        <input type="text" required="true" ng-disabled="true" ng-model="vm.reimbursementObj.name"
                             class="form-control" />
                     </div>
                 </div>
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Employee ID</label>
                     <div class="col-md-6 col-xs-12">
-                        <input type="text" required="true" ng-disabled="true" ng-model="vm.reimbursement.employeeId"
+                        <input type="text" required="true" ng-disabled="true" ng-model="vm.reimbursementObj.employeeId"
                             class="form-control" />
                     </div>
                 </div>
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Project</label>
                     <div class="col-md-6 col-xs-12">
-                        <select class="form-control" ng-model="vm.reimbursement.projectId"
+                        <select class="form-control" ng-model="vm.reimbursementObj.projectId"
                             ng-options="project.projectId as project.projectName for project in vm.user.projects"
-                            ng-change="vm.changeManager(vm.reimbursement.projectId)">
+                            ng-change="vm.changeManager(vm.reimbursementObj.projectId)">
                         </select>
                     </div>
                 </div>
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Manager Name</label>
                     <div class="col-md-6 col-xs-12">
-                        <input type="text" required="true" ng-disabled="true" ng-model="vm.reimbursement.managerName"
+                        <input type="text" required="true" ng-disabled="true" ng-model="vm.reimbursementObj.managerName"
                             class="form-control" />
                     </div>
                 </div>
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Department</label>
                     <div class="col-md-6 col-xs-12">
-                        <input type="text" ng-model="vm.reimbursement.department" class="form-control" />
+                        <input type="text" ng-model="vm.reimbursementObj.department" class="form-control" />
                     </div>
                 </div>
                 <div class="form-group required">
@@ -54,7 +54,7 @@
                     <div class="col-md-2 col-xs-12">
                         <p class="input-group">
                             <input type="text" id="fromDate" class="form-control" uib-datepicker-popup
-                                ng-model="vm.reimbursement.fromDate" is-open="vm.fromDateOpened"
+                                ng-model="vm.reimbursementObj.reimbursementFrom" is-open="vm.fromDateOpened"
                                 datepicker-options="vm.dateOptions" close-text="Close" />
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default"
@@ -67,7 +67,7 @@
                     <div class="col-md-2 col-xs-12">
                         <p class="input-group">
                             <input type="text" id="toDate" class="form-control" uib-datepicker-popup
-                                ng-model="vm.reimbursement.toDate" is-open="vm.toDateOpened"
+                                ng-model="vm.reimbursementObj.reimbursementTo" is-open="vm.toDateOpened"
                                 datepicker-options="vm.dateOptions" close-text="Close" />
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default"
@@ -80,7 +80,7 @@
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Business Purpose</label>
                     <div class="col-md-6 col-xs-12">
-                        <td><textarea class="form-control" ng-model="vm.reimbursement.businessPurpose"
+                        <td><textarea class="form-control" ng-model="vm.reimbursementObj.purpose"
                                 placeholder="Enter your purpose" rows="2"></textarea></td>
                     </div>
                 </div>
@@ -96,7 +96,7 @@
                     ng-click="vm.addBillDate($index,vm.user)">Add Receipt</button><br />
                 <div class="col-md-12">
                     <table id="" class="table">
-                        <tr ng-if="vm.reimbursement.items.length > 0">
+                        <tr ng-if="vm.reimbursementObj.items.length > 0">
                             <th>Date</th>
                             <th>Category</th>
                             <th>Cost</th>
@@ -105,7 +105,7 @@
                             <th></th>
                             <th></th>
                         </tr>
-                        <tr ng-repeat="receipt in vm.reimbursement.items" class="">
+                        <tr ng-repeat="receipt in vm.reimbursementObj.items" class="">
                             <td>
                                 <p class="input-group">
                                     <input type="text" class="form-control" uib-datepicker-popup
@@ -131,7 +131,7 @@
                                     style="width: 200px;" />
                             </td>
                             <td>
-                                <button ng-click="vm.saveReimbursementItem(receipt, $index)"
+                                <button ng-click="vm.saveReimbursementItem(receipt, vm.reimbursementObj._id, $index)"
                                     class="btn btn-primary">Save</button>
                                 <!-- <button ng-click="uploadFile($index)" class="btn btn-primary">Upload File</button> -->
                             </td>
@@ -144,9 +144,10 @@
             </div>
             <div class="text-center">
                 <button class="btn btn-primary" type="button" ng-disabled="!vm.assignForm.$valid"
-                    ng-click="vm.saveAsDraft(vm.assignForm, vm.reimbursement, $index)">Save As Draft</button>
+                    ng-click="vm.saveAsDraft(vm.assignForm, vm.reimbursementObj, $index)">Save As Draft</button>
                 <button class="btn btn-success" type="button" ng-disabled="!vm.assignForm.$valid"
-                    ng-click="vm.save(vm.assignForm, vm.reimbursement, $index)">Save Reimbursement</button>
+                    ng-click="vm.saveReimbursement(vm.assignForm, vm.reimbursementObj, $index)">Save
+                    Reimbursement</button>
                 <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
             </div>
             </form>

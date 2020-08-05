@@ -82,56 +82,90 @@
         vm.user = {};
         vm.alerts = [];
         vm.categories = ReimbursementService.getReimbursementCategories();
-        vm.reimbursement = {
+        vm.reimbursementObj = {
             items: []
         };
 
         vm.changeManager = function (projectID) {
             console.log("projectID", projectID);
-            vm.reimbursement.managerName = vm.user.projects.find(obj => obj.projectId == projectID).ownerName;
+            vm.reimbursementObj.managerName = vm.user.projects.find(obj => obj.projectId == projectID).ownerName;
         }
 
         vm.addBillDate = function (index, user) {
-            if (!vm.reimbursement.items) {
-                vm.reimbursement.items = [];
+            if (!vm.reimbursementObj.items) {
+                vm.reimbursementObj.items = [];
             }
-            vm.reimbursement.items.push({ "file": vm.myFile });
+            vm.reimbursementObj.items.push({ "file": vm.myFile });
         }
 
         vm.deleteBillDate = function (billDate, index) {
-            vm.reimbursement.items.splice(index, 1);
+            vm.reimbursementObj.items.splice(index, 1);
         }
 
-        vm.saveReimbursement = function (form, reimbursement, index) {
-
+        vm.saveReimbursement = function (form, reimbursementObj, index) {
+            var reimbursementFrom = $filter('date')(reimbursementObj.reimbursementFrom, "yyyy-MM-dd");
+            var reimbursementTo = $filter('date')(reimbursementObj.reimbursementTo, "yyyy-MM-dd");
+            var formData = new FormData();
+            formData.append('approveUserId', reimbursementObj.projectId);
+            formData.append('reimbursementFrom', reimbursementFrom);
+            formData.append('reimbursementTo', reimbursementTo);
+            formData.append('purpose', reimbursementObj.purpose);
+            if (reimbursementObj._id) {
+                ReimbursementService.updateReimbursement(reimbursementObj._id, formData).then(function (response) {
+                    noty.showSuccess("Reimbursement has been updated successfully!");
+                }, function (error) {
+                    if (error) {
+                        vm.alerts.push({ msg: error, type: 'danger' });
+                    }
+                });
+            } else {
+                ReimbursementService.addReimbursement(formData).then(function (response) {
+                    console.log(response.reimbursement);
+                    if (response.reimbursement) {
+                        _.each(reimbursementObj.items, function (itemData) {
+                            vm.saveReimbursementItem(itemData, response.reimbursement._id);
+                        });
+                    }
+                    noty.showSuccess("Reimbursement has been added successfully!");
+                }, function (error) {
+                    if (error) {
+                        vm.alerts.push({ msg: error, type: 'danger' });
+                    }
+                });
+            }
         };
 
-        vm.saveReimbursementItem = function (itemData, itemIndex) {
+        vm.saveReimbursementItem = function (itemData, reimbursementId, itemIndex) {
             var itemFormData = new FormData();
             itemFormData.append('file', itemData.file);
             itemFormData.append('billDate', itemData.billDate);
             itemFormData.append('billCategory', itemData.billCategory);
             itemFormData.append('billAmount', itemData.billAmount);
             itemFormData.append('billDescription', itemData.billDescription);
-            ReimbursementService.updateReimbursementItem('5f28017ffb3d756bac10ae6c', itemFormData).then(function (response) {
-                noty.showSuccess("Reimbursement bill item has been updated successfully!");
-            }, function (error) {
-                if (error) {
-                    vm.alerts.push({ msg: error, type: 'danger' });
-                }
-            });
+            if (itemData._id) {
+                ReimbursementService.updateReimbursementItem(itemData._id, itemFormData).then(function (response) {
+                    noty.showSuccess("Reimbursement bill item has been updated successfully!");
+                }, function (error) {
+                    if (error) {
+                        vm.alerts.push({ msg: error, type: 'danger' });
+                    }
+                });
+            } else {
+                ReimbursementService.addReimbursementItem(reimbursementId, itemFormData).then(function (response) {
+                    noty.showSuccess("Reimbursement bill item has been updated successfully!");
+                }, function (error) {
+                    if (error) {
+                        vm.alerts.push({ msg: error, type: 'danger' });
+                    }
+                });
+            }
         }
 
         function initController() {
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
-                if (false) {
-                    vm.isNew = false;
-                } else {
-                    vm.isNew = true;
-                }
-                vm.reimbursement.name = vm.user.name;
-                vm.reimbursement.employeeId = vm.user.employeeId;
+                vm.reimbursementObj.name = vm.user.name;
+                vm.reimbursementObj.employeeId = vm.user.employeeId;
             });
         }
         initController();
@@ -141,52 +175,9 @@
         var vm = this;
         vm.user = {};
 
-        /**Dummy  table data */
-
-        // vm.empReimbursementData = [
-        //     {
-        //         "Name": "Nagaraju Kommanaboyina",
-        //         "EmployeeID": "WL11274",
-        //         "AppliedDate": "01-07-2020",
-        //         "BusinessPurpose": "Client Meeting",
-        //         "FromDate": "01-06-2020",
-        //         "ToDate": "30-06-2020",
-        //         "TotalAmount": "5000"
-        //     },
-        //     {
-        //         "Name": "Nagaraju Kommanaboyina",
-        //         "EmployeeID": "WL11274",
-        //         "AppliedDate": "01-07-2020",
-        //         "BusinessPurpose": "Client Meeting",
-        //         "FromDate": "01-06-2020",
-        //         "ToDate": "30-06-2020",
-        //         "TotalAmount": "5000"
-        //     },
-        //     {
-        //         "Name": "Nagaraju Kommanaboyina",
-        //         "EmployeeID": "WL11274",
-        //         "AppliedDate": "01-07-2020",
-        //         "BusinessPurpose": "Client Meeting",
-        //         "FromDate": "01-06-2020",
-        //         "ToDate": "30-06-2020",
-        //         "TotalAmount": "5000"
-        //     },
-        //     {
-        //         "Name": "Nagaraju Kommanaboyina",
-        //         "EmployeeID": "WL11274",
-        //         "AppliedDate": "01-07-2020",
-        //         "BusinessPurpose": "Client Meeting",
-        //         "FromDate": "01-06-2020",
-        //         "ToDate": "30-06-2020",
-        //         "TotalAmount": "5000"
-        //     }
-        // ];
-
         function getMyReimbursements() {
             ReimbursementService.getMyReimbursements().then(function (response) {
-                console.log("reimbursements", response);
                 vm.teamReimbursements = response.reimbursements;
-                console.log("vm.teamReimbursements", vm.teamReimbursements);
                 for (var i = 0; i < vm.teamReimbursements.length; i++) {
                     vm.teamReimbursements[i].createdOn = JSON.stringify(vm.teamReimbursements[i].createdOn).split('T')[0].slice(1);
                 }
