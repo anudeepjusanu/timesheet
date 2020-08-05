@@ -142,6 +142,8 @@
             </div>
             <div class="text-center">
                 <button class="btn btn-primary" type="button" ng-disabled="!vm.assignForm.$valid"
+                    ng-click="vm.saveAsDraft(vm.assignForm, vm.myReimbursementsObj, $index)">Save As Draft</button>
+                <button class="btn btn-success" type="button" ng-disabled="!vm.assignForm.$valid"
                     ng-click="vm.save(vm.assignForm, vm.myReimbursementsObj, $index)">Save</button>
                 <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
             </div>

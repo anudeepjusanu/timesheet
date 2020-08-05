@@ -22,7 +22,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
                         <tr ng-repeat="reimbursement in vm.reimbursements | orderBy:'name'">
                             <td>{{reimbursement._id}}</td>
                             <td>{{reimbursement.createdOn}}</td>
@@ -38,6 +37,4 @@
             </div>
         </div>
     </div>
-</div>
-</div>
 </div>
