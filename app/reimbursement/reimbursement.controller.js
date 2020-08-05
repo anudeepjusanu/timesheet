@@ -328,8 +328,8 @@
                 controller: 'Reimbursement.TeamReimbursementsModalController',
                 controllerAs: 'vm',
                 size: 'lg',
-                resolve : {
-                    reimbursementId : function() {
+                resolve: {
+                    reimbursementId: function () {
                         return reimbursementId;
                     }
                 }
@@ -399,6 +399,23 @@
                 console.log(error);
             });
         };
+
+        vm.validBill = function (index) {
+            for (var i = 0; i < vm.reimbursement.items.length; i++) {
+                if (i == index) {
+                    vm.reimbursement.items[i].validBill = true;
+                    vm.reimbursement.items[i].invalidBill = false;
+                }
+            }
+        }
+        vm.invalidBill = function (index) {
+            for (var i = 0; i < vm.reimbursement.items.length; i++) {
+                if (i == index) {
+                    vm.reimbursement.items[i].validBill = false;
+                    vm.reimbursement.items[i].invalidBill = true;
+                }
+            }
+        }
 
         vm.accept = function (form, reimbursement) {
         };
