@@ -344,6 +344,11 @@
                 controller: 'Reimbursement.TeamReimbursementsModalController',
                 controllerAs: 'vm',
                 size: 'lg',
+                resolve : {
+                    reimbursementId : function() {
+                        return reimbursementId;
+                    }
+                }
             });
         }
 
@@ -356,12 +361,13 @@
         initController();
     };
 
-    function TeamReimbursementsModalController(UserService, ReimbursementService, _, $uibModal, $uibModalInstance, $filter, $state) {
+    function TeamReimbursementsModalController(UserService, ReimbursementService, reimbursementId, _, $uibModal, $uibModalInstance, $filter, $state) {
         var vm = this;
         vm.user = {};
         vm.myReimbursementsObj = {
             items: []
         };
+        vm.reimbursementId = reimbursementId;
 
         // vm.employeeReceiptData = [
         //     {
@@ -396,8 +402,7 @@
 
 
         function getMyReimbursementById() {
-            let reimbursementId = '5f27c557517e74bf473d8fcc';
-            ReimbursementService.getReimbursement(reimbursementId).then(function (response) {
+            ReimbursementService.getReimbursement(vm.reimbursementId).then(function (response) {
                 console.log("response", response);
                 vm.reimbursement = response.reimbursement;
                 console.log("vm.reimbursement", vm.reimbursement);
