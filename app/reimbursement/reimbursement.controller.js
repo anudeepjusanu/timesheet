@@ -5,7 +5,7 @@
         .module('app')
         .controller('Reimbursement.IndexController', MyReimbursementsController)
         .controller('Reimbursement.TeamReimbursementsController', TeamReimbursementsController)
-        .controller('Reimbursement.AddMyReimbursementController', AddMyReimbursementController)
+        .controller('Reimbursement.ReimbursementFormController', ReimbursementFormController)
         .controller('Reimbursement.TeamReimbursementsModalController', TeamReimbursementsModalController)
         .controller('Reimbursement.MyReimbursementStatusController', MyReimbursementStatusController)
         .directive('fileDirective', FileDirective) //Directive to handel file
@@ -115,56 +115,36 @@
         initController();
     };
 
-    function AddMyReimbursementController(UserService, $scope, ReimbursementService, $timeout, _, $filter, $state) {
+    function ReimbursementFormController(UserService, $scope, ReimbursementService, noty, $timeout, _, $filter, $state) {
         var vm = this;
         vm.user = {};
-        vm.categories = [
-            { "categoryTypeId": "Business Cards", "categoryTypeVal": "Business Cards" },
-            { "categoryTypeId": "Business Meals", "categoryTypeVal": "Business Meals" },
-            { "categoryTypeId": "Dues", "categoryTypeVal": "Dues" },
-            { "categoryTypeId": "Legal Fees", "categoryTypeVal": "Legal Fees" },
-            { "categoryTypeId": "License Fees", "categoryTypeVal": "License Fees" },
-            { "categoryTypeId": "Mileage", "categoryTypeVal": "Mileage" },
-            { "categoryTypeId": "Office Supplies", "categoryTypeVal": "Office Supplies" },
-            { "categoryTypeId": "Passport fee", "categoryTypeVal": "Passport fee" },
-            { "categoryTypeId": "Postage", "categoryTypeVal": "Postage" },
-            { "categoryTypeId": "Printer Cartridges", "categoryTypeVal": "Printer Cartridges" },
-            { "categoryTypeId": "Printer Paper", "categoryTypeVal": "Printer Paper" },
-            { "categoryTypeId": "Software", "categoryTypeVal": "Software" },
-            { "categoryTypeId": "Stationery", "categoryTypeVal": "Stationery" },
-            { "categoryTypeId": "Subscriptions", "categoryTypeVal": "Subscriptions" },
-            { "categoryTypeId": "Telephones", "categoryTypeVal": "Telephones" },
-            { "categoryTypeId": "Tools", "categoryTypeVal": "Tools" },
-            { "categoryTypeId": "Training Fees", "categoryTypeVal": "Training Fees" },
-            { "categoryTypeId": "Travel", "categoryTypeVal": "Travel" },
-            { "categoryTypeId": "Work Clothing", "categoryTypeVal": "Work Clothing" },
-            { "categoryTypeId": "Other", "categoryTypeVal": "Other" }
-        ];
-        vm.myReimbursementsObj = {
+        vm.alerts = [];
+        vm.categories = ReimbursementService.getReimbursementCategories();
+        vm.reimbursement = {
             items: []
         };
 
         vm.changeManager = function (projectID) {
             console.log("projectID", projectID);
-            vm.myReimbursementsObj.managerName = vm.user.projects.find(obj => obj.projectId == projectID).ownerName;
+            vm.reimbursement.managerName = vm.user.projects.find(obj => obj.projectId == projectID).ownerName;
         }
 
         vm.addBillDate = function (index, user) {
-            if (!vm.myReimbursementsObj.items) {
-                vm.myReimbursementsObj.items = [];
+            if (!vm.reimbursement.items) {
+                vm.reimbursement.items = [];
             }
-            vm.myReimbursementsObj.items.push({ "file": vm.myFile });
+            vm.reimbursement.items.push({ "file": vm.myFile });
         }
 
         vm.deleteBillDate = function (billDate, index) {
-            vm.myReimbursementsObj.items.splice(index, 1);
+            vm.reimbursement.items.splice(index, 1);
         }
 
         $scope.uploadFile = function (index) {
-            console.log("index", index, vm.myReimbursementsObj.items);
-            for (var i = 0; i < vm.myReimbursementsObj.items.length; i++) {
-                console.log("vm.myReimbursementsObj.items[index]", vm.myReimbursementsObj.items[index])
-                vm.myReimbursementsObj.items[index].file = vm.myFile;
+            console.log("index", index, vm.reimbursement.items);
+            for (var i = 0; i < vm.reimbursement.items.length; i++) {
+                console.log("vm.reimbursement.items[index]", vm.reimbursement.items[index])
+                vm.reimbursement.items[index].file = vm.myFile;
 
             }
             /**Reference to File Handling **/
@@ -198,7 +178,9 @@
             }).then(function (response) {
                 console.log("reimbursement", response);
                 vm.reimbursement = response.reimbursement;
+                noty.showSuccess("Receipt information saved successfully!");
             }, function (error) {
+                vm.alerts.push({ msg: error, type: 'danger' });
                 console.log(error);
             });
 
@@ -226,18 +208,18 @@
         };
 
         /**To save Reimbursement data */
-        vm.save = function (form, myReimbursementsObj, index) {
-            console.log('myReimbursementsObj', myReimbursementsObj);
-            console.log("data", JSON.stringify(myReimbursementsObj));
-            myReimbursementsObj.fromDate = JSON.stringify(myReimbursementsObj.fromDate).split('T')[0].slice(1);
-            myReimbursementsObj.toDate = JSON.stringify(myReimbursementsObj.toDate).split('T')[0].slice(1);
-            for (var i = 0; i < myReimbursementsObj.items.length; i++) {
-                myReimbursementsObj.items[i].billDate = JSON.stringify(myReimbursementsObj.items[i].billDate).split('T')[0].slice(1);
-                delete myReimbursementsObj.items[i].startOpened;
-                delete myReimbursementsObj.items[i].$$hashKey;
+        vm.save = function (form, reimbursement, index) {
+            console.log('reimbursement', reimbursement);
+            console.log("data", JSON.stringify(reimbursement));
+            reimbursement.fromDate = JSON.stringify(reimbursement.fromDate).split('T')[0].slice(1);
+            reimbursement.toDate = JSON.stringify(reimbursement.toDate).split('T')[0].slice(1);
+            for (var i = 0; i < reimbursement.items.length; i++) {
+                reimbursement.items[i].billDate = JSON.stringify(reimbursement.items[i].billDate).split('T')[0].slice(1);
+                delete reimbursement.items[i].startOpened;
+                delete reimbursement.items[i].$$hashKey;
             }
-            console.log("Final data", myReimbursementsObj);
-            console.log("Final data", JSON.stringify(myReimbursementsObj));
+            console.log("Final data", reimbursement);
+            console.log("Final data", JSON.stringify(reimbursement));
             console.log("index", index)
 
             /**Reference to File Handling **/
@@ -270,8 +252,8 @@
                 } else {
                     vm.isNew = true;
                 }
-                vm.myReimbursementsObj.name = vm.user.name;
-                vm.myReimbursementsObj.employeeId = vm.user.employeeId;
+                vm.reimbursement.name = vm.user.name;
+                vm.reimbursement.employeeId = vm.user.employeeId;
                 console.log("user", user);
             });
         }
@@ -366,7 +348,7 @@
     function TeamReimbursementsModalController(UserService, ReimbursementService, reimbursementId, _, $uibModal, $uibModalInstance, $filter, $state) {
         var vm = this;
         vm.user = {};
-        vm.myReimbursementsObj = {
+        vm.reimbursement = {
             items: []
         };
         vm.reimbursementId = reimbursementId;
@@ -418,7 +400,7 @@
             });
         };
 
-        vm.accept = function (form, myReimbursementsObj) {
+        vm.accept = function (form, reimbursement) {
         };
 
         vm.reject = function () {
@@ -428,9 +410,9 @@
         function initController() {
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
-                vm.myReimbursementsObj.name = vm.user.name;
-                vm.myReimbursementsObj.id = vm.user.employeeId;
-                vm.myReimbursementsObj.managerName = vm.user.projects[vm.user.projects.length - 1].ownerName;
+                vm.reimbursement.name = vm.user.name;
+                vm.reimbursement.id = vm.user.employeeId;
+                vm.reimbursement.managerName = vm.user.projects[vm.user.projects.length - 1].ownerName;
                 console.log("user", user);
             });
             getMyReimbursementById()

@@ -62,7 +62,28 @@
         }
 
         function getReimbursementCategories() {
-            return [];
+            return [
+                { "categoryTypeId": "Business Cards", "categoryTypeVal": "Business Cards" },
+                { "categoryTypeId": "Business Meals", "categoryTypeVal": "Business Meals" },
+                { "categoryTypeId": "Dues", "categoryTypeVal": "Dues" },
+                { "categoryTypeId": "Legal Fees", "categoryTypeVal": "Legal Fees" },
+                { "categoryTypeId": "License Fees", "categoryTypeVal": "License Fees" },
+                { "categoryTypeId": "Mileage", "categoryTypeVal": "Mileage" },
+                { "categoryTypeId": "Office Supplies", "categoryTypeVal": "Office Supplies" },
+                { "categoryTypeId": "Passport fee", "categoryTypeVal": "Passport fee" },
+                { "categoryTypeId": "Postage", "categoryTypeVal": "Postage" },
+                { "categoryTypeId": "Printer Cartridges", "categoryTypeVal": "Printer Cartridges" },
+                { "categoryTypeId": "Printer Paper", "categoryTypeVal": "Printer Paper" },
+                { "categoryTypeId": "Software", "categoryTypeVal": "Software" },
+                { "categoryTypeId": "Stationery", "categoryTypeVal": "Stationery" },
+                { "categoryTypeId": "Subscriptions", "categoryTypeVal": "Subscriptions" },
+                { "categoryTypeId": "Telephones", "categoryTypeVal": "Telephones" },
+                { "categoryTypeId": "Tools", "categoryTypeVal": "Tools" },
+                { "categoryTypeId": "Training Fees", "categoryTypeVal": "Training Fees" },
+                { "categoryTypeId": "Travel", "categoryTypeVal": "Travel" },
+                { "categoryTypeId": "Work Clothing", "categoryTypeVal": "Work Clothing" },
+                { "categoryTypeId": "Other", "categoryTypeVal": "Other" }
+            ];
         }
 
         // private functions

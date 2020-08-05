@@ -319,10 +319,10 @@
                 parent: 'layout',
                 data: { activeTab: 'myReimbursements' }
             })
-            .state('addMyReimbursement', {
-                url: '/reimbursement/addMyReimbursement',
-                templateUrl: 'reimbursement/addMyReimbursement.html',
-                controller: 'Reimbursement.AddMyReimbursementController',
+            .state('reimbursementForm', {
+                url: '/reimbursement/ReimbursementForm',
+                templateUrl: 'reimbursement/reimbursementForm.html',
+                controller: 'Reimbursement.ReimbursementFormController',
                 controllerAs: 'vm',
                 parent: 'layout',
                 data: { activeTab: 'myReimbursements' }
