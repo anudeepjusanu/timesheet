@@ -37,30 +37,30 @@
         };
     }
 
-    /**Service to File UPLOAD */
-    // function FileUploadService($http, $q) {
-    //     // uploadFileToUrl = function(file, uploadUrl) {
-    //     uploadFileToUrl = function (file, uploadUrl) {
-    //         //FormData, object of key/value pair for form fields and values
-    //         var fileFormData = new FormData();
-    //         fileFormData.append('file', file);
+    /**Reference Service to File UPLOAD */
+    function FileUploadService($http, $q) {
+        // uploadFileToUrl = function(file, uploadUrl) {
+        uploadFileToUrl = function (file, uploadUrl) {
+            //FormData, object of key/value pair for form fields and values
+            var fileFormData = new FormData();
+            fileFormData.append('file', file);
 
-    //         var deffered = $q.defer();
-    //         $http.post(uploadUrl, fileFormData, {
-    //             transformRequest: angular.identity,
-    //             headers: { 'Content-Type': undefined }
+            var deffered = $q.defer();
+            $http.post(uploadUrl, fileFormData, {
+                transformRequest: angular.identity,
+                headers: { 'Content-Type': undefined }
 
-    //         }).success(function (response) {
-    //             deffered.resolve(response);
+            }).success(function (response) {
+                deffered.resolve(response);
 
-    //         }).error(function (response) {
-    //             deffered.reject(response);
-    //         });
+            }).error(function (response) {
+                deffered.reject(response);
+            });
 
-    //         return deffered.promise;
-    //     }
-    //     //  }
-    // }
+            return deffered.promise;
+        }
+        //  }
+    }
 
     function MyReimbursementsController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
         var vm = this;
@@ -167,7 +167,7 @@
                 vm.myReimbursementsObj.items[index].file = vm.myFile;
 
             }
-            /** File Handling **/
+            /**Reference to File Handling **/
             var file = vm.myFile;
             console.log("file", file)
             // var uploadUrl = "../server/service.php", //Url of webservice/api/server
@@ -203,7 +203,7 @@
             });
 
 
-            /**File handling code */
+            /**Reference to File handling code */
             // file.upload = Upload.upload({
             //     url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
             //     data: { username: receipt.billDate, file: file },
@@ -240,7 +240,7 @@
             console.log("Final data", JSON.stringify(myReimbursementsObj));
             console.log("index", index)
 
-            /**File Handling **/
+            /**Reference to File Handling **/
             var file = vm.myFile;
             console.log("file", file)
             // var uploadUrl = "../server/service.php", //Url of webservice/api/server
@@ -281,6 +281,8 @@
     function TeamReimbursementsController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
         var vm = this;
         vm.user = {};
+
+        /**Dummy  table data */
 
         // vm.empReimbursementData = [
         //     {
@@ -369,6 +371,7 @@
         };
         vm.reimbursementId = reimbursementId;
 
+        /**Dummy  table data */
         // vm.employeeReceiptData = [
         //     {
         //         "Date": "2020-01-06",
