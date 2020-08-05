@@ -23,8 +23,8 @@
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Employee ID</label>
                     <div class="col-md-6 col-xs-12">
-                        <input type="text" required="true" ng-disabled="true"
-                            ng-model="vm.reimbursement.employeeId" class="form-control" />
+                        <input type="text" required="true" ng-disabled="true" ng-model="vm.reimbursement.employeeId"
+                            class="form-control" />
                     </div>
                 </div>
                 <div class="form-group required">
@@ -39,8 +39,8 @@
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Manager Name</label>
                     <div class="col-md-6 col-xs-12">
-                        <input type="text" required="true" ng-disabled="true"
-                            ng-model="vm.reimbursement.managerName" class="form-control" />
+                        <input type="text" required="true" ng-disabled="true" ng-model="vm.reimbursement.managerName"
+                            class="form-control" />
                     </div>
                 </div>
                 <div class="form-group required">
@@ -127,11 +127,13 @@
                             <td><textarea class="form-control" ng-model="receipt.billDescription"
                                     placeholder="Enter Description" rows="1" style="width: 150px;"></textarea></td>
                             <td>
-                                <input type="file" file-directive="vm.myFile" class="form-control" id="myFileField"
+                                <input type="file" file-model="receipt.file" class="form-control"
                                     style="width: 200px;" />
                             </td>
                             <td>
-                                <button ng-click="uploadFile($index)" class="btn btn-primary">Upload File</button>
+                                <button ng-click="vm.saveReimbursementItem(receipt, $index)"
+                                    class="btn btn-primary">Save</button>
+                                <!-- <button ng-click="uploadFile($index)" class="btn btn-primary">Upload File</button> -->
                             </td>
                             <td>
                                 <a ng-click="vm.deleteBillDate(billDate, $index)"><span class="fa fa-times"></span></a>

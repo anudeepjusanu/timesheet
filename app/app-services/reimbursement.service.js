@@ -30,11 +30,17 @@
         }
 
         function addReimbursement(formData) {
-            return $http.post('/api/reimbursement/', formData).then(handleSuccess, handleError);
+            return $http.post('/api/reimbursement/', formData, {
+                transformRequest: angular.identity,
+                headers: { 'Content-Type': undefined }
+            }).then(handleSuccess, handleError);
         }
 
         function updateReimbursement(reimbursementId, formData) {
-            return $http.put('/api/reimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
+            return $http.put('/api/reimbursement/' + reimbursementId, formData, {
+                transformRequest: angular.identity,
+                headers: { 'Content-Type': undefined }
+            }).then(handleSuccess, handleError);
         }
 
         function deleteReimbursement(reimbursementId) {
@@ -46,15 +52,24 @@
         }
 
         function addReimbursementItem(reimbursementId, formData) {
-            return $http.post('/api/reimbursement/item/' + reimbursementId, formData).then(handleSuccess, handleError);
+            return $http.post('/api/reimbursement/item/' + reimbursementId, formData, {
+                transformRequest: angular.identity,
+                headers: { 'Content-Type': undefined }
+            }).then(handleSuccess, handleError);
         }
 
         function updateReimbursementItem(itemId, formData) {
-            return $http.put('/api/reimbursement/item/' + itemId, formData).then(handleSuccess, handleError);
+            return $http.put('/api/reimbursement/item/' + itemId, formData, {
+                transformRequest: angular.identity,
+                headers: { 'Content-Type': undefined }
+            }).then(handleSuccess, handleError);
         }
 
         function updateReimbursementItemFile(itemId, formData) {
-            return $http.post('/api/reimbursement/itemFile/' + itemId, formData).then(handleSuccess, handleError);
+            return $http.post('/api/reimbursement/itemFile/' + itemId, formData, {
+                transformRequest: angular.identity,
+                headers: { 'Content-Type': undefined }
+            }).then(handleSuccess, handleError);
         }
 
         function deleteReimbursementItem(itemId) {

@@ -8,59 +8,21 @@
         .controller('Reimbursement.ReimbursementFormController', ReimbursementFormController)
         .controller('Reimbursement.TeamReimbursementsModalController', TeamReimbursementsModalController)
         .controller('Reimbursement.MyReimbursementStatusController', MyReimbursementStatusController)
-        .directive('fileDirective', FileDirective) //Directive to handel file
-        .service('fileUploadService', FileUploadService) //Service to handle file
+        .directive('fileModel', ['$parse', function ($parse) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attrs) {
+                    var model = $parse(attrs.fileModel);
+                    var modelSetter = model.assign;
 
-    /**File Upload Directive */
-    function FileDirective($parse) {
-        return {
-            restrict: 'A', //the directive can be used as an attribute only
-            /**
-                link is a function that defines functionality of directive
-                scope: scope associated with the element
-                element: element on which this directive used
-                attrs: key value pair of element attributes
-             */
-            link: function (scope, element, attrs) {
-                var model = $parse(attrs.fileDirective),
-                    modelSetter = model.assign; //define a setter for fileDirective
-
-                //Bind change event on the element
-                element.bind('change', function () {
-                    //Call apply on scope, it checks for value changes and reflect them on UI
-                    scope.$apply(function () {
-                        //set the model value
-                        modelSetter(scope, element[0].files[0]);
+                    element.bind('change', function () {
+                        scope.$apply(function () {
+                            modelSetter(scope, element[0].files[0]);
+                        });
                     });
-                });
-            }
-        };
-    }
-
-    /**Reference Service to File UPLOAD */
-    function FileUploadService($http, $q) {
-        // uploadFileToUrl = function(file, uploadUrl) {
-        uploadFileToUrl = function (file, uploadUrl) {
-            //FormData, object of key/value pair for form fields and values
-            var fileFormData = new FormData();
-            fileFormData.append('file', file);
-
-            var deffered = $q.defer();
-            $http.post(uploadUrl, fileFormData, {
-                transformRequest: angular.identity,
-                headers: { 'Content-Type': undefined }
-
-            }).success(function (response) {
-                deffered.resolve(response);
-
-            }).error(function (response) {
-                deffered.reject(response);
-            });
-
-            return deffered.promise;
-        }
-        //  }
-    }
+                }
+            };
+        }]);
 
     function MyReimbursementsController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
         var vm = this;
@@ -140,109 +102,25 @@
             vm.reimbursement.items.splice(index, 1);
         }
 
-        $scope.uploadFile = function (index) {
-            console.log("index", index, vm.reimbursement.items);
-            for (var i = 0; i < vm.reimbursement.items.length; i++) {
-                console.log("vm.reimbursement.items[index]", vm.reimbursement.items[index])
-                vm.reimbursement.items[index].file = vm.myFile;
+        vm.saveReimbursement = function (form, reimbursement, index) {
 
-            }
-            /**Reference to File Handling **/
-            var file = vm.myFile;
-            console.log("file", file)
-            // var uploadUrl = "../server/service.php", //Url of webservice/api/server
-            //     promise = FileUploadService.uploadFileToUrl(file, uploadUrl);
+        };
 
-            // promise.then(function (response) {
-            //     $scope.serverResponse = response;
-            // }, function () {
-            //     $scope.serverResponse = 'An error has occurred';
-            // })
-            var fileFormData = new FormData();
-            fileFormData.append('file', file);
-            fileFormData.append('billDate', "2020-06-01");
-            fileFormData.append('billCategory', "Business Meals");
-            fileFormData.append('billAmount', '5000');
-            fileFormData.append('billDescription', 'Test Description');
-            for (let [name, value] of fileFormData) {
-                console.log(`${name} = ${value}`); // key1=value1, then key2=value2
-            }
-            var reimbursementId = '5f27c557517e74bf473d8fcc'
-
-            console.log("fileFormData", fileFormData);
-            console.log('formData.get(file)', fileFormData.get(file));
-            ReimbursementService.addReimbursement(reimbursementId, fileFormData, {
-                transformRequest: angular.identity,
-                headers: { 'Content-Type': undefined }
-
-            }).then(function (response) {
-                console.log("reimbursement", response);
-                vm.reimbursement = response.reimbursement;
-                noty.showSuccess("Receipt information saved successfully!");
+        vm.saveReimbursementItem = function (itemData, itemIndex) {
+            var itemFormData = new FormData();
+            itemFormData.append('file', itemData.file);
+            itemFormData.append('billDate', itemData.billDate);
+            itemFormData.append('billCategory', itemData.billCategory);
+            itemFormData.append('billAmount', itemData.billAmount);
+            itemFormData.append('billDescription', itemData.billDescription);
+            ReimbursementService.updateReimbursementItem('5f28017ffb3d756bac10ae6c', itemFormData).then(function (response) {
+                noty.showSuccess("Reimbursement bill item has been updated successfully!");
             }, function (error) {
-                vm.alerts.push({ msg: error, type: 'danger' });
-                console.log(error);
+                if (error) {
+                    vm.alerts.push({ msg: error, type: 'danger' });
+                }
             });
-
-
-            /**Reference to File handling code */
-            // file.upload = Upload.upload({
-            //     url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
-            //     data: { username: receipt.billDate, file: file },
-            // });
-
-            // file.upload.then(function (response) {
-            //     $timeout(function () {
-            //         file.result = response.data;
-            //         console.log("file.result", file.result)
-            //     });
-            // }, function (response) {
-            //     if (response.status > 0)
-            //         $scope.errorMsg = response.status + ': ' + response.data;
-            // }, function (evt) {
-            //     // Math.min is to fix IE which reports 200% sometimes
-            //     file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-            // });
-
-            /** End of File Handling **/
-        };
-
-        /**To save Reimbursement data */
-        vm.save = function (form, reimbursement, index) {
-            console.log('reimbursement', reimbursement);
-            console.log("data", JSON.stringify(reimbursement));
-            reimbursement.fromDate = JSON.stringify(reimbursement.fromDate).split('T')[0].slice(1);
-            reimbursement.toDate = JSON.stringify(reimbursement.toDate).split('T')[0].slice(1);
-            for (var i = 0; i < reimbursement.items.length; i++) {
-                reimbursement.items[i].billDate = JSON.stringify(reimbursement.items[i].billDate).split('T')[0].slice(1);
-                delete reimbursement.items[i].startOpened;
-                delete reimbursement.items[i].$$hashKey;
-            }
-            console.log("Final data", reimbursement);
-            console.log("Final data", JSON.stringify(reimbursement));
-            console.log("index", index)
-
-            /**Reference to File Handling **/
-            var file = vm.myFile;
-            console.log("file", file)
-            // var uploadUrl = "../server/service.php", //Url of webservice/api/server
-            //     promise = fileUploadService.uploadFileToUrl(file, uploadUrl);
-
-            // promise.then(function (response) {
-            //     $scope.serverResponse = response;
-            // }, function () {
-            //     $scope.serverResponse = 'An error has occurred';
-            // })
-
-            // if (form.$valid) {
-            //     vm.enableSaveBtn = false;
-            //     var assignedUsers = [];
-            //     assignedUsers.push(vm.user);
-            // } else {
-            //     vm.enableSaveBtn = true;
-            //     vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
-            // }
-        };
+        }
 
         function initController() {
             UserService.GetCurrent().then(function (user) {
@@ -254,7 +132,6 @@
                 }
                 vm.reimbursement.name = vm.user.name;
                 vm.reimbursement.employeeId = vm.user.employeeId;
-                console.log("user", user);
             });
         }
         initController();
