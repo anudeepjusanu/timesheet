@@ -21,7 +21,7 @@ var upload = multer({
 router.get('/', getMyReimbursements);
 router.get('/:_id', getReimbursement);
 router.post('/', addReimbursement);
-router.put('/:_id', updateReimbursement);
+router.put('/:_id', upload.array('files'), updateReimbursement);
 router.delete('/:_id', deleteReimbursement);
 
 router.get('/item/:itemId', getReimbursementItem);

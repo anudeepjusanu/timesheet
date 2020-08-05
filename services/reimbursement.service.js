@@ -53,7 +53,13 @@ function addReimbursement(ReimbursementData) {
             if (error) {
                 reject({ error: error });
             } else {
-                resolve(data);
+                ReimbursementModel.updateOne({ _id: mongoose.Types.ObjectId(ReimbursementModel._id) }, {
+                    $set: { "totalCost": { $sum: "$items.billAmount" } }
+                }).exec().then((response) => {
+                    resolve(data);
+                }).catch((error) => {
+                    reject({ error: error.errmsg });
+                });
             }
         });
     });
@@ -64,8 +70,15 @@ function updateReimbursement(ReimbursementId, ReimbursementData) {
         if (ReimbursementData.userId) {
             ReimbursementData.userId = mongoose.Types.ObjectId(ReimbursementData.userId);
         }
-        ReimbursementModel.updateOne({ _id: mongoose.Types.ObjectId(ReimbursementId) }, ReimbursementData).exec().then((data) => {
+        ReimbursementModel.updateOne({ _id: mongoose.Types.ObjectId(ReimbursementId) }, { $set: ReimbursementData }).exec().then((data) => {
             resolve(data);
+            // ReimbursementModel.updateOne({ _id: mongoose.Types.ObjectId(ReimbursementId) }, {
+            //     $set: { "totalCost": { $sum: "$items.billAmount" } }
+            // }).exec().then((response) => {
+            //     resolve(data);
+            // }).catch((error) => {
+            //     reject({ error: error.errmsg });
+            // });
         }).catch((error) => {
             reject({ error: error.errmsg });
         });
