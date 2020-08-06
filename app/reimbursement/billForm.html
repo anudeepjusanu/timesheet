@@ -1,0 +1,75 @@
+<div class="content-wrapper">
+    <ul class="breadcrumb">
+        <li><a ui-sref="myBills"><i class="fa fa-dashboard"></i>My Bills</a></li>
+        <li class="active">
+            <span>{{(vm.isBillFormEdit ? 'Edit ' : 'Add ')}}Bill</span>
+        </li>
+    </ul>
+    <br />
+    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+        close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}
+    </div>
+    <div class="panel-heading">
+        <h3 class="panel-title text-center">Bill Information</h3>
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            <form class="form-horizontal" id="billForm" name="vm.billForm">
+                <div class="form-group required">
+                    <label class="col-md-3 col-xs-12 control-label">Date</label>
+                    <div class="col-md-4 col-xs-12">
+                        <p class="input-group">
+                            <input type="text" id="date" class="form-control" uib-datepicker-popup
+                                ng-model="vm.billObj.date" is-open="vm.dateOpened" datepicker-options="vm.dateOptions"
+                                close-text="Close" required />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="vm.dateOpened=!vm.dateOpened">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </button>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label class="col-md-3 col-xs-12 control-label">Category</label>
+                    <div class="col-md-4 col-xs-12">
+                        <select class="form-control" ng-model="vm.billObj.billCategory" required
+                            ng-options="categoryType.categoryTypeId as categoryType.categoryTypeVal for categoryType in vm.categories">
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label class="col-md-3 col-xs-12 control-label">Amount</label>
+                    <div class="col-md-4 col-xs-12">
+                        <input type="number" class="form-control" ng-model="vm.billObj.billAmount" required />
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label class="col-md-3 col-xs-12 control-label">Description</label>
+                    <div class="col-md-4 col-xs-12">
+                        <td><textarea class="form-control" ng-model="vm.billObj.billDescription"
+                                placeholder="Enter your description" rows="2" required></textarea></td>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 col-xs-12 control-label">Receipts</label>
+                    <div class="col-md-4 col-xs-12">
+                        <input type="file" file-model="vm.billObj.file" style="height: auto;" class="form-control"
+                            required />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-10 col-xs-12 text-center">
+                        <button class="btn btn-success btn-rounded reimbursement-buttons" type="button"
+                            ng-disabled="!vm.billForm.$valid"
+                            ng-click="vm.saveBill(vm.billForm, vm.billObj, $index)">Save</button>
+                        <button ui-sref="myBills" class="btn btn-warning btn-rounded reimbursement-buttons"
+                            type="button">
+                            Back</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

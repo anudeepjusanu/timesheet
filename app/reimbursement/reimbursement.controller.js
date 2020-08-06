@@ -4,8 +4,10 @@
     angular
         .module('app')
         .controller('Reimbursement.IndexController', MyReimbursementsController)
-        .controller('Reimbursement.TeamReimbursementsController', TeamReimbursementsController)
         .controller('Reimbursement.ReimbursementFormController', ReimbursementFormController)
+        .controller('Reimbursement.MyBillsController', MyBillsController)
+        .controller('Reimbursement.BillFormController', BillFormController)
+        .controller('Reimbursement.TeamReimbursementsController', TeamReimbursementsController)
         .controller('Reimbursement.TeamReimbursementsModalController', TeamReimbursementsModalController)
         .controller('Reimbursement.MyReimbursementStatusController', MyReimbursementStatusController)
         .directive('fileModel', ['$parse', function ($parse) {
@@ -86,11 +88,6 @@
         vm.reimbursementObj = {
             items: []
         };
-
-        // vm.changeManager = function (projectID) {
-        //     console.log("projectID", projectID);
-        //     vm.reimbursementObj.managerName = vm.user.projects.find(obj => obj.projectId == projectID).ownerName;
-        // }
 
         vm.getApproveActiveUsersList = function () {
             ReimbursementService.getApproveUsersList().then(function (response) {
@@ -197,6 +194,78 @@
         initController();
     };
 
+    function MyBillsController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
+        var vm = this;
+        vm.user = {};
+
+        function getMyBills() {
+            ReimbursementService.getMyReimbursements().then(function (response) {
+                console.log("bills", response);
+                vm.bills = response.reimbursements;
+                for (var i = 0; i < vm.bills.length; i++) {
+                    vm.bills[i].createdOn = $filter('date')(vm.bills[i].createdOn, "yyyy-MM-ddTHH:mm:ss");
+                }
+            }, function (error) {
+                console.log(error);
+            });
+        };
+
+        function initController() {
+            UserService.GetCurrent().then(function (user) {
+                vm.user = user;
+            });
+            getMyBills();
+        }
+        initController();
+    };
+
+    function BillFormController(UserService, $stateParams, $scope, ReimbursementService, noty, $timeout, _, $filter, $state) {
+        var vm = this;
+        vm.user = {};
+        vm.alerts = [];
+        vm.categories = ReimbursementService.getReimbursementCategories();
+        vm.billObj = {
+        };
+
+        vm.saveBill = function (billData, reimbursementId, itemIndex) {
+            var billFormData = new FormData();
+            billFormData.append('file', billData.file);
+            billFormData.append('billDate', billData.billDate);
+            billFormData.append('billCategory', billData.billCategory);
+            billFormData.append('billAmount', billData.billAmount);
+            billFormData.append('billDescription', billData.billDescription);
+            if (billData._id) {
+                ReimbursementService.updateReimbursementItem(billData._id, billFormData).then(function (response) {
+                    noty.showSuccess("Bill has been updated successfully!");
+                }, function (error) {
+                    if (error) {
+                        vm.alerts.push({ msg: error, type: 'danger' });
+                    }
+                });
+            } else {
+                ReimbursementService.addReimbursementItem(reimbursementId, billFormData).then(function (response) {
+                    noty.showSuccess("Bill has been updated successfully!");
+                }, function (error) {
+                    if (error) {
+                        vm.alerts.push({ msg: error, type: 'danger' });
+                    }
+                });
+            }
+        }
+
+        function initController() {
+            UserService.GetCurrent().then(function (user) {
+                vm.user = user;
+            });
+            if ($stateParams.billId) {
+                vm.isBillFormEdit = true;
+            } else {
+                vm.isBillFormEdit = false;
+            }
+        }
+        initController();
+    };
+
     function TeamReimbursementsController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
         var vm = this;
         vm.user = {};
@@ -204,7 +273,7 @@
         function getMyReimbursements() {
             ReimbursementService.getMyReimbursements().then(function (response) {
                 vm.teamReimbursements = response.reimbursements;
-                console.log("vm.teamReimbursements",vm.teamReimbursements);
+                console.log("vm.teamReimbursements", vm.teamReimbursements);
                 for (var i = 0; i < vm.teamReimbursements.length; i++) {
                     vm.teamReimbursements[i].createdOn = $filter('date')(vm.teamReimbursements[i].createdOn, "yyyy-MM-ddTHH:mm:ss");
                 }

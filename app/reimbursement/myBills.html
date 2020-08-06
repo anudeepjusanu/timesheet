@@ -1,0 +1,58 @@
+<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+    close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+    {{alert.msg}}</div>
+<div class="content-wrapper">
+    <div class="">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">My Bills</h3>
+                <a class="btn btn-primary btn-rounded pull-right" ui-sref="billForm">Add Bill</a>
+            </div>
+            <div class="panel-body tab-content">
+                <table class="table table-condensed table-bordered table-striped" export-table>
+                    <thead>
+                        <tr>
+                            <th class="table-heading"></th>
+                            <th class="table-heading">#</th>
+                            <th class="table-heading">Date</th>
+                            <th class="table-heading">Category</th>
+                            <th class="table-heading">Amount</th>
+                            <th class="table-heading">Description</th>
+                            <th class="table-heading">Receipt</th>
+                            <th class="table-heading">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="bill in vm.bills | orderBy:'name'">
+                            <td class="table-heading" style="width: 40px;">
+                                <input type="checkbox" name="billInfo" id="billInfo"
+                                    style="width: 20px; height: 20px; cursor: pointer;">
+                            </td>
+                            <td class="table-heading" style="width: 40px;">{{$index + 1}}</td>
+                            <td class="table-heading" style="width: 100px;">{{bill.billDate}}</td>
+                            <td class="table-heading" style="width: 160px;">{{bill.billCategory}}</td>
+                            <td class="table-heading" style="width: 80px;">{{bill.billAmount}}</td>
+                            <td class="table-heading">{{bill.billDescription}}</td>
+                            <td class="table-heading" style="width: 180px;">{{bill.billFile}}</td>
+                            <td class="table-heading" style="width: 110px;">
+                                <!-- <a class="btn btn-primary btn-icon btn-rounded" title="View Bill"
+                                    ng-click="vm.openBill()">
+                                    <span class="fa fa-eye"></span>
+                                </a> -->
+                                <a ui-sref="billForm({billId:'{{bill._id}}'})"
+                                    class="btn btn-success btn-icon btn-rounded" title="Edit Bill"
+                                    ng-click="vm.editBill()">
+                                    <span class="fa fa-pencil" aria-hidden="true"></span>
+                                </a>
+                                <a class="btn btn-warning btn-icon btn-rounded" title="Delete Bill"
+                                    ng-click="vm.deleteBill()">
+                                    <span class="fa fa-trash-o" aria-hidden="true"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
