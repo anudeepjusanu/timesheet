@@ -13,8 +13,8 @@
                         <tr>
                             <th class="table-heading">#</th>
                             <th class="table-heading">Reimbursement ID</th>
-                            <th class="table-heading">Name</th>
-                            <th class="table-heading">Employee ID</th>
+                            <th class="table-heading">Employee Name</th>
+                            <!-- <th class="table-heading">Employee ID</th> -->
                             <th class="table-heading">Applied On</th>
                             <!-- <th>Business Purpose</th> -->
                             <th class="table-heading">From Date</th>
@@ -27,13 +27,13 @@
                         <tr ng-repeat="reimbursement in vm.teamReimbursements">
                             <td class="table-heading">{{$index+1}}</td>
                             <td class="table-heading" style="width: 180px;">{{reimbursement._id}}</td>
-                            <td class="table-heading">{{reimbursement.Name}}Praveen Pallala</td>
-                            <td class="table-heading">{{reimbursement.EmployeeID}}</td>
+                            <td class="table-heading">{{reimbursement.userName}}</td>
+                            <!-- <td class="table-heading">{{reimbursement.EmployeeID}}</td> -->
                             <td class="table-heading">{{reimbursement.createdOn}}</td>
                             <!-- <td>{{reimbursement.BusinessPurpose}}</td> -->
-                            <td class="table-heading">{{reimbursement.FromDate}}</td>
-                            <td class="table-heading">{{reimbursement.ToDate}}</td>
-                            <td class="table-heading">{{reimbursement.totalCost}}</td>
+                            <td class="table-heading">{{reimbursement.reimbursementFrom}}</td>
+                            <td class="table-heading">{{reimbursement.reimbursementTo}}</td>
+                            <td class="table-heading">{{reimbursement.totalAmount}}</td>
                             <td class="table-heading">
                                 <span>
                                     <a class="btn btn-primary btn-icon btn-rounded"

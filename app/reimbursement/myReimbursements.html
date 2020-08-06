@@ -46,12 +46,12 @@
                     <tbody>
                         <tr ng-repeat="reimbursement in vm.reimbursements | orderBy:'name'">
                             <td class="table-heading">{{$index + 1}}</td>
-                            <td class="table-heading"></td>
-                            <td class="table-heading"></td>
-                            <td class="table-heading"></td>
-                            <td class="table-heading"></td>
-                            <td class="table-heading"></td>
+                            <td class="table-heading">{{reimbursement.approveUserName}}</td>
                             <td class="table-heading">{{reimbursement.totalCost}}</td>
+                            <td class="table-heading">{{reimbursement.reimbursementFrom}}</td>
+                            <td class="table-heading">{{reimbursement.reimbursementTo}}</td>
+                            <td class="table-heading">{{reimbursement.purpose}}</td>
+                            <td class="table-heading">{{reimbursement.totalAmount}}</td>
                             <td class="table-heading">{{reimbursement.status}}</td>
                             <td class="table-heading">{{reimbursement.createdOn}}</td>
                             <td class="table-heading">

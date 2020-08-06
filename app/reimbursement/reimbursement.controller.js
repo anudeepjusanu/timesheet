@@ -204,6 +204,7 @@
         function getMyReimbursements() {
             ReimbursementService.getMyReimbursements().then(function (response) {
                 vm.teamReimbursements = response.reimbursements;
+                console.log("vm.teamReimbursements",vm.teamReimbursements);
                 for (var i = 0; i < vm.teamReimbursements.length; i++) {
                     vm.teamReimbursements[i].createdOn = $filter('date')(vm.teamReimbursements[i].createdOn, "yyyy-MM-ddTHH:mm:ss");
                 }
