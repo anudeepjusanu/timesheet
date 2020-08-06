@@ -33,7 +33,7 @@
                 console.log("reimbursements", response);
                 vm.reimbursements = response.reimbursements;
                 for (var i = 0; i < vm.reimbursements.length; i++) {
-                    vm.reimbursements[i].createdOn = JSON.stringify(vm.reimbursements[i].createdOn).split('T')[0].slice(1);
+                    vm.reimbursements[i].createdOn = $filter('date')(vm.reimbursements[i].createdOn, "yyyy-MM-ddTHH:mm:ss");
                 }
             }, function (error) {
                 console.log(error);
@@ -87,20 +87,21 @@
             items: []
         };
 
-        vm.changeManager = function (projectID) {
-            console.log("projectID", projectID);
-            vm.reimbursementObj.managerName = vm.user.projects.find(obj => obj.projectId == projectID).ownerName;
-        }
-
-        // vm.getApproveActiveUsersList = function() {
-        //     ReimbursementService.getApproveUsersList().then(function (response) {
-        //         vm.approveActiveUsers = response;
-        //     }, function (error) {
-        //         if (error) {
-        //             vm.alerts.push({ msg: error, type: 'danger' });
-        //         }
-        //     });
+        // vm.changeManager = function (projectID) {
+        //     console.log("projectID", projectID);
+        //     vm.reimbursementObj.managerName = vm.user.projects.find(obj => obj.projectId == projectID).ownerName;
         // }
+
+        vm.getApproveActiveUsersList = function () {
+            ReimbursementService.getApproveUsersList().then(function (response) {
+                vm.approveActiveUsers = response.users;
+                console.log("vm.approveActiveUsers", vm.approveActiveUsers);
+            }, function (error) {
+                if (error) {
+                    vm.alerts.push({ msg: error, type: 'danger' });
+                }
+            });
+        }
 
         vm.addBill = function (index, user) {
             if (!vm.reimbursementObj.items) {
@@ -195,7 +196,7 @@
             ReimbursementService.getMyReimbursements().then(function (response) {
                 vm.teamReimbursements = response.reimbursements;
                 for (var i = 0; i < vm.teamReimbursements.length; i++) {
-                    vm.teamReimbursements[i].createdOn = JSON.stringify(vm.teamReimbursements[i].createdOn).split('T')[0].slice(1);
+                    vm.teamReimbursements[i].createdOn = $filter('date')(vm.teamReimbursements[i].createdOn, "yyyy-MM-ddTHH:mm:ss");
                 }
             }, function (error) {
                 console.log(error);
@@ -237,47 +238,14 @@
         };
         vm.reimbursementId = reimbursementId;
 
-        /**Dummy  table data */
-        // vm.employeeReceiptData = [
-        //     {
-        //         "Date": "2020-01-06",
-        //         "Category": "Fuel",
-        //         "Cost": "1000",
-        //         "Description": "Test Description",
-        //         "Receipt": "Attachment"
-        //     },
-        //     {
-        //         "Date": "2020-01-06",
-        //         "Category": "Fuel",
-        //         "Cost": "1000",
-        //         "Description": "Test Description",
-        //         "Receipt": "Attachment"
-        //     },
-        //     {
-        //         "Date": "2020-01-06",
-        //         "Category": "Fuel",
-        //         "Cost": "1000",
-        //         "Description": "Test Description",
-        //         "Receipt": "Attachment"
-        //     },
-        //     {
-        //         "Date": "2020-01-06",
-        //         "Category": "Fuel",
-        //         "Cost": "1000",
-        //         "Description": "Test Description",
-        //         "Receipt": "Attachment"
-        //     }
-        // ]
-
-
         function getMyReimbursementById() {
             ReimbursementService.getReimbursement(vm.reimbursementId).then(function (response) {
                 console.log("response", response);
                 vm.reimbursement = response.reimbursement;
                 console.log("vm.reimbursement", vm.reimbursement);
-                vm.reimbursement.createdOn = JSON.stringify(vm.reimbursement.createdOn).split('T')[0].slice(1);
+                vm.reimbursement.createdOn = $filter('date')(vm.reimbursement.createdOn, "yyyy-MM-ddTHH:mm:ss");
                 for (var i = 0; i < vm.reimbursement.items.length; i++) {
-                    vm.reimbursement.items[i].billDate = JSON.stringify(vm.reimbursement.items[i].billDate).split('T')[0].slice(1);
+                    vm.reimbursement.items[i].billDate = $filter('date')(vm.reimbursement.items[i].billDate, "yyyy-MM-ddTHH:mm:ss");
                 }
             }, function (error) {
                 console.log(error);

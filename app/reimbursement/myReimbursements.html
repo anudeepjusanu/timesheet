@@ -12,25 +12,40 @@
                 <table class="table table-condensed table-bordered table-striped" export-table>
                     <thead>
                         <tr>
-                            <th>Reimbursement Id</th>
-                            <th>Created On</th>
-                            <th>Manager Name</th>
+                            <th>Manager</th>
+                            <th>Department</th>
                             <th>From Date</th>
                             <th>To Date</th>
+                            <th>Purpose</th>
                             <th>Total Amount</th>
-                            <th>Status</th>
+                            <th>Status
+                                <select class="form-control" style="margin-top: 4px; width: 100px;"
+                                    ng-model="vm.reimbursementObj.status"
+                                    ng-options="option as option for option in ['Pending', 'Completed']"></select>
+                            </th>
+                            <th>Created On</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="reimbursement in vm.reimbursements | orderBy:'name'">
-                            <td>{{reimbursement._id}}</td>
-                            <td>{{reimbursement.createdOn}}</td>
-                            <td>Praveen Pallala</td>
-                            <td>2020-07-01</td>
-                            <td>2020-07-30</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td>{{reimbursement.totalCost}}</td>
-                            <td>{{reimbursement.status}}<span> <i style="float:right;margin-right:15px;cursor:pointer;"
-                                        class="fa fa-eye" ng-click="vm.openMyReimbursementStatus()"></i></span></td>
+                            <td>{{reimbursement.status}}</td>
+                            <td>{{reimbursement.createdOn}}</td>
+                            <td>
+                                <a class="btn btn-primary btn-icon btn-rounded"
+                                    ng-click="vm.openMyReimbursementStatus()">
+                                    <span class="fa fa-eye"></span>
+                                </a>
+                                <a class="btn btn-primary btn-icon btn-rounded" ng-click="vm.editMyReimbursement">
+                                    <span class="fa fa-pencil"></span>
+                                </a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

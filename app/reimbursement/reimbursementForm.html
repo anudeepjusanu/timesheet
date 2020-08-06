@@ -2,59 +2,33 @@
     <ul class="breadcrumb">
         <li><a ui-sref="myReimbursements"><i class="fa fa-dashboard"></i>My Reimbursement</a></li>
         <li class="active">
-            <span ng-if="vm.isNew">Add Reimbursement</span>
-            <span ng-if="!vm.isNew">Edit Reimbursement</span>
+            <span ng-if="vm.reimbursementObj._id">Add Reimbursement</span>
+            <span ng-if="vm.reimbursementObj._id">Edit Reimbursement</span>
         </li>
     </ul>
-    <h3 class="modal-title" id="modal-title">Create Reimbursement</h3><br />
+    <br />
     <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
         close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
     <div class="row">
         <div class="col-md-1"></div>
-        <div class="col-md-10">
+        <div class="col-md-11">
             <form class="form-horizontal" id="reimburseForm" name="vm.assignForm">
                 <div class="form-group required">
-                    <label class="col-md-3 col-xs-12 control-label">Employee Name</label>
+                    <label class="col-md-3 col-xs-12 control-label">Employee</label>
                     <div class="col-md-6 col-xs-12">
                         <input type="text" required="true" ng-disabled="true" ng-model="vm.reimbursementObj.name"
                             class="form-control" />
                     </div>
                 </div>
                 <div class="form-group required">
-                    <label class="col-md-3 col-xs-12 control-label">Employee ID</label>
-                    <div class="col-md-6 col-xs-12">
-                        <input type="text" required="true" ng-disabled="true" ng-model="vm.reimbursementObj.employeeId"
-                            class="form-control" />
-                    </div>
-                </div>
-                <!-- <div class="form-group required">
-                    <label class="col-md-3 col-xs-12 control-label">Project</label>
-                    <div class="col-md-6 col-xs-12">
+                    <label class="col-md-3 col-xs-12 control-label">Approval</label>
+                    <div class="col-md-3 col-xs-12">
                         <select class="form-control" ng-model="vm.reimbursementObj.projectId"
-                            ng-options="project.projectId as project.projectName for project in vm.user.projects"
-                            ng-change="vm.changeManager(vm.reimbursementObj.projectId)">
+                            ng-options="user._id as user.name for user in vm.approveActiveUsers">
                         </select>
                     </div>
-                </div> -->
-                <div class="form-group required">
-                    <label class="col-md-3 col-xs-12 control-label">Approval User Id</label>
-                    <div class="col-md-6 col-xs-12">
-                        <select class="form-control" ng-model="vm.reimbursementObj.projectId"
-                            ng-options="project.projectId as project.projectName for project in vm.approveActiveUsers"
-                            ng-change="vm.changeManager(vm.reimbursementObj.projectId)"></select>
-                        </select>
-                    </div>
-                </div>
-                <!-- <div class="form-group required">
-                    <label class="col-md-3 col-xs-12 control-label">Manager Name</label>
-                    <div class="col-md-6 col-xs-12">
-                        <input type="text" required="true" ng-disabled="true" ng-model="vm.reimbursementObj.managerName"
-                            class="form-control" />
-                    </div>
-                </div> -->
-                <div class="form-group required">
-                    <label class="col-md-3 col-xs-12 control-label">Department</label>
-                    <div class="col-md-6 col-xs-12">
+                    <label class="col-md-1 col-xs-12 control-label">Department</label>
+                    <div class="col-md-2 col-xs-12">
                         <input type="text" ng-model="vm.reimbursementObj.department" class="form-control" />
                     </div>
                 </div>
@@ -94,14 +68,14 @@
                     </div>
                 </div>
         </div>
-        <div class="col-md-1"></div>
+        <!-- <div class="col-md-1"></div> -->
     </div>
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-10">
             <div class="form-group">
                 <label class="col-md-3 col-xs-12 control-label">Reimbursement Receipts:</label>
-                <button type="button" class="btn btn-xs btn-primary pull-right"
+                <button type="button" class="btn btn-success btn-rounded pull-right"
                     ng-click="vm.addBill($index,vm.user)">Add Receipt</button><br />
                 <div class="col-md-12">
                     <table id="" class="table">
@@ -136,28 +110,30 @@
                             <td><textarea class="form-control" ng-model="bill.billDescription"
                                     placeholder="Enter Description" rows="1" style="width: 150px;"></textarea></td>
                             <td>
-                                <input type="file" file-model="bill.file" class="form-control"
-                                    style="width: 200px;" />
+                                <input type="file" file-model="bill.file" class="form-control" style="width: 200px;" />
                             </td>
                             <td>
-                                <button ng-click="vm.saveReimbursementItem(bill, vm.reimbursementObj._id, $index)"
-                                    class="btn btn-primary">Save</button>
+                                <button class="btn btn-success btn-rounded"
+                                    ng-click="vm.saveReimbursementItem(bill, vm.reimbursementObj._id, $index)">Save</button>
+                                <!-- <button class="btn btn-success btn-rounded" ng-click="vm.saveReimbursementItem(bill, vm.reimbursementObj._id, $index)"><span class="fa fa-floppy-o" aria-hidden="true"></span></a> -->
                                 <!-- <button ng-click="uploadFile($index)" class="btn btn-primary">Upload File</button> -->
                             </td>
                             <td>
-                                <a ng-click="vm.deleteBill(billDate, $index)"><span class="fa fa-times"></span></a>
+                                <button class="btn btn-warning btn-rounded"
+                                    ng-click="vm.deleteBill(billDate, $index)">Delete</button>
+                                <!-- <button class="btn btn-warning btn-rounded" ng-click="vm.deleteBill(billDate, $index)"><span class="fa fa-times-circle-o" aria-hidden="true"></span></a> -->
                             </td>
                         </tr>
                     </table>
                 </div>
             </div>
             <div class="text-center">
-                <button class="btn btn-primary" type="button" ng-disabled="!vm.assignForm.$valid"
+                <button class="btn btn-primary btn-rounded" type="button" ng-disabled="!vm.assignForm.$valid"
                     ng-click="vm.saveAsDraft(vm.assignForm, vm.reimbursementObj, $index)">Save As Draft</button>
-                <button class="btn btn-success" type="button" ng-disabled="!vm.assignForm.$valid"
+                <button class="btn btn-success btn-rounded" type="button" ng-disabled="!vm.assignForm.$valid"
                     ng-click="vm.saveReimbursement(vm.assignForm, vm.reimbursementObj, $index)">Save
                     Reimbursement</button>
-                <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
+                <button class="btn btn-warning btn-rounded" type="button" ng-click="vm.cancel()">Cancel</button>
             </div>
             </form>
         </div>
