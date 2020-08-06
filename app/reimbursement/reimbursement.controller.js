@@ -29,6 +29,7 @@
     function MyReimbursementsController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
         var vm = this;
         vm.user = {};
+        vm.alerts = [];
 
         function getMyReimbursements() {
             ReimbursementService.getMyReimbursements().then(function (response) {
@@ -52,6 +53,10 @@
                 controllerAs: 'vm',
                 size: 'xs'
             });
+        }
+
+        vm.closeAlert = function (index) {
+            vm.alerts.splice(index, 1);
         }
 
         function initController() {
@@ -174,6 +179,10 @@
             }
         }
 
+        vm.closeAlert = function (index) {
+            vm.alerts.splice(index, 1);
+        }
+
         function initController() {
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
@@ -197,6 +206,7 @@
     function MyBillsController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
         var vm = this;
         vm.user = {};
+        vm.alerts = [];
 
         function getMyBills() {
             ReimbursementService.getMyReimbursements().then(function (response) {
@@ -209,6 +219,10 @@
                 console.log(error);
             });
         };
+
+        vm.closeAlert = function (index) {
+            vm.alerts.splice(index, 1);
+        }
 
         function initController() {
             UserService.GetCurrent().then(function (user) {
@@ -253,6 +267,10 @@
             }
         }
 
+        vm.closeAlert = function (index) {
+            vm.alerts.splice(index, 1);
+        }
+
         function initController() {
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
@@ -269,6 +287,7 @@
     function TeamReimbursementsController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
         var vm = this;
         vm.user = {};
+        vm.alerts = [];
 
         function getMyReimbursements() {
             ReimbursementService.getMyReimbursements().then(function (response) {
@@ -300,6 +319,10 @@
             });
         }
 
+        vm.closeAlert = function (index) {
+            vm.alerts.splice(index, 1);
+        }
+
         function initController() {
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
@@ -312,6 +335,7 @@
     function TeamReimbursementsModalController(UserService, ReimbursementService, reimbursementId, _, $uibModal, $uibModalInstance, $filter, $state) {
         var vm = this;
         vm.user = {};
+        vm.alerts = [];
         vm.reimbursement = {
             items: []
         };
@@ -354,6 +378,10 @@
         vm.reject = function () {
             $uibModalInstance.dismiss('cancel');
         };
+
+        vm.closeAlert = function (index) {
+            vm.alerts.splice(index, 1);
+        }
 
         function initController() {
             UserService.GetCurrent().then(function (user) {
