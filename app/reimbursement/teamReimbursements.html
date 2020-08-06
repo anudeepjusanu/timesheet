@@ -11,30 +11,40 @@
                 <table class="table table-condensed table-bordered table-striped" export-table>
                     <thead>
                         <tr>
-                            <th>Reimbursement Id</th>
-                            <th>Name</th>
-                            <th>Employee ID</th>
-                            <th>Applied On</th>
+                            <th class="table-heading">#</th>
+                            <th class="table-heading">Reimbursement ID</th>
+                            <th class="table-heading">Name</th>
+                            <th class="table-heading">Employee ID</th>
+                            <th class="table-heading">Applied On</th>
                             <!-- <th>Business Purpose</th> -->
-                            <th>From Date</th>
-                            <th>To Date</th>
-                            <th>Total Amount</th>
-                            <th>Action</th>
+                            <th class="table-heading">From Date</th>
+                            <th class="table-heading">To Date</th>
+                            <th class="table-heading">Total Amount</th>
+                            <th class="table-heading">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- <tr ng-repeat="item in vm.empReimbursementData"> -->
                         <tr ng-repeat="reimbursement in vm.teamReimbursements">
-                            <td>{{reimbursement._id}}</td>
-                            <td>{{reimbursement.Name}}</td>
-                            <td>{{reimbursement.EmployeeID}}</td>
-                            <td>{{reimbursement.createdOn}}</td>
-                            <!-- <td>reimbursement.BusinessPurpose</td> -->
-                            <td>{{reimbursement.FromDate}}</td>
-                            <td>{{reimbursement.ToDate}}</td>
-                            <td>{{reimbursement.totalCost}}</td>
-                            <td><span> <i style="float:right;margin-right:15px;cursor:pointer;" class="fa fa-eye"
-                                        ng-click="vm.openTeamReimbursementModal(reimbursement._id)"></i></span></td>
+                            <td class="table-heading">{{$index+1}}</td>
+                            <td class="table-heading" style="width: 180px;">{{reimbursement._id}}</td>
+                            <td class="table-heading">{{reimbursement.Name}}Praveen Pallala</td>
+                            <td class="table-heading">{{reimbursement.EmployeeID}}</td>
+                            <td class="table-heading">{{reimbursement.createdOn}}</td>
+                            <!-- <td>{{reimbursement.BusinessPurpose}}</td> -->
+                            <td class="table-heading">{{reimbursement.FromDate}}</td>
+                            <td class="table-heading">{{reimbursement.ToDate}}</td>
+                            <td class="table-heading">{{reimbursement.totalCost}}</td>
+                            <td class="table-heading">
+                                <span>
+                                    <a class="btn btn-primary btn-icon btn-rounded"
+                                        ng-click="vm.openTeamReimbursementModal(reimbursement._id)">
+                                        <span class="fa fa-eye"></span>
+                                    </a>
+                                    <!-- <i style="float:right;margin-right:15px;cursor:pointer;" class="fa fa-eye"
+                                        ng-click="vm.openTeamReimbursementModal(reimbursement._id)">
+                                    </i> -->
+                                </span>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

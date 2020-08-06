@@ -114,7 +114,7 @@
             vm.reimbursementObj.items.splice(index, 1);
         }
 
-        vm.saveReimbursement = function (form, reimbursementObj, index) {
+        vm.submitReimbursement = function (form, reimbursementObj, index) {
             var reimbursementFrom = $filter('date')(reimbursementObj.reimbursementFrom, "yyyy-MM-dd");
             var reimbursementTo = $filter('date')(reimbursementObj.reimbursementTo, "yyyy-MM-dd");
             var formData = new FormData();
@@ -245,7 +245,7 @@
                 console.log("vm.reimbursement", vm.reimbursement);
                 vm.reimbursement.createdOn = $filter('date')(vm.reimbursement.createdOn, "yyyy-MM-ddTHH:mm:ss");
                 for (var i = 0; i < vm.reimbursement.items.length; i++) {
-                    vm.reimbursement.items[i].billDate = $filter('date')(vm.reimbursement.items[i].billDate, "yyyy-MM-ddTHH:mm:ss");
+                    vm.reimbursement.items[i].billDate = $filter('date')(vm.reimbursement.items[i].billDate, "yyyy-MM-dd");
                 }
             }, function (error) {
                 console.log(error);

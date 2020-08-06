@@ -16,3 +16,16 @@
 .dropdown-item{
     padding-left: 20px;
 }
+
+/* Reimbursement Styles */
+.table-heading {
+    text-align: center;
+}
+.delete-bill-icon {
+    font-size: 26px;
+    color:red;
+    cursor: pointer;
+}
+.reimbursement-buttons {
+    margin: 7px 7px;
+}

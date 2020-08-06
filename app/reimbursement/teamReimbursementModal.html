@@ -56,29 +56,43 @@
         <div class="col-md-12">
             <table id="" class="table table-condensed table-bordered table-striped">
                 <tr>
-                    <th>Date</th>
-                    <th>Category</th>
-                    <th>Cost</th>
-                    <th>Description</th>
-                    <th>Receipt</th>
+                    <th class="table-heading">Date</th>
+                    <th class="table-heading">Category</th>
+                    <th class="table-heading">Cost</th>
+                    <th class="table-heading">Description</th>
+                    <th class="table-heading">Receipt</th>
+                    <th class="table-heading">Status</th>
+                    <th class="table-heading">Actions</th>
                 </tr>
                 <tr ng-repeat="item in vm.reimbursement.items">
-                    <td>{{item.billDate}}</td>
-                    <td>{{item.billCategory}}</td>
-                    <td>{{item.billAmount}}</td>
-                    <td>{{item.billDescription}}</td>
-                    <td style="width: 280px;">
-                        <div>
-                            <span>{{item.billFile}}</span>
-                            <i ng-if="item.validBill" class="fa fa-check" style="color: green;" aria-hidden="true"></i>
-                            <i ng-if="item.invalidBill" class="fa fa-times" style="color: red;" aria-hidden="true"></i>
-                            <span ng-if="vm.user.userRole=='lead' || vm.user.userRole=='manager'">
+                    <td class="table-heading" style="width: 80px;">{{item.billDate}}</td>
+                    <td class="table-heading" style="width: 120px;">{{item.billCategory}}</td>
+                    <td class="table-heading" style="width: 60px;">{{item.billAmount}}</td>
+                    <td class="table-heading">{{item.billDescription}}</td>
+                    <td class="table-heading" style="width: 150px;">
+                        <!-- <div> -->
+                        <span>{{item.billFile}}</span>
+                        <!-- <i ng-if="item.validBill" class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                            <i ng-if="item.invalidBill" class="fa fa-times" style="color: red;" aria-hidden="true"></i> -->
+                        <!-- <span ng-if="vm.user.userRole=='lead' || vm.user.userRole=='manager'">
                                 <button class="btn btn-success btn-rounded" type="button"
                                     ng-click="vm.validBill($index)">Accept</button>
                                 <button class="btn btn-warning btn-rounded" type="button"
                                     ng-click="vm.invalidBill($index)">Reject</button>
-                            </span>
-                        </div>
+                            </span> -->
+                        <!-- </div> -->
+                    </td>
+                    <td class="table-heading" style="width: 60px;">
+                        <i ng-if="item.validBill" class="fa fa-check" style="color: green;" aria-hidden="true"></i>
+                        <i ng-if="item.invalidBill" class="fa fa-times" style="color: red;" aria-hidden="true"></i>
+                    </td>
+                    <td class="table-heading" style="width: 140px;">
+                        <span ng-if="vm.user.userRole=='lead' || vm.user.userRole=='manager'">
+                            <button class="btn btn-success btn-rounded" type="button"
+                                ng-click="vm.validBill($index)">Accept</button>
+                            <button class="btn btn-warning btn-rounded" type="button"
+                                ng-click="vm.invalidBill($index)">Reject</button>
+                        </span>
                     </td>
                 </tr>
             </table>

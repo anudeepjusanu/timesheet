@@ -12,32 +12,49 @@
                 <table class="table table-condensed table-bordered table-striped" export-table>
                     <thead>
                         <tr>
-                            <th>Manager</th>
-                            <th>Department</th>
-                            <th>From Date</th>
-                            <th>To Date</th>
-                            <th>Purpose</th>
-                            <th>Total Amount</th>
-                            <th>Status
-                                <select class="form-control" style="margin-top: 4px; width: 100px;"
+                            <th class="table-heading">#</th>
+                            <th class="table-heading">Manager</th>
+                            <th class="table-heading">Department</th>
+                            <th class="table-heading">From Date</th>
+                            <th class="table-heading">To Date</th>
+                            <th class="table-heading">Purpose</th>
+                            <th class="table-heading">Total Amount</th>
+                            <th class="table-heading">Status
+                                <!-- <select class="form-control" style="margin-top: 4px; width: 100px;"
                                     ng-model="vm.reimbursementObj.status"
-                                    ng-options="option as option for option in ['Pending', 'Completed']"></select>
+                                    ng-options="option as option for option in ['Pending', 'Completed']"></select> -->
                             </th>
-                            <th>Created On</th>
-                            <th>Actions</th>
+                            <th class="table-heading">Created On</th>
+                            <th class="table-heading">Actions</th>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="table-heading">
+                                <select class="form-control" ng-model="vm.reimbursementObj.status"
+                                    ng-options="option as option for option in ['Pending', 'Completed']"></select>
+                            </td>
+                            <td></td>
+                            <td></td>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="reimbursement in vm.reimbursements | orderBy:'name'">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>{{reimbursement.totalCost}}</td>
-                            <td>{{reimbursement.status}}</td>
-                            <td>{{reimbursement.createdOn}}</td>
-                            <td>
+                            <td class="table-heading">{{$index + 1}}</td>
+                            <td class="table-heading"></td>
+                            <td class="table-heading"></td>
+                            <td class="table-heading"></td>
+                            <td class="table-heading"></td>
+                            <td class="table-heading"></td>
+                            <td class="table-heading">{{reimbursement.totalCost}}</td>
+                            <td class="table-heading">{{reimbursement.status}}</td>
+                            <td class="table-heading">{{reimbursement.createdOn}}</td>
+                            <td class="table-heading">
                                 <a class="btn btn-primary btn-icon btn-rounded"
                                     ng-click="vm.openMyReimbursementStatus()">
                                     <span class="fa fa-eye"></span>
