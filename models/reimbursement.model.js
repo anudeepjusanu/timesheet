@@ -8,17 +8,26 @@ var ReimbursementSchema = new Schema({
         type: mongoose.ObjectId,
         required: true
     },
-    projectId: {
+    approveUserId: {
         type: mongoose.ObjectId
     },
-    totalCost: {
-        type: Number,
-        default: 0.00
-    },
-    status: { type: String, default: 'Draft' },
-    purpose: { type: String },
+    department: { type: String },
     reimbursementFrom: { type: String },
     reimbursementTo: { type: String },
+    purpose: { type: String },
+    status: { type: String, default: 'Draft' },
+    totalAmount: {
+        type: Number,
+        default: () => {
+            var totalAmount = 0;
+            if (this.items && this.items.length > 0) {
+                for (var i = 0; i < this.items.length; i++) {
+                    totalAmount += parseFloat(this.items[i].billAmount);
+                }
+            }
+            return parseFloat(totalAmount).toFixed(2);
+        }
+    },
     createdBy: { type: mongoose.ObjectId },
     createdOn: { type: Date, default: Date.now },
     items: [{

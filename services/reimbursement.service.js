@@ -26,7 +26,20 @@ module.exports = service;
 
 function getMyReimbursements(userId) {
     return new Promise((resolve, reject) => {
-        ReimbursementModel.find({ userId: mongoose.Types.ObjectId(userId) }).exec().then((data) => {
+        ReimbursementModel.aggregate([
+            { $match: { userId: mongoose.Types.ObjectId(userId) } },
+            { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "user" } },
+            { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
+            { $lookup: { from: "users", localField: "approveUserId", foreignField: "_id", as: "approveUser" } },
+            { $unwind: { path: "$approveUser", preserveNullAndEmptyArrays: true } },
+            {
+                $project: {
+                    userId: 1, approveUserId: 1, department: 1, reimbursementFrom: 1, reimbursementTo: 1, purpose: 1,
+                    status: 1, totalAmount: 1, status: 1, createdBy: 1, createdOn: 1, items: 1, approveUserName: '$approveUser.name',
+                    userName: '$user.name',
+                }
+            }
+        ]).exec().then((data) => {
             resolve(data);
         }).catch((error) => {
             console.log(error);
