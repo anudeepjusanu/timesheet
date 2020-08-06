@@ -18,6 +18,7 @@
         service.updateReimbursementItemFile = updateReimbursementItemFile;
         service.deleteReimbursementItem = deleteReimbursementItem;
         service.getReimbursementCategories = getReimbursementCategories;
+        service.getApproveUsersList = getApproveUsersList;
 
         return service;
 
@@ -74,6 +75,10 @@
 
         function deleteReimbursementItem(itemId) {
             return $http.delete('/api/reimbursement/item/' + itemId).then(handleSuccess, handleError);
+        }
+
+        function getApproveUsersList() {
+            return $http.get('/api/reimbursement/approveUsersList/').then(handleSuccess, handleError);
         }
 
         function getReimbursementCategories() {

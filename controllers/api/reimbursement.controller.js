@@ -18,6 +18,8 @@ var upload = multer({
 });
 
 // routes
+router.get('/approveUsersList', getApproveUsersList);
+
 router.get('/', getMyReimbursements);
 router.get('/:_id', getReimbursement);
 router.post('/', upload.array('files'), addReimbursement);
@@ -116,6 +118,14 @@ function deleteReimbursementItem(req, res) {
 function updateReimbursementItemFile(req, res) {
     ReimbursementService.updateReimbursementItemFile(req.params._id, req.file).then(data => {
         res.send({ reimbursement: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
+
+function getApproveUsersList(req, res) {
+    ReimbursementService.getApproveUsersList().then(data => {
+        res.send({ users: data });
     }).catch(error => {
         res.status(400).send(error);
     });

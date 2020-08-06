@@ -20,6 +20,8 @@ service.updateReimbursementItem = updateReimbursementItem;
 service.updateReimbursementItemFile = updateReimbursementItemFile;
 service.deleteReimbursementItem = deleteReimbursementItem;
 
+service.getApproveUsersList = getApproveUsersList;
+
 module.exports = service;
 
 function getMyReimbursements(userId) {
@@ -152,10 +154,23 @@ function deleteReimbursementItem(itemId) {
 function updateReimbursementItemFile(itemId, fileData) {
     return new Promise((resolve, reject) => {
         ReimbursementModel.findOneAndUpdate({ 'items._id': mongoose.Types.ObjectId(itemId) },
-            { $set: { 'items.$.billFile': fileData.filename } }).exec().then((data) => {
+            { $set: { 'items.$.billFile': fileData.filename } }).exec().then((itemData) => {
                 resolve(itemData);
             }).catch((error) => {
                 reject({ error: error.errmsg });
             });
+    });
+}
+
+function getApproveUsersList() {
+    return new Promise((resolve, reject) => {
+        UserModel.aggregate([
+            { $match: { isActive: true } },
+            { $project: { name: 1, employeeId: true } }
+        ]).exec().then((data) => {
+            resolve(data);
+        }).catch((error) => {
+            reject({ error: (error.errmsg ? error.errmsg : "Unexpected error") });
+        });
     });
 }

@@ -80,6 +80,7 @@
     function ReimbursementFormController(UserService, $scope, ReimbursementService, noty, $timeout, _, $filter, $state) {
         var vm = this;
         vm.user = {};
+        vm.approveUsers = [];
         vm.alerts = [];
         vm.categories = ReimbursementService.getReimbursementCategories();
         vm.reimbursementObj = {
@@ -165,7 +166,11 @@
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
                 vm.reimbursementObj.name = vm.user.name;
-                vm.reimbursementObj.employeeId = vm.user.employeeId;
+            });
+            ReimbursementService.getApproveUsersList().then(function (response) {
+                if (response.users) {
+                    vm.approveUsers = response.users;
+                }
             });
         }
         initController();
