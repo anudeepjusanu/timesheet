@@ -1,5 +1,10 @@
 <div class="modal-header">
-    <h3 class="modal-title" id="modal-title">Reimbursement</h3>
+    <h3 class="modal-title" id="modal-title">Reimbursement
+        <a class="pull-right" ng-click="vm.reject()">
+            <span class="fa fa-times delete-bill-icon" aria-hidden="true"></span>
+        </a>
+    </h3>
+
 </div>
 <div class="modal-body" id="modal-body">
     <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
@@ -88,9 +93,9 @@
                     </td>
                     <td class="table-heading" style="width: 140px;">
                         <span ng-if="vm.user.userRole=='lead' || vm.user.userRole=='manager'">
-                            <button class="btn btn-success btn-rounded" type="button"
+                            <button class="btn btn-success btn-rounded" type="button" title="Accept Bill"
                                 ng-click="vm.validBill($index)">Accept</button>
-                            <button class="btn btn-warning btn-rounded" type="button"
+                            <button class="btn btn-warning btn-rounded" type="button" title="Reject Bill"
                                 ng-click="vm.invalidBill($index)">Reject</button>
                         </span>
                     </td>
@@ -110,23 +115,23 @@
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-9">
-            <form class="form-horizontal" name="vm.assignForm">
+            <form class="form-horizontal" name="vm.teamRimbursementForm">
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Total Amount</label>
                     <div class="col-md-6 col-xs-12">
-                        <input type="text" ng-model="vm.reimbursement.department" class="form-control" />
+                        <input type="text" ng-model="vm.reimbursement.totalAmount" class="form-control" required />
                     </div>
                 </div>
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Sanctioned Date</label>
                     <div class="col-md-6 col-xs-12">
                         <p class="input-group">
-                            <input type="text" id="toDate" class="form-control" uib-datepicker-popup
-                                ng-model="vm.reimbursement.toDate" is-open="vm.toDateOpened"
-                                datepicker-options="vm.dateOptions" close-text="Close" />
+                            <input type="text" id="sanctionedDate" class="form-control" uib-datepicker-popup
+                                ng-model="vm.reimbursement.sanctionedDate" is-open="vm.sanctionedDateOpened"
+                                datepicker-options="vm.dateOptions" close-text="Close" required />
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default"
-                                    ng-click="vm.toDateOpened=!vm.toDateOpened"><i
+                                    ng-click="vm.sanctionedDateOpened=!vm.sanctionedDateOpened"><i
                                         class="glyphicon glyphicon-calendar"></i></button>
                             </span>
                         </p>
@@ -136,12 +141,12 @@
                     <label class="col-md-3 col-xs-12 control-label">Reflection Date</label>
                     <div class="col-md-6 col-xs-12">
                         <p class="input-group">
-                            <input type="text" id="toDate" class="form-control" uib-datepicker-popup
-                                ng-model="vm.reimbursement.toDate" is-open="vm.toDateOpened"
-                                datepicker-options="vm.dateOptions" close-text="Close" />
+                            <input type="text" id="reflectionDate" class="form-control" uib-datepicker-popup
+                                ng-model="vm.reimbursement.reflectionDate" is-open="vm.reflectionDateOpened"
+                                datepicker-options="vm.dateOptions" close-text="Close" required />
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default"
-                                    ng-click="vm.toDateOpened=!vm.toDateOpened"><i
+                                    ng-click="vm.reflectionDateOpened=!vm.reflectionDateOpened"><i
                                         class="glyphicon glyphicon-calendar"></i></button>
                             </span>
                         </p>
@@ -169,7 +174,7 @@
 </div>
 <div ng-if="vm.user.admin===true" class="modal-footer">
     <div class="text-center">
-        <button class="btn btn-success btn-rounded" type="button" ng-disabled="!vm.assignForm.$valid"
+        <button class="btn btn-success btn-rounded" type="button" ng-disabled="!vm.teamRimbursementForm.$valid"
             ng-click="vm.accept(vm.assignForm, vm.reimbursement)">Sanction</button>
         <button class="btn btn-warning btn-rounded" type="button" ng-click="vm.reject()">Reject</button>
     </div>

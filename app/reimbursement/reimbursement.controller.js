@@ -77,7 +77,7 @@
         initController();
     };
 
-    function ReimbursementFormController(UserService, $scope, ReimbursementService, noty, $timeout, _, $filter, $state) {
+    function ReimbursementFormController(UserService, $stateParams, $scope, ReimbursementService, noty, $timeout, _, $filter, $state) {
         var vm = this;
         vm.user = {};
         vm.approveUsers = [];
@@ -114,7 +114,7 @@
             vm.reimbursementObj.items.splice(index, 1);
         }
 
-        vm.submitReimbursement = function (form, reimbursementObj, index) {
+        vm.submitReimbursement = function (reimbursementForm, reimbursementObj, index) {
             var reimbursementFrom = $filter('date')(reimbursementObj.reimbursementFrom, "yyyy-MM-dd");
             var reimbursementTo = $filter('date')(reimbursementObj.reimbursementTo, "yyyy-MM-dd");
             var formData = new FormData();
@@ -122,28 +122,32 @@
             formData.append('reimbursementFrom', reimbursementFrom);
             formData.append('reimbursementTo', reimbursementTo);
             formData.append('purpose', reimbursementObj.purpose);
-            if (reimbursementObj._id) {
-                ReimbursementService.updateReimbursement(reimbursementObj._id, formData).then(function (response) {
-                    noty.showSuccess("Reimbursement has been updated successfully!");
-                }, function (error) {
-                    if (error) {
-                        vm.alerts.push({ msg: error, type: 'danger' });
-                    }
-                });
+            if (reimbursementForm.$valid) {
+                if (reimbursementObj._id) {
+                    ReimbursementService.updateReimbursement(reimbursementObj._id, formData).then(function (response) {
+                        noty.showSuccess("Reimbursement has been updated successfully!");
+                    }, function (error) {
+                        if (error) {
+                            vm.alerts.push({ msg: error, type: 'danger' });
+                        }
+                    });
+                } else {
+                    ReimbursementService.addReimbursement(formData).then(function (response) {
+                        console.log(response.reimbursement);
+                        if (response.reimbursement) {
+                            _.each(reimbursementObj.items, function (itemData) {
+                                vm.saveReimbursementItem(itemData, response.reimbursement._id);
+                            });
+                        }
+                        noty.showSuccess("Reimbursement has been added successfully!");
+                    }, function (error) {
+                        if (error) {
+                            vm.alerts.push({ msg: error, type: 'danger' });
+                        }
+                    });
+                }
             } else {
-                ReimbursementService.addReimbursement(formData).then(function (response) {
-                    console.log(response.reimbursement);
-                    if (response.reimbursement) {
-                        _.each(reimbursementObj.items, function (itemData) {
-                            vm.saveReimbursementItem(itemData, response.reimbursement._id);
-                        });
-                    }
-                    noty.showSuccess("Reimbursement has been added successfully!");
-                }, function (error) {
-                    if (error) {
-                        vm.alerts.push({ msg: error, type: 'danger' });
-                    }
-                });
+                vm.alerts.push({ msg: "Please enter valid data", type: 'danger' });
             }
         };
 
@@ -178,6 +182,11 @@
                 vm.user = user;
                 vm.reimbursementObj.name = vm.user.name;
             });
+            if ($stateParams.reimbursementId) {
+                vm.isReimbursementFormEdit = true;
+            } else {
+                vm.isReimbursementFormEdit = false;
+            }
             ReimbursementService.getApproveUsersList().then(function (response) {
                 if (response.users) {
                     vm.approveUsers = response.users;

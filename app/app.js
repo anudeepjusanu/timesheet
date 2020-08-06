@@ -320,12 +320,13 @@
                 data: { activeTab: 'myReimbursements' }
             })
             .state('reimbursementForm', {
-                url: '/reimbursement/reimbursementForm',
+                url: '/reimbursement/reimbursementForm/:reimbursementId',
                 templateUrl: 'reimbursement/reimbursementForm.html',
                 controller: 'Reimbursement.ReimbursementFormController',
                 controllerAs: 'vm',
                 parent: 'layout',
-                data: { activeTab: 'myReimbursements' }
+                data: { activeTab: 'myReimbursements' },
+                params: { reimbursementId: '' }
             })
             .state('teamReimbursements', {
                 url: '/reimbursement/teamReimbursements',

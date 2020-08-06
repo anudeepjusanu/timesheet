@@ -2,8 +2,7 @@
     <ul class="breadcrumb">
         <li><a ui-sref="myReimbursements"><i class="fa fa-dashboard"></i>My Reimbursement</a></li>
         <li class="active">
-            <span ng-if="vm.reimbursementObj._id">Add Reimbursement</span>
-            <span ng-if="vm.reimbursementObj._id">Edit Reimbursement</span>
+            <span>{{(vm.isReimbursementFormEdit ? 'Edit ' : 'Add ')}}Reimbursement</span>
         </li>
     </ul>
     <br />
@@ -12,24 +11,24 @@
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-11">
-            <form class="form-horizontal" id="reimburseForm" name="vm.assignForm">
+            <form class="form-horizontal" id="reimburseForm" name="vm.reimburseForm">
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Employee</label>
                     <div class="col-md-6 col-xs-12">
-                        <input type="text" required="true" ng-disabled="true" ng-model="vm.reimbursementObj.name"
+                        <input type="text" required ng-disabled="true" ng-model="vm.reimbursementObj.name"
                             class="form-control" />
                     </div>
                 </div>
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Approval</label>
                     <div class="col-md-3 col-xs-12">
-                        <select class="form-control" ng-model="vm.reimbursementObj.projectId"
+                        <select class="form-control" ng-model="vm.reimbursementObj.projectId" required
                             ng-options="user._id as user.name for user in vm.approveActiveUsers">
                         </select>
                     </div>
                     <label class="col-md-1 col-xs-12 control-label">Department</label>
                     <div class="col-md-2 col-xs-12">
-                        <input type="text" ng-model="vm.reimbursementObj.department" class="form-control" />
+                        <input type="text" ng-model="vm.reimbursementObj.department" class="form-control" required />
                     </div>
                 </div>
                 <div class="form-group required">
@@ -38,7 +37,7 @@
                         <p class="input-group">
                             <input type="text" id="fromDate" class="form-control" uib-datepicker-popup
                                 ng-model="vm.reimbursementObj.reimbursementFrom" is-open="vm.fromDateOpened"
-                                datepicker-options="vm.dateOptions" close-text="Close" />
+                                datepicker-options="vm.dateOptions" close-text="Close" required />
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default"
                                     ng-click="vm.fromDateOpened=!vm.fromDateOpened"><i
@@ -51,7 +50,7 @@
                         <p class="input-group">
                             <input type="text" id="toDate" class="form-control" uib-datepicker-popup
                                 ng-model="vm.reimbursementObj.reimbursementTo" is-open="vm.toDateOpened"
-                                datepicker-options="vm.dateOptions" close-text="Close" />
+                                datepicker-options="vm.dateOptions" close-text="Close" required />
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default"
                                     ng-click="vm.toDateOpened=!vm.toDateOpened"><i
@@ -64,7 +63,7 @@
                     <label class="col-md-3 col-xs-12 control-label">Business Purpose</label>
                     <div class="col-md-6 col-xs-12">
                         <td><textarea class="form-control" ng-model="vm.reimbursementObj.purpose"
-                                placeholder="Enter your purpose" rows="2"></textarea></td>
+                                placeholder="Enter your purpose" rows="2" required></textarea></td>
                     </div>
                 </div>
                 <div class="form-group">
@@ -93,7 +92,8 @@
                         <td class="table-heading" style="width: 150px;padding-top: 15px;">
                             <p class="input-group">
                                 <input type="text" class="form-control" uib-datepicker-popup ng-model="bill.billDate"
-                                    is-open="bill.startOpened" datepicker-options="vm.dateOptions" close-text="Close" />
+                                    is-open="bill.startOpened" datepicker-options="vm.dateOptions" close-text="Close"
+                                    required />
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default" ng-click="bill.startOpened=true;"><i
                                             class="glyphicon glyphicon-calendar"></i></button>
@@ -101,18 +101,19 @@
                             </p>
                         </td>
                         <td class="table-heading" style="width: 140px;padding-top: 15px;">
-                            <select class="form-control" ng-model="bill.billCategory"
+                            <select class="form-control" ng-model="bill.billCategory" required
                                 ng-options="categoryType.categoryTypeId as categoryType.categoryTypeVal for categoryType in vm.categories">
                             </select>
                         </td>
-                        <td class="table-heading" style="width: 120px;padding-top: 15px;"><input type="number"
-                                class="form-control" ng-model="bill.billAmount" />
+                        <td class="table-heading" style="width: 120px;padding-top: 15px;">
+                            <input type="number" class="form-control" ng-model="bill.billAmount" required />
                         </td>
                         <td class="table-heading" style="width: 350px;"><textarea class="form-control"
                                 ng-model="bill.billDescription" placeholder="Enter Description" rows="2"></textarea>
                         </td>
                         <td class="table-heading" style="padding-top: 15px;">
-                            <input type="file" file-model="bill.file" style="height: auto;" class="form-control" />
+                            <input type="file" file-model="bill.file" style="height: auto;" class="form-control"
+                                required />
                         </td>
                         <td class="table-heading" style="padding-top: 17px;">
                             <!-- <button class="btn btn-success btn-rounded"
@@ -137,11 +138,11 @@
         </div>
         <div class="text-center">
             <button class="btn btn-primary btn-rounded reimbursement-buttons" type="button"
-                ng-disabled="!vm.assignForm.$valid"
-                ng-click="vm.saveAsDraft(vm.assignForm, vm.reimbursementObj, $index)">Save As Draft</button>
+                ng-disabled="!vm.reimburseForm.$valid"
+                ng-click="vm.saveAsDraft(vm.reimburseForm, vm.reimbursementObj, $index)">Save As Draft</button>
             <button class="btn btn-success btn-rounded reimbursement-buttons" type="button"
-                ng-disabled="!vm.assignForm.$valid"
-                ng-click="vm.submitReimbursement(vm.assignForm, vm.reimbursementObj, $index)">Submit
+                ng-disabled="!vm.reimburseForm.$valid"
+                ng-click="vm.submitReimbursement(vm.reimburseForm, vm.reimbursementObj, $index)">Submit
                 Reimbursement</button>
             <button class="btn btn-warning btn-rounded reimbursement-buttons" type="button"
                 ng-click="vm.cancel()">Cancel</button>

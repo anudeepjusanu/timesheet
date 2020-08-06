@@ -55,11 +55,12 @@
                             <td class="table-heading">{{reimbursement.status}}</td>
                             <td class="table-heading">{{reimbursement.createdOn}}</td>
                             <td class="table-heading">
-                                <a class="btn btn-primary btn-icon btn-rounded"
+                                <a class="btn btn-primary btn-icon btn-rounded" title="View Reimbursement"
                                     ng-click="vm.openMyReimbursementStatus()">
                                     <span class="fa fa-eye"></span>
                                 </a>
-                                <a class="btn btn-primary btn-icon btn-rounded" ng-click="vm.editMyReimbursement">
+                                <a ui-sref="reimbursementForm({reimbursementId:'{{reimbursement._id}}'})" class="btn btn-primary btn-icon btn-rounded" title="Edit Reimbursement"
+                                    ng-click="vm.editMyReimbursement">
                                     <span class="fa fa-pencil"></span>
                                 </a>
                             </td>
