@@ -7,6 +7,7 @@
 
     function ReimbursementService($http, $q) {
         var service = {};
+        service.getApproveUsersList = getApproveUsersList;
         service.getMyReimbursements = getMyReimbursements;
         service.getReimbursement = getReimbursement;
         service.addReimbursement = addReimbursement;
@@ -20,6 +21,10 @@
         service.getReimbursementCategories = getReimbursementCategories;
 
         return service;
+
+        function getApproveUsersList() {
+            return $http.get('/api/reimbursement/approveUsersList/').then(handleSuccess, handleError);
+        }
 
         function getMyReimbursements() {
             return $http.get('/api/reimbursement/').then(handleSuccess, handleError);

@@ -27,7 +27,7 @@
                             class="form-control" />
                     </div>
                 </div>
-                <div class="form-group required">
+                <!-- <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Project</label>
                     <div class="col-md-6 col-xs-12">
                         <select class="form-control" ng-model="vm.reimbursementObj.projectId"
@@ -35,14 +35,23 @@
                             ng-change="vm.changeManager(vm.reimbursementObj.projectId)">
                         </select>
                     </div>
-                </div>
+                </div> -->
                 <div class="form-group required">
+                    <label class="col-md-3 col-xs-12 control-label">Approval User Id</label>
+                    <div class="col-md-6 col-xs-12">
+                        <select class="form-control" ng-model="vm.reimbursementObj.projectId"
+                            ng-options="project.projectId as project.projectName for project in vm.approveActiveUsers"
+                            ng-change="vm.changeManager(vm.reimbursementObj.projectId)"></select>
+                        </select>
+                    </div>
+                </div>
+                <!-- <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Manager Name</label>
                     <div class="col-md-6 col-xs-12">
                         <input type="text" required="true" ng-disabled="true" ng-model="vm.reimbursementObj.managerName"
                             class="form-control" />
                     </div>
-                </div>
+                </div> -->
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Department</label>
                     <div class="col-md-6 col-xs-12">
@@ -93,7 +102,7 @@
             <div class="form-group">
                 <label class="col-md-3 col-xs-12 control-label">Reimbursement Receipts:</label>
                 <button type="button" class="btn btn-xs btn-primary pull-right"
-                    ng-click="vm.addBillDate($index,vm.user)">Add Receipt</button><br />
+                    ng-click="vm.addBill($index,vm.user)">Add Receipt</button><br />
                 <div class="col-md-12">
                     <table id="" class="table">
                         <tr ng-if="vm.reimbursementObj.items.length > 0">
@@ -105,38 +114,38 @@
                             <th></th>
                             <th></th>
                         </tr>
-                        <tr ng-repeat="receipt in vm.reimbursementObj.items" class="">
+                        <tr ng-repeat="bill in vm.reimbursementObj.items" class="">
                             <td>
                                 <p class="input-group">
                                     <input type="text" class="form-control" uib-datepicker-popup
-                                        ng-model="receipt.billDate" is-open="receipt.startOpened"
+                                        ng-model="bill.billDate" is-open="bill.startOpened"
                                         datepicker-options="vm.dateOptions" close-text="Close" />
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-default"
-                                            ng-click="receipt.startOpened=true;"><i
+                                            ng-click="bill.startOpened=true;"><i
                                                 class="glyphicon glyphicon-calendar"></i></button>
                                     </span>
                                 </p>
                             </td>
                             <td>
-                                <select class="form-control" ng-model="receipt.billCategory"
+                                <select class="form-control" ng-model="bill.billCategory"
                                     ng-options="categoryType.categoryTypeId as categoryType.categoryTypeVal for categoryType in vm.categories">
                                 </select>
                             </td>
-                            <td><input type="number" class="form-control" ng-model="receipt.billAmount" /></td>
-                            <td><textarea class="form-control" ng-model="receipt.billDescription"
+                            <td><input type="number" class="form-control" ng-model="bill.billAmount" /></td>
+                            <td><textarea class="form-control" ng-model="bill.billDescription"
                                     placeholder="Enter Description" rows="1" style="width: 150px;"></textarea></td>
                             <td>
-                                <input type="file" file-model="receipt.file" class="form-control"
+                                <input type="file" file-model="bill.file" class="form-control"
                                     style="width: 200px;" />
                             </td>
                             <td>
-                                <button ng-click="vm.saveReimbursementItem(receipt, vm.reimbursementObj._id, $index)"
+                                <button ng-click="vm.saveReimbursementItem(bill, vm.reimbursementObj._id, $index)"
                                     class="btn btn-primary">Save</button>
                                 <!-- <button ng-click="uploadFile($index)" class="btn btn-primary">Upload File</button> -->
                             </td>
                             <td>
-                                <a ng-click="vm.deleteBillDate(billDate, $index)"><span class="fa fa-times"></span></a>
+                                <a ng-click="vm.deleteBill(billDate, $index)"><span class="fa fa-times"></span></a>
                             </td>
                         </tr>
                     </table>

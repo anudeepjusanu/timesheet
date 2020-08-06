@@ -91,14 +91,24 @@
             vm.reimbursementObj.managerName = vm.user.projects.find(obj => obj.projectId == projectID).ownerName;
         }
 
-        vm.addBillDate = function (index, user) {
+        // vm.getApproveActiveUsersList = function() {
+        //     ReimbursementService.getApproveUsersList().then(function (response) {
+        //         vm.approveActiveUsers = response;
+        //     }, function (error) {
+        //         if (error) {
+        //             vm.alerts.push({ msg: error, type: 'danger' });
+        //         }
+        //     });
+        // }
+
+        vm.addBill = function (index, user) {
             if (!vm.reimbursementObj.items) {
                 vm.reimbursementObj.items = [];
             }
             vm.reimbursementObj.items.push({ "file": vm.myFile });
         }
 
-        vm.deleteBillDate = function (billDate, index) {
+        vm.deleteBill = function (billDate, index) {
             vm.reimbursementObj.items.splice(index, 1);
         }
 
@@ -167,6 +177,7 @@
                 vm.reimbursementObj.name = vm.user.name;
                 vm.reimbursementObj.employeeId = vm.user.employeeId;
             });
+            vm.getApproveActiveUsersList();
         }
         initController();
     };
