@@ -19,18 +19,18 @@ var upload = multer({
 
 // routes
 router.get('/approveUsersList', getApproveUsersList);
+router.get('/myReceipts/', getMyReceipts);
+router.get('/receipt/:receiptId', getReimbursementReceipt);
+router.post('/receipt', upload.single('file'), addReimbursementReceipt);
+router.put('/receipt/:receiptId', upload.single('file'), updateReimbursementReceipt);
+router.delete('/receipt/:receiptId', deleteReimbursementReceipt);
+router.post('/receiptFile/:_id', upload.single('file'), updateReimbursementReceiptFile);
 
 router.get('/', getMyReimbursements);
 router.get('/:_id', getReimbursement);
 router.post('/', upload.array('files'), addReimbursement);
 router.put('/:_id', upload.array('files'), updateReimbursement);
 router.delete('/:_id', deleteReimbursement);
-
-router.get('/item/:itemId', getReimbursementItem);
-router.post('/item/:_id', upload.single('file'), addReimbursementItem);
-router.put('/item/:itemId', upload.single('file'), updateReimbursementItem);
-router.delete('/item/:itemId', deleteReimbursementItem);
-router.post('/itemFile/:_id', upload.single('file'), updateReimbursementItemFile);
 
 module.exports = router;
 
@@ -76,48 +76,57 @@ function deleteReimbursement(req, res) {
     });
 }
 
-// Items
-function getReimbursementItem(req, res) {
-    ReimbursementService.getReimbursementItem(req.params.itemId).then(data => {
+// Receipts
+function getMyReceipts(req, res) {
+    ReimbursementService.getMyReceipts(req.user.sub).then(data => {
+        res.send({ receipts: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
+
+function getReimbursementReceipt(req, res) {
+    ReimbursementService.getReimbursementReceipt(req.params.receiptId).then(data => {
         res.send({ reimbursement: data });
     }).catch(error => {
         res.status(400).send(error);
     });
 }
 
-function addReimbursementItem(req, res) {
+function addReimbursementReceipt(req, res) {
+    req.body.userId = req.user.sub;
     if (req.file && req.file.filename) {
-        req.body.billFile = req.file.filename;
+        req.body.receiptFile = req.file.filename;
     }
-    ReimbursementService.addReimbursementItem(req.params._id, req.body).then(data => {
-        res.send({ reimbursement: data });
+    ReimbursementService.addReimbursementReceipt(req.body).then(data => {
+        res.send({ receipt: data });
     }).catch(error => {
         res.status(400).send(error);
     });
 }
 
-function updateReimbursementItem(req, res) {
+function updateReimbursementReceipt(req, res) {
     if (req.file && req.file.filename) {
-        req.body.billFile = req.file.filename;
+        req.body.receiptFile = req.file.filename;
     }
-    ReimbursementService.updateReimbursementItem(req.params.itemId, req.body).then(data => {
-        res.send({ reimbursement: data });
+    ReimbursementService.updateReimbursementReceipt(req.params.receiptId, req.body).then(data => {
+        res.send({ receipt: data });
     }).catch(error => {
         res.status(400).send(error);
     });
 }
 
-function deleteReimbursementItem(req, res) {
-    ReimbursementService.deleteReimbursementItem(req.params.itemId).then(data => {
-        res.send({ reimbursement: data });
+function deleteReimbursementReceipt(req, res) {
+    ReimbursementService.deleteReimbursementReceipt(req.params.receiptId).then(data => {
+        res.send({ receipt: data });
     }).catch(error => {
         res.status(400).send(error);
     });
 }
 
-function updateReimbursementItemFile(req, res) {
-    ReimbursementService.updateReimbursementItemFile(req.params._id, req.file).then(data => {
-        res.send({ reimbursement: data });
+function updateReimbursementReceiptFile(req, res) {
+    ReimbursementService.updateReimbursementReceiptFile(req.params._id, req.file).then(data => {
+        res.send({ receipt: data });
     }).catch(error => {
         res.status(400).send(error);
     });

@@ -12,11 +12,14 @@
         service.addReimbursement = addReimbursement;
         service.updateReimbursement = updateReimbursement;
         service.deleteReimbursement = deleteReimbursement;
-        service.getReimbursementItem = getReimbursementItem;
-        service.addReimbursementItem = addReimbursementItem;
-        service.updateReimbursementItem = updateReimbursementItem;
-        service.updateReimbursementItemFile = updateReimbursementItemFile;
-        service.deleteReimbursementItem = deleteReimbursementItem;
+
+        service.getMyReceipts = getMyReceipts;
+        service.getApproveReceipts = getApproveReceipts;
+        service.getReimbursementReceipt = getReimbursementReceipt;
+        service.addReimbursementReceipt = addReimbursementReceipt;
+        service.updateReimbursementReceipt = updateReimbursementReceipt;
+        service.updateReimbursementReceiptFile = updateReimbursementReceiptFile;
+        service.deleteReimbursementReceipt = deleteReimbursementReceipt;
         service.getReimbursementCategories = getReimbursementCategories;
         service.getApproveUsersList = getApproveUsersList;
 
@@ -48,33 +51,41 @@
             return $http.delete('/api/reimbursement/' + reimbursementId).then(handleSuccess, handleError);
         }
 
-        function getReimbursementItem(itemId) {
-            return $http.get('/api/reimbursement/item/' + itemId).then(handleSuccess, handleError);
+        function getMyReceipts() {
+            return $http.get('/api/reimbursement/myReceipts/').then(handleSuccess, handleError);
         }
 
-        function addReimbursementItem(reimbursementId, formData) {
-            return $http.post('/api/reimbursement/item/' + reimbursementId, formData, {
+        function getApproveReceipts() {
+            return $http.get('/api/reimbursement/approveReceipts/').then(handleSuccess, handleError);
+        }
+
+        function getReimbursementReceipt(receiptId) {
+            return $http.get('/api/reimbursement/receipt/' + receiptId).then(handleSuccess, handleError);
+        }
+
+        function addReimbursementReceipt(formData) {
+            return $http.post('/api/reimbursement/receipt', formData, {
                 transformRequest: angular.identity,
                 headers: { 'Content-Type': undefined }
             }).then(handleSuccess, handleError);
         }
 
-        function updateReimbursementItem(itemId, formData) {
-            return $http.put('/api/reimbursement/item/' + itemId, formData, {
+        function updateReimbursementReceipt(receiptId, formData) {
+            return $http.put('/api/reimbursement/receipt/' + receiptId, formData, {
                 transformRequest: angular.identity,
                 headers: { 'Content-Type': undefined }
             }).then(handleSuccess, handleError);
         }
 
-        function updateReimbursementItemFile(itemId, formData) {
-            return $http.post('/api/reimbursement/itemFile/' + itemId, formData, {
+        function updateReimbursementReceiptFile(receiptId, formData) {
+            return $http.post('/api/reimbursement/receiptFile/' + receiptId, formData, {
                 transformRequest: angular.identity,
                 headers: { 'Content-Type': undefined }
             }).then(handleSuccess, handleError);
         }
 
-        function deleteReimbursementItem(itemId) {
-            return $http.delete('/api/reimbursement/item/' + itemId).then(handleSuccess, handleError);
+        function deleteReimbursementReceipt(receiptId) {
+            return $http.delete('/api/reimbursement/receipt/' + receiptId).then(handleSuccess, handleError);
         }
 
         function getApproveUsersList() {

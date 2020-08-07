@@ -6,7 +6,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">My Reimbursements</h3>
-                <a class="btn btn-primary btn-rounded pull-right" ui-sref="reimbursementForm">Add Reimbursement</a>
+                <!-- <a class="btn btn-primary btn-rounded pull-right" ui-sref="reimbursementForm">Add Reimbursement</a> -->
             </div>
             <div class="panel-body tab-content">
                 <table class="table table-condensed table-bordered table-striped" export-table>
@@ -59,7 +59,8 @@
                                     ng-click="vm.openMyReimbursementStatus()">
                                     <span class="fa fa-eye"></span>
                                 </a>
-                                <a ui-sref="reimbursementForm({reimbursementId:'{{reimbursement._id}}'})" class="btn btn-primary btn-icon btn-rounded" title="Edit Reimbursement"
+                                <a ui-sref="reimbursementForm({reimbursementId:'{{reimbursement._id}}'})"
+                                    class="btn btn-primary btn-icon btn-rounded" title="Edit Reimbursement"
                                     ng-click="vm.editMyReimbursement">
                                     <span class="fa fa-pencil"></span>
                                 </a>

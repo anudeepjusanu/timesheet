@@ -5,8 +5,8 @@
         .module('app')
         .controller('Reimbursement.IndexController', MyReimbursementsController)
         .controller('Reimbursement.ReimbursementFormController', ReimbursementFormController)
-        .controller('Reimbursement.MyBillsController', MyBillsController)
-        .controller('Reimbursement.BillFormController', BillFormController)
+        .controller('Reimbursement.MyReceiptsController', MyReceiptsController)
+        .controller('Reimbursement.ReceiptFormController', ReceiptFormController)
         .controller('Reimbursement.TeamReimbursementsController', TeamReimbursementsController)
         .controller('Reimbursement.TeamReimbursementsModalController', TeamReimbursementsModalController)
         .controller('Reimbursement.MyReimbursementStatusController', MyReimbursementStatusController)
@@ -203,22 +203,28 @@
         initController();
     };
 
-    function MyBillsController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
+    function MyReceiptsController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
         var vm = this;
         vm.user = {};
         vm.alerts = [];
+        vm.receipts = [];
+        vm.selected = [];
 
-        function getMyBills() {
-            ReimbursementService.getMyReimbursements().then(function (response) {
-                console.log("bills", response);
-                vm.bills = response.reimbursements;
-                for (var i = 0; i < vm.bills.length; i++) {
-                    vm.bills[i].createdOn = $filter('date')(vm.bills[i].createdOn, "yyyy-MM-ddTHH:mm:ss");
+        function getMyReceipts() {
+            ReimbursementService.getMyReceipts().then(function (response) {
+                vm.receipts = response.receipts;
+                for (var i = 0; i < vm.receipts.length; i++) {
+                    vm.receipts[i].selected = false;
+                    vm.receipts[i].createdOn = $filter('date')(vm.receipts[i].createdOn, "yyyy-MM-ddTHH:mm:ss");
                 }
             }, function (error) {
                 console.log(error);
             });
         };
+
+        vm.addReimbursement = function () {
+
+        }
 
         vm.closeAlert = function (index) {
             vm.alerts.splice(index, 1);
@@ -228,37 +234,39 @@
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
             });
-            getMyBills();
+            getMyReceipts();
         }
         initController();
     };
 
-    function BillFormController(UserService, $stateParams, $scope, ReimbursementService, noty, $timeout, _, $filter, $state) {
+    function ReceiptFormController(UserService, $stateParams, $state, ReimbursementService, noty, _, $filter) {
         var vm = this;
         vm.user = {};
         vm.alerts = [];
         vm.categories = ReimbursementService.getReimbursementCategories();
-        vm.billObj = {
+        vm.receiptObj = {
         };
 
-        vm.saveBill = function (billData, reimbursementId, itemIndex) {
-            var billFormData = new FormData();
-            billFormData.append('file', billData.file);
-            billFormData.append('billDate', billData.billDate);
-            billFormData.append('billCategory', billData.billCategory);
-            billFormData.append('billAmount', billData.billAmount);
-            billFormData.append('billDescription', billData.billDescription);
-            if (billData._id) {
-                ReimbursementService.updateReimbursementItem(billData._id, billFormData).then(function (response) {
-                    noty.showSuccess("Bill has been updated successfully!");
+        vm.saveReceipt = function (receiptForm, receiptData) {
+            var receiptFormData = new FormData();
+            receiptFormData.append('file', receiptData.file);
+            receiptFormData.append('receiptDate', receiptData.receiptDate);
+            receiptFormData.append('receiptCategory', receiptData.receiptCategory);
+            receiptFormData.append('receiptAmount', receiptData.receiptAmount);
+            receiptFormData.append('receiptDescription', receiptData.receiptDescription);
+            if (receiptData._id) {
+                ReimbursementService.updateReimbursementReceipt(receiptData._id, receiptFormData).then(function (response) {
+                    noty.showSuccess("Receipt has been updated successfully!");
+                    $state.go('myReceipts');
                 }, function (error) {
                     if (error) {
                         vm.alerts.push({ msg: error, type: 'danger' });
                     }
                 });
             } else {
-                ReimbursementService.addReimbursementItem(reimbursementId, billFormData).then(function (response) {
-                    noty.showSuccess("Bill has been updated successfully!");
+                ReimbursementService.addReimbursementReceipt(receiptFormData).then(function (response) {
+                    noty.showSuccess("Receipt has been updated successfully!");
+                    $state.go('myReceipts');
                 }, function (error) {
                     if (error) {
                         vm.alerts.push({ msg: error, type: 'danger' });
@@ -275,10 +283,10 @@
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
             });
-            if ($stateParams.billId) {
-                vm.isBillFormEdit = true;
+            if ($stateParams.receiptId) {
+                vm.isReceiptFormEdit = true;
             } else {
-                vm.isBillFormEdit = false;
+                vm.isReceiptFormEdit = false;
             }
         }
         initController();
@@ -348,7 +356,7 @@
                 console.log("vm.reimbursement", vm.reimbursement);
                 vm.reimbursement.createdOn = $filter('date')(vm.reimbursement.createdOn, "yyyy-MM-ddTHH:mm:ss");
                 for (var i = 0; i < vm.reimbursement.items.length; i++) {
-                    vm.reimbursement.items[i].billDate = $filter('date')(vm.reimbursement.items[i].billDate, "yyyy-MM-dd");
+                    vm.reimbursement.items[i].receiptDate = $filter('date')(vm.reimbursement.items[i].receiptDate, "yyyy-MM-dd");
                 }
             }, function (error) {
                 console.log(error);

@@ -5,8 +5,8 @@
     <div class="">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">My Bills</h3>
-                <a class="btn btn-primary btn-rounded pull-right" ui-sref="billForm">Add Bill</a>
+                <h3 class="panel-title">My Receipts</h3>
+                <a class="btn btn-primary btn-rounded pull-right" ui-sref="receiptForm">Add Receipt</a>
             </div>
             <div class="panel-body tab-content">
                 <table class="table table-condensed table-bordered table-striped" export-table>
@@ -23,35 +23,36 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="bill in vm.bills | orderBy:'name'">
+                        <tr ng-repeat="receipt in vm.receipts | orderBy:'name'">
                             <td class="table-heading" style="width: 40px;">
-                                <input type="checkbox" name="billInfo" id="billInfo"
+                                <input type="checkbox" ng-model="receipt.selected"
                                     style="width: 20px; height: 20px; cursor: pointer;">
                             </td>
                             <td class="table-heading" style="width: 40px;">{{$index + 1}}</td>
-                            <td class="table-heading" style="width: 100px;">{{bill.billDate}}</td>
-                            <td class="table-heading" style="width: 160px;">{{bill.billCategory}}</td>
-                            <td class="table-heading" style="width: 80px;">{{bill.billAmount}}</td>
-                            <td class="table-heading">{{bill.billDescription}}</td>
-                            <td class="table-heading" style="width: 180px;">{{bill.billFile}}</td>
+                            <td class="table-heading" style="width: 100px;">{{receipt.receiptDate}}</td>
+                            <td class="table-heading" style="width: 160px;">{{receipt.receiptCategory}}</td>
+                            <td class="table-heading" style="width: 80px;">{{receipt.receiptAmount}}</td>
+                            <td class="table-heading">{{receipt.receiptDescription}}</td>
+                            <td class="table-heading" style="width: 180px;">{{receipt.receiptFile}}</td>
                             <td class="table-heading" style="width: 110px;">
-                                <!-- <a class="btn btn-primary btn-icon btn-rounded" title="View Bill"
-                                    ng-click="vm.openBill()">
+                                <!-- <a class="btn btn-primary btn-icon btn-rounded" title="View Receipt"
+                                    ng-click="vm.openReceipt()">
                                     <span class="fa fa-eye"></span>
                                 </a> -->
-                                <a ui-sref="billForm({billId:'{{bill._id}}'})"
-                                    class="btn btn-success btn-icon btn-rounded" title="Edit Bill"
-                                    ng-click="vm.editBill()">
+                                <a ui-sref="receiptForm({receiptId:'{{receipt._id}}'})"
+                                    class="btn btn-success btn-icon btn-rounded" title="Edit Receipt"
+                                    ng-click="vm.editReceipt()">
                                     <span class="fa fa-pencil" aria-hidden="true"></span>
                                 </a>
-                                <a class="btn btn-warning btn-icon btn-rounded" title="Delete Bill"
-                                    ng-click="vm.deleteBill()">
+                                <a class="btn btn-warning btn-icon btn-rounded" title="Delete Receipt"
+                                    ng-click="vm.deleteReceipt()">
                                     <span class="fa fa-trash-o" aria-hidden="true"></span>
                                 </a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+                <a class="btn btn-primary btn-rounded" ng-click="vm.addReimbursement()">Submit Reimbursement</a>
             </div>
         </div>
     </div>

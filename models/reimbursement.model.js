@@ -18,27 +18,10 @@ var ReimbursementSchema = new Schema({
     status: { type: String, default: 'Draft' },
     totalAmount: {
         type: Number,
-        default: () => {
-            var totalAmount = 0;
-            if (this.items && this.items.length > 0) {
-                for (var i = 0; i < this.items.length; i++) {
-                    totalAmount += parseFloat(this.items[i].billAmount);
-                }
-            }
-            return parseFloat(totalAmount).toFixed(2);
-        }
+        default: 0.00
     },
     createdBy: { type: mongoose.ObjectId },
-    createdOn: { type: Date, default: Date.now },
-    items: [{
-        billDate: { type: Date, default: null },
-        billCategory: { type: String },
-        billDescription: { type: String },
-        billFile: { type: String },
-        billAmount: { type: Number },
-        createdOn: { type: Date, default: Date.now },
-        updatedOn: { type: Date, default: Date.now }
-    }]
+    createdOn: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('reimbursement', ReimbursementSchema);

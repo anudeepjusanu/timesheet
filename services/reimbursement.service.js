@@ -3,6 +3,7 @@ var _ = require('lodash');
 var Q = require('q');
 var mongoose = require("mongoose");
 var ReimbursementModel = require("../models/reimbursement.model");
+var ReimbursementReciptModel = require("../models/reimbursementReceipt.model");
 var UserModel = require("../models/user.model");
 mongoose.connect(config.connectionString);
 
@@ -14,11 +15,13 @@ service.addReimbursement = addReimbursement;
 service.updateReimbursement = updateReimbursement;
 service.deleteReimbursement = deleteReimbursement;
 
-service.getReimbursementItem = getReimbursementItem;
-service.addReimbursementItem = addReimbursementItem;
-service.updateReimbursementItem = updateReimbursementItem;
-service.updateReimbursementItemFile = updateReimbursementItemFile;
-service.deleteReimbursementItem = deleteReimbursementItem;
+service.getMyReceipts = getMyReceipts;
+
+service.getReimbursementReceipt = getReimbursementReceipt;
+service.addReimbursementReceipt = addReimbursementReceipt;
+service.updateReimbursementReceipt = updateReimbursementReceipt;
+service.updateReimbursementReceiptFile = updateReimbursementReceiptFile;
+service.deleteReimbursementReceipt = deleteReimbursementReceipt;
 
 service.getApproveUsersList = getApproveUsersList;
 
@@ -69,13 +72,6 @@ function addReimbursement(reimbursementData) {
                 reject({ error: error, reimbursementObj: reimbursementObj });
             } else {
                 resolve(data);
-                // ReimbursementModel.updateOne({ _id: mongoose.Types.ObjectId(ReimbursementModel._id) }, {
-                //     $set: { "totalCost": { $sum: "$items.billAmount" } }
-                // }).exec().then((response) => {
-                //     resolve(data);
-                // }).catch((error) => {
-                //     reject({ error: error.errmsg });
-                // });
             }
         });
     });
@@ -88,13 +84,6 @@ function updateReimbursement(ReimbursementId, ReimbursementData) {
         }
         ReimbursementModel.updateOne({ _id: mongoose.Types.ObjectId(ReimbursementId) }, { $set: ReimbursementData }).exec().then((data) => {
             resolve(data);
-            // ReimbursementModel.updateOne({ _id: mongoose.Types.ObjectId(ReimbursementId) }, {
-            //     $set: { "totalCost": { $sum: "$items.billAmount" } }
-            // }).exec().then((response) => {
-            //     resolve(data);
-            // }).catch((error) => {
-            //     reject({ error: error.errmsg });
-            // });
         }).catch((error) => {
             reject({ error: error.errmsg });
         });
@@ -111,9 +100,23 @@ function deleteReimbursement(ReimbursementId) {
     });
 }
 
-function getReimbursementItem(itemId) {
+function getMyReceipts(userId) {
     return new Promise((resolve, reject) => {
-        ReimbursementModel.findOne({ 'items._id': mongoose.Types.ObjectId(itemId) }, { 'items.$': 1 }).lean().exec().then((data) => {
+        ReimbursementReciptModel.aggregate([
+            { $match: { userId: mongoose.Types.ObjectId(userId) } }
+        ]).exec().then((data) => {
+            resolve(data);
+        }).catch((error) => {
+            console.log(error);
+            reject({ error: (error.errmsg ? error.errmsg : "Unexpected error") });
+        });
+    });
+}
+
+/** Receipt */
+function getReimbursementReceipt(receiptId) {
+    return new Promise((resolve, reject) => {
+        ReimbursementReciptModel.findOne({ '_id': mongoose.Types.ObjectId(receiptId) }).lean().exec().then((data) => {
             resolve(data);
         }).catch((error) => {
             reject({ error: error.errmsg });
@@ -121,9 +124,59 @@ function getReimbursementItem(itemId) {
     });
 }
 
-function addReimbursementItem(reimbursementId, itemData) {
+function addReimbursementReceipt(receiptData) {
     return new Promise((resolve, reject) => {
-        ReimbursementModel.updateOne({ '_id': mongoose.Types.ObjectId(reimbursementId) }, { $push: { "items": itemData } }).exec().then((data) => {
+        var receiptDataObj = {
+            receiptDate: receiptData.receiptDate,
+            receiptCategory: receiptData.receiptCategory,
+            receiptDescription: receiptData.receiptDescription,
+            receiptAmount: receiptData.receiptAmount
+        };
+        receiptDataObj.userId = mongoose.Types.ObjectId(receiptData.userId)
+        if (receiptData.receiptFile) {
+            receiptDataObj.receiptFile = receiptData.receiptFile;
+        }
+        if (receiptData.status) {
+            receiptDataObj.receiptFile = receiptData.status;
+        }
+        var receiptObj = new ReimbursementReciptModel(receiptDataObj);
+        receiptObj.save(function (error, data) {
+            if (error) {
+                reject({ error: error });
+            } else {
+                resolve(data);
+            }
+        });
+    });
+}
+
+function updateReimbursementReceipt(receiptId, receiptData) {
+    return new Promise((resolve, reject) => {
+        var receiptDataObj = {};
+        var receiptDataObj = {
+            receiptDate: receiptData.receiptDate,
+            receiptCategory: receiptData.receiptCategory,
+            receiptDescription: receiptData.receiptDescription,
+            receiptAmount: receiptData.receiptAmount
+        };
+        if (receiptData.receiptFile) {
+            receiptDataObj.receiptFile = receiptData.receiptFile;
+        }
+        if (receiptData.status) {
+            receiptDataObj.receiptFile = receiptData.status;
+        }
+        ReimbursementReciptModel.updateOne({ '_id': mongoose.Types.ObjectId(receiptId) },
+            { $set: receiptDataObj }).exec().then((data) => {
+                resolve(data);
+            }).catch((error) => {
+                reject({ error: error.errmsg });
+            });
+    });
+}
+
+function deleteReimbursementReceipt(receiptId) {
+    return new Promise((resolve, reject) => {
+        ReimbursementReciptModel.deleteOne({ _id: mongoose.Types.ObjectId(receiptId) }).lean().exec().then((data) => {
             resolve(data);
         }).catch((error) => {
             reject({ error: error.errmsg });
@@ -131,43 +184,10 @@ function addReimbursementItem(reimbursementId, itemData) {
     });
 }
 
-function updateReimbursementItem(itemId, itemData) {
+function updateReimbursementReceiptFile(receiptId, fileData) {
     return new Promise((resolve, reject) => {
-        itemData._id = mongoose.Types.ObjectId(itemId);
-        var itemUpdate = {
-            'items.$.billDate': itemData.billDate,
-            'items.$.billCategory': itemData.billCategory,
-            'items.$.billDescription': itemData.billDescription,
-            'items.$.billAmount': itemData.billAmount,
-            'items.$.updatedOn': new Date()
-        }
-        if (itemData.billFile) {
-            itemUpdate['items.$.billFile'] = itemData.billFile;
-        }
-        ReimbursementModel.updateOne({ 'items._id': mongoose.Types.ObjectId(itemId) },
-            { $set: itemUpdate }).exec().then((data) => {
-                resolve(data);
-            }).catch((error) => {
-                reject({ error: error.errmsg });
-            });
-    });
-}
-
-function deleteReimbursementItem(itemId) {
-    return new Promise((resolve, reject) => {
-        ReimbursementModel.updateOne({ 'items._id': mongoose.Types.ObjectId(itemId) },
-            { $pull: { 'items': { _id: mongoose.Types.ObjectId(itemId) } } }).exec().then((data) => {
-                resolve(data);
-            }).catch((error) => {
-                reject({ error: error.errmsg });
-            });
-    });
-}
-
-function updateReimbursementItemFile(itemId, fileData) {
-    return new Promise((resolve, reject) => {
-        ReimbursementModel.findOneAndUpdate({ 'items._id': mongoose.Types.ObjectId(itemId) },
-            { $set: { 'items.$.billFile': fileData.filename } }).exec().then((itemData) => {
+        ReimbursementReciptModel.findOneAndUpdate({ _id: mongoose.Types.ObjectId(receiptId) },
+            { $set: { 'receiptFile': fileData.filename } }).exec().then((itemData) => {
                 resolve(itemData);
             }).catch((error) => {
                 reject({ error: error.errmsg });
@@ -175,6 +195,7 @@ function updateReimbursementItemFile(itemId, fileData) {
     });
 }
 
+// Get Active users
 function getApproveUsersList() {
     return new Promise((resolve, reject) => {
         UserModel.aggregate([
@@ -187,3 +208,73 @@ function getApproveUsersList() {
         });
     });
 }
+
+// service.getReimbursementItem = getReimbursementItem;
+// service.addReimbursementItem = addReimbursementItem;
+// service.updateReimbursementItem = updateReimbursementItem;
+// service.updateReimbursementItemFile = updateReimbursementItemFile;
+// service.deleteReimbursementItem = deleteReimbursementItem;
+/** Reimbursement Item */
+// function getReimbursementItem(itemId) {
+//     return new Promise((resolve, reject) => {
+//         ReimbursementModel.findOne({ 'items._id': mongoose.Types.ObjectId(itemId) }, { 'items.$': 1 }).lean().exec().then((data) => {
+//             resolve(data);
+//         }).catch((error) => {
+//             reject({ error: error.errmsg });
+//         });
+//     });
+// }
+
+// function addReimbursementItem(reimbursementId, itemData) {
+//     return new Promise((resolve, reject) => {
+//         ReimbursementModel.updateOne({ '_id': mongoose.Types.ObjectId(reimbursementId) }, { $push: { "items": itemData } }).exec().then((data) => {
+//             resolve(data);
+//         }).catch((error) => {
+//             reject({ error: error.errmsg });
+//         });
+//     });
+// }
+
+// function updateReimbursementItem(itemId, itemData) {
+//     return new Promise((resolve, reject) => {
+//         itemData._id = mongoose.Types.ObjectId(itemId);
+//         var itemUpdate = {
+//             'items.$.billDate': itemData.billDate,
+//             'items.$.billCategory': itemData.billCategory,
+//             'items.$.billDescription': itemData.billDescription,
+//             'items.$.billAmount': itemData.billAmount,
+//             'items.$.updatedOn': new Date()
+//         }
+//         if (itemData.billFile) {
+//             itemUpdate['items.$.billFile'] = itemData.billFile;
+//         }
+//         ReimbursementModel.updateOne({ 'items._id': mongoose.Types.ObjectId(itemId) },
+//             { $set: itemUpdate }).exec().then((data) => {
+//                 resolve(data);
+//             }).catch((error) => {
+//                 reject({ error: error.errmsg });
+//             });
+//     });
+// }
+
+// function deleteReimbursementItem(itemId) {
+//     return new Promise((resolve, reject) => {
+//         ReimbursementModel.updateOne({ 'items._id': mongoose.Types.ObjectId(itemId) },
+//             { $pull: { 'items': { _id: mongoose.Types.ObjectId(itemId) } } }).exec().then((data) => {
+//                 resolve(data);
+//             }).catch((error) => {
+//                 reject({ error: error.errmsg });
+//             });
+//     });
+// }
+
+// function updateReimbursementItemFile(itemId, fileData) {
+//     return new Promise((resolve, reject) => {
+//         ReimbursementModel.findOneAndUpdate({ 'items._id': mongoose.Types.ObjectId(itemId) },
+//             { $set: { 'items.$.billFile': fileData.filename } }).exec().then((itemData) => {
+//                 resolve(itemData);
+//             }).catch((error) => {
+//                 reject({ error: error.errmsg });
+//             });
+//     });
+// }
