@@ -346,7 +346,10 @@
                 controllerAs: 'vm',
                 parent: 'layout',
                 data: { activeTab: 'myReceipts' },
-                params: { receiptId: '' }
+                params: {
+                    receiptId: '',
+                    receipt : {}
+                }
             })
             .state('teamReimbursements', {
                 url: '/reimbursement/teamReimbursements',

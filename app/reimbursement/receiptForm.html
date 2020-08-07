@@ -20,9 +20,9 @@
                     <label class="col-md-3 col-xs-12 control-label">Date</label>
                     <div class="col-md-4 col-xs-12">
                         <p class="input-group">
-                            <input type="text" id="date" class="form-control" uib-datepicker-popup
+                            <input type="text" id="date" class="form-control" uib-datepicker-popup="yyyy-MM-dd"
                                 ng-model="vm.receiptObj.receiptDate" is-open="vm.dateOpened"
-                                datepicker-options="vm.dateOptions" close-text="Close" required />
+                                datepicker-options="vm.dateOptions" close-text="Close" ng-required />
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default" ng-click="vm.dateOpened=!vm.dateOpened">
                                     <i class="glyphicon glyphicon-calendar"></i>
@@ -57,6 +57,8 @@
                     <div class="col-md-4 col-xs-12">
                         <input type="file" file-model="vm.receiptObj.file" style="height: auto;" class="form-control"
                             required />
+                        <span
+                            ng-if="!vm.receiptObj.file">{{(vm.isReceiptFormEdit ? vm.receiptObj.receiptFile : '')}}</span>
                     </div>
                 </div>
                 <div class="form-group">

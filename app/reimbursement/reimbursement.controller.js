@@ -6,10 +6,12 @@
         .controller('Reimbursement.IndexController', MyReimbursementsController)
         .controller('Reimbursement.ReimbursementFormController', ReimbursementFormController)
         .controller('Reimbursement.MyReceiptsController', MyReceiptsController)
+        .controller('Reimbursement.DeleteReceiptModalController', DeleteReceiptModalController)
         .controller('Reimbursement.ReceiptFormController', ReceiptFormController)
         .controller('Reimbursement.TeamReimbursementsController', TeamReimbursementsController)
         .controller('Reimbursement.TeamReimbursementsModalController', TeamReimbursementsModalController)
         .controller('Reimbursement.MyReimbursementStatusController', MyReimbursementStatusController)
+        /**Directive to handle the file */
         .directive('fileModel', ['$parse', function ($parse) {
             return {
                 restrict: 'A',
@@ -26,6 +28,7 @@
             };
         }]);
 
+    /** Controller to handle all the employee reimbursements*/
     function MyReimbursementsController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
         var vm = this;
         vm.user = {};
@@ -84,6 +87,7 @@
         initController();
     };
 
+    /**Controller to handle the Employee reibursement form */
     function ReimbursementFormController(UserService, $stateParams, $scope, ReimbursementService, noty, $timeout, _, $filter, $state) {
         var vm = this;
         vm.user = {};
@@ -93,6 +97,10 @@
         vm.reimbursementObj = {
             items: []
         };
+        vm.reimbursement = {
+            items: []
+        };
+        vm.reimbursement.items = $stateParams.receipts;
 
         vm.getApproveActiveUsersList = function () {
             ReimbursementService.getApproveUsersList().then(function (response) {
@@ -142,6 +150,7 @@
                             });
                         }
                         noty.showSuccess("Reimbursement has been added successfully!");
+                        $state.go('myReimbursements');
                     }, function (error) {
                         if (error) {
                             vm.alerts.push({ msg: error, type: 'danger' });
@@ -203,27 +212,74 @@
         initController();
     };
 
-    function MyReceiptsController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
+    /**Controller to handle all employee receipts */
+    function MyReceiptsController(UserService, ReimbursementService, $scope, $rootScope, _, $uibModal, $filter, $state) {
         var vm = this;
         vm.user = {};
         vm.alerts = [];
         vm.receipts = [];
         vm.selected = [];
 
-        function getMyReceipts() {
+        $rootScope.$on("GetMyReceipts", function () {
+            $scope.getMyReceipts();
+        });
+
+        /**Function to get all the employee receipts */
+        $scope.getMyReceipts = function () {
             ReimbursementService.getMyReceipts().then(function (response) {
+                console.log("my Recepts Response", response);
                 vm.receipts = response.receipts;
-                for (var i = 0; i < vm.receipts.length; i++) {
-                    vm.receipts[i].selected = false;
-                    vm.receipts[i].createdOn = $filter('date')(vm.receipts[i].createdOn, "yyyy-MM-ddTHH:mm:ss");
-                }
+                _.each(vm.receipts, function (receipt) {
+                    receipt.selected = false;
+                    receipt.receiptDate = $filter('date')(receipt.receiptDate, "yyyy-MM-dd");
+                });
             }, function (error) {
                 console.log(error);
             });
         };
 
-        vm.addReimbursement = function () {
+        vm.addReimbursement = function (selectedReceipts) {
+            console.log("selectedReceipts", selectedReceipts);
+            _.each(selectedReceipts, function (selectedReceipt) {
+                if (selectedReceipt.selected) {
+                    vm.selected.push(selectedReceipt);
+                }
+            });
+            $state.go('reimbursementForm', {
+                receipts: vm.selected
+            })
+        }
 
+        vm.editReceipt = function (receipt) {
+            $state.go('receiptForm', {
+                receipt: receipt
+            })
+        }
+        /**Delete function to open Model */
+        vm.deleteReceipt = function (receiptId) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'reimbursement/deleteReceiptModal.html',
+                controller: 'Reimbursement.DeleteReceiptModalController',
+                resolve: {
+                    receiptId: function () {
+                        return receiptId;
+                    }
+                },
+                controllerAs: 'vm',
+                size: 'xs'
+            });
+        }
+
+        /** Function to enable the Submit Reimbursement button*/
+        vm.enableSubmitButton = function (selectedBills) {
+            if (_.find(selectedBills, function (obj) { return obj.selected; })) {
+                vm.enableSubmitReimbursementBtn = true;
+            } else {
+                vm.enableSubmitReimbursementBtn = false;
+            }
         }
 
         vm.closeAlert = function (index) {
@@ -234,20 +290,69 @@
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
             });
-            getMyReceipts();
+            $scope.getMyReceipts();
+        }
+
+        initController();
+    };
+
+    /**Modal Controller to delete the receipt */
+    function DeleteReceiptModalController(UserService, ReimbursementService, $rootScope, $scope, $uibModalInstance, receiptId, noty, _, $uibModal, $filter, $state) {
+        var vm = this;
+        vm.user = {};
+        vm.alerts = [];
+        console.log("receiptId", receiptId);
+        var receiptId = receiptId;
+
+        vm.confirmDeleteReceipt = function () {
+            console.log("receiptId", receiptId);
+            if (receiptId) {
+                ReimbursementService.deleteReimbursementReceipt(receiptId).then(function (response) {
+                    noty.showSuccess("Receipt has been deleted successfully!");
+                    $rootScope.$emit("GetMyReceipts", {});
+                }, function (error) {
+                    if (error) {
+                        vm.alerts.push({ msg: error, type: 'danger' });
+                    }
+                });
+            }
+            $uibModalInstance.dismiss('cancel');
+        }
+
+        vm.close = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+
+        vm.closeAlert = function (index) {
+            vm.alerts.splice(index, 1);
+        }
+
+        function initController() {
+            UserService.GetCurrent().then(function (user) {
+                vm.user = user;
+            });
         }
         initController();
     };
 
+    /**Controller to handle the Receipt form */
     function ReceiptFormController(UserService, $stateParams, $state, ReimbursementService, noty, _, $filter) {
         var vm = this;
         vm.user = {};
         vm.alerts = [];
+        vm.receiptObj = {};
         vm.categories = ReimbursementService.getReimbursementCategories();
-        vm.receiptObj = {
-        };
+        if ($stateParams.receipt._id) {
+            $stateParams.receipt.receiptDate = new Date($stateParams.receipt.receiptDate)
+            vm.receiptObj = $stateParams.receipt;
+        } else {
+            vm.receiptObj = {};
+        }
+        // vm.receiptObj = {
+        // };
 
         vm.saveReceipt = function (receiptForm, receiptData) {
+            console.log("receiptData", receiptData);
             var receiptFormData = new FormData();
             receiptFormData.append('file', receiptData.file);
             receiptFormData.append('receiptDate', receiptData.receiptDate);
@@ -256,6 +361,7 @@
             receiptFormData.append('receiptDescription', receiptData.receiptDescription);
             if (receiptData._id) {
                 ReimbursementService.updateReimbursementReceipt(receiptData._id, receiptFormData).then(function (response) {
+                    console.log("update Receipt Response", response);
                     noty.showSuccess("Receipt has been updated successfully!");
                     $state.go('myReceipts');
                 }, function (error) {
@@ -265,7 +371,8 @@
                 });
             } else {
                 ReimbursementService.addReimbursementReceipt(receiptFormData).then(function (response) {
-                    noty.showSuccess("Receipt has been updated successfully!");
+                    noty.showSuccess("Receipt has been added successfully!");
+                    console.log("Save Receipt Response", response);
                     $state.go('myReceipts');
                 }, function (error) {
                     if (error) {
@@ -283,7 +390,7 @@
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
             });
-            if ($stateParams.receiptId) {
+            if ($stateParams.receipt._id) {
                 vm.isReceiptFormEdit = true;
             } else {
                 vm.isReceiptFormEdit = false;
@@ -292,6 +399,7 @@
         initController();
     };
 
+    /**Controller to handle all the employee reimbursements for Manges or lead or admin */
     function TeamReimbursementsController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
         var vm = this;
         vm.user = {};
@@ -340,6 +448,7 @@
         initController();
     };
 
+    /**Controller to handle the  employee reimbursement form for manager or lead or admin*/
     function TeamReimbursementsModalController(UserService, ReimbursementService, reimbursementId, _, $uibModal, $uibModalInstance, $filter, $state) {
         var vm = this;
         vm.user = {};

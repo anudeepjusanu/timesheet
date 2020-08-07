@@ -25,7 +25,7 @@
                     <tbody>
                         <tr ng-repeat="receipt in vm.receipts | orderBy:'name'">
                             <td class="table-heading" style="width: 40px;">
-                                <input type="checkbox" ng-model="receipt.selected"
+                                <input type="checkbox" ng-model="receipt.selected" ng-click="vm.enableSubmitButton(vm.receipts)"
                                     style="width: 20px; height: 20px; cursor: pointer;">
                             </td>
                             <td class="table-heading" style="width: 40px;">{{$index + 1}}</td>
@@ -41,18 +41,18 @@
                                 </a> -->
                                 <a ui-sref="receiptForm({receiptId:'{{receipt._id}}'})"
                                     class="btn button-primary btn-icon btn-rounded" title="Edit Receipt"
-                                    ng-click="vm.editReceipt()">
+                                    ng-click="vm.editReceipt(receipt)">
                                     <span class="fa fa-pencil" aria-hidden="true"></span>
                                 </a>
                                 <a class="btn button-warning btn-icon btn-rounded" title="Delete Receipt"
-                                    ng-click="vm.deleteReceipt()">
+                                    ng-click="vm.deleteReceipt(receipt._id)">
                                     <span class="fa fa-trash-o" aria-hidden="true"></span>
                                 </a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <a class="btn button-primary btn-rounded" ng-click="vm.addReimbursement()">Submit Reimbursement</a>
+                <a ng-disabled="!vm.enableSubmitReimbursementBtn" class="btn button-primary btn-rounded" ng-click="vm.addReimbursement(vm.receipts)">Submit Reimbursement</a>
             </div>
         </div>
     </div>
