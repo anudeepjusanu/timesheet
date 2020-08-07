@@ -326,7 +326,10 @@
                 controllerAs: 'vm',
                 parent: 'layout',
                 data: { activeTab: 'myReimbursements' },
-                params: { reimbursementId: '' }
+                params: {
+                    reimbursementId: '',
+                    receipts: []
+                }
             })
             .state('myReceipts', {
                 url: '/reimbursement/myReceipts',
@@ -337,13 +340,13 @@
                 data: { activeTab: 'myReceipts' }
             })
             .state('receiptForm', {
-                url: '/reimbursement/receiptForm/:billId',
+                url: '/reimbursement/receiptForm/:receiptId',
                 templateUrl: 'reimbursement/receiptForm.html',
                 controller: 'Reimbursement.ReceiptFormController',
                 controllerAs: 'vm',
                 parent: 'layout',
                 data: { activeTab: 'myReceipts' },
-                params: { billId: '' }
+                params: { receiptId: '' }
             })
             .state('teamReimbursements', {
                 url: '/reimbursement/teamReimbursements',

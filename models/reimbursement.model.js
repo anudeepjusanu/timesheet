@@ -16,6 +16,10 @@ var ReimbursementSchema = new Schema({
     reimbursementTo: { type: String },
     purpose: { type: String },
     status: { type: String, default: 'Draft' },
+    receipts: [{
+        type: mongoose.ObjectId,
+        required: true
+    }],
     totalAmount: {
         type: Number,
         default: 0.00
