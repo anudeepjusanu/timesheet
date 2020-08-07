@@ -6,7 +6,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">My Bills</h3>
-                <a class="btn btn-primary btn-rounded pull-right" ui-sref="billForm">Add Bill</a>
+                <a class="btn button-success btn-rounded pull-right" ui-sref="billForm">Add Bill</a>
             </div>
             <div class="panel-body tab-content">
                 <table class="table table-condensed table-bordered table-striped" export-table>
@@ -34,17 +34,17 @@
                             <td class="table-heading" style="width: 80px;">{{bill.billAmount}}</td>
                             <td class="table-heading">{{bill.billDescription}}</td>
                             <td class="table-heading" style="width: 180px;">{{bill.billFile}}</td>
-                            <td class="table-heading" style="width: 110px;">
+                            <td class="table-heading" style="width: 130px;">
                                 <!-- <a class="btn btn-primary btn-icon btn-rounded" title="View Bill"
                                     ng-click="vm.openBill()">
                                     <span class="fa fa-eye"></span>
                                 </a> -->
                                 <a ui-sref="billForm({billId:'{{bill._id}}'})"
-                                    class="btn btn-success btn-icon btn-rounded" title="Edit Bill"
+                                    class="btn button-primary btn-icon btn-rounded" title="Edit Bill"
                                     ng-click="vm.editBill()">
                                     <span class="fa fa-pencil" aria-hidden="true"></span>
                                 </a>
-                                <a class="btn btn-warning btn-icon btn-rounded" title="Delete Bill"
+                                <a class="btn button-warning btn-icon btn-rounded" title="Delete Bill"
                                     ng-click="vm.deleteBill()">
                                     <span class="fa fa-trash-o" aria-hidden="true"></span>
                                 </a>
