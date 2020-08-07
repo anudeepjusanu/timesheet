@@ -29,3 +29,30 @@
 .reimbursement-buttons {
     margin: 7px 7px;
 }
+.button-success {
+    font-size: 14px !important;
+    margin-left: 5px !important;
+    margin-right: 5px !important;
+    background: rgb(80, 219, 80)!important;
+    color: black !important;
+    padding: 4px 16px !important;
+    margin: 2px;
+}
+.button-warning {
+    font-size: 14px !important;
+    margin-left: 5px !important;
+    margin-right: 5px !important;
+    background: orange !important;
+    color: black !important;
+    padding: 4px 16px !important;
+    margin: 2px;
+}
+.button-primary {
+    font-size: 14px !important;
+    margin-left: 5px !important;
+    margin-right: 5px !important;
+    background:lightskyblue !important;
+    color: black !important;
+    padding: 4px 16px !important;
+    margin: 2px;
+}
