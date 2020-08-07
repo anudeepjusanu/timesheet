@@ -6,7 +6,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">My Receipts</h3>
-                <a class="btn btn-primary btn-rounded pull-right" ui-sref="receiptForm">Add Receipt</a>
+                <a class="btn button-success btn-rounded pull-right" ui-sref="receiptForm">Add Receipt</a>
             </div>
             <div class="panel-body tab-content">
                 <table class="table table-condensed table-bordered table-striped" export-table>
@@ -34,17 +34,17 @@
                             <td class="table-heading" style="width: 80px;">{{receipt.receiptAmount}}</td>
                             <td class="table-heading">{{receipt.receiptDescription}}</td>
                             <td class="table-heading" style="width: 180px;">{{receipt.receiptFile}}</td>
-                            <td class="table-heading" style="width: 110px;">
+                            <td class="table-heading" style="width: 130px;">
                                 <!-- <a class="btn btn-primary btn-icon btn-rounded" title="View Receipt"
                                     ng-click="vm.openReceipt()">
                                     <span class="fa fa-eye"></span>
                                 </a> -->
                                 <a ui-sref="receiptForm({receiptId:'{{receipt._id}}'})"
-                                    class="btn btn-success btn-icon btn-rounded" title="Edit Receipt"
+                                    class="btn button-primary btn-icon btn-rounded" title="Edit Receipt"
                                     ng-click="vm.editReceipt()">
                                     <span class="fa fa-pencil" aria-hidden="true"></span>
                                 </a>
-                                <a class="btn btn-warning btn-icon btn-rounded" title="Delete Receipt"
+                                <a class="btn button-warning btn-icon btn-rounded" title="Delete Receipt"
                                     ng-click="vm.deleteReceipt()">
                                     <span class="fa fa-trash-o" aria-hidden="true"></span>
                                 </a>
@@ -52,7 +52,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <a class="btn btn-primary btn-rounded" ng-click="vm.addReimbursement()">Submit Reimbursement</a>
+                <a class="btn button-primary btn-rounded" ng-click="vm.addReimbursement()">Submit Reimbursement</a>
             </div>
         </div>
     </div>
