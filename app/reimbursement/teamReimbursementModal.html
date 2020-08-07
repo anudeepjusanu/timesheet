@@ -93,9 +93,11 @@
                     </td>
                     <td class="table-heading" style="width: 140px;">
                         <span ng-if="vm.user.userRole=='lead' || vm.user.userRole=='manager'">
-                            <button class="btn btn-success btn-rounded" type="button" title="Accept Bill"
+                            <button class="btn btn-rounded" type="button" title="Accept Bill" 
+                                style="font-size: 12px !important; background: rgb(80, 219, 80)!important; color: black !important;"
                                 ng-click="vm.validBill($index)">Accept</button>
-                            <button class="btn btn-warning btn-rounded" type="button" title="Reject Bill"
+                            <button class="btn btn-rounded" type="button" title="Reject Bill"
+                                style="font-size: 12px !important; background: orange !important; color: black !important;"
                                 ng-click="vm.invalidBill($index)">Reject</button>
                         </span>
                     </td>
@@ -106,9 +108,9 @@
 </div>
 <div ng-if="vm.user.userRole=='lead' || vm.user.userRole=='manager'" class="modal-footer">
     <div class="text-center">
-        <button class="btn btn-success btn-rounded" type="button" ng-disabled="!vm.assignForm.$valid"
+        <button class="btn button-success btn-rounded" type="button" ng-disabled="!vm.assignForm.$valid"
             ng-click="vm.ok(vm.assignForm, vm.reimbursement)">Approve</button>
-        <button class="btn btn-warning btn-rounded" type="button" ng-click="vm.cancel()">Reject</button>
+        <button class="btn button-warning btn-rounded" type="button" ng-click="vm.cancel()">Reject</button>
     </div>
 </div>
 <div class="modal-body" ng-if="vm.user.admin===true" id="modal-body">
@@ -174,8 +176,8 @@
 </div>
 <div ng-if="vm.user.admin===true" class="modal-footer">
     <div class="text-center">
-        <button class="btn btn-success btn-rounded" type="button" ng-disabled="!vm.teamRimbursementForm.$valid"
+        <button class="btn button-success btn-rounded" type="button" ng-disabled="!vm.teamRimbursementForm.$valid"
             ng-click="vm.accept(vm.assignForm, vm.reimbursement)">Sanction</button>
-        <button class="btn btn-warning btn-rounded" type="button" ng-click="vm.reject()">Reject</button>
+        <button class="btn button-warning btn-rounded" type="button" ng-click="vm.reject()">Reject</button>
     </div>
 </div>

@@ -22,7 +22,7 @@
                         <p class="input-group">
                             <input type="text" id="date" class="form-control" uib-datepicker-popup="yyyy-MM-dd"
                                 ng-model="vm.receiptObj.receiptDate" is-open="vm.dateOpened"
-                                datepicker-options="vm.dateOptions" close-text="Close" ng-required />
+                                datepicker-options="vm.dateOptions" close-text="Close" required />
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default" ng-click="vm.dateOpened=!vm.dateOpened">
                                     <i class="glyphicon glyphicon-calendar"></i>
@@ -64,7 +64,7 @@
                 <div class="form-group">
                     <div class="col-md-10 col-xs-12 text-center">
                         <button class="btn button-success btn-rounded reimbursement-buttons" type="button"
-                            ng-disabled="!vm.receiptForm.$valid"
+                            ng-disabled="!vm.receiptForm.$valid || !vm.receiptObj.file"
                             ng-click="vm.saveReceipt(vm.receiptForm, vm.receiptObj, $index)">Save</button>
                         <button ui-sref="myReceipts" class="btn button-warning btn-rounded reimbursement-buttons"
                             type="button">
