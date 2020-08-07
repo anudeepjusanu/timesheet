@@ -1,8 +1,8 @@
 <div class="content-wrapper">
     <ul class="breadcrumb">
-        <li><a ui-sref="myBills"><i class="fa fa-dashboard"></i>My Bills</a></li>
+        <li><a ui-sref="myReceipts"><i class="fa fa-dashboard"></i>My Receipts</a></li>
         <li class="active">
-            <span>{{(vm.isBillFormEdit ? 'Edit ' : 'Add ')}}Bill</span>
+            <span>{{(vm.isReceiptFormEdit ? 'Edit ' : 'Add ')}}Receipt</span>
         </li>
     </ul>
     <br />
@@ -10,19 +10,19 @@
         close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}
     </div>
     <div class="panel-heading">
-        <h3 class="panel-title text-center">Bill Information</h3>
+        <h3 class="panel-title text-center">Receipt Information</h3>
     </div>
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-10">
-            <form class="form-horizontal" id="billForm" name="vm.billForm">
+            <form class="form-horizontal" id="receiptForm" name="vm.receiptForm">
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Date</label>
                     <div class="col-md-4 col-xs-12">
                         <p class="input-group">
                             <input type="text" id="date" class="form-control" uib-datepicker-popup
-                                ng-model="vm.billObj.date" is-open="vm.dateOpened" datepicker-options="vm.dateOptions"
-                                close-text="Close" required />
+                                ng-model="vm.receiptObj.receiptDate" is-open="vm.dateOpened"
+                                datepicker-options="vm.dateOptions" close-text="Close" required />
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default" ng-click="vm.dateOpened=!vm.dateOpened">
                                     <i class="glyphicon glyphicon-calendar"></i>
@@ -34,7 +34,7 @@
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Category</label>
                     <div class="col-md-4 col-xs-12">
-                        <select class="form-control" ng-model="vm.billObj.billCategory" required
+                        <select class="form-control" ng-model="vm.receiptObj.receiptCategory" required
                             ng-options="categoryType.categoryTypeId as categoryType.categoryTypeVal for categoryType in vm.categories">
                         </select>
                     </div>
@@ -42,29 +42,29 @@
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Amount</label>
                     <div class="col-md-4 col-xs-12">
-                        <input type="number" class="form-control" ng-model="vm.billObj.billAmount" required />
+                        <input type="number" class="form-control" ng-model="vm.receiptObj.receiptAmount" required />
                     </div>
                 </div>
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Description</label>
                     <div class="col-md-4 col-xs-12">
-                        <td><textarea class="form-control" ng-model="vm.billObj.billDescription"
+                        <td><textarea class="form-control" ng-model="vm.receiptObj.receiptDescription"
                                 placeholder="Enter your description" rows="2" required></textarea></td>
                     </div>
                 </div>
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Receipt</label>
                     <div class="col-md-4 col-xs-12">
-                        <input type="file" file-model="vm.billObj.file" style="height: auto;" class="form-control"
+                        <input type="file" file-model="vm.receiptObj.file" style="height: auto;" class="form-control"
                             required />
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-10 col-xs-12 text-center">
-                        <button class="btn button-success btn-rounded" type="button"
-                            ng-disabled="!vm.billForm.$valid"
-                            ng-click="vm.saveBill(vm.billForm, vm.billObj, $index)">Save</button>
-                        <button ui-sref="myBills" class="btn button-warning btn-rounded"
+                        <button class="btn btn-success btn-rounded reimbursement-buttons" type="button"
+                            ng-disabled="!vm.receiptForm.$valid"
+                            ng-click="vm.saveReceipt(vm.receiptForm, vm.receiptObj, $index)">Save</button>
+                        <button ui-sref="myReceipts" class="btn btn-warning btn-rounded reimbursement-buttons"
                             type="button">
                             Back</button>
                     </div>

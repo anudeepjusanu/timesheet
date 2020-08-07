@@ -328,21 +328,21 @@
                 data: { activeTab: 'myReimbursements' },
                 params: { reimbursementId: '' }
             })
-            .state('myBills', {
-                url: '/reimbursement/myBills',
-                templateUrl: 'reimbursement/myBills.html',
-                controller: 'Reimbursement.MyBillsController',
+            .state('myReceipts', {
+                url: '/reimbursement/myReceipts',
+                templateUrl: 'reimbursement/myReceipts.html',
+                controller: 'Reimbursement.MyReceiptsController',
                 controllerAs: 'vm',
                 parent: 'layout',
-                data: { activeTab: 'myBills' }
+                data: { activeTab: 'myReceipts' }
             })
-            .state('billForm', {
-                url: '/reimbursement/billForm/:billId',
-                templateUrl: 'reimbursement/billForm.html',
-                controller: 'Reimbursement.BillFormController',
+            .state('receiptForm', {
+                url: '/reimbursement/receiptForm/:billId',
+                templateUrl: 'reimbursement/receiptForm.html',
+                controller: 'Reimbursement.ReceiptFormController',
                 controllerAs: 'vm',
                 parent: 'layout',
-                data: { activeTab: 'myBills' },
+                data: { activeTab: 'myReceipts' },
                 params: { billId: '' }
             })
             .state('teamReimbursements', {
