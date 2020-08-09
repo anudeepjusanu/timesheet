@@ -36,7 +36,6 @@
 
         function getMyReimbursements() {
             ReimbursementService.getMyReimbursements().then(function (response) {
-                console.log("reimbursements", response);
                 vm.reimbursements = response.reimbursements;
                 for (var i = 0; i < vm.reimbursements.length; i++) {
                     vm.reimbursements[i].createdOn = $filter('date')(vm.reimbursements[i].createdOn, "yyyy-MM-ddTHH:mm:ss");
@@ -88,24 +87,20 @@
     };
 
     /**Controller to handle the Employee reibursement form */
-    function ReimbursementFormController(UserService, $stateParams, $scope, ReimbursementService, noty, $timeout, _, $filter, $state) {
+    function ReimbursementFormController(UserService, $stateParams, ReimbursementService, noty, $timeout, _, $filter, $state) {
         var vm = this;
         vm.user = {};
         vm.approveUsers = [];
         vm.alerts = [];
         vm.categories = ReimbursementService.getReimbursementCategories();
         vm.reimbursementObj = {
-            items: []
+            receipts: []
         };
-        vm.reimbursement = {
-            items: []
-        };
-        vm.reimbursement.items = $stateParams.receipts;
+        vm.reimbursementObj.receipts = $stateParams.receipts;
 
         vm.getApproveActiveUsersList = function () {
             ReimbursementService.getApproveUsersList().then(function (response) {
                 vm.approveActiveUsers = response.users;
-                console.log("vm.approveActiveUsers", vm.approveActiveUsers);
             }, function (error) {
                 if (error) {
                     vm.alerts.push({ msg: error, type: 'danger' });
@@ -113,25 +108,28 @@
             });
         }
 
-        vm.addBill = function (index, user) {
-            if (!vm.reimbursementObj.items) {
-                vm.reimbursementObj.items = [];
-            }
-            vm.reimbursementObj.items.push({ "file": vm.myFile });
-        }
+        // vm.addBill = function (index, user) {
+        //     if (!vm.reimbursementObj.items) {
+        //         vm.reimbursementObj.items = [];
+        //     }
+        //     vm.reimbursementObj.items.push({ "file": vm.myFile });
+        // }
 
-        vm.deleteBill = function (billDate, index) {
-            vm.reimbursementObj.items.splice(index, 1);
-        }
+        // vm.deleteBill = function (billDate, index) {
+        //     vm.reimbursementObj.items.splice(index, 1);
+        // }
 
         vm.submitReimbursement = function (reimbursementForm, reimbursementObj, index) {
-            var reimbursementFrom = $filter('date')(reimbursementObj.reimbursementFrom, "yyyy-MM-dd");
-            var reimbursementTo = $filter('date')(reimbursementObj.reimbursementTo, "yyyy-MM-dd");
-            var formData = new FormData();
-            formData.append('approveUserId', reimbursementObj.projectId);
-            formData.append('reimbursementFrom', reimbursementFrom);
-            formData.append('reimbursementTo', reimbursementTo);
-            formData.append('purpose', reimbursementObj.purpose);
+            var formData = {};
+            formData.reimbursementFrom = $filter('date')(reimbursementObj.reimbursementFrom, "yyyy-MM-dd");
+            formData.reimbursementTo = $filter('date')(reimbursementObj.reimbursementTo, "yyyy-MM-dd");
+            formData.approveUserId = reimbursementObj.approveUserId;
+            formData.department = reimbursementObj.department;
+            formData.purpose = reimbursementObj.purpose;
+            formData.receipts = [];
+            _.each(reimbursementObj.receipts, function (receiptObj) {
+                formData.receipts.push(receiptObj._id);
+            });
             if (reimbursementForm.$valid) {
                 if (reimbursementObj._id) {
                     ReimbursementService.updateReimbursement(reimbursementObj._id, formData).then(function (response) {
@@ -143,7 +141,6 @@
                     });
                 } else {
                     ReimbursementService.addReimbursement(formData).then(function (response) {
-                        console.log(response.reimbursement);
                         if (response.reimbursement) {
                             _.each(reimbursementObj.items, function (itemData) {
                                 vm.saveReimbursementItem(itemData, response.reimbursement._id);
@@ -227,7 +224,6 @@
         /**Function to get all the employee receipts */
         $scope.getMyReceipts = function () {
             ReimbursementService.getMyReceipts().then(function (response) {
-                console.log("my Recepts Response", response);
                 vm.receipts = response.receipts;
                 _.each(vm.receipts, function (receipt) {
                     receipt.selected = false;
@@ -239,7 +235,6 @@
         };
 
         vm.addReimbursement = function (selectedReceipts) {
-            console.log("selectedReceipts", selectedReceipts);
             _.each(selectedReceipts, function (selectedReceipt) {
                 if (selectedReceipt.selected) {
                     vm.selected.push(selectedReceipt);

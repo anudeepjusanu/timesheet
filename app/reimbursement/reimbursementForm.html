@@ -20,8 +20,8 @@
                             class="form-control" />
                     </div>
                 </div>
-                <div class="form-group required">
-                    <label class="col-md-3 col-xs-12 control-label">Approval</label>
+                <div class="form-group">
+                    <label class="col-md-3 col-xs-12 control-label required">Approval</label>
                     <div class="col-md-3 col-xs-12">
                         <select class="form-control" ng-model="vm.reimbursementObj.projectId" required
                             ng-options="user._id as user.name for user in vm.approveActiveUsers">
@@ -29,7 +29,7 @@
                     </div>
                     <label class="col-md-1 col-xs-12 control-label">Department</label>
                     <div class="col-md-2 col-xs-12">
-                        <input type="text" ng-model="vm.reimbursementObj.department" class="form-control" required />
+                        <input type="text" ng-model="vm.reimbursementObj.department" class="form-control" />
                     </div>
                 </div>
                 <div class="form-group required">
@@ -60,11 +60,11 @@
                         </p>
                     </div>
                 </div>
-                <div class="form-group required">
+                <div class="form-group">
                     <label class="col-md-3 col-xs-12 control-label">Business Purpose</label>
                     <div class="col-md-6 col-xs-12">
                         <td><textarea class="form-control" ng-model="vm.reimbursementObj.purpose"
-                                placeholder="Enter your purpose" rows="2" required></textarea></td>
+                                placeholder="Enter your purpose" rows="2"></textarea></td>
                     </div>
                 </div>
                 <div class="form-group">
@@ -94,7 +94,7 @@
                                 <th class="table-heading">Receipt</th>
                                 <!-- <th class="table-heading">Actions</th> -->
                             </tr>
-                            <tr ng-repeat="item in vm.reimbursement.items">
+                            <tr ng-repeat="item in vm.reimbursementObj.receipts">
                                 <td class="table-heading" style="width: 100px;">{{item.receiptDate}}</td>
                                 <td class="table-heading" style="width: 180px;">{{item.receiptCategory}}</td>
                                 <td class="table-heading" style="width: 100px;">{{item.receiptAmount}}</td>
