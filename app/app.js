@@ -347,8 +347,8 @@
                 parent: 'layout',
                 data: { activeTab: 'myReceipts' },
                 params: {
-                    receiptId: '',
-                    receipt : {}
+                    receipt : {},
+                    receiptId: ''
                 }
             })
             .state('teamReimbursements', {

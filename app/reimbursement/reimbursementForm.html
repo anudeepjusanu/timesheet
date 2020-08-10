@@ -20,8 +20,8 @@
                             class="form-control" />
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-md-3 col-xs-12 control-label required">Approval</label>
+                <div class="form-group required">
+                    <label class="col-md-3 col-xs-12 control-label">Approval</label>
                     <div class="col-md-3 col-xs-12">
                         <select class="form-control" ng-model="vm.reimbursementObj.projectId" required
                             ng-options="user._id as user.name for user in vm.approveActiveUsers">
@@ -100,7 +100,7 @@
                                 <td class="table-heading" style="width: 100px;">{{item.receiptAmount}}</td>
                                 <td class="table-heading">{{item.receiptDescription}}</td>
                                 <td class="table-heading" style="width: 200px;">
-                                    <span>{{item.receiptFile}}</span>
+                                    <span><a>{{item.receiptFile}}</a></span>
                                 </td>
                             </tr>
                         </table>

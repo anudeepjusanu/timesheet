@@ -37,9 +37,9 @@
         function getMyReimbursements() {
             ReimbursementService.getMyReimbursements().then(function (response) {
                 vm.reimbursements = response.reimbursements;
-                for (var i = 0; i < vm.reimbursements.length; i++) {
-                    vm.reimbursements[i].createdOn = $filter('date')(vm.reimbursements[i].createdOn, "yyyy-MM-ddTHH:mm:ss");
-                }
+                _.each(vm.reimbursements, function (item) {
+                    item.createdOn = $filter('date')(item.createdOn, "yyyy-MM-dd");
+                });
             }, function (error) {
                 console.log(error);
             });
@@ -270,11 +270,17 @@
 
         /** Function to enable the Submit Reimbursement button*/
         vm.enableSubmitButton = function (selectedBills) {
+            vm.selectedBillsIndex = 0;
             if (_.find(selectedBills, function (obj) { return obj.selected; })) {
                 vm.enableSubmitReimbursementBtn = true;
             } else {
                 vm.enableSubmitReimbursementBtn = false;
             }
+            _.each(selectedBills, function(item){
+                if(item.selected){
+                    vm.selectedBillsIndex =  vm.selectedBillsIndex + 1;
+                }
+            })
         }
 
         vm.closeAlert = function (index) {
@@ -296,11 +302,9 @@
         var vm = this;
         vm.user = {};
         vm.alerts = [];
-        console.log("receiptId", receiptId);
         var receiptId = receiptId;
 
         vm.confirmDeleteReceipt = function () {
-            console.log("receiptId", receiptId);
             if (receiptId) {
                 ReimbursementService.deleteReimbursementReceipt(receiptId).then(function (response) {
                     noty.showSuccess("Receipt has been deleted successfully!");
@@ -343,11 +347,8 @@
         } else {
             vm.receiptObj = {};
         }
-        // vm.receiptObj = {
-        // };
 
         vm.saveReceipt = function (receiptForm, receiptData) {
-            console.log("receiptData", receiptData);
             var receiptFormData = new FormData();
             receiptFormData.append('file', receiptData.file);
             receiptFormData.append('receiptDate', receiptData.receiptDate);
@@ -356,7 +357,6 @@
             receiptFormData.append('receiptDescription', receiptData.receiptDescription);
             if (receiptData._id) {
                 ReimbursementService.updateReimbursementReceipt(receiptData._id, receiptFormData).then(function (response) {
-                    console.log("update Receipt Response", response);
                     noty.showSuccess("Receipt has been updated successfully!");
                     $state.go('myReceipts');
                 }, function (error) {
@@ -367,7 +367,6 @@
             } else {
                 ReimbursementService.addReimbursementReceipt(receiptFormData).then(function (response) {
                     noty.showSuccess("Receipt has been added successfully!");
-                    console.log("Save Receipt Response", response);
                     $state.go('myReceipts');
                 }, function (error) {
                     if (error) {
@@ -403,17 +402,15 @@
         function getMyReimbursements() {
             ReimbursementService.getMyReimbursements().then(function (response) {
                 vm.teamReimbursements = response.reimbursements;
-                console.log("vm.teamReimbursements", vm.teamReimbursements);
-                for (var i = 0; i < vm.teamReimbursements.length; i++) {
-                    vm.teamReimbursements[i].createdOn = $filter('date')(vm.teamReimbursements[i].createdOn, "yyyy-MM-ddTHH:mm:ss");
-                }
+                _.each(vm.teamReimbursements, function (item) {
+                    item.createdOn = $filter('date')(item.createdOn, "yyyy-MM-dd");
+                });
             }, function (error) {
                 console.log(error);
             });
         };
 
         vm.openTeamReimbursementModal = function (reimbursementId) {
-            console.log("reimbursementId", reimbursementId);
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -455,41 +452,58 @@
 
         function getMyReimbursementById() {
             ReimbursementService.getReimbursement(vm.reimbursementId).then(function (response) {
-                console.log("response", response);
                 vm.reimbursement = response.reimbursement;
-                console.log("vm.reimbursement", vm.reimbursement);
                 vm.reimbursement.createdOn = $filter('date')(vm.reimbursement.createdOn, "yyyy-MM-ddTHH:mm:ss");
-                for (var i = 0; i < vm.reimbursement.items.length; i++) {
-                    vm.reimbursement.items[i].receiptDate = $filter('date')(vm.reimbursement.items[i].receiptDate, "yyyy-MM-dd");
-                }
+                _.each(vm.reimbursement.items, function (item) {
+                    item.billDate = $filter('date')(item.billDate, "yyyy-MM-dd");
+                });
             }, function (error) {
                 console.log(error);
             });
         };
 
-        vm.validBill = function (index) {
-            for (var i = 0; i < vm.reimbursement.items.length; i++) {
-                if (i == index) {
-                    vm.reimbursement.items[i].validBill = true;
-                    vm.reimbursement.items[i].invalidBill = false;
+        vm.acceptReceipt = function (receiptIndex) {
+            _.each(vm.reimbursement.items, function (item, index) {
+                if (receiptIndex == index) {
+                    item.acceptReceipt = true;
+                    item.rejectReceipt = false;
                 }
-            }
+            });
         }
-        vm.invalidBill = function (index) {
-            for (var i = 0; i < vm.reimbursement.items.length; i++) {
-                if (i == index) {
-                    vm.reimbursement.items[i].validBill = false;
-                    vm.reimbursement.items[i].invalidBill = true;
+        vm.rejectReceipt = function (receiptIndex) {
+            _.each(vm.reimbursement.items, function (item, index) {
+                if (receiptIndex == index) {
+                    item.acceptReceipt = false;
+                    item.rejectReceipt = true;
                 }
-            }
+            });
+        }
+
+        vm.acceptAllReceipts = function () {
+            _.each(vm.reimbursement.items, function (item) {
+                    item.acceptReceipt = true;
+                    item.rejectReceipt = false;
+            });
+        }
+
+        vm.rejectAllReceipts = function () {
+            _.each(vm.reimbursement.items, function (item) {
+                    item.acceptReceipt = false;
+                    item.rejectReceipt = true;
+            });
         }
 
         vm.accept = function (form, reimbursement) {
+
         };
 
         vm.reject = function () {
-            $uibModalInstance.dismiss('cancel');
+
         };
+
+        vm.close = function () {
+            $uibModalInstance.dismiss('cancel');
+        }
 
         vm.closeAlert = function (index) {
             vm.alerts.splice(index, 1);
@@ -500,8 +514,6 @@
                 vm.user = user;
                 vm.reimbursement.name = vm.user.name;
                 vm.reimbursement.id = vm.user.employeeId;
-                vm.reimbursement.managerName = vm.user.projects[vm.user.projects.length - 1].ownerName;
-                console.log("user", user);
             });
             getMyReimbursementById()
         }
