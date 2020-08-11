@@ -6,7 +6,6 @@
         .controller('Reimbursement.IndexController', MyReimbursementsController)
         .controller('Reimbursement.ReimbursementFormController', ReimbursementFormController)
         .controller('Reimbursement.MyReceiptsController', MyReceiptsController)
-        .controller('Reimbursement.DeleteReceiptModalController', DeleteReceiptModalController)
         .controller('Reimbursement.ReceiptFormController', ReceiptFormController)
         .controller('Reimbursement.TeamReimbursementsController', TeamReimbursementsController)
         .controller('Reimbursement.TeamReimbursementsModalController', TeamReimbursementsModalController)
@@ -44,6 +43,17 @@
                 console.log(error);
             });
         };
+
+        vm.delReimbursement = function (reimbursementObj) {
+            if (confirm("Do you want to delete this reimbursement ?")) {
+                ReimbursementService.deleteReimbursement(reimbursementObj._id).then(function (response) {
+                    getMyReimbursements();
+                }, function (error) {
+                    console.log(error);
+                    getMyReimbursements();
+                });
+            }
+        }
 
         vm.openMyReimbursementStatus = function () {
             var modalInstance = $uibModal.open({
@@ -126,6 +136,7 @@
             formData.approveUserId = reimbursementObj.approveUserId;
             formData.department = reimbursementObj.department;
             formData.purpose = reimbursementObj.purpose;
+            formData.status = 'Submitted';
             formData.receipts = [];
             _.each(reimbursementObj.receipts, function (receiptObj) {
                 formData.receipts.push(receiptObj._id);
@@ -159,31 +170,31 @@
             }
         };
 
-        vm.saveReimbursementItem = function (itemData, reimbursementId, itemIndex) {
-            var itemFormData = new FormData();
-            itemFormData.append('file', itemData.file);
-            itemFormData.append('billDate', itemData.billDate);
-            itemFormData.append('billCategory', itemData.billCategory);
-            itemFormData.append('billAmount', itemData.billAmount);
-            itemFormData.append('billDescription', itemData.billDescription);
-            if (itemData._id) {
-                ReimbursementService.updateReimbursementItem(itemData._id, itemFormData).then(function (response) {
-                    noty.showSuccess("Reimbursement bill item has been updated successfully!");
-                }, function (error) {
-                    if (error) {
-                        vm.alerts.push({ msg: error, type: 'danger' });
-                    }
-                });
-            } else {
-                ReimbursementService.addReimbursementItem(reimbursementId, itemFormData).then(function (response) {
-                    noty.showSuccess("Reimbursement bill item has been updated successfully!");
-                }, function (error) {
-                    if (error) {
-                        vm.alerts.push({ msg: error, type: 'danger' });
-                    }
-                });
-            }
-        }
+        // vm.saveReimbursementItem = function (itemData, reimbursementId, itemIndex) {
+        //     var itemFormData = new FormData();
+        //     itemFormData.append('file', itemData.file);
+        //     itemFormData.append('billDate', itemData.billDate);
+        //     itemFormData.append('billCategory', itemData.billCategory);
+        //     itemFormData.append('billAmount', itemData.billAmount);
+        //     itemFormData.append('billDescription', itemData.billDescription);
+        //     if (itemData._id) {
+        //         ReimbursementService.updateReimbursementItem(itemData._id, itemFormData).then(function (response) {
+        //             noty.showSuccess("Reimbursement bill item has been updated successfully!");
+        //         }, function (error) {
+        //             if (error) {
+        //                 vm.alerts.push({ msg: error, type: 'danger' });
+        //             }
+        //         });
+        //     } else {
+        //         ReimbursementService.addReimbursementItem(reimbursementId, itemFormData).then(function (response) {
+        //             noty.showSuccess("Reimbursement bill item has been updated successfully!");
+        //         }, function (error) {
+        //             if (error) {
+        //                 vm.alerts.push({ msg: error, type: 'danger' });
+        //             }
+        //         });
+        //     }
+        // }
 
         vm.closeAlert = function (index) {
             vm.alerts.splice(index, 1);
@@ -216,6 +227,7 @@
         vm.alerts = [];
         vm.receipts = [];
         vm.selected = [];
+        vm.selectAll = false;
 
         $rootScope.$on("GetMyReceipts", function () {
             $scope.getMyReceipts();
@@ -256,8 +268,29 @@
                 animation: true,
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
-                templateUrl: 'reimbursement/deleteReceiptModal.html',
-                controller: 'Reimbursement.DeleteReceiptModalController',
+                templateUrl: 'common/modalConfirm.html',
+                controller: function (ReimbursementService, $uibModalInstance, receiptId, noty, _) {
+                    var vm = this;
+                    vm.confirmTitle = "Delete Receipt";
+                    vm.confirmMessage = "Are you sure, do you want to delete the receipt?";
+
+                    vm.confirmOk = function () {
+                        if (receiptId) {
+                            ReimbursementService.deleteReimbursementReceipt(receiptId).then(function (response) {
+                                noty.showSuccess("Receipt has been deleted successfully!");
+                            }, function (error) {
+                                if (error) {
+                                    vm.alerts.push({ msg: error, type: 'danger' });
+                                }
+                            });
+                        }
+                        $uibModalInstance.dismiss('cancel');
+                    }
+
+                    vm.close = function () {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+                },
                 resolve: {
                     receiptId: function () {
                         return receiptId;
@@ -265,6 +298,11 @@
                 },
                 controllerAs: 'vm',
                 size: 'xs'
+            }).result.then(function (obj) {
+                //vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
+                $scope.getMyReceipts();
+            }, function () {
+                $scope.getMyReceipts();
             });
         }
 
@@ -276,11 +314,17 @@
             } else {
                 vm.enableSubmitReimbursementBtn = false;
             }
-            _.each(selectedBills, function(item){
-                if(item.selected){
-                    vm.selectedBillsIndex =  vm.selectedBillsIndex + 1;
+            _.each(selectedBills, function (item) {
+                if (item.selected) {
+                    vm.selectedBillsIndex = vm.selectedBillsIndex + 1;
                 }
             })
+        }
+
+        vm.checkAll = function () {
+            _.each(vm.receipts, function (receipt) {
+                receipt.selected = vm.selectAll;
+            });
         }
 
         vm.closeAlert = function (index) {
@@ -352,9 +396,13 @@
             var receiptFormData = new FormData();
             receiptFormData.append('file', receiptData.file);
             receiptFormData.append('receiptDate', receiptData.receiptDate);
-            receiptFormData.append('receiptCategory', receiptData.receiptCategory);
+            if (receiptData.receiptCategory) {
+                receiptFormData.append('receiptCategory', receiptData.receiptCategory);
+            }
             receiptFormData.append('receiptAmount', receiptData.receiptAmount);
-            receiptFormData.append('receiptDescription', receiptData.receiptDescription);
+            if (receiptData.receiptDescription) {
+                receiptFormData.append('receiptDescription', receiptData.receiptDescription);
+            }
             if (receiptData._id) {
                 ReimbursementService.updateReimbursementReceipt(receiptData._id, receiptFormData).then(function (response) {
                     noty.showSuccess("Receipt has been updated successfully!");
@@ -399,8 +447,8 @@
         vm.user = {};
         vm.alerts = [];
 
-        function getMyReimbursements() {
-            ReimbursementService.getMyReimbursements().then(function (response) {
+        function getPendingReimbursements() {
+            ReimbursementService.getPendingReimbursements().then(function (response) {
                 vm.teamReimbursements = response.reimbursements;
                 _.each(vm.teamReimbursements, function (item) {
                     item.createdOn = $filter('date')(item.createdOn, "yyyy-MM-dd");
@@ -435,7 +483,7 @@
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
             });
-            getMyReimbursements();
+            getPendingReimbursements();
         }
         initController();
     };
@@ -481,15 +529,15 @@
 
         vm.acceptAllReceipts = function () {
             _.each(vm.reimbursement.items, function (item) {
-                    item.acceptReceipt = true;
-                    item.rejectReceipt = false;
+                item.acceptReceipt = true;
+                item.rejectReceipt = false;
             });
         }
 
         vm.rejectAllReceipts = function () {
             _.each(vm.reimbursement.items, function (item) {
-                    item.acceptReceipt = false;
-                    item.rejectReceipt = true;
+                item.acceptReceipt = false;
+                item.rejectReceipt = true;
             });
         }
 

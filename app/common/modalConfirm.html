@@ -1,0 +1,18 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">{{vm.confirmTitle}}
+        <!-- <a class="pull-right" ng-click="vm.close()">
+            <span class="fa fa-times" aria-hidden="true"></span>
+        </a> -->
+    </h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="text-center">
+        <h4>{{vm.confirmMessage}}</h3>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="text-center">
+        <button class="btn btn-success btn-rounded" type="button" ng-click="vm.confirmOk()">Yes</button>
+        <button class="btn btn-warning btn-rounded" type="button" ng-click="vm.close()">No</button>
+    </div>
+</div>

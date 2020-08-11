@@ -10,6 +10,8 @@ mongoose.connect(config.connectionString);
 var service = {};
 
 service.getMyReimbursements = getMyReimbursements;
+service.getPendingReimbursements = getPendingReimbursements;
+service.getApprovedReimbursements = getApprovedReimbursements;
 service.getReimbursement = getReimbursement;
 service.addReimbursement = addReimbursement;
 service.updateReimbursement = updateReimbursement;
@@ -39,7 +41,55 @@ function getMyReimbursements(userId) {
                 $project: {
                     userId: 1, approveUserId: 1, department: 1, reimbursementFrom: 1, reimbursementTo: 1, purpose: 1,
                     status: 1, totalAmount: 1, status: 1, createdBy: 1, createdOn: 1, items: 1, approveUserName: '$approveUser.name',
-                    userName: '$user.name',
+                    userName: '$user.name', employeeId: '$user.employeeId'
+                }
+            }
+        ]).exec().then((data) => {
+            resolve(data);
+        }).catch((error) => {
+            console.log(error);
+            reject({ error: (error.errmsg ? error.errmsg : "Unexpected error") });
+        });
+    });
+}
+
+function getPendingReimbursements(userId) {
+    return new Promise((resolve, reject) => {
+        ReimbursementModel.aggregate([
+            { $match: { approveUserId: mongoose.Types.ObjectId(userId), status: 'Submitted' } },
+            { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "user" } },
+            { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
+            { $lookup: { from: "users", localField: "approveUserId", foreignField: "_id", as: "approveUser" } },
+            { $unwind: { path: "$approveUser", preserveNullAndEmptyArrays: true } },
+            {
+                $project: {
+                    userId: 1, approveUserId: 1, department: 1, reimbursementFrom: 1, reimbursementTo: 1, purpose: 1,
+                    status: 1, totalAmount: 1, status: 1, createdBy: 1, createdOn: 1, items: 1, approveUserName: '$approveUser.name',
+                    userName: '$user.name', employeeId: '$user.employeeId'
+                }
+            }
+        ]).exec().then((data) => {
+            resolve(data);
+        }).catch((error) => {
+            console.log(error);
+            reject({ error: (error.errmsg ? error.errmsg : "Unexpected error") });
+        });
+    });
+}
+
+function getApprovedReimbursements(userId) {
+    return new Promise((resolve, reject) => {
+        ReimbursementModel.aggregate([
+            { $match: { status: 'Approved' } },
+            { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "user" } },
+            { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
+            { $lookup: { from: "users", localField: "approveUserId", foreignField: "_id", as: "approveUser" } },
+            { $unwind: { path: "$approveUser", preserveNullAndEmptyArrays: true } },
+            {
+                $project: {
+                    userId: 1, approveUserId: 1, department: 1, reimbursementFrom: 1, reimbursementTo: 1, purpose: 1,
+                    status: 1, totalAmount: 1, status: 1, createdBy: 1, createdOn: 1, items: 1, approveUserName: '$approveUser.name',
+                    userName: '$user.name', employeeId: '$user.employeeId'
                 }
             }
         ]).exec().then((data) => {
@@ -92,7 +142,7 @@ function updateReimbursement(ReimbursementId, ReimbursementData) {
 
 function deleteReimbursement(ReimbursementId) {
     return new Promise((resolve, reject) => {
-        ReimbursementModel.deleteOne({ _id: mongoose.Types.ObjectId(ReimbursementId) }).lean().exec().then((data) => {
+        ReimbursementModel.deleteOne({ _id: mongoose.Types.ObjectId(ReimbursementId), status: 'Draft' }).lean().exec().then((data) => {
             resolve(data);
         }).catch((error) => {
             reject({ error: error.errmsg });

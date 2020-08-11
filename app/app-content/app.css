@@ -6066,3 +6066,8 @@ table.text-center th {
     height: 400px!important;
     overflow-y: scroll;
 }
+.tbl-check-box{
+    width: 16px; 
+    height: 16px; 
+    cursor: pointer;
+}

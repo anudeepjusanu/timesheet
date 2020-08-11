@@ -6,50 +6,56 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">My Receipts</h3>
-                <a class="btn button-primary btn-rounded pull-right" ui-sref="receiptForm">Add Receipt</a>
+                <a class="btn btn-primary btn-rounded pull-right" ui-sref="receiptForm">Add Receipt</a>
             </div>
             <div class="panel-body tab-content">
                 <table class="table table-condensed table-bordered table-striped" export-table>
                     <thead>
                         <tr>
-                            <th class="table-heading"></th>
-                            <th class="table-heading">#</th>
-                            <th class="table-heading">Date</th>
-                            <th class="table-heading">Category</th>
-                            <th class="table-heading">Amount</th>
+                            <th class="heading" style="width: 40px;">
+                                <input type="checkbox" class="tbl-check-box" ng-model="vm.selectAll"
+                                    ng-click="vm.checkAll();" />
+                            </th>
+                            <th class="heading" style="width: 40px;">#</th>
+                            <th class="table-heading" style="width: 100px;">Date</th>
+                            <th class="table-heading" style="width: 160px;">Category</th>
+                            <th class="table-heading" style="width: 80px;">Amount</th>
                             <th class="table-heading">Description</th>
-                            <th class="table-heading">Receipt</th>
-                            <th class="table-heading">Actions</th>
+                            <th class="table-heading" style="width: 180px;">Receipt</th>
+                            <th class="table-heading" style="width: 140px;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="receipt in vm.receipts | orderBy:'name'">
-                            <td class="table-heading" style="width: 40px;">
-                                <input type="checkbox" ng-model="receipt.selected"
-                                    ng-click="vm.enableSubmitButton(vm.receipts)"
-                                    style="width: 20px; height: 20px; cursor: pointer;">
+                            <td class="heading">
+                                <input type="checkbox" class="tbl-check-box" ng-model="receipt.selected"
+                                    ng-click="vm.enableSubmitButton(vm.receipts)">
                             </td>
-                            <td class="table-heading" style="width: 40px;">{{$index + 1}}</td>
-                            <td class="table-heading" style="width: 100px;">{{receipt.receiptDate}}</td>
-                            <td class="table-heading" style="width: 160px;">{{receipt.receiptCategory}}</td>
-                            <td class="table-heading" style="width: 80px;">{{receipt.receiptAmount}}</td>
+                            <td class="table-heading">{{$index + 1}}</td>
+                            <td class="table-heading">{{receipt.receiptDate}}</td>
+                            <td class="table-heading">{{receipt.receiptCategory}}</td>
+                            <td class="table-heading">{{receipt.receiptAmount}}</td>
                             <td class="table-heading">{{receipt.receiptDescription}}</td>
-                            <td class="table-heading" style="width: 180px;"><a>{{receipt.receiptFile}}</a></td>
-                            <td class="table-heading" style="width: 130px;">
-                                <a ng-disabled="vm.selectedBillsIndex > 1" ui-sref="receiptForm({receiptId:'{{receipt._id}}'})"
-                                    class="btn button-primary btn-icon btn-rounded" title="Edit Receipt"
+                            <td>
+                                <a href="/data/reimbursements/{{receipt.receiptFile}}"
+                                    target="_blank">{{receipt.receiptFile}}</a>
+                            </td>
+                            <td class="table-heading">
+                                <a ng-disabled="vm.selectedBillsIndex > 1"
+                                    ui-sref="receiptForm({receiptId:'{{receipt._id}}'})"
+                                    class="btn btn-primary btn-icon btn-rounded" title="Edit Receipt"
                                     ng-click="vm.editReceipt(receipt)">
                                     <span class="fa fa-pencil" aria-hidden="true"></span>
                                 </a>
-                                <a ng-disabled="vm.selectedBillsIndex > 1" class="btn button-warning btn-icon btn-rounded" title="Delete Receipt"
-                                    ng-click="vm.deleteReceipt(receipt._id)">
+                                <a ng-disabled="vm.selectedBillsIndex > 1" class="btn btn-warning btn-icon btn-rounded"
+                                    title="Delete Receipt" ng-click="vm.deleteReceipt(receipt._id)">
                                     <span class="fa fa-trash-o" aria-hidden="true"></span>
                                 </a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <a ng-disabled="!vm.enableSubmitReimbursementBtn" class="btn button-success btn-rounded"
+                <a ng-disabled="!vm.enableSubmitReimbursementBtn" class="btn btn-success btn-rounded"
                     ng-click="vm.addReimbursement(vm.receipts)">Submit Reimbursement</a>
             </div>
         </div>

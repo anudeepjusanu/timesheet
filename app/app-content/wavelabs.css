@@ -18,7 +18,7 @@
 }
 
 /* Reimbursement Styles */
-.table-heading {
+table .heading {
     text-align: center;
 }
 .delete-bill-icon {
@@ -60,4 +60,9 @@
 }
 .modal-padding {
     padding-top: 7px;
+}
+.tbl-check-box{
+    width: 16px; 
+    height: 16px; 
+    cursor: pointer;
 }

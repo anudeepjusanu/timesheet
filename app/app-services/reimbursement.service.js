@@ -8,6 +8,8 @@
     function ReimbursementService($http, $q) {
         var service = {};
         service.getMyReimbursements = getMyReimbursements;
+        service.getPendingReimbursements = getPendingReimbursements;
+        service.getApprovedReimbursements = getApprovedReimbursements;
         service.getReimbursement = getReimbursement;
         service.addReimbursement = addReimbursement;
         service.updateReimbursement = updateReimbursement;
@@ -28,23 +30,23 @@
         function getMyReimbursements() {
             return $http.get('/api/reimbursement/').then(handleSuccess, handleError);
         }
+        function getPendingReimbursements() {
+            return $http.get('/api/reimbursement/pendingReimbursements').then(handleSuccess, handleError);
+        }
+        function getApprovedReimbursements() {
+            return $http.get('/api/reimbursement/approvedReimbursements').then(handleSuccess, handleError);
+        }
 
         function getReimbursement(reimbursementId) {
             return $http.get('/api/reimbursement/' + reimbursementId).then(handleSuccess, handleError);
         }
 
         function addReimbursement(formData) {
-            return $http.post('/api/reimbursement/', formData, {
-                transformRequest: angular.identity,
-                headers: { 'Content-Type': undefined }
-            }).then(handleSuccess, handleError);
+            return $http.post('/api/reimbursement/', formData).then(handleSuccess, handleError);
         }
 
         function updateReimbursement(reimbursementId, formData) {
-            return $http.put('/api/reimbursement/' + reimbursementId, formData, {
-                transformRequest: angular.identity,
-                headers: { 'Content-Type': undefined }
-            }).then(handleSuccess, handleError);
+            return $http.put('/api/reimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
         }
 
         function deleteReimbursement(reimbursementId) {

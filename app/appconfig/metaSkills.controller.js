@@ -22,7 +22,7 @@
             });
         }
 
-        vm.viewMetaSkillModel = function(metaSkillObj) {
+        vm.viewMetaSkillModel = function (metaSkillObj) {
             var metaSkill = {};
             if (metaSkillObj) {
                 metaSkill = metaSkillObj;
@@ -39,23 +39,23 @@
                 controllerAs: 'vm',
                 size: 'md',
                 resolve: {
-                    metaSkill: function() {
+                    metaSkill: function () {
                         return metaSkill;
                     }
                 }
             });
 
-            modalInstance.result.then(function(metaSkillObj) {
+            modalInstance.result.then(function (metaSkillObj) {
                 //vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
                 getMetaSkills();
-            }, function() {
+            }, function () {
                 getMetaSkills();
             });
         }
 
-        vm.delMetaSkill = function(metaSkill){
+        vm.delMetaSkill = function (metaSkill) {
             if (confirm("Do you want to delete this meta skill ?")) {
-                AppConfigService.delMetaSkill(metaSkill).then(function(response) {
+                AppConfigService.delMetaSkill(metaSkill).then(function (response) {
                     getMetaSkills();
                 });
             }
@@ -76,15 +76,15 @@
         vm.alerts = [];
         vm.metaSkill = metaSkill;
 
-        vm.ok = function(form) {
+        vm.ok = function (form) {
             if (form.$valid) {
                 vm.enableSaveBtn = false;
                 if (vm.metaSkill.isNew === true) {
-                    AppConfigService.addMetaSkill({skillName: vm.metaSkill.skillName}).then(function(response) {
+                    AppConfigService.addMetaSkill({ skillName: vm.metaSkill.skillName }).then(function (response) {
                         noty.showSuccess("New Meta Skill has been created successfully!");
                         vm.enableSaveBtn = true;
                         $uibModalInstance.close(vm.metaSkill);
-                    }, function(error) {
+                    }, function (error) {
                         if (error) {
                             vm.alerts.push({ msg: error, type: 'danger' });
                         }
@@ -92,11 +92,11 @@
                         $uibModalInstance.close(vm.metaSkill);
                     });
                 } else {
-                    AppConfigService.updateMetaSkill(vm.metaSkill).then(function(response) {
+                    AppConfigService.updateMetaSkill(vm.metaSkill).then(function (response) {
                         noty.showSuccess("Meta Skill has been updated successfully!");
                         vm.enableSaveBtn = true;
                         $uibModalInstance.close(vm.metaSkill);
-                    }, function(error) {
+                    }, function (error) {
                         if (error) {
                             vm.alerts.push({ msg: error, type: 'danger' });
                         }
@@ -110,7 +110,7 @@
             }
         };
 
-        vm.cancel = function() {
+        vm.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
     };
