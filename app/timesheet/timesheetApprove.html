@@ -15,27 +15,41 @@
 </div>
 <div class="page-content-wrap">
     <div class="row" ng-if="vm.showList">
-        <div class="col-md-3" ng-repeat="project in vm.projects track by $index" ng-if="project.ownerId == vm.user._id" style="cursor: pointer;">
-            <a ng-click="vm.viewProject(project)" class="tile tile-info" ng-class-even="tile-valign" ng-class-odd="tile-primary" style="font-size: 16px;">
-            {{project.projectName}}
-            <div class="informer informer-default"></div>
-            <div class="informer informer-default dir-br"><span class="fa fa-users"></span></div>
-        </a>
+        <div class="col-md-3">
+            <a ui-sref="teamReimbursements" class="tile tile-info" ng-class-even="tile-valign"
+                ng-class-odd="tile-primary" style="font-size: 16px;">
+                Approve Reimbursements
+                <div class="informer informer-default"></div>
+                <div class="informer informer-default dir-br"><span class="fa fa-money"></span></div>
+            </a>
+        </div>
+        <div class="col-md-3" ng-repeat="project in vm.projects track by $index" ng-if="project.ownerId == vm.user._id"
+            style="cursor: pointer;">
+            <a ng-click="vm.viewProject(project)" class="tile tile-info" ng-class-even="tile-valign"
+                ng-class-odd="tile-primary" style="font-size: 16px;">
+                {{project.projectName}}
+                <div class="informer informer-default"></div>
+                <div class="informer informer-default dir-br"><span class="fa fa-users"></span></div>
+            </a>
         </div>
     </div>
     <div class="row" ng-if="!vm.showList">
         <div class="clearfix row">
             <div class="col-sm-6 clearfix">
                 <h1 class="pull-left">{{vm.currentProject.projectName}}</h1>
-                <button class="btn btn-primary pull-left" ng-click="vm.remindAll()" style="margin: 0 10px; position: relative; top: 20px;"> Remind All</button>
+                <button class="btn btn-primary pull-left" ng-click="vm.remindAll()"
+                    style="margin: 0 10px; position: relative; top: 20px;"> Remind All</button>
             </div>
             <div class="form-group pull-right col-sm-6">
                 <label class="col-md-3">Filter By Week</label>
                 <div class="col-md-9">
                     <p class="input-group">
-                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.currentWeek" is-open="vm.popup2.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" ng-change="vm.getReport(vm.currentWeek)" />
+                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.currentWeek"
+                            is-open="vm.popup2.opened" datepicker-options="vm.dateOptions" ng-required="true"
+                            close-text="Close" ng-change="vm.getReport(vm.currentWeek)" />
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-default" ng-click="vm.open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                            <button type="button" class="btn btn-default" ng-click="vm.open2()"><i
+                                    class="glyphicon glyphicon-calendar"></i></button>
                         </span>
                     </p>
                 </div>
@@ -61,7 +75,8 @@
                     </th>
 
                 </tr>
-                <tr ng-repeat="user in vm.currentProject.users" ng-class="{'non-billable-row':(sheet.timesheet.resourceType && sheet.timesheet.resourceType != 'billable')}">
+                <tr ng-repeat="user in vm.currentProject.users"
+                    ng-class="{'non-billable-row':(sheet.timesheet.resourceType && sheet.timesheet.resourceType != 'billable')}">
                     <td>{{user.userName}}</td>
                     <td class="row" min-width="580px">
                         <table class="table table-bordered">
@@ -76,11 +91,17 @@
                                 <td width="100px;">
                                     <div ng-if="!(timesheet | isEmpty)">
                                         <div ng-if="timesheet.sheetStatus != 'Approved'">
-                                            <select class="form-control" ng-model="timesheet.sheetStatus" ng-change="vm.setTimesheetStatus(timesheet)" ng-required="true" ng-options="status.id as status.name for status in vm.statusList" ng-if="timesheet.isSelect"></select>
-                                            <span class="badge badge-secondary" ng-class="{'badge-danger': timesheet.sheetStatus==='Rejected'}" ng-if="!timesheet.isSelect">{{timesheet.sheetStatus}}</span>
+                                            <select class="form-control" ng-model="timesheet.sheetStatus"
+                                                ng-change="vm.setTimesheetStatus(timesheet)" ng-required="true"
+                                                ng-options="status.id as status.name for status in vm.statusList"
+                                                ng-if="timesheet.isSelect"></select>
+                                            <span class="badge badge-secondary"
+                                                ng-class="{'badge-danger': timesheet.sheetStatus==='Rejected'}"
+                                                ng-if="!timesheet.isSelect">{{timesheet.sheetStatus}}</span>
                                         </div>
                                         <div ng-if="timesheet.sheetStatus != 'Pending'">
-                                            <span class="badge badge-success" ng-class="{'badge-danger': timesheet.sheetStatus==='Rejected'}">{{timesheet.sheetStatus}}</span>
+                                            <span class="badge badge-success"
+                                                ng-class="{'badge-danger': timesheet.sheetStatus==='Rejected'}">{{timesheet.sheetStatus}}</span>
                                         </div>
                                     </div>
 

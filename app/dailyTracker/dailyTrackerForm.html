@@ -1,0 +1,42 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">
+        {{ (vm.dailyTrackerObj && vm.dailyTrackerObj._id)?"Edit":"Add" }} Daily Tracker
+    </h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+        close="vm.closeAlert($index)" dismiss-on-timeout="3000">
+        {{alert.msg}}
+    </div>
+    <form class="form-horizontal" name="dailyTrackerForm">
+        <div class="form-group required">
+            <label class="col-md-3 col-xs-12 control-label">Task Name</label>
+            <div class="col-md-6 col-xs-12">
+                <select class="form-control" ng-model="vm.dailyTrackerObj.taskCategory" required="true"
+                    ng-options="taskCategory as taskCategory.taskCategoryName for taskCategory in vm.dailyTaskCategories"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-3 col-xs-12 control-label">Time</label>
+            <div class="row col-md-6 col-xs-12">
+                <div class="col-md-6">
+                    <label class="control-label">Start</label>
+                    <div class="">
+                        <input type="time" ng-model="vm.dailyTrackerObj.taskStartTime" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="control-label">End</label>
+                    <div class="">
+                        <input type="time" ng-model="vm.dailyTrackerObj.taskEndTime" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-disabled="!vm.enableSaveBtn"
+        ng-click="vm.saveDailyTracker(dailyTrackerForm);">Save</button>
+    <button class="btn btn-warning" type="button" ng-click="vm.closeDailyTracker()">Cancel</button>
+</div>

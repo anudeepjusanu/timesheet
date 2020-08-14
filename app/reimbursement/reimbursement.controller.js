@@ -3,13 +3,15 @@
 
     angular
         .module('app')
-        .controller('Reimbursement.IndexController', MyReimbursementsController)
+        .controller('Reimbursement.IndexController', IndexController)
+        .controller('Reimbursement.MyReimbursementsController', MyReimbursementsController)
         .controller('Reimbursement.ReimbursementFormController', ReimbursementFormController)
         .controller('Reimbursement.MyReceiptsController', MyReceiptsController)
         .controller('Reimbursement.ReceiptFormController', ReceiptFormController)
         .controller('Reimbursement.TeamReimbursementsController', TeamReimbursementsController)
         .controller('Reimbursement.TeamReimbursementsModalController', TeamReimbursementsModalController)
         .controller('Reimbursement.MyReimbursementStatusController', MyReimbursementStatusController)
+        .controller('Reimbursement.AccountReimbursementsController', AccountReimbursementsController)
         /**Directive to handle the file */
         .directive('fileModel', ['$parse', function ($parse) {
             return {
@@ -26,7 +28,22 @@
                 }
             };
         }]);
+    function IndexController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
+        var vm = this;
+        vm.user = {};
+        vm.alerts = [];
 
+        vm.closeAlert = function (index) {
+            vm.alerts.splice(index, 1);
+        }
+
+        function initController() {
+            UserService.GetCurrent().then(function (user) {
+                vm.user = user;
+            });
+        }
+        initController();
+    };
     /** Controller to handle all the employee reimbursements*/
     function MyReimbursementsController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
         var vm = this;
@@ -443,6 +460,52 @@
 
     /**Controller to handle all the employee reimbursements for Manges or lead or admin */
     function TeamReimbursementsController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
+        var vm = this;
+        vm.user = {};
+        vm.alerts = [];
+
+        function getPendingReimbursements() {
+            ReimbursementService.getPendingReimbursements().then(function (response) {
+                vm.teamReimbursements = response.reimbursements;
+                _.each(vm.teamReimbursements, function (item) {
+                    item.createdOn = $filter('date')(item.createdOn, "yyyy-MM-dd");
+                });
+            }, function (error) {
+                console.log(error);
+            });
+        };
+
+        vm.openTeamReimbursementModal = function (reimbursementId) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'reimbursement/teamReimbursementModal.html',
+                controller: 'Reimbursement.TeamReimbursementsModalController',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    reimbursementId: function () {
+                        return reimbursementId;
+                    }
+                }
+            });
+        }
+
+        vm.closeAlert = function (index) {
+            vm.alerts.splice(index, 1);
+        }
+
+        function initController() {
+            UserService.GetCurrent().then(function (user) {
+                vm.user = user;
+            });
+            getPendingReimbursements();
+        }
+        initController();
+    };
+
+    function AccountReimbursementsController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
         var vm = this;
         vm.user = {};
         vm.alerts = [];

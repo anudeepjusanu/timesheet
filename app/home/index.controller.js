@@ -989,9 +989,6 @@
             });
         }
 
-
-
-
         initController();
         function initController() {
             UserService.GetCurrent().then(function (user) {

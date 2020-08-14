@@ -108,7 +108,8 @@
                 { id: "employee", name: "Employee" },
                 { id: "lead", name: "Lead" },
                 { id: "manager", name: "Manager" },
-                { id: "itsupport", name: "IT Support" }
+                { id: "itsupport", name: "IT Support" },
+                { id: "account", name: "Account" }
             ];
         }
 

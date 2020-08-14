@@ -311,13 +311,21 @@
                 parent: 'layout',
                 data: { activeTab: 'inventories' }
             })
-            .state('myReimbursements', {
-                url: '/reimbursement/myReimbursements',
-                templateUrl: 'reimbursement/myReimbursements.html',
+            .state('reimbursement', {
+                url: '/reimbursement',
+                templateUrl: 'reimbursement/index.html',
                 controller: 'Reimbursement.IndexController',
                 controllerAs: 'vm',
                 parent: 'layout',
-                data: { activeTab: 'myReimbursements' }
+                data: { activeTab: 'reimbursement' }
+            })
+            .state('myReimbursements', {
+                url: '/reimbursement/myReimbursements',
+                templateUrl: 'reimbursement/myReimbursements.html',
+                controller: 'Reimbursement.MyReimbursementsController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'reimbursement' }
             })
             .state('reimbursementForm', {
                 url: '/reimbursement/reimbursementForm/:reimbursementId',
@@ -325,7 +333,7 @@
                 controller: 'Reimbursement.ReimbursementFormController',
                 controllerAs: 'vm',
                 parent: 'layout',
-                data: { activeTab: 'myReimbursements' },
+                data: { activeTab: 'reimbursement' },
                 params: {
                     reimbursementId: '',
                     receipts: []
@@ -347,7 +355,7 @@
                 parent: 'layout',
                 data: { activeTab: 'myReceipts' },
                 params: {
-                    receipt : {},
+                    receipt: {},
                     receiptId: ''
                 }
             })
@@ -358,6 +366,30 @@
                 controllerAs: 'vm',
                 parent: 'layout',
                 data: { activeTab: 'teamReimbursements' }
+            })
+            .state('accountReimbursements', {
+                url: '/reimbursement/accountReimbursements',
+                templateUrl: 'reimbursement/accountReimbursements.html',
+                controller: 'Reimbursement.AccountReimbursementsController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'accountReimbursements' }
+            })
+            .state('myDailyTracker', {
+                url: '/dailyTracker/my',
+                templateUrl: 'dailyTracker/myDailyTracker.html',
+                controller: 'DailyTracker.MyDailyTrackerController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'myDailyTracker' }
+            })
+            .state('dailyTaskCategories', {
+                url: '/dailyTracker/dailyTaskCategories',
+                templateUrl: 'dailyTracker/dailyTaskCategories.html',
+                controller: 'DailyTask.DailyTaskCategoriesController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'dailyTaskCategories' }
             })
         ChartJsProvider.setOptions({ colors: ['#1caf9a', '#273541'] });
     }

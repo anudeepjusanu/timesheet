@@ -1,0 +1,54 @@
+<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+    close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+    {{alert.msg}}</div>
+<div class="content-wrapper">
+    <div class="">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">My Daily Tracker</h3>
+                <a class="btn btn-primary btn-rounded pull-right" ng-click="vm.viewDailyTrackerForm();">Add</a>
+                <!-- <div class="pull-right">
+                    <button class="btn btn-primary" ng-click="vm.exportTable()">Export</button> &nbsp; &nbsp;
+                </div> -->
+                <div class="form-group pull-right col-sm-6">
+                    <label class="col-md-3">Date</label>
+                    <div class="col-md-9">
+                        <p class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.trackerDate"
+                                is-open="vm.trackerDatePopup.opened" datepicker-options="vm.trackerDateOptions"
+                                ng-required="true" close-text="Close" ng-change="vm.getMyDailyTracker();" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="vm.open2()">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </button>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-condensed table-bordered table-striped" export-table>
+                    <thead>
+                        <tr>
+                            <th style="width: 100px;">#</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="slot in vm.trackerTimes">
+                            <td>{{slot.label}}</td>
+                            <td>
+                                <span class="badge badge-primary">
+                                    New &nbsp;
+                                    <a ng-click="" class=""><span class="fa fa-times"></span></a>
+                                </span>
+                            </td>
+                            <td>{{slot}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
