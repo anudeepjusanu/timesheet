@@ -15,24 +15,39 @@
         var vm = this;
         var nowDate = new Date();
         vm.trackerDate = new Date();
-        vm.trackerSlotTime = 10;
+        vm.trackerIntervel = 30;
+        vm.trackerIntervelOpts = [10, 30, 60];
+        vm.dayShiftOptions = [
+            { label: "24H", startHour: 0, startMinute: 0, endHour: 23, endMinute: 59 },
+            { label: "06:00AM to 02:00PM", startHour: 6, startMinute: 0, endHour: 13, endMinute: 59 },
+            { label: "09:00AM to 06:00PM", startHour: 9, startMinute: 0, endHour: 17, endMinute: 59 },
+            { label: "02:00PM to 11:00PM", startHour: 14, startMinute: 0, endHour: 22, endMinute: 59 }
+        ];
+        vm.dayShift = vm.dayShiftOptions[2];
         vm.trackerTimes = [];
-        vm.myTasks = [];
+        vm.dailyTrackerTasks = [];
         vm.dailyTaskCategories = [];
+        vm.trackerDateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
 
         function generateTrackerTimes() {
-            var navTime = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), 10, 0, 0, 0);
+            vm.trackerTimes = [];
+            var navTime = new Date(vm.trackerDate.getFullYear(), vm.trackerDate.getMonth(), vm.trackerDate.getDate(), vm.dayShift.startHour, vm.dayShift.startMinute, 0, 0);
+            var endTime = new Date(vm.trackerDate.getFullYear(), vm.trackerDate.getMonth(), vm.trackerDate.getDate(), vm.dayShift.endHour, vm.dayShift.endMinute, 0, 0);
             var cnt = 0;
-            while (cnt++ < 40) {
+            while (navTime < endTime && cnt++ < 60) {
                 var trackerTime = {
                     time: navTime,
                     label: navTime.getHours().padZero(2) + ":" + navTime.getMinutes().padZero(2),
                     tasks: []
                 }
-                navTime.setTime(navTime.getTime() + (vm.trackerSlotTime * 60000));
+                trackerTime.startTime = angular.copy(navTime);
+                navTime.setTime(navTime.getTime() + (vm.trackerIntervel * 60000));
                 trackerTime.label += " - " + navTime.getHours().padZero(2) + ":" + navTime.getMinutes().padZero(2);
+                trackerTime.endTime = angular.copy(navTime);
                 vm.trackerTimes.push(angular.copy(trackerTime));
-
             }
         }
 
@@ -44,19 +59,33 @@
             });
         };
 
-        function getUserDailyTrackerTasks() {
-            DailyTrackerService.getUserDailyTrackerTasks().then(function (response) {
-                console.log(response);
-                vm.inventories = response.inventories;
-                _.each(vm.inventories, function (dailyTrackerObj) {
-                    if (dailyTrackerObj.assignedUser && dailyTrackerObj.assignedUser.name) {
-                        dailyTrackerObj.userName = dailyTrackerObj.assignedUser.name;
-                    }
+        vm.getUserDailyTrackerTasks = function () {
+            generateTrackerTimes();
+            var trackerDate = $filter('date')(vm.trackerDate, "yyyy-MM-dd");
+            DailyTrackerService.getUserDailyTrackerTasks({ trackerDate: trackerDate }).then(function (response) {
+                vm.dailyTrackerTasks = response.dailyTrackerTasks;
+                _.each(vm.trackerTimes, function (trackerTimeObj) {
+                    trackerTimeObj.tasks = [];
+                });
+                _.each(vm.dailyTrackerTasks, function (dailyTrackerObj) {
+                    dailyTrackerObj.taskStartTime = new Date(dailyTrackerObj.taskStartTime);
+                    dailyTrackerObj.taskEndTime = new Date(dailyTrackerObj.taskEndTime);
+                    //dailyTrackerObj.trackerDate = new Date(dailyTrackerObj.trackerDate);
+                    _.each(vm.trackerTimes, function (trackerTimeObj) {
+                        if (trackerTimeObj.startTime >= dailyTrackerObj.taskStartTime
+                            && trackerTimeObj.endTime <= dailyTrackerObj.taskEndTime) {
+                            trackerTimeObj.tasks.push(dailyTrackerObj);
+                        }
+                    });
                 });
             }, function (error) {
                 console.log(error);
             });
         };
+
+        vm.newSlotDailyTrackerForm = function (slot) {
+            vm.viewDailyTrackerForm({ taskStartTime: slot.startTime, taskEndTime: slot.endTime });
+        }
 
         vm.viewDailyTrackerForm = function (dailyTrackerObj) {
             var modalInstance = $uibModal.open({
@@ -81,9 +110,9 @@
             });
 
             modalInstance.result.then(function (userObj) {
-                getUserDailyTrackerTasks();
+                vm.getUserDailyTrackerTasks();
             }, function () {
-                getUserDailyTrackerTasks();
+                vm.getUserDailyTrackerTasks();
             });
         }
 
@@ -91,18 +120,25 @@
             e.stopPropagation();
         }
 
+        vm.delDailyTrackerTask = function (taskObj) {
+            if (confirm("Do you want to delete this Daily Tracker Task?")) {
+                DailyTrackerService.delDailyTrackerTask(taskObj).then(function (response) {
+                    vm.getUserDailyTrackerTasks();
+                });
+            }
+        }
+
         function initController() {
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
-                generateTrackerTimes();
                 getDailyTaskCategories();
-                getUserDailyTrackerTasks();
+                vm.getUserDailyTrackerTasks();
             });
         }
         initController();
     };
 
-    function DailyTrackerFormModel(DailyTrackerService, dailyTrackerObj, dailyTaskCategories, trackerDate, $uibModalInstance, $filter, noty) {
+    function DailyTrackerFormModel(DailyTrackerService, dailyTrackerObj, dailyTaskCategories, trackerDate, $uibModalInstance, $filter, _, noty) {
         var vm = this;
         vm.enableSaveBtn = true;
         vm.alerts = [];
@@ -113,7 +149,9 @@
             formatYear: 'yy',
             startingDay: 1
         };
-
+        if (vm.dailyTrackerObj && vm.dailyTrackerObj.taskCategoryId) {
+            vm.dailyTrackerObj.taskCategory = _.find(vm.dailyTaskCategories, { _id: vm.dailyTrackerObj.taskCategoryId });
+        }
         vm.saveDailyTracker = function (dailyTrackerForm) {
             if (dailyTrackerForm.$valid) {
                 var trackerData = {
@@ -123,6 +161,8 @@
                 };
                 trackerData.taskStartTime = $filter('date')(vm.trackerDate, "yyyy-MM-dd") + " " + vm.dailyTrackerObj.taskStartTime.getHours().padZero(2) + ":" + vm.dailyTrackerObj.taskStartTime.getMinutes().padZero(2) + ":00";
                 trackerData.taskEndTime = $filter('date')(vm.trackerDate, "yyyy-MM-dd") + " " + vm.dailyTrackerObj.taskEndTime.getHours().padZero(2) + ":" + vm.dailyTrackerObj.taskEndTime.getMinutes().padZero(2) + ":00";
+                // trackerData.taskStartTime = vm.dailyTrackerObj.taskStartTime;
+                // trackerData.taskEndTime = vm.dailyTrackerObj.taskEndTime;
                 if (vm.dailyTrackerObj._id) {
                     DailyTrackerService.updateDailyTrackerTask(vm.dailyTrackerObj._id, trackerData).then(function (response) {
                         noty.showSuccess("Daily Task has been updated successfully!");
@@ -133,6 +173,7 @@
                         }
                     });
                 } else {
+                    //trackerData._id = vm.dailyTrackerObj._id;
                     DailyTrackerService.addDailyTrackerTask(trackerData).then(function (response) {
                         noty.showSuccess("Dily Task has been added successfully!");
                         $uibModalInstance.close();

@@ -11,26 +11,27 @@
                     <button class="btn btn-primary" ng-click="vm.exportTable()">Export</button> &nbsp; &nbsp;
                 </div> -->
                 <div class="form-group pull-right col-sm-6">
-                    <label class="col-md-3">Date</label>
-                    <div class="col-md-9">
-                        <p class="input-group">
-                            <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.trackerDate"
-                                is-open="vm.trackerDatePopup.opened" datepicker-options="vm.trackerDateOptions"
-                                ng-required="true" close-text="Close" ng-change="vm.getMyDailyTracker();" />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="vm.open2()">
-                                    <i class="glyphicon glyphicon-calendar"></i>
-                                </button>
-                            </span>
-                        </p>
-                    </div>
+                    <p class="input-group pull-right" style="width: 140px;">
+                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.trackerDate"
+                            is-open="vm.trackerDateOpened" datepicker-options="vm.trackerDateOptions" ng-required="true"
+                            close-text="Close" ng-change="vm.getUserDailyTrackerTasks();" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default"
+                                ng-click="vm.trackerDateOpened=!vm.trackerDateOpened">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    </p>
+                    <select class="form-control pull-right" ng-model="vm.dayShift"
+                        style="width: 140px; margin-right: 10px;" ng-change="vm.getUserDailyTrackerTasks();"
+                        ng-options="opt as opt.label for opt in vm.dayShiftOptions"></select>
                 </div>
             </div>
             <div class="panel-body">
-                <table class="table table-condensed table-bordered table-striped" export-table>
+                <table class="table table-condensed table-bordered table-striped" style="width: 480px;">
                     <thead>
                         <tr>
-                            <th style="width: 100px;">#</th>
+                            <th style="width: 120px;">#</th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -39,12 +40,22 @@
                         <tr ng-repeat="slot in vm.trackerTimes">
                             <td>{{slot.label}}</td>
                             <td>
-                                <span class="badge badge-primary">
-                                    New &nbsp;
-                                    <a ng-click="" class=""><span class="fa fa-times"></span></a>
+                                <span class="badge badge-primary" ng-repeat="task in slot.tasks">
+                                    {{task.taskShortName}} &nbsp;
+                                    <a class="" ng-click="vm.viewDailyTrackerForm(task);">
+                                        <span class="fa fa-pencil"></span>
+                                    </a>
+                                    <a class="" ng-click="vm.delDailyTrackerTask(task);">
+                                        <span class="fa fa-times"></span>
+                                    </a>
                                 </span>
+                                <a class="btn pull-right" ng-click="vm.newSlotDailyTrackerForm(slot);">
+                                    <span class="fa fa-plus"></span>
+                                </a>
                             </td>
-                            <td>{{slot}}</td>
+                            <td>
+
+                            </td>
                         </tr>
                     </tbody>
                 </table>

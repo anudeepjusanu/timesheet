@@ -21,8 +21,8 @@
 
         return service;
 
-        function getUserDailyTrackerTasks() {
-            return $http.get('/api/dailyTracker/myDailyTrackerTasks/').then(handleSuccess, handleError);
+        function getUserDailyTrackerTasks(trackerData) {
+            return $http.get('/api/dailyTracker/myDailyTrackerTasks/', { params: trackerData }).then(handleSuccess, handleError);
         }
 
         function getDailyTrckerTask(dailyTrackerTaskId) {
@@ -37,8 +37,8 @@
             return $http.put('/api/dailyTracker/dailyTrackerTask/' + dailyTrackerTaskId, dailyTrackerTaskObj).then(handleSuccess, handleError);
         }
 
-        function delDailyTrackerTask(dailyTrackerTaskId) {
-            return $http.delete('/api/dailyTracker/dailyTrackerTask/' + dailyTrackerTaskId).then(handleSuccess, handleError);
+        function delDailyTrackerTask(dailyTrackerTask) {
+            return $http.delete('/api/dailyTracker/dailyTrackerTask/' + dailyTrackerTask._id).then(handleSuccess, handleError);
         }
 
         /** Daily Task Categories */

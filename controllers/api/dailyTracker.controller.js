@@ -8,8 +8,8 @@ const DailyTaskCategoryService = require('../../services/dailyTaskCategories.ser
 router.get('/myDailyTrackerTasks', getMyDailyTrackerTasks);
 router.get('/dailyTrackerTask/:_id', getDailyTrackerTask);
 router.post('/dailyTrackerTask', addDailyTrackerTask);
-router.put('/dailyTrackerTask', updateDailyTrackerTask);
-router.delete('/dailyTrackerTask', deleteDailyTrackerTask);
+router.put('/dailyTrackerTask/:_id', updateDailyTrackerTask);
+router.delete('/dailyTrackerTask/:_id', deleteDailyTrackerTask);
 
 router.get('/dailyTaskCategories', getDailyTaskCategories);
 router.get('/dailyTaskCategory/:_id', getDailyTaskCategory);
@@ -21,7 +21,8 @@ module.exports = router;
 
 /** Daily Tracker Task */
 function getMyDailyTrackerTasks(req, res) {
-    DailyTrackerService.getMyDailyTrackerTasks(req.user.sub).then(data => {
+    var query = { trackerDate: req.query.trackerDate };
+    DailyTrackerService.getMyDailyTrackerTasks(req.user.sub, query).then(data => {
         res.send({ dailyTrackerTasks: data });
     }).catch(error => {
         res.status(400).send(error);
