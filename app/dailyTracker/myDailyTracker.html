@@ -33,7 +33,6 @@
                         <tr>
                             <th style="width: 120px;">#</th>
                             <th></th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,17 +43,15 @@
                                     {{task.taskShortName}} &nbsp;
                                     <a class="" ng-click="vm.viewDailyTrackerForm(task);">
                                         <span class="fa fa-pencil"></span>
-                                    </a>
+                                    </a> |
                                     <a class="" ng-click="vm.delDailyTrackerTask(task);">
                                         <span class="fa fa-times"></span>
                                     </a>
                                 </span>
-                                <a class="btn pull-right" ng-click="vm.newSlotDailyTrackerForm(slot);">
+                                <a ng-if="slot.tasks.length == 0" class="pull-right"
+                                    ng-click="vm.newSlotDailyTrackerForm(slot);">
                                     <span class="fa fa-plus"></span>
                                 </a>
-                            </td>
-                            <td>
-
                             </td>
                         </tr>
                     </tbody>

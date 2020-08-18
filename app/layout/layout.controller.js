@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -10,10 +10,10 @@
         vm.logout = logout;
 
         function logout() {
-            UserService.logout().then(function() {
+            UserService.logout().then(function () {
                 $window.jwtToken = null;
                 $state.go('login');
-            }, function(error) {
+            }, function (error) {
                 console.log("Error loggin out");
             });
         }

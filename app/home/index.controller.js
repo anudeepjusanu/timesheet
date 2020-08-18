@@ -637,12 +637,11 @@
 
         UserService.GetCurrent().then(function (user) {
             vm.user = user;
+            console.log(vm.user);
         });
     }
 
     function AdminUsersController(UserService, $filter, ReportService, _, $scope, FlashService, NgTableParams) {
-
-
         var vm = this;
         vm.user = null;
         vm.deleteUser = deleteUser;
