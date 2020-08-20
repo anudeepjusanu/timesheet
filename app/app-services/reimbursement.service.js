@@ -8,8 +8,8 @@
     function ReimbursementService($http, $q) {
         var service = {};
         service.getMyReimbursements = getMyReimbursements;
-        service.getPendingReimbursements = getPendingReimbursements;
-        service.getApprovedReimbursements = getApprovedReimbursements;
+        service.getTeamReimbursements = getTeamReimbursements;
+        service.getAccountReimbursements = getAccountReimbursements;
         service.getReimbursement = getReimbursement;
         service.addReimbursement = addReimbursement;
         service.updateReimbursement = updateReimbursement;
@@ -31,11 +31,11 @@
         function getMyReimbursements() {
             return $http.get('/api/reimbursement/').then(handleSuccess, handleError);
         }
-        function getPendingReimbursements() {
-            return $http.get('/api/reimbursement/pendingReimbursements').then(handleSuccess, handleError);
+        function getTeamReimbursements() {
+            return $http.get('/api/reimbursement/teamReimbursements').then(handleSuccess, handleError);
         }
-        function getApprovedReimbursements() {
-            return $http.get('/api/reimbursement/approvedReimbursements').then(handleSuccess, handleError);
+        function getAccountReimbursements() {
+            return $http.get('/api/reimbursement/accountReimbursements').then(handleSuccess, handleError);
         }
 
         function getReimbursement(reimbursementId) {

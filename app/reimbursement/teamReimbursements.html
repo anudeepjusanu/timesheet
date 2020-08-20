@@ -2,47 +2,45 @@
     close="vm.closeAlert($index)" dismiss-on-timeout="1000">
     {{alert.msg}}</div>
 <div class="content-wrapper">
-    <div class="" ng-if="vm.user.admin">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Employees Reimbursements</h3>
-            </div>
-            <div class="panel-body">
-                <table class="table table-condensed table-bordered table-striped" export-table>
-                    <thead>
-                        <tr>
-                            <th class="table-heading">#</th>
-                            <th class="table-heading">Employee Name</th>
-                            <th class="table-heading">Applied On</th>
-                            <th class="table-heading">From Date</th>
-                            <th class="table-heading">To Date</th>
-                            <th class="table-heading">Total Amount</th>
-                            <th class="table-heading">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="reimbursement in vm.reimbursements">
-                            <td class="table-heading">{{$index+1}}</td>
-                            <td class="table-heading">{{reimbursement.userName}}</td>
-                            <td class="table-heading">{{reimbursement.createdOn}}</td>
-                            <td class="table-heading">{{reimbursement.reimbursementFrom}}</td>
-                            <td class="table-heading">{{reimbursement.reimbursementTo}}</td>
-                            <td class="table-heading">{{reimbursement.totalAmount}}</td>
-                            <td class="table-heading">
-                                <span>
-                                    <a class="btn button-primary btn-icon btn-rounded"
-                                        ng-click="vm.openTeamReimbursementModal(reimbursement._id)">
-                                        <span class="fa fa-eye"></span>
-                                    </a>
-                                    <!-- <i style="float:right;margin-right:15px;cursor:pointer;" class="fa fa-eye"
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Employees Reimbursements</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-condensed table-bordered table-striped" export-table>
+                <thead>
+                    <tr>
+                        <th class="table-heading">#</th>
+                        <th class="table-heading">Employee Name</th>
+                        <th class="table-heading">Applied On</th>
+                        <th class="table-heading">From Date</th>
+                        <th class="table-heading">To Date</th>
+                        <th class="table-heading">Total Amount</th>
+                        <th class="table-heading">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="reimbursement in vm.reimbursements">
+                        <td class="table-heading">{{$index+1}}</td>
+                        <td class="table-heading">{{reimbursement.userName}}</td>
+                        <td class="table-heading">{{reimbursement.createdOn}}</td>
+                        <td class="table-heading">{{reimbursement.reimbursementFrom}}</td>
+                        <td class="table-heading">{{reimbursement.reimbursementTo}}</td>
+                        <td class="table-heading">{{reimbursement.totalAmount}}</td>
+                        <td class="table-heading">
+                            <span>
+                                <a class="btn button-primary btn-icon btn-rounded"
+                                    ng-click="vm.openTeamReimbursementModal(reimbursement._id)">
+                                    <span class="fa fa-eye"></span>
+                                </a>
+                                <!-- <i style="float:right;margin-right:15px;cursor:pointer;" class="fa fa-eye"
                                         ng-click="vm.openTeamReimbursementModal(reimbursement._id)">
                                     </i> -->
-                                </span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

@@ -455,9 +455,10 @@
         vm.alerts = [];
         vm.reimbursements = [];
 
-        function getPendingReimbursements() {
-            ReimbursementService.getPendingReimbursements().then(function (response) {
+        function getTeamReimbursements() {
+            ReimbursementService.getTeamReimbursements().then(function (response) {
                 vm.reimbursements = response.reimbursements;
+                console.log(vm.reimbursements);
                 _.each(vm.reimbursements, function (item) {
                     item.createdOn = $filter('date')(item.createdOn, "yyyy-MM-dd");
                 });
@@ -491,7 +492,7 @@
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
             });
-            getPendingReimbursements();
+            getTeamReimbursements();
         }
         initController();
     };
@@ -501,8 +502,8 @@
         vm.user = {};
         vm.alerts = [];
 
-        function getPendingReimbursements() {
-            ReimbursementService.getPendingReimbursements().then(function (response) {
+        function getTeamReimbursements() {
+            ReimbursementService.getTeamReimbursements().then(function (response) {
                 vm.teamReimbursements = response.reimbursements;
                 _.each(vm.teamReimbursements, function (item) {
                     item.createdOn = $filter('date')(item.createdOn, "yyyy-MM-dd");
@@ -537,7 +538,7 @@
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
             });
-            getPendingReimbursements();
+            getTeamReimbursements();
         }
         initController();
     };
@@ -548,7 +549,7 @@
         vm.user = {};
         vm.alerts = [];
         vm.reimbursement = {
-            items: []
+            receipts: []
         };
         vm.reimbursementId = reimbursementId;
 
@@ -572,6 +573,7 @@
                 }
             });
         }
+
         vm.rejectReceipt = function (receiptIndex) {
             _.each(vm.reimbursement.items, function (item, index) {
                 if (receiptIndex == index) {

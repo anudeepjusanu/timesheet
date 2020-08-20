@@ -18,8 +18,8 @@ var upload = multer({
 });
 
 // routes
-router.get('/pendingReimbursements', getPendingReimbursements);
-router.get('/approvedReimbursements', getApprovedReimbursements);
+router.get('/teamReimbursements', getTeamReimbursements);
+router.get('/accountReimbursements', getAccountReimbursements);
 router.get('/approveUsersList', getApproveUsersList);
 router.get('/activeProjectsList', getActiveProjectsList);
 
@@ -47,16 +47,16 @@ function getMyReimbursements(req, res) {
     });
 }
 
-function getPendingReimbursements(req, res) {
-    ReimbursementService.getPendingReimbursements(req.user.sub).then(data => {
+function getTeamReimbursements(req, res) {
+    ReimbursementService.getTeamReimbursements(req.user.sub).then(data => {
         res.send({ reimbursements: data });
     }).catch(error => {
         res.status(400).send(error);
     });
 }
 
-function getApprovedReimbursements(req, res) {
-    ReimbursementService.getApprovedReimbursements(req.user.sub).then(data => {
+function getAccountReimbursements(req, res) {
+    ReimbursementService.getAccountReimbursements(req.user.sub).then(data => {
         res.send({ reimbursements: data });
     }).catch(error => {
         res.status(400).send(error);
