@@ -19,45 +19,31 @@
                 <div class="form-group">
                     <label class="col-md-3 col-xs-12 control-label">Employee Name:</label>
                     <div class="col-md-3 col-xs-12 modal-padding">
-                        {{vm.user.name}}
+                        {{vm.reimbursement.userName}}
                     </div>
                     <label class="col-md-2 col-xs-12 control-label">Employee ID:</label>
                     <div class="col-md-3 col-xs-12 modal-padding">{{vm.user.employeeId}}
                     </div>
                 </div>
-                <!-- <div class="form-group">
-                    <label class="col-md-3 col-xs-12 control-label">Employee ID</label>
-                    <div class="col-md-6 col-xs-12">{{vm.user.employeeId}}
-                    </div>
-                </div> -->
                 <div class="form-group">
                     <label class="col-md-3 col-xs-12 control-label">Manager Name:</label>
-                    <div class="col-md-3 col-xs-12 modal-padding">Praveen Pallala</div>
+                    <div class="col-md-3 col-xs-12 modal-padding">{{vm.reimbursement.approveUserName}} </div>
                     <label class="col-md-2 col-xs-12 control-label">Department:</label>
                     <div class="col-md-3 col-xs-12 modal-padding">Developement
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 col-xs-12 control-label">From Date:</label>
-                    <div class="col-md-3 col-xs-12 modal-padding">01-07-2020
-                    </div>
+                    <div class="col-md-3 col-xs-12 modal-padding"></div>
                     <label class="col-md-2 col-xs-12 control-label">To Date:</label>
                     <div class="col-md-3 col-xs-12 modal-padding">01-08-2020
                     </div>
                 </div>
-                <!-- <div class="form-group">
-                    <label class="col-md-3 col-xs-12 control-label">To Date</label>
-                    <div class="col-md-6 col-xs-12">01-08-2020
-                    </div>
-                </div> -->
                 <div class="form-group">
                     <label class="col-md-3 col-xs-12 control-label">Business Purpose:</label>
                     <div class="col-md-6 col-xs-12 modal-padding">Test Business Purpose
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-md-3 col-xs-12 control-label">Reimbursement Receipts:</label>
-                </div></br>
             </form>
         </div>
     </div>
@@ -71,7 +57,7 @@
                     <th class="table-heading">Description</th>
                     <th class="table-heading">Receipt</th>
                     <th class="table-heading">Status</th>
-                    <th class="table-heading" style="width: 180px;">
+                    <th class="table-heading" ng-if="vm.user.userRole=='account'" style="width: 180px;">
                         <button class="btn btn-rounded" type="button" title="Accept Bill"
                             style="font-size: 12px !important; background: rgb(80, 219, 80)!important; color:black !important;"
                             ng-click="vm.acceptAllReceipts()">Accept All</button>
@@ -80,30 +66,20 @@
                             ng-click="vm.rejectAllReceipts()">Reject All</button>
                     </th>
                 </tr>
-                <tr ng-repeat="item in vm.reimbursement.items">
-                    <td class="table-heading" style="width: 80px;">{{item.billDate}}</td>
-                    <td class="table-heading" style="width: 120px;">{{item.billCategory}}</td>
-                    <td class="table-heading" style="width: 60px;">{{item.billAmount}}</td>
-                    <td class="table-heading">{{item.billDescription}}</td>
+                <tr ng-repeat="receipt in vm.reimbursement.receipts">
+                    <td class="table-heading" style="width: 80px;">{{receipt.receiptDate|date:short}}</td>
+                    <td class="table-heading" style="width: 120px;">{{receipt.billCategory}}</td>
+                    <td class="table-heading" style="width: 60px;">{{receipt.billAmount}}</td>
+                    <td class="table-heading">{{receipt.billDescription}}</td>
                     <td class="table-heading" style="width: 150px;">
-                        <!-- <div> -->
-                        <span><a>{{item.billFile}}</a></span>
-                        <!-- <i ng-if="item.acceptReceipt" class="fa fa-check" style="color: green;" aria-hidden="true"></i>
-                            <i ng-if="item.rejectReceipt" class="fa fa-times" style="color: red;" aria-hidden="true"></i> -->
-                        <!-- <span ng-if="vm.user.userRole=='lead' || vm.user.userRole=='manager'">
-                                <button class="btn btn-success btn-rounded" type="button"
-                                    ng-click="vm.acceptReceipt($index)">Accept</button>
-                                <button class="btn btn-warning btn-rounded" type="button"
-                                    ng-click="vm.rejectReceipt($index)">Reject</button>
-                            </span> -->
-                        <!-- </div> -->
+                        <span><a>{{receipt.billFile}}</a></span>
                     </td>
                     <td class="table-heading" style="width: 60px;">
                         <i ng-if="item.acceptReceipt" class="fa fa-check" style="color: green;" aria-hidden="true"></i>
                         <i ng-if="item.rejectReceipt" class="fa fa-times" style="color: red;" aria-hidden="true"></i>
                     </td>
-                    <td class="table-heading" style="width: 140px;">
-                        <span ng-if="vm.user.userRole=='lead' || vm.user.userRole=='manager'">
+                    <td ng-if="vm.user.userRole=='account'" class="table-heading" style="width: 140px;">
+                        <span>
                             <button class="btn btn-rounded" type="button" title="Accept Bill"
                                 style="font-size: 12px !important; background: rgb(80, 219, 80)!important; color: black !important;"
                                 ng-click="vm.acceptReceipt($index)">Accept</button>
@@ -124,7 +100,9 @@
         <button class="btn button-warning btn-rounded" type="button" ng-click="vm.cancel()">Reject</button>
     </div>
 </div>
-<div class="modal-body" ng-if="vm.user.admin===true" id="modal-body">
+
+
+<div ng-if="false" class="modal-body" id="modal-body">
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-9">
@@ -187,7 +165,7 @@
         <div class="col-md-1"></div>
     </div>
 </div>
-<div ng-if="vm.user.admin===true" class="modal-footer">
+<div ng-if="false" class="modal-footer">
     <div class="text-center">
         <button class="btn button-success btn-rounded" type="button" ng-disabled="!vm.teamRimbursementForm.$valid"
             ng-click="vm.accept(vm.assignForm, vm.reimbursement)">Sanction</button>

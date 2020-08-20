@@ -32,15 +32,10 @@
                         <td class="table-heading">{{reimbursement.totalAmount}}</td>
                         <td class="table-heading">{{reimbursement.createdOn}}</td>
                         <td class="table-heading">
-                            <span>
-                                <a class="btn btn-info btn-icon btn-rounded"
-                                    ng-click="vm.openTeamReimbursementModal(reimbursement._id)">
-                                    <span class="fa fa-eye"></span>
-                                </a>
-                                <!-- <i style="float:right;margin-right:15px;cursor:pointer;" class="fa fa-eye"
-                                        ng-click="vm.openTeamReimbursementModal(reimbursement._id)">
-                                    </i> -->
-                            </span>
+                            <a class="btn btn-info btn-icon btn-rounded"
+                                ng-click="vm.openTeamReimbursementModal(reimbursement)">
+                                <span class="fa fa-eye"></span>
+                            </a>
                         </td>
                     </tr>
                 </tbody>

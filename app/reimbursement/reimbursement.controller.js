@@ -458,7 +458,6 @@
         function getTeamReimbursements() {
             ReimbursementService.getTeamReimbursements().then(function (response) {
                 vm.reimbursements = response.reimbursements;
-                console.log(vm.reimbursements);
                 _.each(vm.reimbursements, function (item) {
                     item.createdOn = $filter('date')(item.createdOn, "yyyy-MM-dd");
                 });
@@ -467,7 +466,7 @@
             });
         };
 
-        vm.openTeamReimbursementModal = function (reimbursementId) {
+        vm.openTeamReimbursementModal = function (reimbursementObj) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -477,8 +476,11 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    reimbursementId: function () {
-                        return reimbursementId;
+                    userObj: function () {
+                        return vm.user;
+                    },
+                    reimbursementObj: function () {
+                        return reimbursementObj;
                     }
                 }
             });
@@ -513,7 +515,7 @@
             });
         };
 
-        vm.openTeamReimbursementModal = function (reimbursementId) {
+        vm.openTeamReimbursementModal = function (reimbursementObj) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -523,8 +525,8 @@
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    reimbursementId: function () {
-                        return reimbursementId;
+                    reimbursementObj: function () {
+                        return reimbursementObj;
                     }
                 }
             });
@@ -544,26 +546,11 @@
     };
 
     /**Controller to handle the  employee reimbursement form for manager or lead or admin*/
-    function TeamReimbursementsModalController(UserService, ReimbursementService, reimbursementId, _, $uibModal, $uibModalInstance, $filter, $state) {
+    function TeamReimbursementsModalController(UserService, ReimbursementService, reimbursementObj, _, $uibModal, $uibModalInstance, $filter, $state) {
         var vm = this;
         vm.user = {};
         vm.alerts = [];
-        vm.reimbursement = {
-            receipts: []
-        };
-        vm.reimbursementId = reimbursementId;
-
-        function getMyReimbursementById() {
-            ReimbursementService.getReimbursement(vm.reimbursementId).then(function (response) {
-                vm.reimbursement = response.reimbursement;
-                vm.reimbursement.createdOn = $filter('date')(vm.reimbursement.createdOn, "yyyy-MM-ddTHH:mm:ss");
-                _.each(vm.reimbursement.items, function (item) {
-                    item.billDate = $filter('date')(item.billDate, "yyyy-MM-dd");
-                });
-            }, function (error) {
-                console.log(error);
-            });
-        };
+        vm.reimbursement = reimbursementObj;
 
         vm.acceptReceipt = function (receiptIndex) {
             _.each(vm.reimbursement.items, function (item, index) {
@@ -616,10 +603,8 @@
         function initController() {
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
-                vm.reimbursement.name = vm.user.name;
-                vm.reimbursement.id = vm.user.employeeId;
+                console.log(vm.reimbursement);
             });
-            getMyReimbursementById()
         }
         initController();
     };
