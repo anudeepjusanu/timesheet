@@ -50,7 +50,7 @@
                                     ng-click="vm.editReceipt(receipt)">
                                     <span class="fa fa-pencil" aria-hidden="true"></span>
                                 </a>
-                                <a ng-disabled="vm.selectedBillsIndex > 1" class="btn btn-warning btn-icon btn-rounded"
+                                <a ng-disabled="vm.selectedBillsIndex > 1" class="btn btn-danger btn-icon btn-rounded"
                                     title="Delete Receipt" ng-click="vm.deleteReceipt(receipt._id)">
                                     <span class="fa fa-trash-o" aria-hidden="true"></span>
                                 </a>
@@ -58,7 +58,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <a ng-disabled="!vm.enableSubmitReimbursementBtn" class="btn btn-success btn-rounded"
+                <a ng-disabled="!vm.enableSubmitReimbursementBtn" class="btn btn-primary btn-rounded"
                     ng-click="vm.addReimbursement(vm.receipts)">Submit Reimbursement</a>
             </div>
         </div>
