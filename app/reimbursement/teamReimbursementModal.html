@@ -26,68 +26,45 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-3 col-xs-12 control-label">Manager Name:</label>
+                    <label class="col-md-3 col-xs-12 control-label">Approver Name:</label>
                     <div class="col-md-3 col-xs-12 modal-padding">{{vm.reimbursement.approveUserName}} </div>
-                    <label class="col-md-2 col-xs-12 control-label">Department:</label>
-                    <div class="col-md-3 col-xs-12 modal-padding">Developement
+                    <label class="col-md-2 col-xs-12 control-label">Month:</label>
+                    <div class="col-md-3 col-xs-12 modal-padding">{{vm.reimbursement.reimbursementMonth}}
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-md-3 col-xs-12 control-label">From Date:</label>
-                    <div class="col-md-3 col-xs-12 modal-padding"></div>
-                    <label class="col-md-2 col-xs-12 control-label">To Date:</label>
-                    <div class="col-md-3 col-xs-12 modal-padding">01-08-2020
-                    </div>
-                </div>
+                
                 <div class="form-group">
                     <label class="col-md-3 col-xs-12 control-label">Business Purpose:</label>
-                    <div class="col-md-6 col-xs-12 modal-padding">Test Business Purpose
+                    <div class="col-md-6 col-xs-12 modal-padding">{{vm.reimbursement.purpose}}
                     </div>
                 </div>
             </form>
         </div>
     </div>
+    <br>
     <div class="row">
         <div class="col-md-12">
             <table id="" class="table table-condensed table-bordered table-striped">
                 <tr>
                     <th class="table-heading">Date</th>
                     <th class="table-heading">Category</th>
-                    <th class="table-heading">Cost</th>
                     <th class="table-heading">Description</th>
-                    <th class="table-heading">Receipt</th>
-                    <th class="table-heading">Status</th>
-                    <th class="table-heading" ng-if="vm.user.userRole=='account'" style="width: 180px;">
-                        <button class="btn btn-rounded" type="button" title="Accept Bill"
-                            style="font-size: 12px !important; background: rgb(80, 219, 80)!important; color:black !important;"
-                            ng-click="vm.acceptAllReceipts()">Accept All</button>
-                        <button class="btn btn-rounded" type="button" title="Reject Bill"
-                            style="font-size: 12px !important; background: red !important; color:aliceblue !important;"
-                            ng-click="vm.rejectAllReceipts()">Reject All</button>
-                    </th>
+                    <th class="table-heading" style="width: 120px;">Status</th>
+                    <th class="table-heading"style="width: 100px;">Amount</th>
+                    <th class="table-heading"style="width: 70px;">Receipt</th>
+                    
+                    
                 </tr>
                 <tr ng-repeat="receipt in vm.reimbursement.receipts">
                     <td class="table-heading" style="width: 80px;">{{receipt.receiptDate|date:short}}</td>
-                    <td class="table-heading" style="width: 120px;">{{receipt.billCategory}}</td>
-                    <td class="table-heading" style="width: 60px;">{{receipt.billAmount}}</td>
-                    <td class="table-heading">{{receipt.billDescription}}</td>
+                    <td class="table-heading" style="width: 120px;">{{receipt.receiptCategory}}</td>
+                    <td class="table-heading" style="width: 60px;">{{receipt.receiptDescription}}</td>
+                    <td class="table-heading">{{receipt.status}}</td>
+                    <td class="table-heading">{{receipt.receiptAmount}}</td>
                     <td class="table-heading" style="width: 150px;">
-                        <span><a>{{receipt.billFile}}</a></span>
+                    <a href="/data/reimbursements/{{receipt.receiptFile}}" target="_blank"><span class="fa fa-download"></span></a>
                     </td>
-                    <td class="table-heading" style="width: 60px;">
-                        <i ng-if="item.acceptReceipt" class="fa fa-check" style="color: green;" aria-hidden="true"></i>
-                        <i ng-if="item.rejectReceipt" class="fa fa-times" style="color: red;" aria-hidden="true"></i>
-                    </td>
-                    <td ng-if="vm.user.userRole=='account'" class="table-heading" style="width: 140px;">
-                        <span>
-                            <button class="btn btn-rounded" type="button" title="Accept Bill"
-                                style="font-size: 12px !important; background: rgb(80, 219, 80)!important; color: black !important;"
-                                ng-click="vm.acceptReceipt($index)">Accept</button>
-                            <button class="btn btn-rounded" type="button" title="Reject Bill"
-                                style="font-size: 12px !important; background: orange !important; color: black !important;"
-                                ng-click="vm.rejectReceipt($index)">Reject</button>
-                        </span>
-                    </td>
+                   
                 </tr>
             </table>
         </div>

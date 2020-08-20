@@ -11,8 +11,8 @@
                 <thead>
                     <tr>
                         <th class="table-heading">#</th>
-                        <th class="table-heading">Project</th>
                         <th class="table-heading">Employee Name</th>
+                        <th class="table-heading">Project</th>
                         <th class="table-heading" style="width: 80px;">Month</th>
                         <th class="table-heading">Purpose</th>
                         <th class="table-heading" style="width: 120px;">Status</th>
@@ -24,17 +24,17 @@
                 <tbody>
                     <tr ng-repeat="reimbursement in vm.reimbursements">
                         <td class="table-heading">{{$index+1}}</td>
-                        <td class="table-heading">{{reimbursement.projectName}}</td>
                         <td class="table-heading">{{reimbursement.userName}}</td>
+                        <td class="table-heading">{{reimbursement.projectName}}</td>
                         <td class="table-heading">{{reimbursement.reimbursementMonth}}</td>
                         <td class="table-heading">{{reimbursement.purpose}}</td>
                         <td class="table-heading">{{reimbursement.status}}</td>
                         <td class="table-heading">{{reimbursement.totalAmount}}</td>
                         <td class="table-heading">{{reimbursement.createdOn}}</td>
                         <td class="table-heading">
-                            <a class="btn btn-info btn-icon btn-rounded"
+                            <a class="btn btn-primary btn-icon btn-rounded"
                                 ng-click="vm.openTeamReimbursementModal(reimbursement)">
-                                <span class="fa fa-eye"></span>
+                                <span class="fa fa-list"></span>
                             </a>
                         </td>
                     </tr>
