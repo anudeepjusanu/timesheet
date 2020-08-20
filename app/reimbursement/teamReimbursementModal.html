@@ -37,11 +37,6 @@
                     <div class="col-md-3 col-xs-12 modal-padding">Developement
                     </div>
                 </div>
-                <!-- <div class="form-group">
-                    <label class="col-md-3 col-xs-12 control-label">Department</label>
-                    <div class="col-md-6 col-xs-12">Developement
-                    </div>
-                </div> -->
                 <div class="form-group">
                     <label class="col-md-3 col-xs-12 control-label">From Date:</label>
                     <div class="col-md-3 col-xs-12 modal-padding">01-07-2020
@@ -77,12 +72,12 @@
                     <th class="table-heading">Receipt</th>
                     <th class="table-heading">Status</th>
                     <th class="table-heading" style="width: 180px;">
-                        <button class="btn btn-rounded" type="button" title="Accept Bill" 
-                        style="font-size: 12px !important; background: rgb(80, 219, 80)!important; color: black !important;"
-                        ng-click="vm.acceptAllReceipts()">Accept All</button>
-                    <button class="btn btn-rounded" type="button" title="Reject Bill"
-                        style="font-size: 12px !important; background: orange !important; color: black !important;"
-                        ng-click="vm.rejectAllReceipts()">Reject All</button>
+                        <button class="btn btn-rounded" type="button" title="Accept Bill"
+                            style="font-size: 12px !important; background: rgb(80, 219, 80)!important; color: black !important;"
+                            ng-click="vm.acceptAllReceipts()">Accept All</button>
+                        <button class="btn btn-rounded" type="button" title="Reject Bill"
+                            style="font-size: 12px !important; background: orange !important; color: black !important;"
+                            ng-click="vm.rejectAllReceipts()">Reject All</button>
                     </th>
                 </tr>
                 <tr ng-repeat="item in vm.reimbursement.items">
@@ -109,7 +104,7 @@
                     </td>
                     <td class="table-heading" style="width: 140px;">
                         <span ng-if="vm.user.userRole=='lead' || vm.user.userRole=='manager'">
-                            <button class="btn btn-rounded" type="button" title="Accept Bill" 
+                            <button class="btn btn-rounded" type="button" title="Accept Bill"
                                 style="font-size: 12px !important; background: rgb(80, 219, 80)!important; color: black !important;"
                                 ng-click="vm.acceptReceipt($index)">Accept</button>
                             <button class="btn btn-rounded" type="button" title="Reject Bill"
@@ -181,8 +176,10 @@
                 <div class="form-group">
                     <label class="col-md-3 col-xs-12 control-label">Comment</label>
                     <div class="col-md-6 col-xs-12">
-                        <td><textarea class="form-control" ng-model="vm.reimbursement.comment"
-                                placeholder="Enter your comment" rows="2"></textarea></td>
+                        <td>
+                            <textarea class="form-control" ng-model="vm.reimbursement.comment"
+                                placeholder="Enter your comment" rows="2"></textarea>
+                        </td>
                     </div>
                 </div>
             </form>

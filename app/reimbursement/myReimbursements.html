@@ -13,15 +13,14 @@
                     <thead>
                         <tr>
                             <th class="table-heading">#</th>
+                            <th class="table-heading">Project</th>
                             <th class="table-heading">Manager</th>
-                            <th class="table-heading">Department</th>
-                            <th class="table-heading">From Date</th>
-                            <th class="table-heading">To Date</th>
+                            <th class="table-heading">Month</th>
                             <th class="table-heading">Purpose</th>
-                            <th class="table-heading">Total Amount</th>
-                            <th class="table-heading">Status</th>
-                            <th class="table-heading">Created On</th>
-                            <th class="table-heading">Actions</th>
+                            <th class="table-heading" style="width: 120px;">Status</th>
+                            <th class="table-heading" style="width: 100px;">Total Amount</th>
+                            <th class="table-heading" style="width: 80px;">Created On</th>
+                            <th class="table-heading" style="width: 110px;">Actions</th>
                         </tr>
                         <tr>
                             <td></td>
@@ -29,37 +28,32 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
-                            <td></td>
                             <td class="table-heading">
-                                <select class="form-control" ng-model="vm.reimbursementObj.status"
+                                <select class="form-control" ng-model="vm.searchObj.status"
                                     ng-options="option as option for option in ['Pending', 'Completed']"></select>
                             </td>
+                            <td></td>
                             <td></td>
                             <td></td>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="reimbursement in vm.reimbursements | orderBy:'name'">
-                            <td class="table-heading">{{$index + 1}}</td>
-                            <td class="table-heading">{{reimbursement.approveUserName}}</td>
-                            <td class="table-heading">{{reimbursement.department}}</td>
-                            <td class="table-heading">{{reimbursement.reimbursementFrom}}</td>
-                            <td class="table-heading">{{reimbursement.reimbursementTo}}</td>
-                            <td class="table-heading">{{reimbursement.purpose}}</td>
-                            <td class="table-heading">{{reimbursement.totalAmount}}</td>
-                            <td class="table-heading">{{reimbursement.status}}</td>
-                            <td class="table-heading">{{reimbursement.createdOn}}</td>
-                            <td class="table-heading">
-                                <!-- <a class="btn btn-primary btn-icon btn-rounded" title="View"
-                                    ng-click="vm.openMyReimbursementStatus()">
-                                    <span class="fa fa-eye"></span>
-                                </a> -->
+                            <td>{{$index + 1}}</td>
+                            <td>{{reimbursement.projectName}}</td>
+                            <td>{{reimbursement.approveUserName}}</td>
+                            <td>{{reimbursement.reimbursementMonth}}</td>
+                            <td>{{reimbursement.purpose}}</td>
+                            <td>{{reimbursement.status}}</td>
+                            <td>{{reimbursement.totalAmount}}</td>
+                            <td>{{reimbursement.createdOn}}</td>
+                            <td>
                                 <a ui-sref="reimbursementForm({reimbursementId:'{{reimbursement._id}}'})"
                                     class="btn btn-primary btn-icon btn-rounded" title="Edit">
                                     <span class="fa fa-pencil"></span>
                                 </a>
-                                <a class="btn btn-primary btn-icon btn-rounded" title="Delete"
+                                <a ng-if="reimbursement.status=='Submitted'"
+                                    class="btn btn-primary btn-icon btn-rounded" title="Delete"
                                     ng-click="vm.delReimbursement(reimbursement)">
                                     <span class="fa fa-trash-o"></span>
                                 </a>

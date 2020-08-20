@@ -18,10 +18,12 @@ var upload = multer({
 });
 
 // routes
-router.get('/approveUsersList', getApproveUsersList);
-router.get('/myReceipts/', getMyReceipts);
 router.get('/pendingReimbursements', getPendingReimbursements);
 router.get('/approvedReimbursements', getApprovedReimbursements);
+router.get('/approveUsersList', getApproveUsersList);
+router.get('/activeProjectsList', getActiveProjectsList);
+
+router.get('/myReceipts/', getMyReceipts);
 router.get('/receipt/:receiptId', getReimbursementReceipt);
 router.post('/receipt', upload.single('file'), addReimbursementReceipt);
 router.put('/receipt/:receiptId', upload.single('file'), updateReimbursementReceipt);
@@ -153,6 +155,14 @@ function updateReimbursementReceiptFile(req, res) {
 function getApproveUsersList(req, res) {
     ReimbursementService.getApproveUsersList().then(data => {
         res.send({ users: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
+
+function getActiveProjectsList(req, res) {
+    ReimbursementService.getActiveProjectsList().then(data => {
+        res.send({ projects: data });
     }).catch(error => {
         res.status(400).send(error);
     });

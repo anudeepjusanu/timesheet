@@ -24,6 +24,7 @@
         service.deleteReimbursementReceipt = deleteReimbursementReceipt;
         service.getReimbursementCategories = getReimbursementCategories;
         service.getApproveUsersList = getApproveUsersList;
+        service.getActiveProjectsList = getActiveProjectsList;
 
         return service;
 
@@ -92,6 +93,10 @@
 
         function getApproveUsersList() {
             return $http.get('/api/reimbursement/approveUsersList/').then(handleSuccess, handleError);
+        }
+
+        function getActiveProjectsList() {
+            return $http.get('/api/reimbursement/activeProjectsList/').then(handleSuccess, handleError);
         }
 
         function getReimbursementCategories() {

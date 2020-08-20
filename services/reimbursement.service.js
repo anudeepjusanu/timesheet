@@ -4,7 +4,10 @@ var Q = require('q');
 var mongoose = require("mongoose");
 var ReimbursementModel = require("../models/reimbursement.model");
 var ReimbursementReciptModel = require("../models/reimbursementReceipt.model");
+var ProjectModel = require("../models/project.model");
 var UserModel = require("../models/user.model");
+const { async } = require('q');
+const { find } = require('lodash');
 mongoose.connect(config.connectionString);
 
 var service = {};
@@ -26,6 +29,7 @@ service.updateReimbursementReceiptFile = updateReimbursementReceiptFile;
 service.deleteReimbursementReceipt = deleteReimbursementReceipt;
 
 service.getApproveUsersList = getApproveUsersList;
+service.getActiveProjectsList = getActiveProjectsList;
 
 module.exports = service;
 
@@ -37,11 +41,13 @@ function getMyReimbursements(userId) {
             { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
             { $lookup: { from: "users", localField: "approveUserId", foreignField: "_id", as: "approveUser" } },
             { $unwind: { path: "$approveUser", preserveNullAndEmptyArrays: true } },
+            { $lookup: { from: "projects", localField: "projectId", foreignField: "_id", as: "project" } },
+            { $unwind: { path: "$project", preserveNullAndEmptyArrays: true } },
             {
                 $project: {
-                    userId: 1, approveUserId: 1, department: 1, reimbursementFrom: 1, reimbursementTo: 1, purpose: 1,
-                    status: 1, totalAmount: 1, status: 1, createdBy: 1, createdOn: 1, items: 1, approveUserName: '$approveUser.name',
-                    userName: '$user.name', employeeId: '$user.employeeId'
+                    userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1,
+                    createdBy: 1, createdOn: 1, receipts: 1, approveUserName: '$approveUser.name',
+                    userName: '$user.name', employeeId: '$user.employeeId', projectName: '$project.projectName'
                 }
             }
         ]).exec().then((data) => {
@@ -112,16 +118,35 @@ function getReimbursement(ReimbursementId) {
 }
 
 function addReimbursement(reimbursementData) {
-    return new Promise((resolve, reject) => {
-        if (reimbursementData.userId) {
-            reimbursementData.userId = mongoose.Types.ObjectId(reimbursementData.userId);
+    return new Promise(async (resolve, reject) => {
+        reimbursementData.userId = (reimbursementData.userId) ? mongoose.Types.ObjectId(reimbursementData.userId) : null;
+        reimbursementData.projectId = (reimbursementData.projectId) ? mongoose.Types.ObjectId(reimbursementData.projectId) : null;
+        reimbursementData.approveUserId = (reimbursementData.approveUserId) ? mongoose.Types.ObjectId(reimbursementData.approveUserId) : null;
+        for (var i = 0; i < reimbursementData.receipts.length; i++) {
+            reimbursementData.receipts[i] = mongoose.Types.ObjectId(reimbursementData.receipts[i]);
         }
+        var receiptSum = await ReimbursementReciptModel.aggregate([
+            { $match: { "_id": { "$in": reimbursementData.receipts } } },
+            {
+                $group: {
+                    _id: null,
+                    total: {
+                        $sum: "$receiptAmount"
+                    }
+                }
+            }
+        ]).exec();
+        reimbursementData.totalAmount = (receiptSum[0]) ? receiptSum[0].total : 0.0;
         reimbursementObj = new ReimbursementModel(reimbursementData);
         reimbursementObj.save(function (error, data) {
             if (error) {
-                reject({ error: error, reimbursementObj: reimbursementObj });
+                reject({ error: error, reimbursement: reimbursementObj });
             } else {
-                resolve(data);
+                ReimbursementReciptModel.updateMany({ _id: { $in: reimbursementData.receipts } }, { $set: { reimbursementId: reimbursementObj._id, status: "Submitted" } }).exec().then((data) => {
+                    resolve(reimbursementObj);
+                }).catch((error) => {
+                    reject({ error: error.errmsg });
+                });
             }
         });
     });
@@ -142,7 +167,7 @@ function updateReimbursement(ReimbursementId, ReimbursementData) {
 
 function deleteReimbursement(ReimbursementId) {
     return new Promise((resolve, reject) => {
-        ReimbursementModel.deleteOne({ _id: mongoose.Types.ObjectId(ReimbursementId), status: 'Draft' }).lean().exec().then((data) => {
+        ReimbursementModel.deleteOne({ _id: mongoose.Types.ObjectId(ReimbursementId), status: 'Submitted' }).lean().exec().then((data) => {
             resolve(data);
         }).catch((error) => {
             reject({ error: error.errmsg });
@@ -251,6 +276,19 @@ function getApproveUsersList() {
         UserModel.aggregate([
             { $match: { isActive: true } },
             { $project: { name: 1, employeeId: true } }
+        ]).exec().then((data) => {
+            resolve(data);
+        }).catch((error) => {
+            reject({ error: (error.errmsg ? error.errmsg : "Unexpected error") });
+        });
+    });
+}
+
+function getActiveProjectsList() {
+    return new Promise((resolve, reject) => {
+        ProjectModel.aggregate([
+            { $match: { isActive: true } },
+            { $project: { projectName: 1, projectType: 1, clientId: 1, ownerId: 1, ownerName: 1 } }
         ]).exec().then((data) => {
             resolve(data);
         }).catch((error) => {

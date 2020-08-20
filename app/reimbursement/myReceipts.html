@@ -19,9 +19,10 @@
                             <th class="heading" style="width: 40px;">#</th>
                             <th class="table-heading" style="width: 100px;">Date</th>
                             <th class="table-heading" style="width: 160px;">Category</th>
-                            <th class="table-heading" style="width: 80px;">Amount</th>
                             <th class="table-heading">Description</th>
-                            <th class="table-heading" style="width: 180px;">Receipt</th>
+                            <th class="table-heading" style="width: 120px;">Status</th>
+                            <th class="table-heading" style="width: 80px;">Amount</th>
+                            <th class="table-heading" style="width: 80px;">Receipt</th>
                             <th class="table-heading" style="width: 140px;">Actions</th>
                         </tr>
                     </thead>
@@ -29,16 +30,18 @@
                         <tr ng-repeat="receipt in vm.receipts | orderBy:'name'">
                             <td class="heading">
                                 <input type="checkbox" class="tbl-check-box" ng-model="receipt.selected"
-                                    ng-click="vm.enableSubmitButton(vm.receipts)">
+                                    ng-click="vm.enableSubmitButton();">
                             </td>
                             <td class="table-heading">{{$index + 1}}</td>
                             <td class="table-heading">{{receipt.receiptDate}}</td>
                             <td class="table-heading">{{receipt.receiptCategory}}</td>
-                            <td class="table-heading">{{receipt.receiptAmount}}</td>
                             <td class="table-heading">{{receipt.receiptDescription}}</td>
+                            <td class="table-heading">{{receipt.status}}</td>
+                            <td class="table-heading">{{receipt.receiptAmount}}</td>
                             <td>
-                                <a href="/data/reimbursements/{{receipt.receiptFile}}"
-                                    target="_blank">{{receipt.receiptFile}}</a>
+                                <a href="/data/reimbursements/{{receipt.receiptFile}}" target="_blank">
+                                    <span class="fa fa-download"></span>
+                                </a>
                             </td>
                             <td class="table-heading">
                                 <a ng-disabled="vm.selectedBillsIndex > 1"

@@ -13,9 +13,7 @@
                         <tr>
                             <th class="table-heading">#</th>
                             <th class="table-heading">Employee Name</th>
-                            <!-- <th class="table-heading">Employee ID</th> -->
                             <th class="table-heading">Applied On</th>
-                            <!-- <th>Business Purpose</th> -->
                             <th class="table-heading">From Date</th>
                             <th class="table-heading">To Date</th>
                             <th class="table-heading">Total Amount</th>
@@ -23,12 +21,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="reimbursement in vm.teamReimbursements">
+                        <tr ng-repeat="reimbursement in vm.reimbursements">
                             <td class="table-heading">{{$index+1}}</td>
                             <td class="table-heading">{{reimbursement.userName}}</td>
-                            <!-- <td class="table-heading">{{reimbursement.EmployeeID}}</td> -->
                             <td class="table-heading">{{reimbursement.createdOn}}</td>
-                            <!-- <td>{{reimbursement.BusinessPurpose}}</td> -->
                             <td class="table-heading">{{reimbursement.reimbursementFrom}}</td>
                             <td class="table-heading">{{reimbursement.reimbursementTo}}</td>
                             <td class="table-heading">{{reimbursement.totalAmount}}</td>

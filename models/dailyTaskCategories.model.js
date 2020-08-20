@@ -14,7 +14,7 @@ var DailyTaskCategorySchema = new Schema({
         required: true,
         unique: true
     },
-    colorCode: {
+    taskColorCode: {
         type: String,
         required: true
     },

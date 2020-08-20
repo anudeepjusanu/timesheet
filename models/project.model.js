@@ -6,12 +6,12 @@ var Schema = mongoose.Schema;
 var ProjectsSchema = new Schema({
     projectName: { type: String },
     projectType: { type: String },
-    clientId: { type: String },
+    clientId: { type: mongoose.ObjectId },
     clientName: { type: String },
 
     ownerId: { type: String },
     ownerName: { type: String },
-    
+
     businessUnit: { type: String },
     estimatedCost: { type: String },
     estimatedHours: { type: String },

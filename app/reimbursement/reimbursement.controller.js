@@ -19,7 +19,6 @@
                 link: function (scope, element, attrs) {
                     var model = $parse(attrs.fileModel);
                     var modelSetter = model.assign;
-
                     element.bind('change', function () {
                         scope.$apply(function () {
                             modelSetter(scope, element[0].files[0]);
@@ -49,6 +48,9 @@
         var vm = this;
         vm.user = {};
         vm.alerts = [];
+        vm.searchObj = {
+            status: 'Pending'
+        };
 
         function getMyReimbursements() {
             ReimbursementService.getMyReimbursements().then(function (response) {
@@ -118,12 +120,26 @@
         var vm = this;
         vm.user = {};
         vm.approveUsers = [];
+        vm.activeProjects = [];
         vm.alerts = [];
-        vm.categories = ReimbursementService.getReimbursementCategories();
         vm.reimbursementObj = {
+            project: null,
             receipts: []
         };
+        vm.receiptTotalAmount = 0;
         vm.reimbursementObj.receipts = $stateParams.receipts;
+        vm.dateOptions = {
+            datepickerMode: "month",
+            minMode: 'month'
+        }
+
+        vm.calReceiptsAmount = function () {
+            vm.receiptTotalAmount = 0;
+            _.each(vm.reimbursementObj.receipts, (receiptObj) => {
+                vm.receiptTotalAmount += parseFloat(receiptObj.receiptAmount);
+            });
+            vm.receiptTotalAmount.toFixed(2);
+        }
 
         vm.getApproveActiveUsersList = function () {
             ReimbursementService.getApproveUsersList().then(function (response) {
@@ -135,23 +151,23 @@
             });
         }
 
-        // vm.addBill = function (index, user) {
-        //     if (!vm.reimbursementObj.items) {
-        //         vm.reimbursementObj.items = [];
-        //     }
-        //     vm.reimbursementObj.items.push({ "file": vm.myFile });
-        // }
-
-        // vm.deleteBill = function (billDate, index) {
-        //     vm.reimbursementObj.items.splice(index, 1);
-        // }
+        vm.getActiveProjectsList = function () {
+            ReimbursementService.getActiveProjectsList().then(function (response) {
+                vm.activeProjects = response.projects;
+            }, function (error) {
+                if (error) {
+                    vm.alerts.push({ msg: error, type: 'danger' });
+                }
+            });
+        }
 
         vm.submitReimbursement = function (reimbursementForm, reimbursementObj, index) {
             var formData = {};
-            formData.reimbursementFrom = $filter('date')(reimbursementObj.reimbursementFrom, "yyyy-MM-dd");
-            formData.reimbursementTo = $filter('date')(reimbursementObj.reimbursementTo, "yyyy-MM-dd");
+            //formData.reimbursementFrom = $filter('date')(reimbursementObj.reimbursementFrom, "yyyy-MM-dd");
+            //formData.reimbursementTo = $filter('date')(reimbursementObj.reimbursementTo, "yyyy-MM-dd");
+            formData.reimbursementMonth = $filter('date')(reimbursementObj.reimbursementMonth, "yyyy-MM-dd");
             formData.approveUserId = reimbursementObj.approveUserId;
-            formData.department = reimbursementObj.department;
+            formData.projectId = reimbursementObj.projectId;
             formData.purpose = reimbursementObj.purpose;
             formData.status = 'Submitted';
             formData.receipts = [];
@@ -187,31 +203,12 @@
             }
         };
 
-        // vm.saveReimbursementItem = function (itemData, reimbursementId, itemIndex) {
-        //     var itemFormData = new FormData();
-        //     itemFormData.append('file', itemData.file);
-        //     itemFormData.append('billDate', itemData.billDate);
-        //     itemFormData.append('billCategory', itemData.billCategory);
-        //     itemFormData.append('billAmount', itemData.billAmount);
-        //     itemFormData.append('billDescription', itemData.billDescription);
-        //     if (itemData._id) {
-        //         ReimbursementService.updateReimbursementItem(itemData._id, itemFormData).then(function (response) {
-        //             noty.showSuccess("Reimbursement bill item has been updated successfully!");
-        //         }, function (error) {
-        //             if (error) {
-        //                 vm.alerts.push({ msg: error, type: 'danger' });
-        //             }
-        //         });
-        //     } else {
-        //         ReimbursementService.addReimbursementItem(reimbursementId, itemFormData).then(function (response) {
-        //             noty.showSuccess("Reimbursement bill item has been updated successfully!");
-        //         }, function (error) {
-        //             if (error) {
-        //                 vm.alerts.push({ msg: error, type: 'danger' });
-        //             }
-        //         });
-        //     }
-        // }
+        vm.changeProject = function () {
+            if (vm.reimbursementObj.project) {
+                vm.reimbursementObj.projectId = vm.reimbursementObj.project._id;
+                vm.reimbursementObj.approveUserId = vm.reimbursementObj.project.ownerId;
+            }
+        }
 
         vm.closeAlert = function (index) {
             vm.alerts.splice(index, 1);
@@ -227,12 +224,9 @@
             } else {
                 vm.isReimbursementFormEdit = false;
             }
-            ReimbursementService.getApproveUsersList().then(function (response) {
-                if (response.users) {
-                    vm.approveUsers = response.users;
-                }
-            });
             vm.getApproveActiveUsersList();
+            vm.getActiveProjectsList();
+            vm.calReceiptsAmount();
         }
         initController();
     };
@@ -257,6 +251,7 @@
                 _.each(vm.receipts, function (receipt) {
                     receipt.selected = false;
                     receipt.receiptDate = $filter('date')(receipt.receiptDate, "yyyy-MM-dd");
+                    receipt.receiptAmount = receipt.receiptAmount.toFixed(2);
                 });
             }, function (error) {
                 console.log(error);
@@ -279,7 +274,7 @@
                 receipt: receipt
             })
         }
-        /**Delete function to open Model */
+
         vm.deleteReceipt = function (receiptId) {
             var modalInstance = $uibModal.open({
                 animation: true,
@@ -323,25 +318,20 @@
             });
         }
 
-        /** Function to enable the Submit Reimbursement button*/
-        vm.enableSubmitButton = function (selectedBills) {
-            vm.selectedBillsIndex = 0;
-            if (_.find(selectedBills, function (obj) { return obj.selected; })) {
-                vm.enableSubmitReimbursementBtn = true;
-            } else {
-                vm.enableSubmitReimbursementBtn = false;
-            }
-            _.each(selectedBills, function (item) {
-                if (item.selected) {
-                    vm.selectedBillsIndex = vm.selectedBillsIndex + 1;
+        vm.enableSubmitButton = function () {
+            vm.enableSubmitReimbursementBtn = false;
+            _.each(vm.receipts, function (receiptObj) {
+                if (receiptObj.selected === true) {
+                    vm.enableSubmitReimbursementBtn = true;
                 }
-            })
+            });
         }
 
         vm.checkAll = function () {
             _.each(vm.receipts, function (receipt) {
                 receipt.selected = vm.selectAll;
             });
+            vm.enableSubmitButton();
         }
 
         vm.closeAlert = function (index) {
@@ -463,11 +453,12 @@
         var vm = this;
         vm.user = {};
         vm.alerts = [];
+        vm.reimbursements = [];
 
         function getPendingReimbursements() {
             ReimbursementService.getPendingReimbursements().then(function (response) {
-                vm.teamReimbursements = response.reimbursements;
-                _.each(vm.teamReimbursements, function (item) {
+                vm.reimbursements = response.reimbursements;
+                _.each(vm.reimbursements, function (item) {
                     item.createdOn = $filter('date')(item.createdOn, "yyyy-MM-dd");
                 });
             }, function (error) {

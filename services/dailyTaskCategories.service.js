@@ -37,9 +37,8 @@ function getDailyTaskCategory(taskCategoryId) {
 
 function addDailyTaskCategory(categoryData) {
     return new Promise((resolve, reject) => {
-        console.log(categoryData);
-        skillCategoryObj = new DailyTaskCategory(categoryData);
-        skillCategoryObj.save(function (error, data) {
+        taskCategoryObj = new DailyTaskCategory(categoryData);
+        taskCategoryObj.save(function (error, data) {
             if (error) {
                 console.log(error);
                 reject({ error: error.errmsg });

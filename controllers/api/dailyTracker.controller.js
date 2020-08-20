@@ -82,7 +82,8 @@ function getDailyTaskCategory(req, res) {
 function addDailyTaskCategory(req, res) {
     DailyTaskCategoryService.addDailyTaskCategory({
         taskCategoryShortName: req.body.taskCategoryShortName,
-        taskCategoryName: req.body.taskCategoryName
+        taskCategoryName: req.body.taskCategoryName,
+        taskColorCode: req.body.taskColorCode
     }).then(data => {
         res.send({ dailyTaskCategory: data });
     }).catch(error => {
@@ -93,7 +94,8 @@ function addDailyTaskCategory(req, res) {
 function updateDailyTaskCategory(req, res) {
     DailyTaskCategoryService.updateDailyTaskCategory(req.body._id, {
         taskCategoryShortName: req.body.taskCategoryShortName,
-        taskCategoryName: req.body.taskCategoryName
+        taskCategoryName: req.body.taskCategoryName,
+        taskColorCode: req.body.taskColorCode
     }).then(data => {
         res.send({ dailyTaskCategory: data, req: req.query });
     }).catch(error => {

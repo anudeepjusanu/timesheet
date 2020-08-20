@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -11,9 +11,9 @@
         vm.surveys = [];
 
         function getAllSurveys() {
-            SurveyService.getAll().then(function(response) {
+            SurveyService.getAll().then(function (response) {
                 vm.surveys = response;
-            }, function(error) {
+            }, function (error) {
                 if (error) {
                     vm.alerts.push({ msg: error, type: 'danger' });
                 }
@@ -21,7 +21,7 @@
         }
 
         function initController() {
-            UserService.GetCurrent().then(function(user) {
+            UserService.GetCurrent().then(function (user) {
                 vm.user = user;
                 if (vm.user.admin !== true) {
 
@@ -51,12 +51,10 @@
 
         function postSurvey(surveyForm) {
             if (surveyForm.$valid) {
-                console.log(vm.survey);
-                console.log(vm.user);
                 vm.survey.createdBy = vm.user.name;
-                SurveyService.create(vm.survey).then(function(response) {
+                SurveyService.create(vm.survey).then(function (response) {
                     noty.showSuccess("New Project has been added successfully!");
-                }, function(error) {
+                }, function (error) {
                     if (error) {
                         vm.alerts.push({ msg: error, type: 'danger' });
                     }
@@ -65,7 +63,7 @@
         };
 
         function initController() {
-            UserService.GetCurrent().then(function(user) {
+            UserService.GetCurrent().then(function (user) {
                 vm.user = user;
                 if (vm.user.admin !== true) {
 
