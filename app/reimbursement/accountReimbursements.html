@@ -4,7 +4,7 @@
 <div class="content-wrapper">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Employees Reimbursements</h3>
+            <h3 class="panel-title">Approved Reimbursements</h3>
         </div>
         <div class="panel-body">
             <table class="table table-condensed table-bordered table-striped" export-table>
@@ -45,9 +45,9 @@
                         <td class="table-heading">{{reimbursement.status}}</td>
                         <td class="table-heading">{{reimbursement.totalAmount}}</td>
                         <td class="table-heading">{{reimbursement.createdOn}}</td>
-                        <td class="table-heading">
+                        <td>
                             <a class="btn btn-primary btn-icon btn-rounded"
-                                ng-click="vm.openTeamReimbursementModal(reimbursement)">
+                                ng-click="vm.openAccountReimbursementModal(reimbursement)">
                                 <span class="fa fa-list"></span>
                             </a>
                         </td>

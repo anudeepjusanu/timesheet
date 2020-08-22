@@ -13,7 +13,7 @@ var ReimbursementReceiptSchema = new Schema({
     receiptDescription: { type: String },
     receiptFile: { type: String },
     receiptAmount: { type: Number },
-    status: { type: String, default: 'Active' },
+    status: { type: String, default: 'New' },
     reimbursementId: { type: String, default: null },
     createdOn: { type: Date, default: Date.now },
     updatedOn: { type: Date, default: Date.now }

@@ -25,6 +25,7 @@ service.getMyReceipts = getMyReceipts;
 service.getReimbursementReceipt = getReimbursementReceipt;
 service.addReimbursementReceipt = addReimbursementReceipt;
 service.updateReimbursementReceipt = updateReimbursementReceipt;
+service.updateReimbursementReceiptStatus = updateReimbursementReceiptStatus;
 service.updateReimbursementReceiptFile = updateReimbursementReceiptFile;
 service.deleteReimbursementReceipt = deleteReimbursementReceipt;
 
@@ -49,7 +50,8 @@ function getMyReimbursements(userId) {
                     createdBy: 1, createdOn: 1, receipts: 1, approveUserName: '$approveUser.name',
                     userName: '$user.name', employeeId: '$user.employeeId', projectName: '$project.projectName'
                 }
-            }
+            },
+            { $sort: { createdOn: -1 } }
         ]).exec().then((data) => {
             resolve(data);
         }).catch((error) => {
@@ -62,7 +64,7 @@ function getMyReimbursements(userId) {
 function getTeamReimbursements(userId) {
     return new Promise((resolve, reject) => {
         ReimbursementModel.aggregate([
-            { $match: { /*approveUserId: mongoose.Types.ObjectId(userId),*/ status: 'Submitted' } },
+            { $match: { approveUserId: mongoose.Types.ObjectId(userId), /*status: 'Submitted'*/ } },
             { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "user" } },
             { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
             { $lookup: { from: "users", localField: "approveUserId", foreignField: "_id", as: "approveUser" } },
@@ -75,7 +77,8 @@ function getTeamReimbursements(userId) {
                     createdBy: 1, createdOn: 1, receipts: 1, items: 1, approveUserName: '$approveUser.name',
                     userName: '$user.name', employeeId: '$user.employeeId', projectName: '$project.projectName'
                 }
-            }
+            },
+            { $sort: { createdOn: -1 } }
         ]).exec().then(async (data) => {
             for (var i = 0; i < data.length; i++) {
                 data[i].receipts = await ReimbursementReciptModel.find({ _id: { $in: data[i].receipts } }).exec();
@@ -91,7 +94,7 @@ function getTeamReimbursements(userId) {
 function getAccountReimbursements(userId) {
     return new Promise((resolve, reject) => {
         ReimbursementModel.aggregate([
-            { $match: { status: 'Approved' } },
+            { $match: { status: { $set: ['Approved', 'Paid', 'Payment Rejected'] } } },
             { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "user" } },
             { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
             { $lookup: { from: "users", localField: "approveUserId", foreignField: "_id", as: "approveUser" } },
@@ -104,7 +107,8 @@ function getAccountReimbursements(userId) {
                     createdBy: 1, createdOn: 1, receipts: 1, approveUserName: '$approveUser.name',
                     userName: '$user.name', employeeId: '$user.employeeId', projectName: '$project.projectName'
                 }
-            }
+            },
+            { $sort: { createdOn: -1 } }
         ]).exec().then(async (data) => {
             for (var i = 0; i < data.length; i++) {
                 data[i].receipts = await ReimbursementReciptModel.find({ _id: { $in: data[i].receipts } }).exec();
@@ -119,7 +123,18 @@ function getAccountReimbursements(userId) {
 
 function getReimbursement(ReimbursementId) {
     return new Promise((resolve, reject) => {
-        ReimbursementModel.findOne({ _id: mongoose.Types.ObjectId(ReimbursementId) }).lean().exec().then((data) => {
+        ReimbursementModel.aggregate([
+            { $match: { _id: mongoose.Types.ObjectId(ReimbursementId) } },
+            { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "user" } },
+            {
+                $project: {
+                    userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1, createdBy: 1,
+                    createdOn: 1, receipts: 1, userName: '$user.name', employeeId: '$user.employeeId', projectName: '$project.projectName'
+                }
+            }
+        ]).exec().then(async (data) => {
+            data = data[0];
+            data.receipts = await ReimbursementReciptModel.find({ _id: { $in: data.receipts } }).exec();
             resolve(data);
         }).catch((error) => {
             reject({ error: error.errmsg });
@@ -188,7 +203,8 @@ function deleteReimbursement(ReimbursementId) {
 function getMyReceipts(userId) {
     return new Promise((resolve, reject) => {
         ReimbursementReciptModel.aggregate([
-            { $match: { userId: mongoose.Types.ObjectId(userId) } }
+            { $match: { userId: mongoose.Types.ObjectId(userId) } },
+            { $sort: { createdOn: -1 } }
         ]).exec().then((data) => {
             resolve(data);
         }).catch((error) => {
@@ -252,6 +268,17 @@ function updateReimbursementReceipt(receiptId, receiptData) {
         }
         ReimbursementReciptModel.updateOne({ '_id': mongoose.Types.ObjectId(receiptId) },
             { $set: receiptDataObj }).exec().then((data) => {
+                resolve(data);
+            }).catch((error) => {
+                reject({ error: error.errmsg });
+            });
+    });
+}
+
+function updateReimbursementReceiptStatus(receiptId, receiptData) {
+    return new Promise((resolve, reject) => {
+        ReimbursementReciptModel.updateOne({ '_id': mongoose.Types.ObjectId(receiptId) },
+            { $set: receiptData }).exec().then((data) => {
                 resolve(data);
             }).catch((error) => {
                 reject({ error: error.errmsg });

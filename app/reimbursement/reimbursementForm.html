@@ -17,8 +17,8 @@
                 <div class="form-group required">
                     <label class="col-md-2 col-xs-12 control-label">Employee</label>
                     <div class="col-md-6 col-xs-12">
-                        <input type="text" required ng-disabled="true" ng-model="vm.reimbursementObj.name"
-                            class="form-control" />
+                        <input type="text" ng-model="vm.reimbursementObj.userName" class="form-control"
+                            ng-disabled="true" />
                     </div>
                 </div>
                 <div class="form-group required">
@@ -52,34 +52,6 @@
                         </p>
                     </div>
                 </div>
-                <!-- <div class="form-group required">
-                    <label class="col-md-2 col-xs-12 control-label">From</label>
-                    <div class="col-md-2 col-xs-12">
-                        <p class="input-group">
-                            <input type="text" id="fromDate" class="form-control" uib-datepicker-popup
-                                ng-model="vm.reimbursementObj.reimbursementFrom" is-open="vm.fromDateOpened"
-                                datepicker-options="vm.dateOptions" close-text="Close" required />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default"
-                                    ng-click="vm.fromDateOpened=!vm.fromDateOpened"><i
-                                        class="glyphicon glyphicon-calendar"></i></button>
-                            </span>
-                        </p>
-                    </div>
-                    <label class="col-md-2 col-xs-12 control-label">To</label>
-                    <div class="col-md-2 col-xs-12">
-                        <p class="input-group">
-                            <input type="text" id="toDate" class="form-control" uib-datepicker-popup
-                                ng-model="vm.reimbursementObj.reimbursementTo" is-open="vm.toDateOpened"
-                                datepicker-options="vm.dateOptions" close-text="Close" required />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default"
-                                    ng-click="vm.toDateOpened=!vm.toDateOpened"><i
-                                        class="glyphicon glyphicon-calendar"></i></button>
-                            </span>
-                        </p>
-                    </div>
-                </div> -->
                 <div class="form-group">
                     <label class="col-md-2 col-xs-12 control-label">Business Purpose</label>
                     <div class="col-md-6 col-xs-12">
@@ -92,7 +64,7 @@
             </div>
             <div class="col-md-1"></div>
         </div>
-        <div class="row"></div>
+        <br />
         <div class="row">
             <div class="col-md-1"></div>
             <div class="col-md-10">
@@ -120,7 +92,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="3" class="table-heading"> <span class="pull-right">Total : </span></td>
-                                    <td>{{vm.receiptTotalAmount}}</td>
+                                    <td>{{vm.reimbursementObj.totalAmount}}</td>
                                     <td></td>
                                 </tr>
                             </table>
@@ -128,13 +100,13 @@
                     </div>
                 </div>
                 <div class="col-md-1"></div>
-                <div class="text-center">
-                    <button class="btn button-success btn-rounded reimbursement-buttons" type="button"
-                        ng-disabled="!vm.reimburseForm.$valid"
-                        ng-click="vm.submitReimbursement(vm.reimburseForm, vm.reimbursementObj, $index)">Submit
+                <div ng-if="vm.reimbursementObj.status=='New' || vm.reimbursementObj.status=='Submitted'"
+                    class="text-center">
+                    <button class="btn btn-success btn-rounded" ng-disabled="!vm.reimburseForm.$valid"
+                        ng-click="vm.submitReimbursement(vm.reimburseForm, vm.reimbursementObj)">Submit
                         Reimbursement</button>
-                    <button ui-sref="myReceipts" class="btn button-warning btn-rounded reimbursement-buttons"
-                        type="button" ng-click="vm.cancel()">Cancel</button>
+                    <button ui-sref="myReimbursements" class="btn btn-warning btn-rounded"
+                        ng-click="vm.cancel()">Cancel</button>
                 </div>
             </div>
         </div>

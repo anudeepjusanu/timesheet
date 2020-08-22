@@ -27,8 +27,15 @@ router.get('/myReceipts/', getMyReceipts);
 router.get('/receipt/:receiptId', getReimbursementReceipt);
 router.post('/receipt', upload.single('file'), addReimbursementReceipt);
 router.put('/receipt/:receiptId', upload.single('file'), updateReimbursementReceipt);
+router.put('/approveReimbursementReceipt/:receiptId', approveReimbursementReceipt);
+router.put('/rejectReimbursementReceipt/:receiptId', rejectReimbursementReceipt);
 router.delete('/receipt/:receiptId', deleteReimbursementReceipt);
 router.post('/receiptFile/:_id', upload.single('file'), updateReimbursementReceiptFile);
+
+router.put('/approveReimbursement/:_id', approveReimbursement);
+router.put('/rejectReimbursement/:_id', rejectReimbursement);
+router.put('/payReimbursement/:_id', payReimbursement);
+router.put('/paymentRejectedReimbursement/:_id', payReimbursement);
 
 router.get('/', getMyReimbursements);
 router.get('/:_id', getReimbursement);
@@ -88,6 +95,40 @@ function updateReimbursement(req, res) {
     });
 }
 
+function approveReimbursement(req, res) {
+    var dataObj = {
+        status: "Approved"
+    }
+    ReimbursementService.updateReimbursement(req.params._id, dataObj).then(data => {
+        res.send({ reimbursement: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
+
+function rejectReimbursement(req, res) {
+    var dataObj = {
+        status: "Rejected"
+    }
+    ReimbursementService.updateReimbursement(req.params._id, dataObj).then(data => {
+        res.send({ reimbursement: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
+
+function payReimbursement(req, res) {
+    var dataObj = {
+        status: "Paid",
+        paymentMode: req.body.paymentMode ? req.body.paymentMode : null
+    }
+    ReimbursementService.updateReimbursement(req.params._id, dataObj).then(data => {
+        res.send({ reimbursement: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
+
 function deleteReimbursement(req, res) {
     ReimbursementService.deleteReimbursement(req.params._id).then(data => {
         res.send({ reimbursement: data });
@@ -130,6 +171,28 @@ function updateReimbursementReceipt(req, res) {
         req.body.receiptFile = req.file.filename;
     }
     ReimbursementService.updateReimbursementReceipt(req.params.receiptId, req.body).then(data => {
+        res.send({ receipt: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
+
+function approveReimbursementReceipt(req, res) {
+    var objData = {
+        status: "Approved"
+    }
+    ReimbursementService.updateReimbursementReceiptStatus(req.params.receiptId, objData).then(data => {
+        res.send({ receipt: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
+
+function rejectReimbursementReceipt(req, res) {
+    var objData = {
+        status: "Rejected"
+    }
+    ReimbursementService.updateReimbursementReceiptStatus(req.params.receiptId, objData).then(data => {
         res.send({ receipt: data });
     }).catch(error => {
         res.status(400).send(error);

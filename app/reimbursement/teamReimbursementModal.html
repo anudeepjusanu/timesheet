@@ -4,7 +4,6 @@
             <span class="fa fa-times delete-bill-icon" aria-hidden="true"></span>
         </a>
     </h3>
-
 </div>
 <div class="modal-body" id="modal-body">
     <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
@@ -12,7 +11,7 @@
     <div class="row">
         <div class="col-md-2 image">
             <img src="app-content/assets/user.jpg" class="img-circle group-item-img"
-                style="height: 100px; width: 100px; margin-left: 30px; margin-top: 30px;" alt="{{vm.user.userName}}">
+                style="height: 100px; width: 100px; margin-left: 30px; margin-top: 30px;" alt="{{vm.user.userName}}" />
         </div>
         <div class="col-md-10 info">
             <form class="form-horizontal" name="vm.assignForm">
@@ -29,14 +28,11 @@
                     <label class="col-md-3 col-xs-12 control-label">Approver Name:</label>
                     <div class="col-md-3 col-xs-12 modal-padding">{{vm.reimbursement.approveUserName}} </div>
                     <label class="col-md-2 col-xs-12 control-label">Month:</label>
-                    <div class="col-md-3 col-xs-12 modal-padding">{{vm.reimbursement.reimbursementMonth}}
-                    </div>
+                    <div class="col-md-3 col-xs-12 modal-padding">{{vm.reimbursement.reimbursementMonth}}</div>
                 </div>
-                
                 <div class="form-group">
                     <label class="col-md-3 col-xs-12 control-label">Business Purpose:</label>
-                    <div class="col-md-6 col-xs-12 modal-padding">{{vm.reimbursement.purpose}}
-                    </div>
+                    <div class="col-md-6 col-xs-12 modal-padding">{{vm.reimbursement.purpose}}</div>
                 </div>
             </form>
         </div>
@@ -50,102 +46,86 @@
                     <th class="table-heading">Category</th>
                     <th class="table-heading">Description</th>
                     <th class="table-heading" style="width: 120px;">Status</th>
-                    <th class="table-heading"style="width: 100px;">Amount</th>
-                    <th class="table-heading"style="width: 70px;">Receipt</th>
-                    
-                    
+                    <th class="table-heading" style="width: 100px;">Amount</th>
+                    <th class="table-heading" style="width: 70px;">Receipt</th>
+                    <th class="table-heading" style="width: 110px;" ng-if="vm.user.userRole=='account'">
+                    </th>
                 </tr>
                 <tr ng-repeat="receipt in vm.reimbursement.receipts">
-                    <td class="table-heading" style="width: 80px;">{{receipt.receiptDate|date:short}}</td>
-                    <td class="table-heading" style="width: 120px;">{{receipt.receiptCategory}}</td>
-                    <td class="table-heading" style="width: 60px;">{{receipt.receiptDescription}}</td>
-                    <td class="table-heading">{{receipt.status}}</td>
-                    <td class="table-heading">{{receipt.receiptAmount}}</td>
-                    <td class="table-heading" style="width: 150px;">
-                    <a href="/data/reimbursements/{{receipt.receiptFile}}" target="_blank"><span class="fa fa-download"></span></a>
+                    <td style="width: 100px;">{{receipt.receiptDate|date:short}}</td>
+                    <td style="width: 120px;">{{receipt.receiptCategory}}</td>
+                    <td>{{receipt.receiptDescription}}</td>
+                    <td style="width: 120px;">{{receipt.status}}</td>
+                    <td style="width: 100px;">{{receipt.receiptAmount}}</td>
+                    <td style="width: 80px; text-align: center;">
+                        <a class="" href="/data/reimbursements/{{receipt.receiptFile}}" target="_blank">
+                            <span class="fa fa-download"></span>
+                        </a>
                     </td>
-                   
+                    <td ng-if="vm.user.userRole=='account'">
+                        <a href="" class="btn btn-sm btn-success btn-rounded"
+                            ng-click="vm.approveReimbursementReceipt(receipt);">
+                            <span class="fa fa-check"></span>
+                        </a>
+                        <a href="" class="btn btn-sm btn-danger btn-rounded"
+                            ng-click="vm.rejectReimbursementReceipt(receipt);">
+                            <span class="fa fa-times"></span>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4"></td>
+                    <td>{{vm.reimbursement.totalAmount}}</td>
+                    <td colspan="2"></td>
                 </tr>
             </table>
         </div>
     </div>
+    <div ng-if="vm.user.userRole=='account'" class="row">
+        <form class="form-horizontal" name="vm.rimbursementForm">
+            <div class="form-group required">
+                <label class="col-md-2 col-xs-12 control-label">Paid Date</label>
+                <div class="col-md-3 col-xs-12">
+                    <p class="input-group">
+                        <input type="text" id="paidDate" class="form-control" uib-datepicker-popup
+                            ng-model="vm.reimbursement.paidDate" is-open="vm.paidDateOpened"
+                            datepicker-options="vm.dateOptions" close-text="Close" required />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default"
+                                ng-click="vm.paidDateOpened=!vm.paidDateOpened">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    </p>
+                </div>
+                <label class="col-md-2 col-xs-12 control-label">Mode fo Payment</label>
+                <div class="col-md-3 col-xs-12">
+                    <select class="form-control" name="paymentMode" id="paymentMode"
+                        ng-model="vm.reimbursement.paymentMode"
+                        ng-options="option as option for option in ['Online', 'Cheque', 'Cash']"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 col-xs-12 control-label">Comment</label>
+                <div class="col-md-8 col-xs-12">
+                    <textarea class="form-control" ng-model="vm.reimbursement.comment" rows="2"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 <div ng-if="vm.user.userRole=='lead' || vm.user.userRole=='manager'" class="modal-footer">
     <div class="text-center">
-        <button class="btn button-success btn-rounded" type="button" ng-disabled="!vm.assignForm.$valid"
-            ng-click="vm.ok(vm.assignForm, vm.reimbursement)">Approve</button>
-        <button class="btn button-warning btn-rounded" type="button" ng-click="vm.cancel()">Reject</button>
+        <button class="btn btn-success btn-rounded" ng-click="vm.approveReimbursement();">Approve</button>
+        <button class="btn btn-danger btn-rounded" ng-click="vm.rejectReimbursement();">Reject</button>
+        <button class="btn btn-danger btn-rounded" ng-click="vm.close();">Cancel</button>
     </div>
 </div>
-
-
-<div ng-if="false" class="modal-body" id="modal-body">
-    <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-9">
-            <form class="form-horizontal" name="vm.teamRimbursementForm">
-                <div class="form-group required">
-                    <label class="col-md-3 col-xs-12 control-label">Total Amount</label>
-                    <div class="col-md-6 col-xs-12">
-                        <input type="text" ng-model="vm.reimbursement.totalAmount" class="form-control" required />
-                    </div>
-                </div>
-                <div class="form-group required">
-                    <label class="col-md-3 col-xs-12 control-label">Sanctioned Date</label>
-                    <div class="col-md-6 col-xs-12">
-                        <p class="input-group">
-                            <input type="text" id="sanctionedDate" class="form-control" uib-datepicker-popup
-                                ng-model="vm.reimbursement.sanctionedDate" is-open="vm.sanctionedDateOpened"
-                                datepicker-options="vm.dateOptions" close-text="Close" required />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default"
-                                    ng-click="vm.sanctionedDateOpened=!vm.sanctionedDateOpened"><i
-                                        class="glyphicon glyphicon-calendar"></i></button>
-                            </span>
-                        </p>
-                    </div>
-                </div>
-                <div class="form-group required">
-                    <label class="col-md-3 col-xs-12 control-label">Reflection Date</label>
-                    <div class="col-md-6 col-xs-12">
-                        <p class="input-group">
-                            <input type="text" id="reflectionDate" class="form-control" uib-datepicker-popup
-                                ng-model="vm.reimbursement.reflectionDate" is-open="vm.reflectionDateOpened"
-                                datepicker-options="vm.dateOptions" close-text="Close" required />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default"
-                                    ng-click="vm.reflectionDateOpened=!vm.reflectionDateOpened"><i
-                                        class="glyphicon glyphicon-calendar"></i></button>
-                            </span>
-                        </p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-3 col-xs-12 control-label">Mode fo Payment</label>
-                    <div class="col-md-6 col-xs-12">
-                        <select class="form-control" name="paymentMode" id="paymentMode"
-                            ng-model="vm.reimbursement.paymentMode"
-                            ng-options="option as option for option in ['Online', 'Cheque', 'Cash']"></select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-3 col-xs-12 control-label">Comment</label>
-                    <div class="col-md-6 col-xs-12">
-                        <td>
-                            <textarea class="form-control" ng-model="vm.reimbursement.comment"
-                                placeholder="Enter your comment" rows="2"></textarea>
-                        </td>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="col-md-1"></div>
-    </div>
-</div>
-<div ng-if="false" class="modal-footer">
+<div ng-if="vm.user.userRole=='account'" class="modal-footer" class="modal-footer">
     <div class="text-center">
-        <button class="btn button-success btn-rounded" type="button" ng-disabled="!vm.teamRimbursementForm.$valid"
-            ng-click="vm.accept(vm.assignForm, vm.reimbursement)">Sanction</button>
-        <button class="btn button-warning btn-rounded" type="button" ng-click="vm.reject()">Reject</button>
+        <button class="btn btn-primary btn-rounded" ng-disabled="!vm.enablePayBtn"
+            ng-click="vm.payReimbursement(vm.rimbursementForm);">Sanction</button>
+        <button class="btn btn-danger btn-rounded" ng-click="vm.rejectReimbursement();">Reject</button>
+        <button class="btn btn-danger btn-rounded" ng-click="vm.close();">Cancel</button>
     </div>
 </div>

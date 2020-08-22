@@ -69,18 +69,6 @@
                 <a ui-sref="timesheetApprove"><span class="fa fa-file-excel-o"></span> <span
                         class="xn-text">Team</span></a>
             </li>
-            <li class="" ng-if="vm.user.admin===true || vm.user.userRole=='lead' || vm.user.userRole=='manager'"
-                ng-class="{active: activeTab === 'teamReimbursements'}">
-                <a ui-sref="teamReimbursements"><span class="fa fa-file-excel-o"></span>
-                    <span class="xn-text">Team Reimbursements</span>
-                </a>
-            </li>
-            <li class="" ng-if="vm.user.admin===true && vm.user.userRole=='account'"
-                ng-class="{active: activeTab === 'accountReimbursements'}">
-                <a ui-sref="accountReimbursements"><span class="fa fa-file-excel-o"></span>
-                    <span class="xn-text">EMP Reimbursements</span>
-                </a>
-            </li>
             <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'myDailyTracker'}">
                 <a ui-sref="myDailyTracker"><span class="fa fa-file-excel-o"></span>
                     <span class="xn-text">My Daily Tracker</span>

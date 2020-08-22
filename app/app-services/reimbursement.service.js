@@ -15,12 +15,18 @@
         service.updateReimbursement = updateReimbursement;
         service.deleteReimbursement = deleteReimbursement;
 
+        service.approveReimbursement = approveReimbursement;
+        service.rejectReimbursement = rejectReimbursement;
+        service.payReimbursement = payReimbursement;
+
         service.getMyReceipts = getMyReceipts;
         service.getApproveReceipts = getApproveReceipts;
         service.getReimbursementReceipt = getReimbursementReceipt;
         service.addReimbursementReceipt = addReimbursementReceipt;
         service.updateReimbursementReceipt = updateReimbursementReceipt;
         service.updateReimbursementReceiptFile = updateReimbursementReceiptFile;
+        service.approveReimbursementReceipt = approveReimbursementReceipt;
+        service.rejectReimbursementReceipt = rejectReimbursementReceipt;
         service.deleteReimbursementReceipt = deleteReimbursementReceipt;
         service.getReimbursementCategories = getReimbursementCategories;
         service.getApproveUsersList = getApproveUsersList;
@@ -48,6 +54,18 @@
 
         function updateReimbursement(reimbursementId, formData) {
             return $http.put('/api/reimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
+        }
+
+        function approveReimbursement(reimbursementId, formData = {}) {
+            return $http.put('/api/reimbursement/approveReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
+        }
+
+        function rejectReimbursement(reimbursementId, formData = {}) {
+            return $http.put('/api/reimbursement/rejectReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
+        }
+
+        function payReimbursement(reimbursementId, formData = {}) {
+            return $http.put('/api/reimbursement/payReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
         }
 
         function deleteReimbursement(reimbursementId) {
@@ -85,6 +103,14 @@
                 transformRequest: angular.identity,
                 headers: { 'Content-Type': undefined }
             }).then(handleSuccess, handleError);
+        }
+
+        function approveReimbursementReceipt(receiptId, formData = {}) {
+            return $http.put('/api/reimbursement/approveReimbursementReceipt/' + receiptId, formData).then(handleSuccess, handleError);
+        }
+
+        function rejectReimbursementReceipt(receiptId, formData = {}) {
+            return $http.put('/api/reimbursement/rejectReimbursementReceipt/' + receiptId, formData).then(handleSuccess, handleError);
         }
 
         function deleteReimbursementReceipt(receiptId) {

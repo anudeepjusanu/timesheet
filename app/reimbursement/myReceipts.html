@@ -23,14 +23,31 @@
                             <th class="table-heading" style="width: 120px;">Status</th>
                             <th class="table-heading" style="width: 80px;">Amount</th>
                             <th class="table-heading" style="width: 80px;">Receipt</th>
-                            <th class="table-heading" style="width: 140px;">Actions</th>
+                            <th class="table-heading" style="width: 120px;">Actions</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>
+                                <select class="form-control" ng-model="vm.searchObj.category"
+                                    ng-options="categoryType.categoryTypeId as categoryType.categoryTypeVal for categoryType in vm.categories"></select>
+                            </th>
+                            <th></th>
+                            <th>
+                                <select class="form-control" ng-model="vm.searchObj.status"
+                                    ng-options="opt as opt for opt in ['All', 'New', 'Submitted', 'Approved', 'Rejected', 'Paid']"></select>
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="receipt in vm.receipts | orderBy:'name'">
+                        <tr ng-repeat="receipt in vm.receipts | MyReceiptsSearch:vm.searchObj | orderBy:'name'">
                             <td class="heading">
                                 <input type="checkbox" class="tbl-check-box" ng-model="receipt.selected"
-                                    ng-click="vm.enableSubmitButton();">
+                                    ng-click="vm.enableSubmitButton();" ng-disabled="receipt.status!=='New'">
                             </td>
                             <td class="table-heading">{{$index + 1}}</td>
                             <td class="table-heading">{{receipt.receiptDate}}</td>
@@ -50,7 +67,7 @@
                                     ng-click="vm.editReceipt(receipt)">
                                     <span class="fa fa-pencil" aria-hidden="true"></span>
                                 </a>
-                                <a ng-disabled="vm.selectedBillsIndex > 1" class="btn btn-danger btn-icon btn-rounded"
+                                <a ng-if="receipt.status=='New'" class="btn btn-danger btn-icon btn-rounded"
                                     title="Delete Receipt" ng-click="vm.deleteReceipt(receipt._id)">
                                     <span class="fa fa-trash-o" aria-hidden="true"></span>
                                 </a>

@@ -10,9 +10,8 @@
         .controller('Reimbursement.ReceiptFormController', ReceiptFormController)
         .controller('Reimbursement.TeamReimbursementsController', TeamReimbursementsController)
         .controller('Reimbursement.TeamReimbursementsModalController', TeamReimbursementsModalController)
-        .controller('Reimbursement.MyReimbursementStatusController', MyReimbursementStatusController)
         .controller('Reimbursement.AccountReimbursementsController', AccountReimbursementsController)
-        /**Directive to handle the file */
+        .controller('Reimbursement.AccountReimbursementsModalController', AccountReimbursementsModalController)
         .directive('fileModel', ['$parse', function ($parse) {
             return {
                 restrict: 'A',
@@ -26,7 +25,34 @@
                     });
                 }
             };
-        }]);
+        }])
+        .filter('MyReceiptsSearch', function ($filter) {
+            return function (input, searchObj) {
+                var output = input;
+                if (searchObj.category && searchObj.category.length > 0 && searchObj.category != "") {
+                    output = $filter('filter')(output, function (item) {
+                        return (item.receiptCategory == searchObj.category);
+                    });
+                }
+                if (searchObj.status && searchObj.status.length > 0 && searchObj.status != "All") {
+                    output = $filter('filter')(output, function (item) {
+                        return (item.status == searchObj.status);
+                    });
+                }
+                return output;
+            }
+        })
+        .filter('ReimbursementsSearch', function ($filter) {
+            return function (input, searchObj) {
+                var output = input;
+                if (searchObj.status && searchObj.status.length > 0 && searchObj.status != "All") {
+                    output = $filter('filter')(output, function (item) {
+                        return (item.status == searchObj.status);
+                    });
+                }
+                return output;
+            }
+        });
     function IndexController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
         var vm = this;
         vm.user = {};
@@ -99,23 +125,6 @@
         initController();
     };
 
-    function MyReimbursementStatusController(UserService, $uibModalInstance, _, $uibModal, $filter, $state) {
-        var vm = this;
-        vm.user = {};
-
-        vm.close = function () {
-            $uibModalInstance.dismiss('cancel');
-        };
-
-        function initController() {
-            UserService.GetCurrent().then(function (user) {
-                vm.user = user;
-            });
-        }
-        initController();
-    };
-
-    /**Controller to handle the Employee reibursement form */
     function ReimbursementFormController(UserService, $stateParams, ReimbursementService, noty, $timeout, _, $filter, $state) {
         var vm = this;
         vm.user = {};
@@ -124,6 +133,7 @@
         vm.alerts = [];
         vm.reimbursementObj = {
             project: null,
+            status: "New",
             receipts: []
         };
         vm.receiptTotalAmount = 0;
@@ -138,12 +148,13 @@
             _.each(vm.reimbursementObj.receipts, (receiptObj) => {
                 vm.receiptTotalAmount += parseFloat(receiptObj.receiptAmount);
             });
-            vm.receiptTotalAmount.toFixed(2);
+            vm.reimbursementObj.totalAmount = vm.receiptTotalAmount.toFixed(2);
         }
 
         vm.getApproveActiveUsersList = function () {
             ReimbursementService.getApproveUsersList().then(function (response) {
                 vm.approveActiveUsers = response.users;
+                vm.getActiveProjectsList();
             }, function (error) {
                 if (error) {
                     vm.alerts.push({ msg: error, type: 'danger' });
@@ -154,6 +165,7 @@
         vm.getActiveProjectsList = function () {
             ReimbursementService.getActiveProjectsList().then(function (response) {
                 vm.activeProjects = response.projects;
+                vm.getReimbursementById();
             }, function (error) {
                 if (error) {
                     vm.alerts.push({ msg: error, type: 'danger' });
@@ -161,20 +173,37 @@
             });
         }
 
-        vm.submitReimbursement = function (reimbursementForm, reimbursementObj, index) {
-            var formData = {};
-            //formData.reimbursementFrom = $filter('date')(reimbursementObj.reimbursementFrom, "yyyy-MM-dd");
-            //formData.reimbursementTo = $filter('date')(reimbursementObj.reimbursementTo, "yyyy-MM-dd");
-            formData.reimbursementMonth = $filter('date')(reimbursementObj.reimbursementMonth, "yyyy-MM-dd");
-            formData.approveUserId = reimbursementObj.approveUserId;
-            formData.projectId = reimbursementObj.projectId;
-            formData.purpose = reimbursementObj.purpose;
-            formData.status = 'Submitted';
-            formData.receipts = [];
-            _.each(reimbursementObj.receipts, function (receiptObj) {
-                formData.receipts.push(receiptObj._id);
-            });
+        vm.getReimbursementById = function () {
+            if ($stateParams.reimbursementId) {
+                ReimbursementService.getReimbursement($stateParams.reimbursementId).then(function (response) {
+                    vm.reimbursementObj = response.reimbursement;
+                    vm.reimbursementObj.reimbursementMonth = new Date(vm.reimbursementObj.reimbursementMonth);
+                    vm.reimbursementObj.project = _.find(vm.activeProjects, { _id: vm.reimbursementObj.projectId });
+                    _.each(vm.reimbursementObj.receipts, (receiptObj) => {
+                        receiptObj.receiptDate = String(receiptObj.receiptDate).split("T")[0];
+                    });
+                    //vm.calReceiptsAmount();
+                }, function (error) {
+                    if (error) {
+                        vm.alerts.push({ msg: error, type: 'danger' });
+                    }
+                });
+            }
+        }
+
+        vm.submitReimbursement = function (reimbursementForm, reimbursementObj) {
             if (reimbursementForm.$valid) {
+                var formData = {};
+                formData.reimbursementMonth = $filter('date')(reimbursementObj.reimbursementMonth, "yyyy-MM-dd");
+                formData.approveUserId = reimbursementObj.approveUserId;
+                formData.projectId = reimbursementObj.projectId;
+                formData.purpose = reimbursementObj.purpose;
+                formData.status = 'Submitted';
+                formData.receipts = [];
+                _.each(reimbursementObj.receipts, function (receiptObj) {
+                    formData.receipts.push(receiptObj._id);
+                });
+
                 if (reimbursementObj._id) {
                     ReimbursementService.updateReimbursement(reimbursementObj._id, formData).then(function (response) {
                         noty.showSuccess("Reimbursement has been updated successfully!");
@@ -217,15 +246,17 @@
         function initController() {
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
-                vm.reimbursementObj.name = vm.user.name;
+                if ($stateParams.reimbursementId) {
+                    vm.isReimbursementFormEdit = true;
+                } else {
+                    vm.reimbursementObj.userName = vm.user.name;
+                    vm.isReimbursementFormEdit = false;
+                    if (vm.reimbursementObj.receipts.length == 0) {
+                        $state.go('myReceipts');
+                    }
+                }
             });
-            if ($stateParams.reimbursementId) {
-                vm.isReimbursementFormEdit = true;
-            } else {
-                vm.isReimbursementFormEdit = false;
-            }
             vm.getApproveActiveUsersList();
-            vm.getActiveProjectsList();
             vm.calReceiptsAmount();
         }
         initController();
@@ -239,6 +270,12 @@
         vm.receipts = [];
         vm.selected = [];
         vm.selectAll = false;
+        vm.categories = ReimbursementService.getReimbursementCategories();
+        vm.searchObj = {
+            category: "",
+            status: "New"
+        };
+        vm.categories.unshift({ "categoryTypeId": "", "categoryTypeVal": "All" });
 
         $rootScope.$on("GetMyReceipts", function () {
             $scope.getMyReceipts();
@@ -329,7 +366,9 @@
 
         vm.checkAll = function () {
             _.each(vm.receipts, function (receipt) {
-                receipt.selected = vm.selectAll;
+                if (receipt.status == "New") {
+                    receipt.selected = vm.selectAll;
+                }
             });
             vm.enableSubmitButton();
         }
@@ -448,12 +487,14 @@
         initController();
     };
 
-    /**Controller to handle all the employee reimbursements for Manges or lead or admin */
     function TeamReimbursementsController(UserService, ReimbursementService, _, $uibModal, $filter, $state) {
         var vm = this;
         vm.user = {};
         vm.alerts = [];
         vm.reimbursements = [];
+        vm.searchObj = {
+            status: "Submitted"
+        }
 
         function getTeamReimbursements() {
             ReimbursementService.getTeamReimbursements().then(function (response) {
@@ -483,6 +524,10 @@
                         return reimbursementObj;
                     }
                 }
+            }).result.then(function () {
+                getTeamReimbursements();
+            }, function () {
+                getTeamReimbursements();
             });
         }
 
@@ -503,11 +548,15 @@
         var vm = this;
         vm.user = {};
         vm.alerts = [];
+        vm.reimbursements = [];
+        vm.searchObj = {
+            status: "Approved"
+        }
 
-        function getTeamReimbursements() {
-            ReimbursementService.getTeamReimbursements().then(function (response) {
-                vm.teamReimbursements = response.reimbursements;
-                _.each(vm.teamReimbursements, function (item) {
+        function getAccountReimbursements() {
+            ReimbursementService.getAccountReimbursements().then(function (response) {
+                vm.reimbursements = response.reimbursements;
+                _.each(vm.reimbursements, function (item) {
                     item.createdOn = $filter('date')(item.createdOn, "yyyy-MM-dd");
                 });
             }, function (error) {
@@ -515,20 +564,27 @@
             });
         };
 
-        vm.openTeamReimbursementModal = function (reimbursementObj) {
+        vm.openAccountReimbursementModal = function (reimbursementObj) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
                 templateUrl: 'reimbursement/teamReimbursementModal.html',
-                controller: 'Reimbursement.TeamReimbursementsModalController',
+                controller: 'Reimbursement.AccountReimbursementsModalController',
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
+                    userObj: function () {
+                        return vm.user;
+                    },
                     reimbursementObj: function () {
                         return reimbursementObj;
                     }
                 }
+            }).result.then(function () {
+                getAccountReimbursements();
+            }, function () {
+                getAccountReimbursements();
             });
         }
 
@@ -540,57 +596,32 @@
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
             });
-            getTeamReimbursements();
+            getAccountReimbursements();
         }
         initController();
     };
 
-    /**Controller to handle the  employee reimbursement form for manager or lead or admin*/
     function TeamReimbursementsModalController(UserService, ReimbursementService, reimbursementObj, _, $uibModal, $uibModalInstance, $filter, $state) {
         var vm = this;
         vm.user = {};
         vm.alerts = [];
         vm.reimbursement = reimbursementObj;
 
-        vm.acceptReceipt = function (receiptIndex) {
-            _.each(vm.reimbursement.items, function (item, index) {
-                if (receiptIndex == index) {
-                    item.acceptReceipt = true;
-                    item.rejectReceipt = false;
-                }
+        vm.approveReimbursement = function () {
+            ReimbursementService.approveReimbursement(vm.reimbursement._id).then(function (response) {
+                $uibModalInstance.dismiss('close');
+            }, function (error) {
+                console.log(error);
             });
         }
 
-        vm.rejectReceipt = function (receiptIndex) {
-            _.each(vm.reimbursement.items, function (item, index) {
-                if (receiptIndex == index) {
-                    item.acceptReceipt = false;
-                    item.rejectReceipt = true;
-                }
+        vm.rejectReimbursement = function () {
+            ReimbursementService.rejectReimbursement(vm.reimbursement._id).then(function (response) {
+                $uibModalInstance.dismiss('close');
+            }, function (error) {
+                console.log(error);
             });
         }
-
-        vm.acceptAllReceipts = function () {
-            _.each(vm.reimbursement.items, function (item) {
-                item.acceptReceipt = true;
-                item.rejectReceipt = false;
-            });
-        }
-
-        vm.rejectAllReceipts = function () {
-            _.each(vm.reimbursement.items, function (item) {
-                item.acceptReceipt = false;
-                item.rejectReceipt = true;
-            });
-        }
-
-        vm.accept = function (form, reimbursement) {
-
-        };
-
-        vm.reject = function () {
-
-        };
 
         vm.close = function () {
             $uibModalInstance.dismiss('cancel');
@@ -603,7 +634,83 @@
         function initController() {
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
-                console.log(vm.reimbursement);
+            });
+        }
+        initController();
+    };
+
+    function AccountReimbursementsModalController(UserService, ReimbursementService, reimbursementObj, _, $uibModal, $uibModalInstance, $filter, $state) {
+        var vm = this;
+        vm.user = {};
+        vm.alerts = [];
+        vm.reimbursement = reimbursementObj;
+        vm.enablePayBtn = false;
+        vm.enableRejectBtn = false;
+
+        vm.approveReimbursementReceipt = function (receipt) {
+            ReimbursementService.approveReimbursementReceipt(receipt._id).then(function (response) {
+                receipt.status = "Approved";
+                vm.checkReimbursementStatus();
+            }, function (error) {
+                console.log(error);
+            });
+        }
+
+        vm.rejectReimbursementReceipt = function (receipt) {
+            ReimbursementService.rejectReimbursementReceipt(receipt._id).then(function (response) {
+                receipt.status = "Rejected";
+                vm.checkReimbursementStatus();
+            }, function (error) {
+                console.log(error);
+            });
+        }
+
+        vm.payReimbursement = function (form) {
+            if (form.$valid) {
+                var objData = {
+                    paidDate: $filter('date')(vm.reimbursement.paidDate, "yyyy-MM-dd"),
+                    paymentMode: vm.reimbursement.paymentMode,
+                    comment: vm.reimbursement.comment
+                };
+                ReimbursementService.payReimbursement(vm.reimbursement._id, objData).then(function (response) {
+                    $uibModalInstance.dismiss('close');
+                }, function (error) {
+                    console.log(error);
+                });
+            } else {
+                vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
+            }
+        }
+
+        vm.rejectReimbursement = function () {
+            ReimbursementService.rejectReimbursement(vm.reimbursement._id).then(function (response) {
+                $uibModalInstance.dismiss('close');
+            }, function (error) {
+                console.log(error);
+            });
+        }
+
+        vm.checkReimbursementStatus = function () {
+            vm.enablePayBtn = true;
+            _.each(vm.reimbursement.receipts, function (receiptObj) {
+                if (receiptObj.status != "Approved") {
+                    vm.enablePayBtn = false;
+                }
+            });
+        }
+
+        vm.close = function () {
+            $uibModalInstance.dismiss('cancel');
+        }
+
+        vm.closeAlert = function (index) {
+            vm.alerts.splice(index, 1);
+        }
+
+        function initController() {
+            UserService.GetCurrent().then(function (user) {
+                vm.user = user;
+                vm.checkReimbursementStatus();
             });
         }
         initController();
