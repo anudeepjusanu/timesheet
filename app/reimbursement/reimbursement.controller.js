@@ -75,8 +75,9 @@
         vm.user = {};
         vm.alerts = [];
         vm.searchObj = {
-            status: 'Pending'
+            status: 'New'
         };
+        vm.reimbursementStatus = ReimbursementService.getReimbursementStatus();
 
         function getMyReimbursements() {
             ReimbursementService.getMyReimbursements().then(function (response) {
@@ -495,6 +496,7 @@
         vm.searchObj = {
             status: "Submitted"
         }
+        vm.reimbursementStatus = ReimbursementService.getReimbursementStatus();
 
         function getTeamReimbursements() {
             ReimbursementService.getTeamReimbursements().then(function (response) {
@@ -552,6 +554,7 @@
         vm.searchObj = {
             status: "Approved"
         }
+        vm.reimbursementStatus = ReimbursementService.getReimbursementStatus();
 
         function getAccountReimbursements() {
             ReimbursementService.getAccountReimbursements().then(function (response) {

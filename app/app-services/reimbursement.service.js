@@ -30,6 +30,7 @@
         service.rejectReimbursementReceipt = rejectReimbursementReceipt;
         service.deleteReimbursementReceipt = deleteReimbursementReceipt;
         service.getReimbursementCategories = getReimbursementCategories;
+        service.getReimbursementStatus = getReimbursementStatus;
         service.getApproveUsersList = getApproveUsersList;
         service.getActiveProjectsList = getActiveProjectsList;
 
@@ -128,6 +129,19 @@
 
         function getActiveProjectsList() {
             return $http.get('/api/reimbursement/activeProjectsList/').then(handleSuccess, handleError);
+        }
+
+        function getReimbursementStatus() {
+            return [
+                "All",
+                "New",
+                "Submitted",
+                "Approved",
+                "Rejected",
+                "Cliam Approved",
+                "Cliam Rejected",
+                "Payment Processed"
+            ];
         }
 
         function getReimbursementCategories() {
