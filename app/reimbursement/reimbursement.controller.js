@@ -665,14 +665,14 @@
             });
         }
 
-        vm.payReimbursement = function (form) {
+        vm.claimApproveReimbursement = function (form) {
             if (form.$valid) {
                 var objData = {
                     paidDate: $filter('date')(vm.reimbursement.paidDate, "yyyy-MM-dd"),
                     paymentMode: vm.reimbursement.paymentMode,
                     comment: vm.reimbursement.comment
                 };
-                ReimbursementService.payReimbursement(vm.reimbursement._id, objData).then(function (response) {
+                ReimbursementService.claimApproveReimbursement(vm.reimbursement._id, objData).then(function (response) {
                     $uibModalInstance.dismiss('close');
                 }, function (error) {
                     console.log(error);
@@ -682,8 +682,11 @@
             }
         }
 
-        vm.rejectReimbursement = function () {
-            ReimbursementService.rejectReimbursement(vm.reimbursement._id).then(function (response) {
+        vm.claimRejectReimbursement = function () {
+            var objData = {
+                comment: vm.reimbursement.comment
+            };
+            ReimbursementService.claimRejectReimbursement(vm.reimbursement._id, objData).then(function (response) {
                 $uibModalInstance.dismiss('close');
             }, function (error) {
                 console.log(error);

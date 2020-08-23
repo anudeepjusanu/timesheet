@@ -124,8 +124,8 @@
 <div ng-if="vm.user.userRole=='account'" class="modal-footer" class="modal-footer">
     <div class="text-center">
         <button class="btn btn-primary btn-rounded" ng-disabled="!vm.enablePayBtn"
-            ng-click="vm.payReimbursement(vm.rimbursementForm);">Sanction</button>
-        <button class="btn btn-danger btn-rounded" ng-click="vm.rejectReimbursement();">Reject</button>
+            ng-click="vm.claimApproveReimbursement(vm.rimbursementForm);">Claim Approve</button>
+        <button class="btn btn-danger btn-rounded" ng-click="vm.claimRejectReimbursement();">Claim Reject</button>
         <button class="btn btn-danger btn-rounded" ng-click="vm.close();">Cancel</button>
     </div>
 </div>
