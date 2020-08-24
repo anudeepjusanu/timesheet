@@ -75,7 +75,7 @@
         vm.user = {};
         vm.alerts = [];
         vm.searchObj = {
-            status: 'New'
+            status: 'All'
         };
         vm.reimbursementStatus = ReimbursementService.getReimbursementStatus();
 

@@ -36,6 +36,7 @@ router.put('/approveReimbursement/:_id', approveReimbursement);
 router.put('/rejectReimbursement/:_id', rejectReimbursement);
 router.put('/claimApproveReimbursement/:_id', claimApproveReimbursement);
 router.put('/claimRejectReimbursement/:_id', claimRejectReimbursement);
+router.put('/paymentProcessedReimbursement/:_id', paymentProcessedReimbursement);
 
 router.get('/', getMyReimbursements);
 router.get('/:_id', getReimbursement);
@@ -119,9 +120,7 @@ function rejectReimbursement(req, res) {
 
 function claimApproveReimbursement(req, res) {
     var dataObj = {
-        status: "Claim Approved",
-        paymentMode: req.body.paymentMode ? req.body.paymentMode : null,
-        comment: req.body.comment ? req.body.comment : null
+        status: "Expenses Approved"
     }
     ReimbursementService.updateReimbursement(req.params._id, dataObj).then(data => {
         res.send({ reimbursement: data });
@@ -132,7 +131,19 @@ function claimApproveReimbursement(req, res) {
 
 function claimRejectReimbursement(req, res) {
     var dataObj = {
-        status: "Claim Rejected",
+        status: "Expenses Rejected",
+        comment: req.body.comment ? req.body.comment : null
+    }
+    ReimbursementService.updateReimbursement(req.params._id, dataObj).then(data => {
+        res.send({ reimbursement: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
+
+function paymentProcessedReimbursement(req, res) {
+    var dataObj = {
+        status: "Payment Processed",
         paymentMode: req.body.paymentMode ? req.body.paymentMode : null,
         comment: req.body.comment ? req.body.comment : null
     }
