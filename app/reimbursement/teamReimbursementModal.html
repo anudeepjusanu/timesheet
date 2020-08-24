@@ -56,10 +56,10 @@
                     <td style="width: 120px;">{{receipt.receiptCategory}}</td>
                     <td>{{receipt.receiptDescription}}</td>
                     <td style="width: 120px;">{{receipt.status}}</td>
-                    <td style="width: 100px;">{{receipt.receiptAmount}}</td>
+                    <td style="width: 100px;"><span class="fa fa-inr"></span>{{receipt.receiptAmount}}</td>
                     <td style="width: 80px; text-align: center;">
                         <a class="" href="/data/reimbursements/{{receipt.receiptFile}}" target="_blank">
-                            <span class="fa fa-download"></span>
+                            <span class="fa fa-eye"></span>
                         </a>
                     </td>
                     <td ng-if="vm.user.userRole=='account'">
@@ -75,7 +75,7 @@
                 </tr>
                 <tr>
                     <td colspan="4"></td>
-                    <td>{{vm.reimbursement.totalAmount}}</td>
+                    <td><span class="fa fa-inr"></span>{{vm.reimbursement.totalAmount}}</td>
                     <td colspan="2"></td>
                 </tr>
             </table>
