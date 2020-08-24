@@ -138,8 +138,8 @@
                 "Submitted",
                 "Approved",
                 "Rejected",
-                "Cliam Approved",
-                "Cliam Rejected",
+                "Expenses Approved",
+                "Expenses Rejected",
                 "Payment Processed"
             ];
         }
