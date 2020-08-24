@@ -2,281 +2,152 @@
     <h3 class="modal-title" id="modal-title">Edit User</h3>
 </div>
 <div class="modal-body" id="modal-body">
-    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
-        close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
-<<<<<<< HEAD
-    <form class="form-horizontal row" name="userForm">
-        
-            <div class="form-group required">
-                <div class="col-md-6">
-                <label class="col-md-4 col-xs-12 control-label">Employee ID</label>
-                <div class="col-md-6 col-xs-12">
-                    <input type="text" ng-model="vm.userObj.employeeId" class="form-control" />
-=======
-    <form class="form-horizontal" name="userForm">
-        <div class="form-row">
-            <div class="col-md-6">
-                <div class="form-group required">
-                    <label class="col-md-3 col-xs-12 control-label">Employee ID</label>
-                    <div class="col-md-9 col-xs-12">
+    <div class="container-fluid">
+        <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+            close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
+        <form class="form-horizontal" name="userForm">
+            <div class="row">
+                <div class="form-group col-md-6 required">
+                    <label class="col-md-4 col-xs-12 control-label required">Employee ID</label>
+                    <div class="col-md-8 col-xs-12">
                         <input type="text" ng-model="vm.userObj.employeeId" class="form-control" />
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group required">
-                    <label class="col-md-3 col-xs-12 control-label">Email</label>
-                    <div class="col-md-9 col-xs-12">
+                <div class="form-group col-md-6 required">
+                    <label class="col-md-4 col-xs-12 control-label">Email</label>
+                    <div class="col-md-8 col-xs-12">
                         <input type="email" required="true" ng-model="vm.userObj.username" class="form-control" />
                     </div>
->>>>>>> cbda4f66f175ea3a89d75be1b95cf2898b2a73ea
                 </div>
             </div>
-                    
-        <div class="col-md-6">        
-            <label class="col-md-4 col-xs-12 control-label">Email</label>
-            <div class="col-md-6 col-xs-12">
-                <input type="email" required="true" ng-model="vm.userObj.username" class="form-control" />
-            </div>
-        </div>
-<<<<<<< HEAD
-        </div>
-        
-            <div class="form-group required ">
-                <div class="col-md-12 text-align-left">
-                <label class="col-md-2 col-xs-12  control-label text-align-last" >Name</label>
-                <div class="col-md-9 col-xs-12 text-align-left" >
-                    <input type="text"  required="true" ng-model="vm.userObj.name" class="form-control " />
-                </div>
-            
-                </div>
-        </div>
-
-        <div class="form-group required">
-         <div class="col-md-6">            
-                <label class="col-md-4 col-xs-12 control-label">Mobile</label>
-                <div class="col-md-6 col-xs-12">
-                    <input type="text" ng-model="vm.userObj.phone" class="form-control" />
-=======
-        <div class="form-row">
-            <div class="col-md-12">
+            <div class="row">
                 <div class="form-group required">
-                    <label class="col-md-3 col-xs-12  control-label">Name</label>
+                    <label class="col-md-2 col-xs-12  control-label">Name</label>
                     <div class="col-md-8 col-xs-12">
                         <input type="text" required="true" ng-model="vm.userObj.name" class="form-control " />
                     </div>
                 </div>
+                <div class="">
+
+                </div>
             </div>
-        </div>
-        <div class="form-row">
-            <div class="col-md-6">
-                <div class="form-group required">
-                    <label class="col-md-3 col-xs-12 control-label">Mobile</label>
-                    <div class="col-md-9 col-xs-12">
+            <div class="row">
+                <div class="form-group col-md-6 required">
+                    <label class="col-md-4 col-xs-12 control-label">Mobile</label>
+                    <div class="col-md-8 col-xs-12">
                         <input type="text" ng-model="vm.userObj.phone" class="form-control" />
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group required">
-                    <label class="col-md-3 col-xs-12 control-label">Designation</label>
-                    <div class="col-md-9 col-xs-12">
+                <div class="form-group col-md-6 required">
+                    <label class="col-md-4 col-xs-12 control-label">Designation</label>
+                    <div class="col-md-8 col-xs-12">
                         <input type="text" ng-model="vm.userObj.designation" class="form-control" />
                     </div>
->>>>>>> cbda4f66f175ea3a89d75be1b95cf2898b2a73ea
-                </div>
-         </div>
-         <div class="col-md-6"> 
-            <label class="col-md-4 col-xs-12 control-label">Designation</label>
-            <div class="col-md-6 col-xs-12">
-                <input type="text" ng-model="vm.userObj.designation" class="form-control" />
-            </div>
-<<<<<<< HEAD
-            </div>
-        </div>
-            <div class="form-group required  ">
-            <div class="col-md-6 "> 
-                <label class="col-md-4 col-xs-12 control-label ">Join Date</label>
-=======
-        </div>
-        <div class="col-md-6">
-
-            <div class="form-group required">
-                <label class="col-md- col-xs-12 control-label">Join Date</label>
->>>>>>> cbda4f66f175ea3a89d75be1b95cf2898b2a73ea
-                <div class="col-md-6 col-xs-12">
-                    <p class="input-group">
-                        <input type="text" id="joinDate" class="form-control" uib-datepicker-popup
-                            ng-model="vm.userObj.joinDate" is-open="vm.joinDateOpened"
-                            datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" />
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-default"
-                                ng-click="vm.joinDateOpened=!vm.joinDateOpened"><i
-                                    class="glyphicon glyphicon-calendar"></i></button>
-                        </span>
-                    </p>
                 </div>
             </div>
-            <div class="col-md-6">
-                <label class="col-md-4 col-xs-12 control-label">Provision Period</label>
-                    <div class="col-md-6 col-xs-12">
-                         <input type="number" ng-model="vm.userObj.provisionPeriod" class="form-control" />
+            <div class="row">
+                <div class="form-group col-md-6 required">
+                    <label class="col-md-4 col-xs-12 control-label">Join Date</label>
+                    <div class="col-md-8 col-xs-12">
+                        <p class="input-group">
+                            <input type="text" id="joinDate" class="form-control" uib-datepicker-popup
+                                ng-model="vm.userObj.joinDate" is-open="vm.joinDateOpened"
+                                datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default"
+                                    ng-click="vm.joinDateOpened=!vm.joinDateOpened"><i
+                                        class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
                     </div>
                 </div>
-
-            </div>
-           
-            <div class="form-group required">
-                <div class="col-md-6"> 
-                    
-                <label class="col-md-4 col-xs-12 control-label">Resource Type</label>
-                <div class="col-md-6 col-xs-12">
-                    <select class="form-control" ng-model="vm.userObj.userResourceType" ng-required="true"
-                        ng-options="option as option for option in ['Billable', 'Non-billable', 'Trainee', 'Intern', 'Operations', 'Sales', 'Product', 'Leadership']"></select>
-                </div>
-                
-            </div>
-           
-            <div class="col-md-6"> 
-
-                <label class="col-md-4 col-xs-12 control-label">Employee Type</label>
-            <div class="col-md-6 col-xs-12">
-                <select class="form-control" ng-model="vm.userObj.employeeType" ng-required="true"
-                    ng-options="employeeType.id as employeeType.label for employeeType in vm.employeeTypes"></select>
-            </div>
-
-            </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-6">                   
-                <label class="col-md-4 col-xs-12 control-label">Reporting To</label>
-                <div class="col-md-6 col-xs-12">
-                    <select class="form-control" ng-model="vm.userObj.reportingTo"
-                        ng-options="reportUser.id as reportUser.name for reportUser in vm.reportUsers"></select>
-                </div>
-
-            </div>
-       
-        <div class="col-md-6 required">
-            <label class="col-md-4 col-xs-12 control-label">Role</label>
-                <div class="col-md-6 col-xs-12">
-                <select class="form-control" ng-model="vm.userObj.userRole" ng-required="true"
-                    ng-options="userRole.id as userRole.name for userRole in vm.userRoles"></select>
-                </div>
-        </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-6 required"> 
-                <label class="col-md-4 col-xs-12 control-label ">Skill Category</label>
-                <div class="col-md-6 col-xs-12">
-                    <input type="text" ng-model="vm.userObj.skillCategory" class="form-control" />
-                </div>
-        </div>
-        <div class="col-md-6 ">
-            <label class="col-md-4 col-xs-12 control-label">employeeCategory</label>
-            <div class="col-md-6 col-xs-12">
-                <select class="form-control" ng-model="vm.userObj.employeeCategory"
-                    ng-options="cat as cat for cat in vm.employeeCategories"></select>
-            </div>
-        </div>
-        </div>
-        <div class="form-group ">
-            <div class="col-md-6"> 
-            
-                <label class="col-md-4 col-xs-12 control-label">Bank Name</label>
-                <div class="col-md-6 col-xs-12">
-                    <input type="text" ng-model="vm.userObj.bankName" class="form-control" />
-                </div>
-        </div>
-        <div class="col-md-6"> 
-                <label class="col-md-4 col-xs-12 control-label">IFSC Code</label>
-                <div class="col-md-6 col-xs-12">
-                    <input type="text" ng-model="vm.userObj.IFSCcode" class="form-control" />
-                </div>
-<<<<<<< HEAD
-        </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-6"> 
-            <label class="col-md-4 col-xs-12 control-label">Account Number</label>
-            <div class="col-md-6 col-xs-12">
-                <input type="text" ng-model="vm.userObj.accountNumber" class="form-control" />
-=======
-            </div>
-
-        </div>
-        <!--------------------------------------------->
-        <div class="col-md-6">
-            <div class="form-group required">
-                <label class="col-md-4 col-xs-12 control-label">Email</label>
-                <div class="col-md-6 col-xs-12">
-                    <input type="email" required="true" ng-model="vm.userObj.username" class="form-control" />
+                <div class="form-group col-md-6">
+                    <label class="col-md-4 col-xs-12 control-label">Provision Period</label>
+                    <div class="col-md-8 col-xs-12">
+                        <input type="number" ng-model="vm.userObj.provisionPeriod" class="form-control" />
+                    </div>
                 </div>
             </div>
-            <div></div>
-
-            <div class="form-group">
-                <label class="col-md-4 col-xs-12 control-label">Provision Period</label>
-                <div class="col-md-6 col-xs-12">
-                    <input type="number" ng-model="vm.userObj.provisionPeriod" class="form-control" />
+            <div class="row">
+                <div class="form-group col-md-6 required">
+                    <label class="col-md-4 col-xs-12 control-label">Resource Type</label>
+                    <div class="col-md-8 col-xs-12">
+                        <select class="form-control" ng-model="vm.userObj.userResourceType" ng-required="true"
+                            ng-options="option as option for option in ['Billable', 'Non-billable', 'Trainee', 'Intern', 'Operations', 'Sales', 'Product', 'Leadership']"></select>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="col-md-4 col-xs-12 control-label">Employee Type</label>
+                    <div class="col-md-8 col-xs-12">
+                        <select class="form-control" ng-model="vm.userObj.employeeType" ng-required="true"
+                            ng-options="employeeType.id as employeeType.label for employeeType in vm.employeeTypes"></select>
+                    </div>
                 </div>
             </div>
-            <div class="form-group required">
-                <label class="col-md-4 col-xs-12 control-label">Employee Type</label>
-                <div class="col-md-6 col-xs-12">
-                    <select class="form-control" ng-model="vm.userObj.employeeType" ng-required="true"
-                        ng-options="employeeType.id as employeeType.label for employeeType in vm.employeeTypes"></select>
+            <div class="row">
+                <div class="form-group col-md-6 required">
+                    <label class="col-md-4 col-xs-12 control-label">Role</label>
+                    <div class="col-md-8 col-xs-12">
+                        <select class="form-control" ng-model="vm.userObj.userRole" ng-required="true"
+                            ng-options="userRole.id as userRole.name for userRole in vm.userRoles"></select>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="col-md-4 col-xs-12 control-label">Reporting To</label>
+                    <div class="col-md-8 col-xs-12">
+                        <select class="form-control" ng-model="vm.userObj.reportingTo"
+                            ng-options="reportUser.id as reportUser.name for reportUser in vm.reportUsers"></select>
+                    </div>
                 </div>
             </div>
-
-            <div class="form-group required">
-                <label class="col-md-4 col-xs-12 control-label">Role</label>
-                <div class="col-md-6 col-xs-12">
-                    <select class="form-control" ng-model="vm.userObj.userRole" ng-required="true"
-                        ng-options="userRole.id as userRole.name for userRole in vm.userRoles"></select>
+            <div class="row">
+                <div class="form-group col-md-6 required">
+                    <label class="col-md-4 col-xs-12 control-label ">Skill Category</label>
+                    <div class="col-md-8 col-xs-12">
+                        <input type="text" ng-model="vm.userObj.skillCategory" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="col-md-4 col-xs-12 control-label">employeeCategory</label>
+                    <div class="col-md-8 col-xs-12">
+                        <select class="form-control" ng-model="vm.userObj.employeeCategory"
+                            ng-options="cat as cat for cat in vm.employeeCategories"></select>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-md-4 col-xs-12 control-label">employeeCategory</label>
-                <div class="col-md-6 col-xs-12">
-                    <select class="form-control" ng-model="vm.userObj.employeeCategory"
-                        ng-options="cat as cat for cat in vm.employeeCategories"></select>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="col-md-4 col-xs-12 control-label">Bank Name</label>
+                    <div class="col-md-8 col-xs-12">
+                        <input type="text" ng-model="vm.userObj.bankName" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="col-md-4 col-xs-12 control-label">IFSC Code</label>
+                    <div class="col-md-8 col-xs-12">
+                        <input type="text" ng-model="vm.userObj.ifscCode" class="form-control" />
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-md-4 col-xs-12 control-label">IFSC Code</label>
-                <div class="col-md-6 col-xs-12">
-                    <input type="text" ng-model="vm.userObj.IFSCcode" class="form-control" />
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="col-md-4 col-xs-12 control-label">Bank Account No</label>
+                    <div class="col-md-8 col-xs-12">
+                        <input type="text" ng-model="vm.userObj.bankAccountNumber" class="form-control" />
+                    </div>
                 </div>
->>>>>>> cbda4f66f175ea3a89d75be1b95cf2898b2a73ea
+                <div class="form-group col-md-6">
+                    <label class="col-md-4 col-xs-12 control-label">Active</label>
+                    <div class="col-md-8 col-xs-12">
+                        <label class="switch">
+                            <input type="checkbox" class="switch" ng-model="vm.userObj.isActive" />
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
             </div>
-
-<<<<<<< HEAD
-        <div class="col-md-6"> 
-            <label class="col-md-4 col-xs-12 control-label">Active</label>
-            <div class="col-md-6 col-xs-12">
-                <label class="switch">
-                    <input type="checkbox" class="switch" ng-model="vm.userObj.isActive" />
-                    <span></span>
-                </label>
-            </div>
-        </div>
-        </div>
+        </form>
     </div>
-=======
-
-            <div class="form-group">
-                <label class="col-md-4 col-xs-12 control-label">Active</label>
-                <div class="col-md-6 col-xs-12">
-                    <label class="switch">
-                        <input type="checkbox" class="switch" ng-model="vm.userObj.isActive" />
-                        <span></span>
-                    </label>
-                </div>
-            </div>
-        </div>
->>>>>>> cbda4f66f175ea3a89d75be1b95cf2898b2a73ea
-    </form>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary" type="button" ng-disabled="!vm.enableSaveBtn"
