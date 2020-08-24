@@ -83,16 +83,16 @@
                                     <td class="table-heading" style="width: 100px;">{{item.receiptDate}}</td>
                                     <td class="table-heading" style="width: 180px;">{{item.receiptCategory}}</td>
                                     <td class="table-heading">{{item.receiptDescription}}</td>
-                                    <td class="table-heading" style="width: 100px;"><span class="fa fa-inr"></span>{{item.receiptAmount}}</td>
+                                    <td class="table-heading" style="width: 100px;"><span class="fa fa-inr"></span> {{item.receiptAmount}}</td>
                                     <td class="table-heading" style="width: 60px;">
                                         <a href="/data/reimbursements/{{item.receiptFile}}" target="_blank">
-                                            <span class="fa fa-eye"></span>
+                                            <span class="fa fa-file-text-o"></span>
                                         </a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="3" class="table-heading"> <span class="pull-right">Total : </span></td>
-                                    <td><span class="fa fa-inr"></span>{{vm.reimbursementObj.totalAmount}}</td>
+                                    <td><span class="fa fa-inr"></span> {{vm.reimbursementObj.totalAmount}}</td>
                                     <td></td>
                                 </tr>
                             </table>
