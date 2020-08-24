@@ -5,7 +5,7 @@
     <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
         close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
     <form class="form-horizontal" name="userForm">
-        <div class="row">
+        <div class="form-row">
             <div class="col-md-6">
                 <div class="form-group required">
                     <label class="col-md-3 col-xs-12 control-label">Employee ID</label>
@@ -23,24 +23,36 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="form-group required">
-                <label class="col-md-4 col-xs-12  control-label text-align-last">Name</label>
-                <div class="col-md-8 col-xs-12 text-align-left">
-                    <input type="text" required="true" ng-model="vm.userObj.name" class="form-control " />
+        <div class="form-row">
+            <div class="col-md-12">
+                <div class="form-group required">
+                    <label class="col-md-3 col-xs-12  control-label">Name</label>
+                    <div class="col-md-8 col-xs-12">
+                        <input type="text" required="true" ng-model="vm.userObj.name" class="form-control " />
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-
+        <div class="form-row">
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="col-md-3 col-xs-12 control-label">Mobile</label>
+                    <div class="col-md-9 col-xs-12">
+                        <input type="text" ng-model="vm.userObj.phone" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group required">
+                    <label class="col-md-3 col-xs-12 control-label">Designation</label>
+                    <div class="col-md-9 col-xs-12">
+                        <input type="text" ng-model="vm.userObj.designation" class="form-control" />
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-md-6">
-            <div class="form-group required">
-                <label class="col-md-4 col-xs-12 control-label">Mobile</label>
-                <div class="col-md-6 col-xs-12">
-                    <input type="text" ng-model="vm.userObj.phone" class="form-control" />
-                </div>
-            </div>
+
             <div class="form-group required">
                 <label class="col-md- col-xs-12 control-label">Join Date</label>
                 <div class="col-md-6 col-xs-12">
@@ -105,12 +117,7 @@
                 </div>
             </div>
             <div></div>
-            <div class="form-group required">
-                <label class="col-md-4 col-xs-12 control-label">Designation</label>
-                <div class="col-md-6 col-xs-12">
-                    <input type="text" ng-model="vm.userObj.designation" class="form-control" />
-                </div>
-            </div>
+
             <div class="form-group">
                 <label class="col-md-4 col-xs-12 control-label">Provision Period</label>
                 <div class="col-md-6 col-xs-12">
