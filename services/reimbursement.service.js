@@ -310,9 +310,12 @@ function updateReimbursementReceiptFile(receiptId, fileData) {
 // Get Active users
 function getApproveUsersList() {
     return new Promise((resolve, reject) => {
-        UserModel.aggregate([
+        ProjectModel.aggregate([
             { $match: { isActive: true } },
-            { $project: { name: 1, employeeId: true } }
+            { $project: { "ownerId": { "$toObjectId": "$ownerId" } } },
+            { $lookup: { from: "users", localField: "ownerId", foreignField: "_id", as: "user" } },
+            { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
+            { $project: { _id: '$user._id', ownerId: 1, name: '$user.name', employeeId: '$user.employeeId' } }
         ]).exec().then((data) => {
             resolve(data);
         }).catch((error) => {
