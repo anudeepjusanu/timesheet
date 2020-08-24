@@ -30,7 +30,7 @@
                             <td></td>
                             <td class="table-heading">
                                 <select class="form-control" ng-model="vm.searchObj.status"
-                                    ng-options="option as option for option in ['Pending', 'Completed']"></select>
+                                    ng-options="opt as opt for opt in vm.reimbursementStatus"></select>
                             </td>
                             <td></td>
                             <td></td>
@@ -38,7 +38,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="reimbursement in vm.reimbursements | orderBy:'name'">
+                        <tr
+                            ng-repeat="reimbursement in vm.reimbursements | MyReceiptsSearch:vm.searchObj | orderBy:'name'">
                             <td>{{$index + 1}}</td>
                             <td>{{reimbursement.projectName}}</td>
                             <td>{{reimbursement.approveUserName}}</td>

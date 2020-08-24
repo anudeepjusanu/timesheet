@@ -17,7 +17,8 @@
 
         service.approveReimbursement = approveReimbursement;
         service.rejectReimbursement = rejectReimbursement;
-        service.payReimbursement = payReimbursement;
+        service.claimApproveReimbursement = claimApproveReimbursement;
+        service.claimRejectReimbursement = claimRejectReimbursement;
 
         service.getMyReceipts = getMyReceipts;
         service.getApproveReceipts = getApproveReceipts;
@@ -29,6 +30,7 @@
         service.rejectReimbursementReceipt = rejectReimbursementReceipt;
         service.deleteReimbursementReceipt = deleteReimbursementReceipt;
         service.getReimbursementCategories = getReimbursementCategories;
+        service.getReimbursementStatus = getReimbursementStatus;
         service.getApproveUsersList = getApproveUsersList;
         service.getActiveProjectsList = getActiveProjectsList;
 
@@ -64,8 +66,12 @@
             return $http.put('/api/reimbursement/rejectReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
         }
 
-        function payReimbursement(reimbursementId, formData = {}) {
-            return $http.put('/api/reimbursement/payReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
+        function claimApproveReimbursement(reimbursementId, formData = {}) {
+            return $http.put('/api/reimbursement/claimApproveReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
+        }
+
+        function claimRejectReimbursement(reimbursementId, formData = {}) {
+            return $http.put('/api/reimbursement/claimRejectReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
         }
 
         function deleteReimbursement(reimbursementId) {
@@ -123,6 +129,19 @@
 
         function getActiveProjectsList() {
             return $http.get('/api/reimbursement/activeProjectsList/').then(handleSuccess, handleError);
+        }
+
+        function getReimbursementStatus() {
+            return [
+                "All",
+                "New",
+                "Submitted",
+                "Approved",
+                "Rejected",
+                "Cliam Approved",
+                "Cliam Rejected",
+                "Payment Processed"
+            ];
         }
 
         function getReimbursementCategories() {

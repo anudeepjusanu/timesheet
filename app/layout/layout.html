@@ -47,18 +47,11 @@
                     <span class="xn-text">My Leaves</span>
                 </a>
             </li>
-            <li class="" ng-class="{active: activeTab === 'reimbursement'}">
+            <li class="" ng-if="vm.user.admin===true" ng-class="{active: activeTab === 'reimbursement'}">
                 <a ui-sref="reimbursement"><span class="fa fa-file-excel-o"></span>
-                    <span class="xn-text">Reimbursement</span></a>
+                    <span class="xn-text">Reimbursement</span>
+                </a>
             </li>
-            <!-- <li class="" ng-class="{active: activeTab === 'myReceipts'}">
-                <a ui-sref="myReceipts"><span class="fa fa-file-excel-o"></span>
-                    <span class="xn-text">My Receipts</span></a>
-            </li>
-            <li class="" ng-class="{active: activeTab === 'myReimbursements'}">
-                <a ui-sref="myReimbursements"><span class="fa fa-file-excel-o"></span>
-                    <span class="xn-text">My Reimbursements</span></a>
-            </li> -->
             <li class="" ng-if="vm.user.admin===true || vm.user.userRole=='manager'"
                 ng-class="{active: activeTab === 'timesheet'}">
                 <a ui-sref="timesheet"><span class="fa fa-file-excel-o"></span> <span
@@ -157,7 +150,7 @@
         <ul class="x-navigation x-navigation-horizontal x-navigation-panel">
             <!-- TOGGLE NAVIGATION -->
             <li class="xn-icon-button">
-                <a href="#" class="x-navigation-minimize">
+                <a href="#" class="x-navigation-minimize" ng-click="vm.xNavigationMinimize()">
                     <span class="fa fa-dedent"></span>
                 </a>
             </li>
