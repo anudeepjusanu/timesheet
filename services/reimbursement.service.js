@@ -312,12 +312,46 @@ function getApproveUsersList() {
     return new Promise((resolve, reject) => {
         ProjectModel.aggregate([
             { $match: { isActive: true } },
-            { $project: { "ownerId": { "$toObjectId": "$ownerId" } } },
-            { $lookup: { from: "users", localField: "ownerId", foreignField: "_id", as: "user" } },
+            { $project: { "ownerId": { "$toObjectId": "$ownerId" }, "reimbursementApproverId": { "$toObjectId": "$reimbursementApproverId" } } },
+            //{ $lookup: { from: "users", localField: "ownerId", foreignField: "_id", as: "user" } },
+            {
+                $lookup: {
+                    from: "users", let: { ownerId: "$ownerId", reimbursementApproverId: "$reimbursementApproverId" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $or: [
+                                        {
+                                            $eq: [
+                                                "$_id",
+                                                "$$ownerId"
+                                            ]
+                                        },
+                                        {
+                                            $eq: [
+                                                "$_id",
+                                                "$$reimbursementApproverId"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ],
+                    as: "user"
+                }
+            },
             { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
             { $project: { _id: '$user._id', ownerId: 1, name: '$user.name', employeeId: '$user.employeeId' } }
         ]).exec().then((data) => {
-            resolve(data);
+            var finalData = [];
+            for (var i = 0; i < data.length; i++) {
+                if (_.findIndex(finalData, { _id: data[i]._id }) === -1) {
+                    finalData.push(data[i]);
+                }
+            }
+            resolve(finalData);
         }).catch((error) => {
             reject({ error: (error.errmsg ? error.errmsg : "Unexpected error") });
         });
@@ -328,7 +362,7 @@ function getActiveProjectsList() {
     return new Promise((resolve, reject) => {
         ProjectModel.aggregate([
             { $match: { isActive: true } },
-            { $project: { projectName: 1, projectType: 1, clientId: 1, ownerId: 1, ownerName: 1 } }
+            { $project: { projectName: 1, projectType: 1, clientId: 1, ownerId: 1, reimbursementApproverId: 1, ownerName: 1 } }
         ]).exec().then((data) => {
             resolve(data);
         }).catch((error) => {

@@ -53,12 +53,13 @@ function create(projectParam) {
         description: projectParam.description,
         ownerId: projectParam.ownerId,
         ownerName: projectParam.ownerName,
+        reimbursementApproverId: (projectParam.reimbursementApproverId) ? mongo.helper.toObjectID(projectParam.reimbursementApproverId) : null,
         createdOn: new Date(),
         updatedOn: new Date()
     }
     db.projects.insert(
         projectObj,
-        function(err, project) {
+        function (err, project) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             deferred.resolve(project.ops[0]);
         });
@@ -82,13 +83,14 @@ function update(_id, params) {
         isActive: params.isActive,
         description: params.description,
         ownerId: params.ownerId,
-        ownerName: params.ownerName
+        ownerName: params.ownerName,
+        reimbursementApproverId: (params.reimbursementApproverId) ? mongo.helper.toObjectID(params.reimbursementApproverId) : null
     }
     projectObj.updatedOn = new Date();
-    db.projects.update({ _id: mongo.helper.toObjectID(_id) }, { '$set': projectObj }, function(err, project) {
+    db.projects.update({ _id: mongo.helper.toObjectID(_id) }, { '$set': projectObj }, function (err, project) {
         if (err) deferred.reject(err.name + ': ' + err.message);
-        db.users.update({ "projects.projectId": _id }, { '$set': { "projects.$.projectName": params.projectName, "projects.$.ownerId": params.ownerId, "projects.$.ownerName": params.ownerName } }, { upsert: true, multi: true }, function(err, respone) {
-            db.timesheets.update({ "projects.projectId": mongo.helper.toObjectID(_id) }, { '$set': { "projects.$.projectName": params.projectName, "projects.$.businessUnit": params.businessUnit, "projects.$.costAccount": params.costAccount } }, { upsert: true, multi: true }, function(err, respone) {
+        db.users.update({ "projects.projectId": _id }, { '$set': { "projects.$.projectName": params.projectName, "projects.$.ownerId": params.ownerId, "projects.$.ownerName": params.ownerName } }, { upsert: true, multi: true }, function (err, respone) {
+            db.timesheets.update({ "projects.projectId": mongo.helper.toObjectID(_id) }, { '$set': { "projects.$.projectName": params.projectName, "projects.$.businessUnit": params.businessUnit, "projects.$.costAccount": params.costAccount } }, { upsert: true, multi: true }, function (err, respone) {
                 deferred.resolve(project);
             });
         });
@@ -101,7 +103,7 @@ function del(_id) {
     var deferred = Q.defer();
 
     db.projects.remove({ _id: mongo.helper.toObjectID(_id) },
-        function(err) {
+        function (err) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             deferred.resolve();
         });
@@ -111,7 +113,7 @@ function del(_id) {
 
 function getProjectById(projectId) {
     var deferred = Q.defer();
-    db.projects.findById(projectId, function(err, project) {
+    db.projects.findById(projectId, function (err, project) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (project) {
             deferred.resolve(project);
@@ -124,7 +126,7 @@ function getProjectById(projectId) {
 
 function getAllProjects() {
     var deferred = Q.defer();
-    db.projects.find().sort({ clientName: 1, projectName: 1 }).toArray(function(err, projects) {
+    db.projects.find().sort({ clientName: 1, projectName: 1 }).toArray(function (err, projects) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (projects) {
             deferred.resolve(projects);
@@ -138,11 +140,11 @@ function getAllProjects() {
 
 function getAssignedUsers(projectId) {
     var deferred = Q.defer();
-    db.users.find({ "projects.projectId": { "$in": [projectId] }, "isActive": true }).toArray(function(err, users) {
+    db.users.find({ "projects.projectId": { "$in": [projectId] }, "isActive": true }).toArray(function (err, users) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (users) {
             var assignedUsers = [];
-            _.each(users, function(user) {
+            _.each(users, function (user) {
                 if (user.isActive) {
                     var userProject = _.find(user.projects, { "projectId": projectId });
                     if (!userProject.billDates) {
@@ -170,19 +172,19 @@ function getAssignedUsers(projectId) {
 
 function getAssignedUsersWithWorkedHours(projectId) {
     var deferred = Q.defer();
-    db.users.find({ "projects.projectId": { "$in": [projectId] } }).toArray(function(err, users) {
+    db.users.find({ "projects.projectId": { "$in": [projectId] } }).toArray(function (err, users) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (users) {
             var assignedUsers = [];
-            _.each(users, function(user) {
+            _.each(users, function (user) {
                 var userProject = _.find(user.projects, { "projectId": projectId });
-                userProject.billDates = (userProject.billDates)?userProject.billDates:[];
-                _.each(userProject.billDates, function(billDate){
+                userProject.billDates = (userProject.billDates) ? userProject.billDates : [];
+                _.each(userProject.billDates, function (billDate) {
                     billDate.workedHours = 0;
                     billDate.sheets = [];
-                    db.timesheets.find({ "weekDate": {$gte: new Date(billDate.start), $lt: new Date(billDate.end)}, "projects.projectId": { "$in": [projectId] } }).toArray(function(err, sheets) {
+                    db.timesheets.find({ "weekDate": { $gte: new Date(billDate.start), $lt: new Date(billDate.end) }, "projects.projectId": { "$in": [projectId] } }).toArray(function (err, sheets) {
                         billDate.sheets = sheets;
-                        _.each(sheets, function(sheet){
+                        _.each(sheets, function (sheet) {
                             var billProject = _.find(sheet.projects, { "projectId": projectId });
                             billDate.workedHours += billProject.projectHours;
                         });
@@ -206,11 +208,11 @@ function getAssignedUsersWithWorkedHours(projectId) {
 function assignUsers(projectId, users) {
     var deferred = Q.defer();
 
-    _.each(users, function(user) {
-        db.users.findById(user.userId, function(err, userRoc) {
+    _.each(users, function (user) {
+        db.users.findById(user.userId, function (err, userRoc) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             if (userRoc) {
-                db.projects.findById(projectId, function(err, projectRoc) {
+                db.projects.findById(projectId, function (err, projectRoc) {
                     if (err) deferred.reject(err.name + ': ' + err.message);
                     if (projectRoc) {
                         var rowData = {
@@ -234,18 +236,18 @@ function assignUsers(projectId, users) {
                             rowData.projects.push(projectData);
                         }
                         db.users.update({ _id: mongo.helper.toObjectID(userRoc._id) }, { '$set': rowData },
-                            function(err, project) {
+                            function (err, project) {
                                 if (err) deferred.reject(err.name + ': ' + err.message);
                                 //deferred.resolve(project);
                                 // update user timesheets as per new changes
-                                db.users.findById(userRoc._id, function(err, userObj) {
+                                db.users.findById(userRoc._id, function (err, userObj) {
                                     var userSheetCnt = 0;
                                     var userSheetTotalCnt = 0;
-                                    db.timesheets.find({ userId: userObj._id }).toArray(function(err, sheetObjs) {
+                                    db.timesheets.find({ userId: userObj._id }).toArray(function (err, sheetObjs) {
                                         if (err) deferred.reject(err.name + ': ' + err.message);
                                         userSheetTotalCnt = sheetObjs.length;
-                                        _.each(sheetObjs, function(sheetObj) {
-                                            _.each(sheetObj.projects, function(projectObj) {
+                                        _.each(sheetObjs, function (sheetObj) {
+                                            _.each(sheetObj.projects, function (projectObj) {
                                                 var billData = getProjectBillData(projectObj, sheetObj.weekDate, userObj);
                                                 projectObj.resourceType = billData.resourceType;
                                                 projectObj.allocatedHours = billData.allocatedHours;
@@ -262,7 +264,7 @@ function assignUsers(projectId, users) {
                                             sheetObj.totalBillableHours = 0;
                                             sheetObj.timeoffHours = 0;
                                             sheetObj.overtimeHours = 0;
-                                            _.each(sheetObj.projects, function(projectObj) {
+                                            _.each(sheetObj.projects, function (projectObj) {
                                                 /*if(!projectObj.businessUnit){
                                                     projectObj.businessUnit = "";
                                                 }
@@ -288,7 +290,7 @@ function assignUsers(projectId, users) {
                                                 projects: sheetObj.projects
                                             }
                                             newSheetObj.updatedOn = new Date();
-                                            db.timesheets.update({ _id: mongo.helper.toObjectID(sheetObj._id) }, { $set: newSheetObj }, function(err, responseSheet) {
+                                            db.timesheets.update({ _id: mongo.helper.toObjectID(sheetObj._id) }, { $set: newSheetObj }, function (err, responseSheet) {
                                                 userSheetCnt++;
                                                 if (userSheetCnt >= userSheetTotalCnt) {
                                                     deferred.resolve();
@@ -322,7 +324,7 @@ function getProjectBillData(projectObj, weekDateVal, sheetUserObj) {
         var prjData = _.find(sheetUserObj.projects, { "projectId": projectObj.projectId + "" });
         if (prjData && prjData.billDates) {
             var weekDate = new Date(weekDateVal);
-            _.each(prjData.billDates, function(billDate) {
+            _.each(prjData.billDates, function (billDate) {
                 if (billDate.start && billDate.start != "" && billDate.end && billDate.end != "") {
                     var startDate = new Date(billDate.start);
                     var endDate = new Date(billDate.end);
@@ -365,10 +367,10 @@ function getProjectBillData(projectObj, weekDateVal, sheetUserObj) {
 function assignUser(projectId, user) {
     var deferred = Q.defer();
 
-    db.users.findById(user.userId, function(err, userRoc) {
+    db.users.findById(user.userId, function (err, userRoc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (userRoc) {
-            db.projects.findById(projectId, function(err, projectRoc) {
+            db.projects.findById(projectId, function (err, projectRoc) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
                 if (projectRoc) {
                     var rowData = {
@@ -393,7 +395,7 @@ function assignUser(projectId, user) {
                         rowData.projects.push(projectData);
                     }
                     db.users.update({ _id: mongo.helper.toObjectID(userRoc._id) }, { '$set': rowData },
-                        function(err, project) {
+                        function (err, project) {
                             if (err) deferred.reject(err.name + ': ' + err.message);
                             deferred.resolve(project);
                         });
@@ -410,7 +412,7 @@ function assignUser(projectId, user) {
 
 function unassignUser(projectId, userId) {
     var deferred = Q.defer();
-    db.users.findById(userId, function(err, userRoc) {
+    db.users.findById(userId, function (err, userRoc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (userRoc) {
             var rowData = {
@@ -424,7 +426,7 @@ function unassignUser(projectId, userId) {
                 rowData.projects.splice(projectIndex, 1);
             }
             db.users.update({ _id: mongo.helper.toObjectID(userRoc._id) }, { '$set': rowData },
-                function(err, project) {
+                function (err, project) {
                     if (err) deferred.reject(err.name + ': ' + err.message);
                     deferred.resolve(project);
                 });
@@ -439,7 +441,7 @@ function unassignUser(projectId, userId) {
 
 function getClients() {
     var deferred = Q.defer();
-    db.clients.find().toArray(function(err, clients) {
+    db.clients.find().toArray(function (err, clients) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (clients) {
             deferred.resolve(clients);
@@ -452,7 +454,7 @@ function getClients() {
 
 function getClientById(clientId) {
     var deferred = Q.defer();
-    db.clients.findById(clientId, function(err, client) {
+    db.clients.findById(clientId, function (err, client) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (client) {
             deferred.resolve(client);
@@ -470,7 +472,7 @@ function createClient(clientParam) {
         createdOn: new Date(),
         updatedOn: new Date()
     }
-    db.clients.insert(clientObj, function(err, client) {
+    db.clients.insert(clientObj, function (err, client) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         deferred.resolve(client);
     });
@@ -483,9 +485,9 @@ function updateClient(_id, clientParam) {
         clientName: clientParam.clientName
     }
     clientObj.updatedOn = new Date();
-    db.clients.update({ _id: mongo.helper.toObjectID(_id) }, { '$set': clientObj }, true, function(err, client) {
+    db.clients.update({ _id: mongo.helper.toObjectID(_id) }, { '$set': clientObj }, true, function (err, client) {
         if (err) deferred.reject(err.name + ': ' + err.message);
-        db.projects.update({ clientId: mongo.helper.toObjectID(_id) }, { '$set': { clientName: clientParam.clientName } }, { upsert: true, multi: true }, function(err, respone) {
+        db.projects.update({ clientId: mongo.helper.toObjectID(_id) }, { '$set': { clientName: clientParam.clientName } }, { upsert: true, multi: true }, function (err, respone) {
             deferred.resolve(client);
         });
     });
@@ -497,7 +499,7 @@ function deleteClient(_id) {
     var deferred = Q.defer();
 
     db.clients.remove({ _id: mongo.helper.toObjectID(_id) },
-        function(err) {
+        function (err) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             deferred.resolve();
         });
@@ -508,10 +510,10 @@ function deleteClient(_id) {
 function getProjectOwners() {
     var deferred = Q.defer();
     projects.aggregate([
-        {$match: {isActive: true}},
-        {$project: {'projectName': true, 'ownerId': {'$toObjectId': '$ownerId'}, 'user_info.name': 1}},
-        {$lookup: {from: 'users', localField: 'ownerId', foreignField: '_id', as: 'user_info'}},
-    ]).exec(function(error, response){
+        { $match: { isActive: true } },
+        { $project: { 'projectName': true, 'ownerId': { '$toObjectId': '$ownerId' }, 'user_info.name': 1 } },
+        { $lookup: { from: 'users', localField: 'ownerId', foreignField: '_id', as: 'user_info' } },
+    ]).exec(function (error, response) {
         if (error) deferred.reject(error);
         deferred.resolve(response);
     });
