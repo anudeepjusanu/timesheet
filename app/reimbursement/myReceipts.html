@@ -55,8 +55,8 @@
                             <td class="table-heading">{{receipt.receiptDescription}}</td>
                             <td class="table-heading">{{receipt.status}}</td>
                             <td class="table-heading "><span class="fa fa-inr"></span> {{receipt.receiptAmount}}</td>
-                            <td>
-                                <a href="/data/reimbursements/{{receipt.receiptFile}}" target="_blank">
+                            <td class="text-center" ng-controller="popupControl">
+                                <a href="/data/reimbursements/{{receipt.receiptFile}}">
                                     <span class="fa fa-file-text-o"></span>
                                 </a>
                             </td>
