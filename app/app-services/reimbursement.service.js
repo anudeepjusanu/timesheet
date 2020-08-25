@@ -17,8 +17,9 @@
 
         service.approveReimbursement = approveReimbursement;
         service.rejectReimbursement = rejectReimbursement;
-        service.claimApproveReimbursement = claimApproveReimbursement;
-        service.claimRejectReimbursement = claimRejectReimbursement;
+        service.expensesApproveReimbursement = expensesApproveReimbursement;
+        service.expencesRejectReimbursement = expencesRejectReimbursement;
+        service.paymentProcessReimbursement = paymentProcessReimbursement;
 
         service.getMyReceipts = getMyReceipts;
         service.getApproveReceipts = getApproveReceipts;
@@ -66,12 +67,16 @@
             return $http.put('/api/reimbursement/rejectReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
         }
 
-        function claimApproveReimbursement(reimbursementId, formData = {}) {
-            return $http.put('/api/reimbursement/claimApproveReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
+        function expensesApproveReimbursement(reimbursementId, formData = {}) {
+            return $http.put('/api/reimbursement/expensesApproveReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
         }
 
-        function claimRejectReimbursement(reimbursementId, formData = {}) {
-            return $http.put('/api/reimbursement/claimRejectReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
+        function expencesRejectReimbursement(reimbursementId, formData = {}) {
+            return $http.put('/api/reimbursement/expencesRejectReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
+        }
+
+        function paymentProcessReimbursement(reimbursementId, formData = {}) {
+            return $http.put('/api/reimbursement/paymentProcessReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
         }
 
         function deleteReimbursement(reimbursementId) {

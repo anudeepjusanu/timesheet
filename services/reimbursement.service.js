@@ -94,7 +94,7 @@ function getTeamReimbursements(userId) {
 function getAccountReimbursements(userId) {
     return new Promise((resolve, reject) => {
         ReimbursementModel.aggregate([
-            { $match: { status: { $in: ['Approved', 'Expenses Approved', 'Payment Rejected'] } } },
+            { $match: { status: { $in: ['Approved', 'Expenses Approved', 'Expenses Rejected', 'Payment Processed'] } } },
             { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "user" } },
             { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
             { $lookup: { from: "users", localField: "approveUserId", foreignField: "_id", as: "approveUser" } },

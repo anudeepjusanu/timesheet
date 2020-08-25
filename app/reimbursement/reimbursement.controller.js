@@ -594,6 +594,63 @@
             });
         }
 
+        vm.paymentProcessReimbursement = function (reimbursementObj) {
+            $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'reimbursement/paymentReimbursementModal.html',
+                controller: function (UserService, ReimbursementService, reimbursementObj, userObj, $uibModalInstance) {
+                    var vm = this;
+                    vm.user = userObj;
+                    vm.alerts = [];
+                    vm.reimbursement = reimbursementObj;
+
+                    vm.paymentProcessReimbursement = function () {
+                        var objData = {
+                            paidDate: vm.reimbursement.paidDate,
+                            paymentMode: vm.reimbursement.paymentMode,
+                            comment: vm.reimbursement.comment
+                        }
+                        ReimbursementService.paymentProcessReimbursement(vm.reimbursement._id, objData).then(function (response) {
+                            $uibModalInstance.dismiss('close');
+                        }, function (error) {
+                            console.log(error);
+                        });
+                    }
+
+                    vm.close = function () {
+                        $uibModalInstance.dismiss('cancel');
+                    }
+
+                    vm.closeAlert = function (index) {
+                        vm.alerts.splice(index, 1);
+                    }
+
+                    function initController() {
+                        UserService.GetCurrent().then(function (user) {
+                            vm.user = user;
+                        });
+                    }
+                    initController();
+                },
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    userObj: function () {
+                        return vm.user;
+                    },
+                    reimbursementObj: function () {
+                        return reimbursementObj;
+                    }
+                }
+            }).result.then(function () {
+                getAccountReimbursements();
+            }, function () {
+                getAccountReimbursements();
+            });
+        }
+
         vm.closeAlert = function (index) {
             vm.alerts.splice(index, 1);
         }
@@ -640,7 +697,7 @@
             _.each(vm.reimbursement.receipts, function (receiptObj) {
                 vm.reimbursement.approvedAmount += parseFloat(receiptObj.approvedAmount);
             });
-            vm.reimbursement.approvedAmount.toFixed(2);
+            vm.reimbursement.totalAmount = vm.reimbursement.approvedAmount.toFixed(2);
         }
 
         vm.close = function () {
@@ -686,14 +743,14 @@
             });
         }
 
-        vm.claimApproveReimbursement = function (form) {
+        vm.expensesApproveReimbursement = function (form) {
             if (form.$valid) {
                 var objData = {
-                    paidDate: $filter('date')(vm.reimbursement.paidDate, "yyyy-MM-dd"),
-                    paymentMode: vm.reimbursement.paymentMode,
+                    //paidDate: $filter('date')(vm.reimbursement.paidDate, "yyyy-MM-dd"),
+                    //paymentMode: vm.reimbursement.paymentMode,
                     comment: vm.reimbursement.comment
                 };
-                ReimbursementService.claimApproveReimbursement(vm.reimbursement._id, objData).then(function (response) {
+                ReimbursementService.expensesApproveReimbursement(vm.reimbursement._id, objData).then(function (response) {
                     $uibModalInstance.dismiss('close');
                 }, function (error) {
                     console.log(error);
@@ -703,11 +760,11 @@
             }
         }
 
-        vm.claimRejectReimbursement = function () {
+        vm.expencesRejectReimbursement = function () {
             var objData = {
                 comment: vm.reimbursement.comment
             };
-            ReimbursementService.claimRejectReimbursement(vm.reimbursement._id, objData).then(function (response) {
+            ReimbursementService.expencesRejectReimbursement(vm.reimbursement._id, objData).then(function (response) {
                 $uibModalInstance.dismiss('close');
             }, function (error) {
                 console.log(error);
