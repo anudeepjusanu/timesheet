@@ -47,6 +47,7 @@
                     <th class="table-heading">Description</th>
                     <th class="table-heading" style="width: 120px;">Status</th>
                     <th class="table-heading" style="width: 100px;">Amount</th>
+                    <th class="table-heading" style="width:120px">Approved Amount</th>
                     <th class="table-heading" style="width: 70px;">Receipt</th>
                     <th class="table-heading" style="width: 110px;" ng-if="vm.user.userRole=='account'">
                     </th>
@@ -57,6 +58,7 @@
                     <td>{{receipt.receiptDescription}}</td>
                     <td style="width: 120px;">{{receipt.status}}</td>
                     <td style="width: 100px;"><span class="fa fa-inr"></span>{{receipt.receiptAmount}}</td>
+                    <td class="table-heading"><input type="number" ng-model="vm.reimbursement.approvedAmount" class="form-control"></input></td>
                     <td style="width: 80px; text-align: center;">
                         <a class="" href="/data/reimbursements/{{receipt.receiptFile}}" target="_blank">
                             <span class="fa fa-file-text-o"></span>
