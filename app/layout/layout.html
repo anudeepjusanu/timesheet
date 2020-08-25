@@ -47,7 +47,8 @@
                     <span class="xn-text">My Leaves</span>
                 </a>
             </li>
-            <li class="" ng-class="{active: activeTab === 'reimbursement'}">
+            <li class="" ng-if="vm.user.admin===true || vm.user.userRole=='manager' || vm.user.userRole=='lead'"
+                ng-class="{active: activeTab === 'reimbursement'}">
                 <a ui-sref="reimbursement"><span class="fa fa-file-excel-o"></span>
                     <span class="xn-text">Reimbursement</span>
                 </a>
