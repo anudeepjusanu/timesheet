@@ -47,8 +47,8 @@ function getMyReimbursements(userId) {
             {
                 $project: {
                     userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1,
-                    createdBy: 1, createdOn: 1, receipts: 1, approveUserName: '$approveUser.name',
-                    userName: '$user.name', employeeId: '$user.employeeId', projectName: '$project.projectName'
+                    createdBy: 1, createdOn: 1, receipts: 1, comment: 1, approveUserName: '$approveUser.name', userName: '$user.name',
+                    employeeId: '$user.employeeId', projectName: '$project.projectName'
                 }
             },
             { $sort: { createdOn: -1 } }
@@ -74,8 +74,8 @@ function getTeamReimbursements(userId) {
             {
                 $project: {
                     userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1,
-                    createdBy: 1, createdOn: 1, receipts: 1, items: 1, approveUserName: '$approveUser.name',
-                    userName: '$user.name', employeeId: '$user.employeeId', projectName: '$project.projectName'
+                    createdBy: 1, createdOn: 1, receipts: 1, comment: 1, approveUserName: '$approveUser.name', userName: '$user.name',
+                    employeeId: '$user.employeeId', projectName: '$project.projectName'
                 }
             },
             { $sort: { createdOn: -1 } }
@@ -104,8 +104,8 @@ function getAccountReimbursements(userId) {
             {
                 $project: {
                     userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1,
-                    createdBy: 1, createdOn: 1, receipts: 1, approveUserName: '$approveUser.name',
-                    userName: '$user.name', employeeId: '$user.employeeId', projectName: '$project.projectName'
+                    createdBy: 1, createdOn: 1, receipts: 1, comment: 1, approveUserName: '$approveUser.name', userName: '$user.name',
+                    employeeId: '$user.employeeId', projectName: '$project.projectName'
                 }
             },
             { $sort: { createdOn: -1 } }
@@ -128,7 +128,7 @@ function getReimbursement(ReimbursementId) {
             { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "user" } },
             {
                 $project: {
-                    userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1, createdBy: 1,
+                    userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1, createdBy: 1, comment: 1,
                     createdOn: 1, receipts: 1, userName: '$user.name', employeeId: '$user.employeeId', projectName: '$project.projectName'
                 }
             }
@@ -177,12 +177,26 @@ function addReimbursement(reimbursementData) {
     });
 }
 
-function updateReimbursement(ReimbursementId, ReimbursementData) {
-    return new Promise((resolve, reject) => {
-        if (ReimbursementData.userId) {
-            ReimbursementData.userId = mongoose.Types.ObjectId(ReimbursementData.userId);
+function updateReimbursement(ReimbursementId, reimbursementData) {
+    return new Promise(async (resolve, reject) => {
+        if (reimbursementData.status == 'Approved') {
+            var totalApprovedAmount = 0;
+            for (var i = 0; i < reimbursementData.receipts.length; i++) {
+                var receiptObj = reimbursementData.receipts[i];
+                await ReimbursementReciptModel.updateOne({ '_id': mongoose.Types.ObjectId(receiptObj._id) },
+                    { $set: { approvedAmount: receiptObj.approvedAmount } }).exec();
+                totalApprovedAmount += parseFloat(receiptObj.approvedAmount);
+            }
+            reimbursementData = {
+                status: reimbursementData.status,
+                totalAmount: totalApprovedAmount,
+                comment: reimbursementData.comment
+            }
         }
-        ReimbursementModel.updateOne({ _id: mongoose.Types.ObjectId(ReimbursementId) }, { $set: ReimbursementData }).exec().then((data) => {
+        if (reimbursementData.userId) {
+            reimbursementData.userId = mongoose.Types.ObjectId(reimbursementData.userId);
+        }
+        ReimbursementModel.updateOne({ _id: mongoose.Types.ObjectId(ReimbursementId) }, { $set: reimbursementData }).exec().then((data) => {
             resolve(data);
         }).catch((error) => {
             reject({ error: error.errmsg });

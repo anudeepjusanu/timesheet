@@ -146,8 +146,10 @@
 
         vm.calReceiptsAmount = function () {
             vm.receiptTotalAmount = 0;
+            vm.receiptApprovedTotalAmount = 0;
             _.each(vm.reimbursementObj.receipts, (receiptObj) => {
                 vm.receiptTotalAmount += parseFloat(receiptObj.receiptAmount);
+                vm.receiptApprovedTotalAmount += parseFloat(receiptObj.approvedAmount);
             });
             vm.reimbursementObj.totalAmount = vm.receiptTotalAmount.toFixed(2);
         }
@@ -605,14 +607,20 @@
         initController();
     };
 
-    function TeamReimbursementsModalController(UserService, ReimbursementService, reimbursementObj, _, $uibModal, $uibModalInstance, $filter, $state) {
+    function TeamReimbursementsModalController(UserService, ReimbursementService, reimbursementObj, _, $scope, $uibModal, $uibModalInstance, $filter, $state) {
         var vm = this;
         vm.user = {};
         vm.alerts = [];
         vm.reimbursement = reimbursementObj;
 
+        if (vm.reimbursement.status == "Submitted") {
+            _.each(vm.reimbursement.receipts, function (receiptObj) {
+                receiptObj.approvedAmount = receiptObj.receiptAmount;
+            });
+        }
+
         vm.approveReimbursement = function () {
-            ReimbursementService.approveReimbursement(vm.reimbursement._id).then(function (response) {
+            ReimbursementService.approveReimbursement(vm.reimbursement._id, vm.reimbursement).then(function (response) {
                 $uibModalInstance.dismiss('close');
             }, function (error) {
                 console.log(error);
@@ -620,11 +628,19 @@
         }
 
         vm.rejectReimbursement = function () {
-            ReimbursementService.rejectReimbursement(vm.reimbursement._id).then(function (response) {
+            ReimbursementService.rejectReimbursement(vm.reimbursement._id, { comment: vm.reimbursement.comment }).then(function (response) {
                 $uibModalInstance.dismiss('close');
             }, function (error) {
                 console.log(error);
             });
+        }
+
+        vm.calReceiptsAmount = function () {
+            vm.reimbursement.approvedAmount = 0;
+            _.each(vm.reimbursement.receipts, function (receiptObj) {
+                vm.reimbursement.approvedAmount += parseFloat(receiptObj.approvedAmount);
+            });
+            vm.reimbursement.approvedAmount.toFixed(2);
         }
 
         vm.close = function () {
@@ -638,6 +654,7 @@
         function initController() {
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
+                vm.calReceiptsAmount();
             });
         }
         initController();

@@ -21,7 +21,7 @@
                         {{vm.reimbursement.userName}}
                     </div>
                     <label class="col-md-2 col-xs-12 control-label">Employee ID:</label>
-                    <div class="col-md-3 col-xs-12 modal-padding">{{vm.user.employeeId}}
+                    <div class="col-md-3 col-xs-12 modal-padding">{{vm.reimbursement.employeeId}}
                     </div>
                 </div>
                 <div class="form-group">
@@ -49,7 +49,7 @@
                     <th class="table-heading" style="width: 100px;">Amount</th>
                     <th class="table-heading" style="width:120px">Approved Amount</th>
                     <th class="table-heading" style="width: 70px;">Receipt</th>
-                    <th class="table-heading" style="width: 110px;" ng-if="vm.user.userRole=='account'">
+                    <th class="table-heading" style="width: 110px;" ng-if="vm.user.userRole=='finance'">
                     </th>
                 </tr>
                 <tr ng-repeat="receipt in vm.reimbursement.receipts">
@@ -58,13 +58,16 @@
                     <td>{{receipt.receiptDescription}}</td>
                     <td style="width: 120px;">{{receipt.status}}</td>
                     <td style="width: 100px;"><span class="fa fa-inr"></span>{{receipt.receiptAmount}}</td>
-                    <td class="table-heading"><input type="number" ng-model="vm.reimbursement.approvedAmount" class="form-control"></input></td>
+                    <td class="table-heading">
+                        <input type="number" ng-model="receipt.approvedAmount" class="form-control"
+                            ng-change="vm.calReceiptsAmount();" />
+                    </td>
                     <td style="width: 80px; text-align: center;">
                         <a class="" href="/data/reimbursements/{{receipt.receiptFile}}" target="_blank">
                             <span class="fa fa-file-text-o"></span>
                         </a>
                     </td>
-                    <td ng-if="vm.user.userRole=='account'">
+                    <td ng-if="vm.user.userRole=='finance'">
                         <a href="" class="btn btn-sm btn-success btn-rounded"
                             ng-click="vm.approveReimbursementReceipt(receipt);">
                             <span class="fa fa-check"></span>
@@ -78,12 +81,23 @@
                 <tr>
                     <td colspan="4"></td>
                     <td><span class="fa fa-inr"></span> {{vm.reimbursement.totalAmount}}</td>
+                    <td><span class="fa fa-inr"></span> {{vm.reimbursement.approvedAmount}}</td>
                     <td colspan="2"></td>
                 </tr>
             </table>
         </div>
     </div>
-    <div ng-if="vm.user.userRole=='account'" class="row">
+    <div ng-if="vm.user.userRole!='finance'" class="row">
+        <form class="form-horizontal" name="vm.rimbursementForm">
+            <div class="form-group">
+                <label class="col-md-2 col-xs-12 control-label">Comment</label>
+                <div class="col-md-8 col-xs-12">
+                    <textarea class="form-control" ng-model="vm.reimbursement.comment" rows="2"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div ng-if="vm.user.userRole=='finance'" class="row">
         <form class="form-horizontal" name="vm.rimbursementForm">
             <div class="form-group required">
                 <label class="col-md-2 col-xs-12 control-label">Paid Date</label>
@@ -123,7 +137,7 @@
         <button class="btn btn-danger btn-rounded" ng-click="vm.close();">Cancel</button>
     </div>
 </div>
-<div ng-if="vm.user.userRole=='account'" class="modal-footer" class="modal-footer">
+<div ng-if="vm.user.userRole=='finance'" class="modal-footer" class="modal-footer">
     <div class="text-center">
         <button class="btn btn-primary btn-rounded" ng-disabled="!vm.enablePayBtn"
             ng-click="vm.claimApproveReimbursement(vm.rimbursementForm);">Claim Approve</button>

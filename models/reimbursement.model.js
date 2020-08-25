@@ -21,6 +21,7 @@ var ReimbursementSchema = new Schema({
         type: Number,
         default: 0.00
     },
+    comment: { type: String },
     createdBy: { type: mongoose.ObjectId },
     createdOn: { type: Date, default: Date.now }
 });

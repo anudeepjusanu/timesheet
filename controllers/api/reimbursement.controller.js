@@ -98,7 +98,9 @@ function updateReimbursement(req, res) {
 
 function approveReimbursement(req, res) {
     var dataObj = {
-        status: "Approved"
+        status: "Approved",
+        comment: req.body.comment,
+        receipts: req.body.receipts
     }
     ReimbursementService.updateReimbursement(req.params._id, dataObj).then(data => {
         res.send({ reimbursement: data });
@@ -109,7 +111,8 @@ function approveReimbursement(req, res) {
 
 function rejectReimbursement(req, res) {
     var dataObj = {
-        status: "Rejected"
+        status: "Rejected",
+        comment: req.body.comment
     }
     ReimbursementService.updateReimbursement(req.params._id, dataObj).then(data => {
         res.send({ reimbursement: data });
