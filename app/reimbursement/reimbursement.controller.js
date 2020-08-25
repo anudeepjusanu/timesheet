@@ -235,8 +235,9 @@
 
         vm.changeProject = function () {
             if (vm.reimbursementObj.project) {
+                console.log(vm.reimbursementObj.project);
                 vm.reimbursementObj.projectId = vm.reimbursementObj.project._id;
-                vm.reimbursementObj.approveUserId = vm.reimbursementObj.project.ownerId;
+                vm.reimbursementObj.approveUserId = (vm.reimbursementObj.project.reimbursementApproverId) ? vm.reimbursementObj.project.reimbursementApproverId : vm.reimbursementObj.project.ownerId;
             }
         }
 

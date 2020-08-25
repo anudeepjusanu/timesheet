@@ -4,7 +4,8 @@
         <li><a ui-sref="projects"><i class="fa fa-dashboard"></i> Projects</a></li>
         <li class="active">Add Project</li>
     </ul>
-    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
+    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+        close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
     <div class="page-content-wrap">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
@@ -17,9 +18,12 @@
                                 <label class="col-md-3 control-label" for="clientName">Customer Name</label>
                                 <div class="col-md-9">
                                     <p class="input-group">
-                                        <select id="clientName" class="form-control" ng-model="vm.obj.clientId" ng-options="client._id as client.clientName for client in vm.clients" ng-required="true"></select>
+                                        <select id="clientName" class="form-control" ng-model="vm.obj.clientId"
+                                            ng-options="client._id as client.clientName for client in vm.clients"
+                                            ng-required="true"></select>
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default" ng-click="vm.viewClientModel();">Add New</button>
+                                            <button type="button" class="btn btn-default"
+                                                ng-click="vm.viewClientModel();">Add New</button>
                                         </span>
                                     </p>
                                 </div>
@@ -27,16 +31,21 @@
                             <div class="form-group required">
                                 <label class="col-md-3 control-label" for="projectName">Project Name</label>
                                 <div class="col-md-9">
-                                    <input id="projectName" name="projectName" type="text" min="0" max="70" placeholder="Project Name" class="form-control" ng-model="vm.obj.projectName" ng-required="true">
+                                    <input id="projectName" name="projectName" type="text" min="0" max="70"
+                                        placeholder="Project Name" class="form-control" ng-model="vm.obj.projectName"
+                                        ng-required="true">
                                 </div>
                             </div>
                             <div class="form-group required">
                                 <label class="col-md-3 control-label" for="startDate">Start Date</label>
                                 <div class="col-md-9">
                                     <p class="input-group">
-                                        <input type="text" id="startDate" class="form-control" uib-datepicker-popup ng-model="vm.obj.startDate" is-open="vm.popup2.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" />
+                                        <input type="text" id="startDate" class="form-control" uib-datepicker-popup
+                                            ng-model="vm.obj.startDate" is-open="vm.popup2.opened"
+                                            datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" />
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default" ng-click="vm.open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                            <button type="button" class="btn btn-default" ng-click="vm.open2()"><i
+                                                    class="glyphicon glyphicon-calendar"></i></button>
                                         </span>
                                     </p>
                                 </div>
@@ -45,9 +54,13 @@
                                 <label class="col-md-3 control-label" for="endDate">End Date</label>
                                 <div class="col-md-9">
                                     <p class="input-group">
-                                        <input type="text" id="endDate" class="form-control" uib-datepicker-popup ng-model="vm.obj.endDate" is-open="vm.endDateOpt.opened" datepicker-options="vm.dateOptions" close-text="Close" />
+                                        <input type="text" id="endDate" class="form-control" uib-datepicker-popup
+                                            ng-model="vm.obj.endDate" is-open="vm.endDateOpt.opened"
+                                            datepicker-options="vm.dateOptions" close-text="Close" />
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default" ng-click="vm.endDateOpt.opened=true"><i class="glyphicon glyphicon-calendar"></i></button>
+                                            <button type="button" class="btn btn-default"
+                                                ng-click="vm.endDateOpt.opened=true"><i
+                                                    class="glyphicon glyphicon-calendar"></i></button>
                                         </span>
                                     </p>
                                 </div>
@@ -55,55 +68,75 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label" for="projectBillType">Project Bill Type</label>
                                 <div class="col-md-9">
-                                    <select class="form-control" id="projectBillType" ng-model="vm.obj.projectBillType" ng-options="prj.projectBillId as prj.projectBillName for prj in vm.projectBillTypes"></select>
+                                    <select class="form-control" id="projectBillType" ng-model="vm.obj.projectBillType"
+                                        ng-options="prj.projectBillId as prj.projectBillName for prj in vm.projectBillTypes"></select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 control-label" for="projectType">Project Type</label>
                                 <div class="col-md-9">
-                                    <select class="form-control" id="projectType" ng-model="vm.obj.projectType" ng-options="prj.projectTypeId as prj.projectTypeName for prj in vm.projectTypes"></select>
+                                    <select class="form-control" id="projectType" ng-model="vm.obj.projectType"
+                                        ng-options="prj.projectTypeId as prj.projectTypeName for prj in vm.projectTypes"></select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 control-label" for="businessUnit">Business Unit</label>
                                 <div class="col-md-9">
-                                    <select class="form-control" id="businessUnit" ng-model="vm.obj.businessUnit" ng-options="option as option for option in vm.projectBusinessUnits"></select>
+                                    <select class="form-control" id="businessUnit" ng-model="vm.obj.businessUnit"
+                                        ng-options="option as option for option in vm.projectBusinessUnits"></select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 control-label" for="costAccount">Cost Account</label>
                                 <div class="col-md-9">
-                                    <select class="form-control" id="costAccount" ng-model="vm.obj.costAccount" ng-options="item as item for item in ['', 'S&M', 'G&A', 'DELIVERY']"></select>
+                                    <select class="form-control" id="costAccount" ng-model="vm.obj.costAccount"
+                                        ng-options="item as item for item in ['', 'S&M', 'G&A', 'DELIVERY']"></select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 control-label" for="projectName">Estimated Hours</label>
                                 <div class="col-md-9">
-                                    <input id="estimatedHours" name="estimatedHours" type="text" placeholder="Estimated Hours" class="form-control" ng-model="vm.obj.estimatedHours" />
+                                    <input id="estimatedHours" name="estimatedHours" type="text"
+                                        placeholder="Estimated Hours" class="form-control"
+                                        ng-model="vm.obj.estimatedHours" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 control-label" for="projectName">Estimated Cost</label>
                                 <div class="col-md-9">
-                                    <input id="estimatedCost" name="estimatedCost" type="text" placeholder="Estimated Cost" class="form-control" ng-model="vm.obj.estimatedCost" />
+                                    <input id="estimatedCost" name="estimatedCost" type="text"
+                                        placeholder="Estimated Cost" class="form-control"
+                                        ng-model="vm.obj.estimatedCost" />
                                 </div>
                             </div>
                             <div class="form-group required">
                                 <label class="col-md-3 control-label" for="visibility">Visibility</label>
                                 <div class="col-md-9">
-                                    <select class="form-control" id="visibility" ng-model="vm.obj.visibility" ng-required="true" ng-options="option as option for option in ['Private', 'Public']"></select>
+                                    <select class="form-control" id="visibility" ng-model="vm.obj.visibility"
+                                        ng-required="true"
+                                        ng-options="option as option for option in ['Private', 'Public']"></select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 control-label" for="description">Description</label>
                                 <div class="col-md-9">
-                                    <textarea class="form-control" id="description" name="description" placeholder="Description" rows="5" ng-model="vm.obj.description"></textarea>
+                                    <textarea class="form-control" id="description" name="description"
+                                        placeholder="Description" rows="5" ng-model="vm.obj.description"></textarea>
                                 </div>
                             </div>
                             <div class="form-group required">
                                 <label class="col-md-3 col-xs-12 control-label">Owner</label>
                                 <div class="col-md-6 col-xs-12">
-                                    <select class="form-control" ng-model="vm.obj.user" ng-options="userObj as userObj.name for userObj in vm.users" ng-required="true"></select>
+                                    <select class="form-control" ng-model="vm.obj.user"
+                                        ng-options="userObj as userObj.name for userObj in vm.users"
+                                        ng-required="true"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-12 control-label">Reimbursement Approver</label>
+                                <div class="col-md-6 col-xs-12">
+                                    <select class="form-control" ng-model="vm.obj.reimbursementApproverId"
+                                        ng-options="userObj._id as userObj.name for userObj in vm.users"></select>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -117,7 +150,8 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12 text-right">
-                                    <button type="button" class="btn btn-primary btn-lg" ng-click="vm.saveProject(vm.addForm)">Submit</button>
+                                    <button type="button" class="btn btn-primary btn-lg"
+                                        ng-click="vm.saveProject(vm.addForm)">Submit</button>
                                 </div>
                             </div>
                         </fieldset>

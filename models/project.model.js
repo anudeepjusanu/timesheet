@@ -11,6 +11,7 @@ var ProjectsSchema = new Schema({
 
     ownerId: { type: String },
     ownerName: { type: String },
+    reimbursementApproverId: { type: mongoose.ObjectId },
 
     businessUnit: { type: String },
     estimatedCost: { type: String },
