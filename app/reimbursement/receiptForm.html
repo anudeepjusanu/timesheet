@@ -1,8 +1,8 @@
 <div class="content-wrapper">
     <ul class="breadcrumb">
-        <li><a ui-sref="myReceipts"><i class="fa fa-dashboard"></i>My Receipts</a></li>
+        <li><a ui-sref="myReceipts"><i class="fa fa-dashboard"></i>My Expenses</a></li>
         <li class="active">
-            <span>{{(vm.isReceiptFormEdit ? 'Edit ' : 'Add ')}}Receipt</span>
+            <span>{{(vm.isReceiptFormEdit ? 'Edit ' : 'Add ')}} Expense</span>
         </li>
     </ul>
     <br />
@@ -11,7 +11,7 @@
     </div>
     <div class="container">
         <div class="panel-heading">
-            <h3 class="panel-title text-center">Receipt Information</h3>
+            <h3 class="panel-title text-center">Expenses Information</h3>
         </div>
         <div class="row">
             <div class="col-md-2"></div>
@@ -70,9 +70,6 @@
                             <button class="btn btn-primary btn-rounded reimbursement-buttons" type="button"
                                 ng-disabled="!vm.receiptForm.$valid"
                                 ng-click="vm.saveReceipt(vm.receiptForm, vm.receiptObj, $index)">Save</button>
-                            <!-- <button class="btn button-success btn-rounded reimbursement-buttons" type="button"
-                            ng-disabled="!vm.receiptForm.$valid || !vm.receiptObj.file || !vm.receiptObj.receiptFile"
-                            ng-click="vm.saveReceipt(vm.receiptForm, vm.receiptObj, $index)">Save</button> -->
                             <button ui-sref="myReceipts" class="btn btn-primary btn-rounded reimbursement-buttons"
                                 type="button">
                                 Back</button>
