@@ -438,6 +438,7 @@
         if ($stateParams.receipt._id) {
             $stateParams.receipt.receiptDate = new Date($stateParams.receipt.receiptDate)
             vm.receiptObj = $stateParams.receipt;
+            vm.receiptObj.receiptAmount = (vm.receiptObj.receiptAmount) ? parseFloat(vm.receiptObj.receiptAmount) : vm.receiptObj.receiptAmount;
         } else {
             vm.receiptObj = {};
         }
