@@ -192,6 +192,12 @@ function updateReimbursement(ReimbursementId, reimbursementData) {
                 totalAmount: totalApprovedAmount,
                 comment: reimbursementData.comment
             }
+        } else if (reimbursementData.status == 'Payment Processed' && reimbursementData.receipts) {
+            for (var i = 0; i < reimbursementData.receipts.length; i++) {
+                var receiptObj = reimbursementData.receipts[i];
+                await ReimbursementReciptModel.updateOne({ '_id': mongoose.Types.ObjectId(receiptObj._id) },
+                    { $set: { status: "Paid" } }).exec();
+            }
         }
         if (reimbursementData.userId) {
             reimbursementData.userId = mongoose.Types.ObjectId(reimbursementData.userId);
@@ -244,6 +250,7 @@ function addReimbursementReceipt(receiptData) {
         var receiptDataObj = {
             receiptDate: receiptData.receiptDate,
             receiptCategory: receiptData.receiptCategory,
+            receiptNumber: receiptData.receiptNumber,
             receiptDescription: receiptData.receiptDescription,
             receiptAmount: receiptData.receiptAmount
         };
@@ -271,6 +278,7 @@ function updateReimbursementReceipt(receiptId, receiptData) {
         var receiptDataObj = {
             receiptDate: receiptData.receiptDate,
             receiptCategory: receiptData.receiptCategory,
+            receiptNumber: receiptData.receiptNumber,
             receiptDescription: receiptData.receiptDescription,
             receiptAmount: receiptData.receiptAmount
         };

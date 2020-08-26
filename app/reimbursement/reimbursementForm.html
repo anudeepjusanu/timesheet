@@ -75,6 +75,7 @@
                                 <tr>
                                     <th class="table-heading">Date</th>
                                     <th class="table-heading">Category</th>
+                                    <th class="table-heading">Number</th>
                                     <th class="table-heading">Description</th>
                                     <th class="table-heading">Amount</th>
                                     <th class="table-heading">Approved Amount</th>
@@ -83,6 +84,7 @@
                                 <tr ng-repeat="item in vm.reimbursementObj.receipts">
                                     <td class="table-heading" style="width: 100px;">{{item.receiptDate}}</td>
                                     <td class="table-heading" style="width: 180px;">{{item.receiptCategory}}</td>
+                                    <td class="table-heading" style="width: 180px;">{{item.receiptNumber}}</td>
                                     <td class="table-heading">{{item.receiptDescription}}</td>
                                     <td class="table-heading" style="width: 100px;">
                                         <span class="fa fa-inr"></span>
@@ -98,7 +100,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" class="table-heading"> <span class="pull-right">Total : </span></td>
+                                    <td colspan="5" class="table-heading"> <span class="pull-right">Total : </span></td>
                                     <td><span class="fa fa-inr"></span> {{vm.reimbursementObj.totalAmount}}</td>
                                     <td></td>
                                 </tr>

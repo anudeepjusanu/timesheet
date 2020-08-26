@@ -148,6 +148,7 @@ function expencesRejectReimbursement(req, res) {
 function paymentProcessReimbursement(req, res) {
     var dataObj = {
         status: "Payment Processed",
+        receipts: req.body.receipts,
         paidDate: req.body.paidDate ? req.body.paidDate : null,
         paymentMode: req.body.paymentMode ? req.body.paymentMode : null,
         comment: req.body.comment ? req.body.comment : null

@@ -446,6 +446,7 @@
             var receiptFormData = new FormData();
             receiptFormData.append('file', receiptData.file);
             receiptFormData.append('receiptDate', receiptData.receiptDate);
+            receiptFormData.append('receiptNumber', receiptData.receiptNumber);
             if (receiptData.receiptCategory) {
                 receiptFormData.append('receiptCategory', receiptData.receiptCategory);
             }
@@ -608,6 +609,7 @@
 
                     vm.paymentProcessReimbursement = function () {
                         var objData = {
+                            receipts: vm.reimbursement.receipts,
                             paidDate: vm.reimbursement.paidDate,
                             paymentMode: vm.reimbursement.paymentMode,
                             comment: vm.reimbursement.comment
