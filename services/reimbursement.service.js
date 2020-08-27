@@ -177,9 +177,17 @@ function addReimbursement(reimbursementData) {
     });
 }
 
-function updateReimbursement(ReimbursementId, reimbursementData) {
+function updateReimbursement(ReimbursementId, reimbursementData, sessionUserId = null) {
     return new Promise(async (resolve, reject) => {
-        if (reimbursementData.status == 'Approved') {
+        var historyObj = {
+            actionName: (reimbursementData.status) ? reimbursementData.status : "Updated",
+            comment: (reimbursementData.comment) ? reimbursementData.comment : "",
+            updatedBy: (sessionUserId !== null) ? mongoose.Types.ObjectId(sessionUserId) : null,
+            updatedOn: new Date()
+        };
+        if (reimbursementData.status == 'Submitted') {
+
+        } else if (reimbursementData.status == 'Approved') {
             var totalApprovedAmount = 0;
             for (var i = 0; i < reimbursementData.receipts.length; i++) {
                 var receiptObj = reimbursementData.receipts[i];
@@ -192,6 +200,8 @@ function updateReimbursement(ReimbursementId, reimbursementData) {
                 totalAmount: totalApprovedAmount,
                 comment: reimbursementData.comment
             }
+        } else if (reimbursementData.status == 'Rejected') {
+            //reimbursementData['$push'] = { "history": {} }
         } else if (reimbursementData.status == 'Payment Processed' && reimbursementData.receipts) {
             for (var i = 0; i < reimbursementData.receipts.length; i++) {
                 var receiptObj = reimbursementData.receipts[i];
@@ -199,14 +209,38 @@ function updateReimbursement(ReimbursementId, reimbursementData) {
                     { $set: { status: "Paid" } }).exec();
             }
         }
-        if (reimbursementData.userId) {
-            reimbursementData.userId = mongoose.Types.ObjectId(reimbursementData.userId);
-        }
-        ReimbursementModel.updateOne({ _id: mongoose.Types.ObjectId(ReimbursementId) }, { $set: reimbursementData }).exec().then((data) => {
-            resolve(data);
-        }).catch((error) => {
-            reject({ error: error.errmsg });
+        ReimbursementModel.findById(ReimbursementId, function (err, reimbursementObj) {
+            if (err) return reject(err);
+            reimbursementObj.history.push(historyObj);
+            if (reimbursementData.userId) {
+                reimbursementObj.userId = mongoose.Types.ObjectId(reimbursementData.userId);
+            }
+            if (reimbursementData.projectId) {
+                reimbursementObj.projectId = mongoose.Types.ObjectId(reimbursementData.projectId);
+            }
+            if (reimbursementData.approveUserId) {
+                reimbursementObj.approveUserId = mongoose.Types.ObjectId(reimbursementData.approveUserId);
+            }
+            reimbursementObj.reimbursementMonth = (reimbursementData.reimbursementMonth) ? reimbursementData.reimbursementMonth : reimbursementObj.reimbursementMonth;
+            reimbursementObj.purpose = (reimbursementData.purpose) ? reimbursementData.purpose : reimbursementObj.purpose;
+            reimbursementObj.status = (reimbursementData.status) ? reimbursementData.status : reimbursementObj.status;
+            reimbursementObj.comment = (reimbursementData.comment) ? reimbursementData.comment : reimbursementObj.comment;
+            if (reimbursementData.totalAmount) {
+                reimbursementObj.totalAmount = reimbursementData.totalAmount;
+            }
+            reimbursementObj.save(function (error) {
+                if (error) reject({ error });
+                resolve(reimbursementObj);
+            });
         });
+        // if (reimbursementData.userId) {
+        //     reimbursementData.userId = mongoose.Types.ObjectId(reimbursementData.userId);
+        // }
+        // ReimbursementModel.updateOne({ _id: mongoose.Types.ObjectId(ReimbursementId) }, { $set: reimbursementData }).exec().then((data) => {
+        //     resolve(data);
+        // }).catch((error) => {
+        //     reject({ error: error.errmsg });
+        // });
     });
 }
 

@@ -67,7 +67,7 @@ function updateInventory(InventoryId, InventoryData) {
         if (InventoryData.userId) {
             InventoryData.userId = mongoose.Types.ObjectId(InventoryData.userId);
         }
-        InventoryModel.updateOne({ _id: mongoose.Types.ObjectId(InventoryId) }, InventoryData).exec().then((data) => {
+        InventoryModel.updateOne({ _id: mongoose.Types.ObjectId(InventoryId) }, { $set: InventoryData }).exec().then((data) => {
             resolve(data);
         }).catch((error) => {
             reject({ error: error.errmsg });
@@ -100,7 +100,7 @@ function assignUser(InventoryId, assignData) {
         }
 
         InventoryModel.findById(InventoryId, function (err, InventoryObj) {
-            if (err) return handleError(err);
+            if (err) return reject(err);
             InventoryObj.history.push({
                 inventoryAction: inventoryAction,
                 prevValue: InventoryObj.userId,

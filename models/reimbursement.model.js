@@ -22,6 +22,12 @@ var ReimbursementSchema = new Schema({
         default: 0.00
     },
     comment: { type: String },
+    history: [{
+        actionName: { type: String },
+        comment: { type: String },
+        updatedBy: { type: mongoose.ObjectId },
+        updatedOn: { type: Date, default: Date.now }
+    }],
     createdBy: { type: mongoose.ObjectId },
     createdOn: { type: Date, default: Date.now }
 });

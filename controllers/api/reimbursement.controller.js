@@ -89,7 +89,7 @@ function addReimbursement(req, res) {
 }
 
 function updateReimbursement(req, res) {
-    ReimbursementService.updateReimbursement(req.params._id, req.body).then(data => {
+    ReimbursementService.updateReimbursement(req.params._id, req.body, req.user.sub).then(data => {
         res.send({ reimbursement: data });
     }).catch(error => {
         res.status(400).send(error);
@@ -102,7 +102,7 @@ function approveReimbursement(req, res) {
         comment: req.body.comment,
         receipts: req.body.receipts
     }
-    ReimbursementService.updateReimbursement(req.params._id, dataObj).then(data => {
+    ReimbursementService.updateReimbursement(req.params._id, dataObj, req.user.sub).then(data => {
         res.send({ reimbursement: data });
     }).catch(error => {
         res.status(400).send(error);
@@ -114,7 +114,7 @@ function rejectReimbursement(req, res) {
         status: "Rejected",
         comment: req.body.comment
     }
-    ReimbursementService.updateReimbursement(req.params._id, dataObj).then(data => {
+    ReimbursementService.updateReimbursement(req.params._id, dataObj, req.user.sub).then(data => {
         res.send({ reimbursement: data });
     }).catch(error => {
         res.status(400).send(error);
@@ -126,7 +126,7 @@ function expensesApproveReimbursement(req, res) {
         status: "Expenses Approved",
         comment: req.body.comment ? req.body.comment : null
     }
-    ReimbursementService.updateReimbursement(req.params._id, dataObj).then(data => {
+    ReimbursementService.updateReimbursement(req.params._id, dataObj, req.user.sub).then(data => {
         res.send({ reimbursement: data });
     }).catch(error => {
         res.status(400).send(error);
@@ -153,7 +153,7 @@ function paymentProcessReimbursement(req, res) {
         paymentMode: req.body.paymentMode ? req.body.paymentMode : null,
         comment: req.body.comment ? req.body.comment : null
     }
-    ReimbursementService.updateReimbursement(req.params._id, dataObj).then(data => {
+    ReimbursementService.updateReimbursement(req.params._id, dataObj, req.user.sub).then(data => {
         res.send({ reimbursement: data });
     }).catch(error => {
         res.status(400).send(error);

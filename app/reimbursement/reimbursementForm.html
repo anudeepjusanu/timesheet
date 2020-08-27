@@ -55,11 +55,13 @@
                 <div class="form-group">
                     <label class="col-md-2 col-xs-12 control-label">Business Purpose</label>
                     <div class="col-md-6 col-xs-12">
-                        <td>
-                            <textarea class="form-control" ng-model="vm.reimbursementObj.purpose"
-                                placeholder="Enter your purpose" rows="2"></textarea>
-                        </td>
+                        <textarea class="form-control" ng-model="vm.reimbursementObj.purpose"
+                            placeholder="Enter your purpose" rows="2"></textarea>
                     </div>
+                </div>
+                <div ng-if="vm.reimbursementObj.comment" class="form-group">
+                    <label class="col-md-2 col-xs-12 control-label">Comment</label>
+                    <div class="col-md-6 col-xs-12"> <span>{{vm.reimbursementObj.comment}}</span> </div>
                 </div>
             </div>
             <div class="col-md-1"></div>
