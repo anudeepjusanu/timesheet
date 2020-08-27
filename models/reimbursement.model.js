@@ -12,7 +12,7 @@ var ReimbursementSchema = new Schema({
     projectId: { type: mongoose.ObjectId },
     reimbursementMonth: { type: String },
     purpose: { type: String },
-    status: { type: String, default: 'Draft' },
+    status: { type: String, default: 'Submitted' },
     receipts: [{
         type: mongoose.ObjectId,
         required: true

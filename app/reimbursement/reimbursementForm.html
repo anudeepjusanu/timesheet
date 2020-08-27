@@ -12,59 +12,52 @@
     </div>
     <form class="form-horizontal" id="reimburseForm" name="vm.reimburseForm">
         <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
-                <div class="form-group required">
-                    <label class="col-md-2 col-xs-12 control-label">Employee</label>
-                    <div class="col-md-6 col-xs-12">
-                        <input type="text" ng-model="vm.reimbursementObj.userName" class="form-control"
-                            ng-disabled="true" />
-                    </div>
+            <div class="form-group required">
+                <label class="col-md-2 col-xs-12 control-label">Employee</label>
+                <div class="col-md-3 col-xs-12">
+                    <input type="text" ng-model="vm.reimbursementObj.userName" class="form-control"
+                        ng-disabled="true" />
                 </div>
-                <div class="form-group required">
-                    <label class="col-md-2 col-xs-12 control-label">Project</label>
-                    <div class="col-md-3 col-xs-12">
-                        <select class="form-control" ng-model="vm.reimbursementObj.project"
-                            ng-change="vm.changeProject();"
-                            ng-options="project as project.projectName for project in vm.activeProjects" required>
-                        </select>
-                    </div>
-                    <label class="col-md-2 col-xs-12 control-label">Approval</label>
-                    <div class="col-md-3 col-xs-12">
-                        <select class="form-control" ng-model="vm.reimbursementObj.approveUserId"
-                            ng-options="user._id as user.name for user in vm.approveActiveUsers" required>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group required">
-                    <label class="col-md-2 col-xs-12 control-label">Month</label>
-                    <div class="col-md-2 col-xs-12">
-                        <p class="input-group">
-                            <input type="text" id="fromDate" class="form-control" uib-datepicker-popup
-                                ng-model="vm.reimbursementObj.reimbursementMonth" is-open="vm.fromDateOpened"
-                                datepicker-options="vm.dateOptions" close-text="Close" required />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default"
-                                    ng-click="vm.fromDateOpened=!vm.fromDateOpened">
-                                    <i class="glyphicon glyphicon-calendar"></i>
-                                </button>
-                            </span>
-                        </p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 col-xs-12 control-label">Business Purpose</label>
-                    <div class="col-md-6 col-xs-12">
-                        <textarea class="form-control" ng-model="vm.reimbursementObj.purpose"
-                            placeholder="Enter your purpose" rows="2"></textarea>
-                    </div>
-                </div>
-                <div ng-if="vm.reimbursementObj.comment" class="form-group">
-                    <label class="col-md-2 col-xs-12 control-label">Comment</label>
-                    <div class="col-md-6 col-xs-12"> <span>{{vm.reimbursementObj.comment}}</span> </div>
+                <label class="col-md-1 col-xs-12 control-label">Month</label>
+                <div class="col-md-2 col-xs-12">
+                    <p class="input-group">
+                        <input type="text" id="fromDate" class="form-control" uib-datepicker-popup
+                            ng-model="vm.reimbursementObj.reimbursementMonth" is-open="vm.fromDateOpened"
+                            datepicker-options="vm.dateOptions" close-text="Close" required />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default"
+                                ng-click="vm.fromDateOpened=!vm.fromDateOpened">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    </p>
                 </div>
             </div>
-            <div class="col-md-1"></div>
+            <div class="form-group required">
+                <label class="col-md-2 col-xs-12 control-label">Project</label>
+                <div class="col-md-3 col-xs-12">
+                    <select class="form-control" ng-model="vm.reimbursementObj.project" ng-change="vm.changeProject();"
+                        ng-options="project as project.projectName for project in vm.activeProjects" required>
+                    </select>
+                </div>
+                <label class="col-md-1 col-xs-12 control-label">Approval</label>
+                <div class="col-md-3 col-xs-12">
+                    <select class="form-control" ng-model="vm.reimbursementObj.approveUserId"
+                        ng-options="user._id as user.name for user in vm.approveActiveUsers" required>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 col-xs-12 control-label">Business Purpose</label>
+                <div class="col-md-6 col-xs-12">
+                    <textarea class="form-control" ng-model="vm.reimbursementObj.purpose"
+                        placeholder="Enter your purpose" rows="2"></textarea>
+                </div>
+            </div>
+            <div ng-if="vm.reimbursementObj.comment" class="form-group">
+                <label class="col-md-2 col-xs-12 control-label">Comment</label>
+                <div class="col-md-6 col-xs-12"> <span>{{vm.reimbursementObj.comment}}</span> </div>
+            </div>
         </div>
         <br />
         <div class="row">
@@ -111,7 +104,7 @@
                     </div>
                 </div>
                 <div class="col-md-1"></div>
-                <div ng-if="vm.reimbursementObj.status=='New' || vm.reimbursementObj.status=='Submitted'"
+                <div ng-if="vm.reimbursementObj.status=='New' || vm.reimbursementObj.status=='Submitted' || vm.reimbursementObj.status=='Rejected'"
                     class="text-center">
                     <button class="btn btn-success btn-rounded" ng-disabled="!vm.reimburseForm.$valid"
                         ng-click="vm.submitReimbursement(vm.reimburseForm, vm.reimbursementObj)">Submit

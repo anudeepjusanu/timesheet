@@ -46,7 +46,7 @@ function getMyReimbursements(userId) {
             { $unwind: { path: "$project", preserveNullAndEmptyArrays: true } },
             {
                 $project: {
-                    userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1,
+                    userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1, history: 1,
                     createdBy: 1, createdOn: 1, receipts: 1, comment: 1, approveUserName: '$approveUser.name', userName: '$user.name',
                     employeeId: '$user.employeeId', projectName: '$project.projectName'
                 }
@@ -73,7 +73,7 @@ function getTeamReimbursements(userId) {
             { $unwind: { path: "$project", preserveNullAndEmptyArrays: true } },
             {
                 $project: {
-                    userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1,
+                    userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1, history: 1,
                     createdBy: 1, createdOn: 1, receipts: 1, comment: 1, approveUserName: '$approveUser.name', userName: '$user.name',
                     employeeId: '$user.employeeId', projectName: '$project.projectName'
                 }
@@ -103,7 +103,7 @@ function getAccountReimbursements(userId) {
             { $unwind: { path: "$project", preserveNullAndEmptyArrays: true } },
             {
                 $project: {
-                    userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1,
+                    userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1, history: 1,
                     createdBy: 1, createdOn: 1, receipts: 1, comment: 1, approveUserName: '$approveUser.name', userName: '$user.name',
                     employeeId: '$user.employeeId', projectName: '$project.projectName'
                 }
@@ -186,7 +186,21 @@ function updateReimbursement(ReimbursementId, reimbursementData, sessionUserId =
             updatedOn: new Date()
         };
         if (reimbursementData.status == 'Submitted') {
-
+            for (var i = 0; i < reimbursementData.receipts.length; i++) {
+                reimbursementData.receipts[i] = mongoose.Types.ObjectId(reimbursementData.receipts[i]);
+            }
+            var receiptSum = await ReimbursementReciptModel.aggregate([
+                { $match: { "_id": { "$in": reimbursementData.receipts } } },
+                {
+                    $group: {
+                        _id: null,
+                        total: {
+                            $sum: "$receiptAmount"
+                        }
+                    }
+                }
+            ]).exec();
+            reimbursementData.totalAmount = (receiptSum[0]) ? receiptSum[0].total : 0.0;
         } else if (reimbursementData.status == 'Approved') {
             var totalApprovedAmount = 0;
             for (var i = 0; i < reimbursementData.receipts.length; i++) {

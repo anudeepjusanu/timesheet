@@ -206,10 +206,10 @@
                 _.each(reimbursementObj.receipts, function (receiptObj) {
                     formData.receipts.push(receiptObj._id);
                 });
-
                 if (reimbursementObj._id) {
                     ReimbursementService.updateReimbursement(reimbursementObj._id, formData).then(function (response) {
                         noty.showSuccess("Reimbursement has been updated successfully!");
+                        $state.go('myReimbursements');
                     }, function (error) {
                         if (error) {
                             vm.alerts.push({ msg: error, type: 'danger' });
@@ -237,7 +237,6 @@
 
         vm.changeProject = function () {
             if (vm.reimbursementObj.project) {
-                console.log(vm.reimbursementObj.project);
                 vm.reimbursementObj.projectId = vm.reimbursementObj.project._id;
                 vm.reimbursementObj.approveUserId = (vm.reimbursementObj.project.reimbursementApproverId) ? vm.reimbursementObj.project.reimbursementApproverId : vm.reimbursementObj.project.ownerId;
             }
