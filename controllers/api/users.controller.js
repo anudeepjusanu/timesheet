@@ -6,6 +6,7 @@ var leaveWalletService = require('services/leaveWallet.service');
 const InventoryService = require('../../services/inventory.service');
 
 var builder = require('botbuilder');
+const { async } = require('q');
 var connector = new builder.ChatConnector({
     appId: config.botId,
     appPassword: config.botPassword
@@ -84,18 +85,16 @@ function registerUser(req, res) {
         });
 }
 
-function getCurrentUser(req, res) {
-    userService.getById(req.user.sub)
-        .then(function (user) {
-            if (user) {
-                res.send(user);
-            } else {
-                res.sendStatus(404);
-            }
-        })
-        .catch(function (err) {
-            res.status(400).send(err);
-        });
+async function getCurrentUser(req, res) {
+    userService.getById(req.user.sub).then(function (user) {
+        if (user) {
+            res.send(user);
+        } else {
+            res.sendStatus(404);
+        }
+    }).catch(function (err) {
+        res.status(400).send(err);
+    });
 }
 
 function getUser(req, res) {

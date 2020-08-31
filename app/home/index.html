@@ -111,6 +111,38 @@
             <!-- END VISITORS BLOCK -->
         </div>
     </div>
+    <div ng-if="vm.user.admin" class="row">
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title-box">
+                        <h3>Careers</h3>
+                    </div>
+                </div>
+                <div class="panel-body padding-0">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th width="120px;">Job Code</th>
+                                <th>Job Title</th>
+                                <th>Experience</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="job in vm.jobs">
+                                <td><strong>{{job.jobCode}}</strong></td>
+                                <td><strong>{{job.jobTitle}}</strong></td>
+                                <td><strong>{{job.experience}}</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <!-- START PROJECTS BLOCK -->
