@@ -60,7 +60,38 @@
     </div>
     <!-- END WIDGETS -->
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title-box">
+                        <h3>Careers</h3>
+                    </div>
+                </div>
+                <div class="panel-body padding-0">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th width="120px;">Job Code</th>
+                                <th>Job Title</th>
+                                <th>Experience</th>
+                                <th width="120px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="job in vm.jobs">
+                                <td><strong>{{job.jobCode}}</strong></td>
+                                <td><strong>{{job.jobTitle}}</strong></td>
+                                <td><strong>{{job.experience}}</strong></td>
+                                <td>
+                                    <button disabled="true">Referral</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="panel-title-box">
@@ -109,76 +140,6 @@
                 </div>
             </div>
             <!-- END VISITORS BLOCK -->
-        </div>
-    </div>
-    <div ng-if="vm.user.admin" class="row">
-        <div class="col-md-8">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="panel-title-box">
-                        <h3>Careers</h3>
-                    </div>
-                </div>
-                <div class="panel-body padding-0">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th width="120px;">Job Code</th>
-                                <th>Job Title</th>
-                                <th>Experience</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="job in vm.jobs">
-                                <td><strong>{{job.jobCode}}</strong></td>
-                                <td><strong>{{job.jobTitle}}</strong></td>
-                                <td><strong>{{job.experience}}</strong></td>
-                                <td>
-                                    <button disabled="true">Referral</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <!-- START PROJECTS BLOCK -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="panel-title-box">
-                        <h3>Projects</h3>
-                        <span>Projects activity</span>
-                    </div>
-                </div>
-                <div class="panel-body panel-body-table" style="height: 205px; overflow-y: scroll;">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th width="30%">Client</th>
-                                    <th width="50%">Project</th>
-                                    <th>People</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="project in vm.projects">
-                                    <td><strong>{{project.clientName}}</strong></td>
-                                    <td><strong>{{project.projectName}}</strong></td>
-                                    <td><span class="label label-success">{{project.userCount}}</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <!-- END PROJECTS BLOCK -->
         </div>
     </div>
     <div ng-if="vm.user.admin">
