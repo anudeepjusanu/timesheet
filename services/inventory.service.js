@@ -2,20 +2,9 @@
 var _ = require('lodash');
 var Q = require('q');
 var mongoose = require("mongoose");
-(async () => {
-    try {
-        await mongoose.connect("mongodb://timesheet:nbostimesheet@localhost:27017/wltimesheet", {
-            useNewUrlParser: true,
-            socketTimeoutMS: 30000,
-            keepAlive: true,
-            reconnectTries: 30000
-        });
-    } catch (e) {
-        console.log('Error happend while connecting to the DB: ', e.message)
-    }
-})();
 var InventoryModel = require("../models/inventory.model");
 var UserModel = require("../models/user.model");
+mongoose.connect(config.connectionString, { useNewUrlParser: true });
 
 var service = {};
 
