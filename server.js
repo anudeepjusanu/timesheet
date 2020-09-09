@@ -6,7 +6,10 @@ var bodyParser = require('body-parser');
 var expressJwt = require('express-jwt');
 var config = require('config.json');
 var builder = require('botbuilder');
+var mongoose = require("mongoose");
+mongoose.connect(config.connectionString, { useNewUrlParser: true });
 var userService = require('services/user.service');
+
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');

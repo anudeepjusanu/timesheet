@@ -12,7 +12,6 @@ db.bind('timesheets');
 
 var mongoose = require('mongoose');
 var projects = require("../models/project.model");
-mongoose.connect(config.connectionString);
 
 var service = {};
 

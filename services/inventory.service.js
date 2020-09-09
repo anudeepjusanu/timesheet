@@ -4,7 +4,6 @@ var Q = require('q');
 var mongoose = require("mongoose");
 var InventoryModel = require("../models/inventory.model");
 var UserModel = require("../models/user.model");
-mongoose.connect(config.connectionString, { useNewUrlParser: true });
 
 var service = {};
 

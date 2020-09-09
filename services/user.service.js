@@ -5,11 +5,10 @@ var bcrypt = require('bcryptjs');
 var Q = require('q');
 var mongo = require('mongoskin');
 var mongoose = require("mongoose");
-var db = mongo.db(config.connectionString, { native_parser: true, useNewUrlParser: true });
+var db = mongo.db(config.connectionString, { native_parser: true });
 db.bind('users');
 db.bind('poolLogs');
 var UserModel = require("../models/user.model");
-mongoose.connect(config.connectionString);
 
 var service = {};
 

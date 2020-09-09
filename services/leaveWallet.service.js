@@ -1,11 +1,10 @@
-﻿var config = require(__dirname+'/../config.json');
+﻿var config = require(__dirname + '/../config.json');
 var _ = require('lodash');
 var Q = require('q');
 var mongoose = require("mongoose");
-var ObjectId = require('mongoose').Types.ObjectId; 
+var ObjectId = require('mongoose').Types.ObjectId;
 var leaveWallet = require("../models/leaveWallet.model");
 var timesheet = require("../models/timesheet.model");
-mongoose.connect(config.connectionString);
 var mongo = require('mongoskin');
 var db = mongo.db(config.connectionString, { native_parser: true });
 db.bind('timesheets');
@@ -22,64 +21,64 @@ service.usersLeaveBalance = usersLeaveBalance;
 
 module.exports = service;
 
-function saveMonthlyLeaves(leaveWalletData){
+function saveMonthlyLeaves(leaveWalletData) {
     var deferred = Q.defer();
-    leaveWallet.findOneAndUpdate({userId: leaveWalletData.userId, yearMonth: leaveWalletData.yearMonth}, 
-        {$set: leaveWalletData}, 
-        {upsert: true}).exec(function(error, response){
+    leaveWallet.findOneAndUpdate({ userId: leaveWalletData.userId, yearMonth: leaveWalletData.yearMonth },
+        { $set: leaveWalletData },
+        { upsert: true }).exec(function (error, response) {
+            if (error) deferred.reject(error);
+            deferred.resolve(response);
+        });
+    return deferred.promise;
+}
+
+function delMonthlyLeaves(userId, yearMonth) {
+    var deferred = Q.defer();
+    leaveWallet.findOneAndRemove({ userId: userId, yearMonth: yearMonth }).exec(function (error, response) {
         if (error) deferred.reject(error);
         deferred.resolve(response);
     });
     return deferred.promise;
 }
 
-function delMonthlyLeaves(userId, yearMonth){
-    var deferred = Q.defer();
-    leaveWallet.findOneAndRemove({userId: userId, yearMonth: yearMonth}).exec(function(error, response){
-        if (error) deferred.reject(error);
-        deferred.resolve(response);
-    });
-    return deferred.promise;
-}
-
-function getUserLeaveWallet(userId, fananceYear = null){
+function getUserLeaveWallet(userId, fananceYear = null) {
     var nowDate = new Date();
-    if(fananceYear !== null){
+    if (fananceYear !== null) {
         fananceYear = fananceYear.split("-");
         fananceYear = parseInt(fananceYear[0]);
-    }else{
-        fananceYear = (nowDate.getMonth()>=3)?nowDate.getFullYear():(nowDate.getFullYear()-1);
+    } else {
+        fananceYear = (nowDate.getMonth() >= 3) ? nowDate.getFullYear() : (nowDate.getFullYear() - 1);
     }
     var startYearMonth = parseInt(fananceYear + "04");
-    var endYearMonth = parseInt((fananceYear+1) + "03");
+    var endYearMonth = parseInt((fananceYear + 1) + "03");
     var deferred = Q.defer();
-    leaveWallet.find({userId: new ObjectId(userId), yearMonthNumber: {$gte: startYearMonth, $lte: endYearMonth}}, function(error, response){
+    leaveWallet.find({ userId: new ObjectId(userId), yearMonthNumber: { $gte: startYearMonth, $lte: endYearMonth } }, function (error, response) {
         if (error) deferred.reject(error);
         deferred.resolve(response);
     });
     return deferred.promise;
 }
 
-function getUserLeaveWalletBalance(userId, fananceYear = null){
+function getUserLeaveWalletBalance(userId, fananceYear = null) {
     var nowDate = new Date();
-    if(fananceYear !== null){
+    if (fananceYear !== null) {
         fananceYear = fananceYear.split("-");
         fananceYear = parseInt(fananceYear[0]);
-    }else{
-        fananceYear = (nowDate.getMonth()>=3)?nowDate.getFullYear():(nowDate.getFullYear()-1);
+    } else {
+        fananceYear = (nowDate.getMonth() >= 3) ? nowDate.getFullYear() : (nowDate.getFullYear() - 1);
     }
     var startYearMonth = parseInt(fananceYear + "04");
-    var endYearMonth = parseInt((fananceYear+1) + "03");
+    var endYearMonth = parseInt((fananceYear + 1) + "03");
     var leaveWalletBalance = {
         accruedLeaves: 0.00,
         creditedLeaves: 0.00,
         deductedLOP: 0.00
     };
     var deferred = Q.defer();
-    leaveWallet.find({userId: new ObjectId(userId), yearMonthNumber: {$gte: startYearMonth, $lte: endYearMonth}}, function(error, response){
+    leaveWallet.find({ userId: new ObjectId(userId), yearMonthNumber: { $gte: startYearMonth, $lte: endYearMonth } }, function (error, response) {
         if (error) deferred.reject(error);
-        if(response && response.length>0){
-            _.each(response, function(item){
+        if (response && response.length > 0) {
+            _.each(response, function (item) {
                 leaveWalletBalance.accruedLeaves += item.accruedLeaves;
                 leaveWalletBalance.creditedLeaves += item.creditedLeaves;
                 leaveWalletBalance.deductedLOP += item.deductedLOP;
@@ -90,26 +89,26 @@ function getUserLeaveWalletBalance(userId, fananceYear = null){
     return deferred.promise;
 }
 
-function updateUserLeaveBalance(userId, leaveWalletData){
+function updateUserLeaveBalance(userId, leaveWalletData) {
     var deferred = Q.defer();
     var leaveData = {
         userId: new ObjectId(userId),
         yearMonth: leaveWalletData.yearMonth,
         yearMonthNumber: leaveWalletData.yearMonth.replace('-', '')
     };
-    if(leaveWalletData.creditedLeaves || leaveWalletData.creditedLeaves===0){
+    if (leaveWalletData.creditedLeaves || leaveWalletData.creditedLeaves === 0) {
         leaveData.creditedLeaves = leaveWalletData.creditedLeaves;
-        leaveData.creditedLeavesComment = (leaveWalletData.creditedLeavesComment)?leaveWalletData.creditedLeavesComment:"";
-    }else if(leaveWalletData.deductedLOP || leaveWalletData.deductedLOP===0){
+        leaveData.creditedLeavesComment = (leaveWalletData.creditedLeavesComment) ? leaveWalletData.creditedLeavesComment : "";
+    } else if (leaveWalletData.deductedLOP || leaveWalletData.deductedLOP === 0) {
         leaveData.deductedLOP = leaveWalletData.deductedLOP;
-        leaveData.deductedLOPComment = (leaveWalletData.deductedLOPComment)?leaveWalletData.deductedLOPComment:"";
+        leaveData.deductedLOPComment = (leaveWalletData.deductedLOPComment) ? leaveWalletData.deductedLOPComment : "";
     }
-    leaveWallet.findOneAndUpdate({userId: new ObjectId(leaveData.userId), yearMonth: leaveData.yearMonth}, 
-        {$set: leaveData}, 
-        {upsert: true}).exec(function(error, response){
-        if (error) deferred.reject(error);
-        deferred.resolve(response);
-    });
+    leaveWallet.findOneAndUpdate({ userId: new ObjectId(leaveData.userId), yearMonth: leaveData.yearMonth },
+        { $set: leaveData },
+        { upsert: true }).exec(function (error, response) {
+            if (error) deferred.reject(error);
+            deferred.resolve(response);
+        });
     return deferred.promise;
 }
 
@@ -131,15 +130,15 @@ function usersLeaveBalance(financialYear) {
     var startYearMonth = financialYearArr[0] + "04";
     var endYearMonth = financialYearArr[1] + "03";
     var deferred = Q.defer();
-    leaveWallet.find({yearMonthNumber: {$gte: startYearMonth, $lte: endYearMonth}}, function(error, response){
+    leaveWallet.find({ yearMonthNumber: { $gte: startYearMonth, $lte: endYearMonth } }, function (error, response) {
         if (error) deferred.reject(error);
-        if(response){
+        if (response) {
             var userGroups = _.groupBy(response, 'userId');
-            _.each(userGroups, function(userLeavesInfo, userId){
+            _.each(userGroups, function (userLeavesInfo, userId) {
                 var totalAccruedLeaves = 0;
                 var totalCreditedLeaves = 0;
                 var totalDeductedLOP = 0;
-                _.each(userLeavesInfo, function(userMonthLeave){
+                _.each(userLeavesInfo, function (userMonthLeave) {
                     totalAccruedLeaves += userMonthLeave.accruedLeaves;
                     totalCreditedLeaves += userMonthLeave.creditedLeaves;
                     totalDeductedLOP += userMonthLeave.deductedLOP;
@@ -155,20 +154,20 @@ function usersLeaveBalance(financialYear) {
             });
         }
         timesheet.aggregate([
-            {$match: queryStr},
-            {$lookup: {from: 'users', localField: 'userId', foreignField: '_id', as: 'user_info'}},
-            {$unwind:"$user_info"},
-            {$project: {week: 1, userId: 1, weekDate: 1, userResourceType: 1, totalHours: 1, totalBillableHours: 1, timeoffHours: 1, sickLeaveHours: 1, userJoinDate: "$user_info.joinDate"} }
-        ]).exec(function(err, sheets){
+            { $match: queryStr },
+            { $lookup: { from: 'users', localField: 'userId', foreignField: '_id', as: 'user_info' } },
+            { $unwind: "$user_info" },
+            { $project: { week: 1, userId: 1, weekDate: 1, userResourceType: 1, totalHours: 1, totalBillableHours: 1, timeoffHours: 1, sickLeaveHours: 1, userJoinDate: "$user_info.joinDate" } }
+        ]).exec(function (err, sheets) {
             var userGroupSheets = _.groupBy(sheets, 'userId');
-            _.each(userGroupSheets, function(userSheets, userId){
-                var userObj = _.find(users, {userId: userId});
+            _.each(userGroupSheets, function (userSheets, userId) {
+                var userObj = _.find(users, { userId: userId });
                 var userTimesheets = [];
                 var totalTimeOffHours = 0.00;
-                _.each(userSheets, function(userSheet){
+                _.each(userSheets, function (userSheet) {
                     var weekDate = new Date(userSheet.weekDate);
                     var userJoinDate = new Date(userSheet.userJoinDate);
-                    if(weekDate > userJoinDate && userSheet.userResourceType != "Intern"){
+                    if (weekDate > userJoinDate && userSheet.userResourceType != "Intern") {
                         totalTimeOffHours += userSheet.timeoffHours;
                         userTimesheets.push({
                             _id: userSheet._id,
@@ -181,10 +180,10 @@ function usersLeaveBalance(financialYear) {
                         });
                     }
                 });
-                if(userObj){
+                if (userObj) {
                     userObj.timesheets = userTimesheets;
                     userObj.totalTimeOffHours = totalTimeOffHours;
-                }else{
+                } else {
                     users.push({
                         userId: userId,
                         leavesInfo: [],
@@ -224,7 +223,7 @@ function usersLeaveBalance(financialYear) {
             deferred.resolve(users);
         });
     });
-    
-    
+
+
     return deferred.promise;
 }

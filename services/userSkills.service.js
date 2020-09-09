@@ -4,7 +4,6 @@ var Q = require('q');
 var mongoose = require("mongoose");
 var UserSkill = require("../models/userskill.model");
 var UserModel = require("../models/user.model");
-mongoose.connect(config.connectionString);
 
 var service = {};
 

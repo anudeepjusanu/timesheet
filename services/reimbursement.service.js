@@ -6,9 +6,6 @@ var ReimbursementModel = require("../models/reimbursement.model");
 var ReimbursementReciptModel = require("../models/reimbursementReceipt.model");
 var ProjectModel = require("../models/project.model");
 var UserModel = require("../models/user.model");
-const { async } = require('q');
-const { find } = require('lodash');
-mongoose.connect(config.connectionString);
 
 var service = {};
 

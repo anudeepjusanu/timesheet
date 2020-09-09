@@ -11,7 +11,6 @@ db.bind('projects');
 
 var mongoose = require('mongoose');
 var timesheet = require("../models/timesheet.model");
-mongoose.connect(config.connectionString);
 
 var service = {};
 
@@ -47,7 +46,7 @@ function createTimesheet(currentUser, userParam) {
     if (!userParam.userId) {
         userParam.userId = currentUser._id + "";
     }
-    _.each(userParam.projects, function(projectObj) {
+    _.each(userParam.projects, function (projectObj) {
         projectObj.projectId = mongo.helper.toObjectID(projectObj.projectId);
     });
     var timeOffPrj = _.find(userParam.projects, { projectName: "Timeoff" });
@@ -55,12 +54,12 @@ function createTimesheet(currentUser, userParam) {
         userParam.projects.splice(userParam.projects.indexOf(timeOffPrj), 1);
     }
     var allProjects;
-    db.projects.find({}).toArray(function(err, projects) {
+    db.projects.find({}).toArray(function (err, projects) {
         allProjects = projects;
 
-        db.users.findById(userParam.userId, function(err, user) {
+        db.users.findById(userParam.userId, function (err, user) {
             if (user && user.projects) {
-                _.each(userParam.projects, function(projectObj) {
+                _.each(userParam.projects, function (projectObj) {
                     var billData = getProjectBillData(projectObj, userParam.weekDate, user);
                     projectObj.resourceType = billData.resourceType;
                     projectObj.allocatedHours = billData.allocatedHours;
@@ -79,7 +78,7 @@ function createTimesheet(currentUser, userParam) {
                 userParam.totalBillableHours = 0;
                 userParam.timeoffHours = 0;
                 userParam.overtimeHours = 0;
-                _.each(userParam.projects, function(projectObj) {
+                _.each(userParam.projects, function (projectObj) {
                     if (!projectObj.businessUnit) {
                         projectObj.businessUnit = "";
                     }
@@ -97,7 +96,7 @@ function createTimesheet(currentUser, userParam) {
             if (!user.userResourceType) {
                 user.userResourceType = "";
             }
-            db.timesheets.findOne({ userId: user._id, week: userParam.week }, function(err, sheet) {
+            db.timesheets.findOne({ userId: user._id, week: userParam.week }, function (err, sheet) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
                 if (!sheet) {
                     var sheetObj = {
@@ -114,7 +113,7 @@ function createTimesheet(currentUser, userParam) {
                         createdOn: new Date(),
                         updatedOn: new Date()
                     }
-                    db.timesheets.insert(sheetObj, function(err, sheet) {
+                    db.timesheets.insert(sheetObj, function (err, sheet) {
                         if (err) deferred.reject(err.name + ': ' + err.message);
                         deferred.resolve(sheet);
                     });
@@ -131,7 +130,7 @@ function createTimesheet(currentUser, userParam) {
 function updateTimesheet(sheetId, userParam, currentUser) {
     var deferred = Q.defer();
     var currentUserId = currentUser._id + "";
-    _.each(userParam.projects, function(projectObj) {
+    _.each(userParam.projects, function (projectObj) {
         projectObj.projectId = mongo.helper.toObjectID(projectObj.projectId);
     });
     var timeOffPrj = _.find(userParam.projects, { projectName: "Timeoff" });
@@ -139,14 +138,14 @@ function updateTimesheet(sheetId, userParam, currentUser) {
         userParam.projects.splice(userParam.projects.indexOf(timeOffPrj), 1);
     }
     var allProjects;
-    db.projects.find({}).toArray(function(err, projects) {
+    db.projects.find({}).toArray(function (err, projects) {
         allProjects = projects;
 
-        db.timesheets.findById(sheetId, function(err, sheetObj) {
+        db.timesheets.findById(sheetId, function (err, sheetObj) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             if (sheetObj.userId == currentUserId || currentUser.admin === true) {
-                db.users.findById(sheetObj.userId, function(err, sheetUserObj) {
-                    _.each(userParam.projects, function(projectObj) {
+                db.users.findById(sheetObj.userId, function (err, sheetUserObj) {
+                    _.each(userParam.projects, function (projectObj) {
                         var billData = getProjectBillData(projectObj, userParam.weekDate, sheetUserObj);
                         projectObj.resourceType = billData.resourceType;
                         projectObj.allocatedHours = billData.allocatedHours;
@@ -165,7 +164,7 @@ function updateTimesheet(sheetId, userParam, currentUser) {
                     userParam.totalBillableHours = 0;
                     userParam.timeoffHours = 0;
                     userParam.overtimeHours = 0;
-                    _.each(userParam.projects, function(projectObj) {
+                    _.each(userParam.projects, function (projectObj) {
                         if (!projectObj.businessUnit) {
                             projectObj.businessUnit = "";
                         }
@@ -196,7 +195,7 @@ function updateTimesheet(sheetId, userParam, currentUser) {
                         timesheetStatus: userParam.timesheetStatus
                     }
                     newSheetObj.updatedOn = new Date();
-                    db.timesheets.update({ _id: mongo.helper.toObjectID(sheetId) }, { $set: newSheetObj }, function(err, responseSheet) {
+                    db.timesheets.update({ _id: mongo.helper.toObjectID(sheetId) }, { $set: newSheetObj }, function (err, responseSheet) {
                         if (err) deferred.reject(err.name + ': ' + err.message);
                         deferred.resolve(responseSheet);
                     });
@@ -211,7 +210,7 @@ function updateTimesheet(sheetId, userParam, currentUser) {
 
 function setTimesheetStatus(sheetId, projectId, sheetStatus) {
     var deferred = Q.defer();
-    db.timesheets.find({ '_id': mongo.helper.toObjectID(sheetId), "projects.projectId": mongo.helper.toObjectID(projectId) }).toArray(function(err, doc) {
+    db.timesheets.find({ '_id': mongo.helper.toObjectID(sheetId), "projects.projectId": mongo.helper.toObjectID(projectId) }).toArray(function (err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (doc && doc[0]) {
             for (var i = 0, len = doc[0].projects.length; i < len; i++) {
@@ -220,7 +219,7 @@ function setTimesheetStatus(sheetId, projectId, sheetStatus) {
                     break;
                 }
             }
-            db.timesheets.update({ _id: mongo.helper.toObjectID(sheetId), "projects.projectId": mongo.helper.toObjectID(projectId) }, { $set: doc[0] }, function(err, responseSheet) {
+            db.timesheets.update({ _id: mongo.helper.toObjectID(sheetId), "projects.projectId": mongo.helper.toObjectID(projectId) }, { $set: doc[0] }, function (err, responseSheet) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
                 deferred.resolve(responseSheet);
             });
@@ -242,7 +241,7 @@ function getProjectBillData(projectObj, weekDateVal, sheetUserObj) {
         var prjData = _.find(sheetUserObj.projects, { "projectId": projectObj.projectId + "" });
         if (prjData && prjData.billDates) {
             var weekDate = new Date(weekDateVal);
-            _.each(prjData.billDates, function(billDate) {
+            _.each(prjData.billDates, function (billDate) {
                 if (billDate.start && billDate.start != "" && billDate.end && billDate.end != "") {
                     var startDate = new Date(billDate.start);
                     var endDate = new Date(billDate.end);
@@ -250,7 +249,7 @@ function getProjectBillData(projectObj, weekDateVal, sheetUserObj) {
                         BillData.resourceType = billDate.resourceType;
                         BillData.allocatedHours = billDate.allocatedHours;
                         BillData.billableMaxHours = billDate.billableMaxHours;
-                        BillData.salesItemId = (billDate.salesItemId)?billDate.salesItemId:null;
+                        BillData.salesItemId = (billDate.salesItemId) ? billDate.salesItemId : null;
                     }
                 } else if (billDate.start && billDate.start != "") {
                     var startDate = new Date(billDate.start);
@@ -258,7 +257,7 @@ function getProjectBillData(projectObj, weekDateVal, sheetUserObj) {
                         BillData.resourceType = billDate.resourceType;
                         BillData.allocatedHours = billDate.allocatedHours;
                         BillData.billableMaxHours = billDate.billableMaxHours;
-                        BillData.salesItemId = (billDate.salesItemId)?billDate.salesItemId:null;
+                        BillData.salesItemId = (billDate.salesItemId) ? billDate.salesItemId : null;
                     }
                 } else if (billDate.end && billDate.end != "") {
                     var endDate = new Date(billDate.end);
@@ -266,13 +265,13 @@ function getProjectBillData(projectObj, weekDateVal, sheetUserObj) {
                         BillData.resourceType = billDate.resourceType;
                         BillData.allocatedHours = billDate.allocatedHours;
                         BillData.billableMaxHours = billDate.billableMaxHours;
-                        BillData.salesItemId = (billDate.salesItemId)?billDate.salesItemId:null;
+                        BillData.salesItemId = (billDate.salesItemId) ? billDate.salesItemId : null;
                     }
                 } else if (billDate.start == "" && billDate.end == "") {
                     BillData.resourceType = billDate.resourceType;
                     BillData.allocatedHours = billDate.allocatedHours;
                     BillData.billableMaxHours = billDate.billableMaxHours;
-                    BillData.salesItemId = (billDate.salesItemId)?billDate.salesItemId:null;
+                    BillData.salesItemId = (billDate.salesItemId) ? billDate.salesItemId : null;
                 }
             });
         }
@@ -288,7 +287,7 @@ function getProjectBillData(projectObj, weekDateVal, sheetUserObj) {
 
 function getProjectInfoById(projectId) {
     var deferred = Q.defer();
-    db.projects.findById(projectId, function(err, projectInfo) {
+    db.projects.findById(projectId, function (err, projectInfo) {
         if (projectInfo) {
             deferred.resolve(projectInfo);
         } else {
@@ -300,7 +299,7 @@ function getProjectInfoById(projectId) {
 
 function getTimesheet(id) {
     var deferred = Q.defer();
-    db.timesheets.findById(id, function(err, doc) {
+    db.timesheets.findById(id, function (err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (doc) {
             deferred.resolve(doc);
@@ -313,7 +312,7 @@ function getTimesheet(id) {
 
 function deleteTimesheet(timesheetId, userId) {
     var deferred = Q.defer();
-    db.timesheets.remove({ _id: mongo.helper.toObjectID(timesheetId), userId: mongo.helper.toObjectID(userId) }, function(err, doc) {
+    db.timesheets.remove({ _id: mongo.helper.toObjectID(timesheetId), userId: mongo.helper.toObjectID(userId) }, function (err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (doc) {
             deferred.resolve(doc);
@@ -326,7 +325,7 @@ function deleteTimesheet(timesheetId, userId) {
 
 function adminDeleteTimesheet(timesheetId) {
     var deferred = Q.defer();
-    db.timesheets.remove({ _id: mongo.helper.toObjectID(timesheetId) }, function(err, doc) {
+    db.timesheets.remove({ _id: mongo.helper.toObjectID(timesheetId) }, function (err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (doc) {
             deferred.resolve(doc);
@@ -339,7 +338,7 @@ function adminDeleteTimesheet(timesheetId) {
 
 function getByWeek(week) {
     var deferred = Q.defer();
-    db.timesheets.find({ week: week }).toArray(function(err, doc) {
+    db.timesheets.find({ week: week }).toArray(function (err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (doc) {
             deferred.resolve(doc);
@@ -352,7 +351,7 @@ function getByWeek(week) {
 
 function getByMonth(weekArr) {
     var deferred = Q.defer();
-    db.timesheets.find({ "week": { "$in": weekArr } }).toArray(function(err, doc) {
+    db.timesheets.find({ "week": { "$in": weekArr } }).toArray(function (err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (doc) {
             deferred.resolve(doc);
@@ -365,7 +364,7 @@ function getByMonth(weekArr) {
 
 function getMine(userId) {
     var deferred = Q.defer();
-    db.timesheets.find({ userId: mongo.helper.toObjectID(userId) }).toArray(function(err, doc) {
+    db.timesheets.find({ userId: mongo.helper.toObjectID(userId) }).toArray(function (err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (doc) {
             deferred.resolve(doc);
@@ -379,7 +378,7 @@ function getMine(userId) {
 function adminUpdate(id, params) {
     var deferred = Q.defer();
 
-    db.timesheets.findById(id, function(err, sheet) {
+    db.timesheets.findById(id, function (err, sheet) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (sheet) {
             updateSheet();
@@ -400,7 +399,7 @@ function adminUpdate(id, params) {
         };
 
         db.timesheet.update({ _id: mongo.helper.toObjectID(id) }, { $set: set },
-            function(err, doc) {
+            function (err, doc) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
                 deferred.resolve(doc);
             });
@@ -420,17 +419,17 @@ function weekHoursCal(sheets, resourceTypes, weekVal) {
         totalHours: 0,
         resourceTypes: []
     };
-    _.each(resourceTypes, function(resourceType) {
+    _.each(resourceTypes, function (resourceType) {
         report.resourceTypes.push({
             resourceType: resourceType,
             projectUserCount: 0,
             projectHours: 0
         });
     })
-    _.each(sheets, function(sheet) {
+    _.each(sheets, function (sheet) {
         report.totalUserCount += 1;
         report.totalHours += sheet.totalHours;
-        _.each(sheet.projects, function(project) {
+        _.each(sheet.projects, function (project) {
             var resourceTypeId = (project.resourceType == "") ? "buffer" : project.resourceType;
             var resourceTypeObj = _.find(report.resourceTypes, { "resourceType": resourceTypeId });
             if (resourceTypeObj) {
@@ -444,7 +443,7 @@ function weekHoursCal(sheets, resourceTypes, weekVal) {
 
 function allUserHoursByWeek(week) {
     var deferred = Q.defer();
-    db.timesheets.find({ week: week }).toArray(function(err, sheets) {
+    db.timesheets.find({ week: week }).toArray(function (err, sheets) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (sheets) {
             /*var report = {
@@ -483,7 +482,7 @@ function allUserHoursByWeek(week) {
 
 function projectUserHoursByWeek(week, projectId) {
     var deferred = Q.defer();
-    db.timesheets.find({ week: week, "projects.projectId": { "$in": [mongo.helper.toObjectID(projectId)] } }).toArray(function(err, sheets) {
+    db.timesheets.find({ week: week, "projects.projectId": { "$in": [mongo.helper.toObjectID(projectId)] } }).toArray(function (err, sheets) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (sheets) {
             /*var report = {
@@ -522,7 +521,7 @@ function projectUserHoursByWeek(week, projectId) {
 
 function clientUserHoursByWeek(week, clientId) {
     var deferred = Q.defer();
-    db.timesheets.find({ week: week }).toArray(function(err, sheets) {
+    db.timesheets.find({ week: week }).toArray(function (err, sheets) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (sheets) {
 
@@ -536,7 +535,7 @@ function clientUserHoursByWeek(week, clientId) {
 
 function allUserHoursByMonth(month, year) {
     var deferred = Q.defer();
-    Date.prototype.getWeek = function() {
+    Date.prototype.getWeek = function () {
         var onejan = new Date(this.getFullYear(), 0, 1);
         return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
     }
@@ -557,8 +556,8 @@ function allUserHoursByMonth(month, year) {
         }
         startDate.setDate(startDate.getDate() + 7);
     }
-    _.each(weeks, function(weekVal) {
-        db.timesheets.find({ week: weekVal }).toArray(function(err, sheets) {
+    _.each(weeks, function (weekVal) {
+        db.timesheets.find({ week: weekVal }).toArray(function (err, sheets) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             if (sheets) {
                 /*var report = {
@@ -603,7 +602,7 @@ function allUserHoursByMonth(month, year) {
 
 function projectUserHoursByMonth(month, year, projectId) {
     var deferred = Q.defer();
-    Date.prototype.getWeek = function() {
+    Date.prototype.getWeek = function () {
         var onejan = new Date(this.getFullYear(), 0, 1);
         return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
     }
@@ -624,8 +623,8 @@ function projectUserHoursByMonth(month, year, projectId) {
         }
         startDate.setDate(startDate.getDate() + 7);
     }
-    _.each(weeks, function(weekVal) {
-        db.timesheets.find({ week: weekVal, "projects.projectId": { "$in": [mongo.helper.toObjectID(projectId)] } }).toArray(function(err, sheets) {
+    _.each(weeks, function (weekVal) {
+        db.timesheets.find({ week: weekVal, "projects.projectId": { "$in": [mongo.helper.toObjectID(projectId)] } }).toArray(function (err, sheets) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             if (sheets) {
                 /*var report = {
@@ -670,7 +669,7 @@ function projectUserHoursByMonth(month, year, projectId) {
 
 function timesheetBetweenDates(startDateVal, endDateVal, params) {
     var deferred = Q.defer();
-    Date.prototype.getWeek = function() {
+    Date.prototype.getWeek = function () {
         var onejan = new Date(this.getFullYear(), 0, 1);
         return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
     }
@@ -690,7 +689,7 @@ function timesheetBetweenDates(startDateVal, endDateVal, params) {
         var queryStr = {};
         var projectList = [];
         if (params.projectIds && params.projectIds.length > 0) {
-            _.each(params.projectIds, function(projectId) {
+            _.each(params.projectIds, function (projectId) {
                 projectList.push(mongo.helper.toObjectID(projectId));
             });
             queryStr = {
@@ -699,10 +698,10 @@ function timesheetBetweenDates(startDateVal, endDateVal, params) {
         }
         var timesheets = [];
         var loopCount = 0;
-        _.each(weeks, function(weekVal) {
+        _.each(weeks, function (weekVal) {
             queryStr.week = weekVal;
-            db.timesheets.find(queryStr).toArray(function(err, sheets) {
-                _.each(sheets, function(sheetObj) {
+            db.timesheets.find(queryStr).toArray(function (err, sheets) {
+                _.each(sheets, function (sheetObj) {
                     var timesheetObj = {
                         _id: sheetObj._id,
                         userId: sheetObj.userId,
@@ -711,13 +710,13 @@ function timesheetBetweenDates(startDateVal, endDateVal, params) {
                         projects: []
                     };
                     if (projectList.length === 0) {
-                        _.each(sheetObj.projects, function(projectObj) {
+                        _.each(sheetObj.projects, function (projectObj) {
                             timesheetObj.projects.push(projectObj);
                         });
                     } else {
-                        _.each(projectList, function(projectIdVal) {
+                        _.each(projectList, function (projectIdVal) {
                             projectIdVal = projectIdVal + "";
-                            _.each(sheetObj.projects, function(sheetPrj) {
+                            _.each(sheetObj.projects, function (sheetPrj) {
                                 sheetPrj.projectId = sheetPrj.projectId + "";
                                 if (sheetPrj.projectId == projectIdVal) {
                                     timesheetObj.projects.push(sheetPrj);
@@ -747,7 +746,7 @@ function timesheetBetweenDates(startDateVal, endDateVal, params) {
 
 function utilizationByMonth(month, year, params) {
     var deferred = Q.defer();
-    Date.prototype.getWeek = function() {
+    Date.prototype.getWeek = function () {
         var onejan = new Date(this.getFullYear(), 0, 1);
         return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
     }
@@ -768,8 +767,8 @@ function utilizationByMonth(month, year, params) {
         }
         startDate.setDate(startDate.getDate() + 7);
     }
-    _.each(weeks, function(weekVal) {
-        db.timesheets.find({ week: weekVal }).toArray(function(err, sheets) {
+    _.each(weeks, function (weekVal) {
+        db.timesheets.find({ week: weekVal }).toArray(function (err, sheets) {
             var report = {
                 week: weekVal,
                 weekHeadCount: 0,
@@ -786,11 +785,11 @@ function utilizationByMonth(month, year, params) {
                 haveBillableProjectHeadCount: 0
             };
             if (sheets) {
-                _.each(sheets, function(sheetObj) {
+                _.each(sheets, function (sheetObj) {
                     var hasBillableProject = false;
                     if (sheetObj.userResourceType == "Billable") {
                         report.weekHeadCount += 1;
-                        _.each(sheetObj.projects, function(projectObj) {
+                        _.each(sheetObj.projects, function (projectObj) {
                             if (projectObj.resourceType == "billable") {
                                 hasBillableProject = true;
                                 report.weekBillableHours += projectObj.billableHours;
@@ -823,7 +822,7 @@ function utilizationByMonth(month, year, params) {
 
 function getByProject(week, projectId) {
     var deferred = Q.defer();
-    db.timesheets.find({ week: week, "projects.projectId": mongo.helper.toObjectID(projectId) }).toArray(function(err, doc) {
+    db.timesheets.find({ week: week, "projects.projectId": mongo.helper.toObjectID(projectId) }).toArray(function (err, doc) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (doc) {
             deferred.resolve(doc);
@@ -835,7 +834,7 @@ function getByProject(week, projectId) {
 }
 
 function remindByProject(user, projectName, week) {
-    
+
 }
 
 function usersLeaveBalance(financialYear) {
@@ -854,25 +853,25 @@ function usersLeaveBalance(financialYear) {
     };
     var users = [];
     timesheet.aggregate([
-        {$match: queryStr},
-        {$lookup: {from: 'users', localField: 'userId', foreignField: '_id', as: 'user_info'}},
-        {$unwind:"$user_info"},
-        {$project: {week: 1, userId: 1, weekDate: 1, userResourceType: 1, totalHours: 1, totalBillableHours: 1, timeoffHours: 1, sickLeaveHours: 1, userJoinDate: "$user_info.joinDate"} }
-    ]).exec(function(err, sheets){
-        _.each(sheets, function(sheetObj) {
+        { $match: queryStr },
+        { $lookup: { from: 'users', localField: 'userId', foreignField: '_id', as: 'user_info' } },
+        { $unwind: "$user_info" },
+        { $project: { week: 1, userId: 1, weekDate: 1, userResourceType: 1, totalHours: 1, totalBillableHours: 1, timeoffHours: 1, sickLeaveHours: 1, userJoinDate: "$user_info.joinDate" } }
+    ]).exec(function (err, sheets) {
+        _.each(sheets, function (sheetObj) {
             var weekDate = new Date(sheetObj.weekDate);
             var userJoinDate = new Date(sheetObj.userJoinDate);
-            if(weekDate > userJoinDate && userSheet.userResourceType != "Intern"){
-                var userObj = _.find(users, {_id: sheetObj.userId});
-                if(userObj){
+            if (weekDate > userJoinDate && userSheet.userResourceType != "Intern") {
+                var userObj = _.find(users, { _id: sheetObj.userId });
+                if (userObj) {
                     userObj.timesheets.push({
                         timeoffHours: sheetObj.timeoffHours,
                         week: sheetObj.week,
                         weekDate: sheetObj.weekDate,
                         totalHours: sheetObj.totalHours,
-                        totalBillableHours: sheetObj.totalBillableHours 
+                        totalBillableHours: sheetObj.totalBillableHours
                     });
-                }else{
+                } else {
                     var userObj = {
                         _id: sheetObj.userId,
                         userResourceType: sheetObj.userResourceType,
@@ -890,21 +889,21 @@ function usersLeaveBalance(financialYear) {
         });
         deferred.resolve(users);
     });
-    
+
     return deferred.promise;
 }
 
-function userTakenLeaves(userId, financialYear=null) {
+function userTakenLeaves(userId, financialYear = null) {
     var deferred = Q.defer();
-    if(financialYear){
+    if (financialYear) {
         var financialYearArr = financialYear.split("-");
         var startDate = new Date(financialYearArr[0], 3, 1);
         var endDate = new Date(financialYearArr[1], 3, 1);
-    }else{
+    } else {
         var now = new Date();
-        var startYear = (now.getMonth()>=3)?now.getFullYear():now.getFullYear()-1; 
+        var startYear = (now.getMonth() >= 3) ? now.getFullYear() : now.getFullYear() - 1;
         var startDate = new Date(startYear, 3, 1);
-        var endDate = new Date((startYear+1), 3, 1);
+        var endDate = new Date((startYear + 1), 3, 1);
     }
     var queryStr = {
         userId: mongo.helper.toObjectID(userId),
@@ -918,19 +917,19 @@ function userTakenLeaves(userId, financialYear=null) {
     };
     var userSheets = [];
     timesheet.aggregate([
-        {$match: queryStr},
-        {$lookup: {from: 'users', localField: 'userId', foreignField: '_id', as: 'user_info'}},
-        {$unwind:"$user_info"},
-        {$project: {week: 1, userId: 1, weekDate: 1, userResourceType: 1, totalHours: 1, totalBillableHours: 1, timeoffHours: 1, sickLeaveHours: 1, projects: 1, userJoinDate: "$user_info.joinDate"} }
-    ]).exec(function(err, sheets){
-    //db.timesheets.find(queryStr).toArray(function(err, sheets) {
-        _.each(sheets, function(sheetObj) {
+        { $match: queryStr },
+        { $lookup: { from: 'users', localField: 'userId', foreignField: '_id', as: 'user_info' } },
+        { $unwind: "$user_info" },
+        { $project: { week: 1, userId: 1, weekDate: 1, userResourceType: 1, totalHours: 1, totalBillableHours: 1, timeoffHours: 1, sickLeaveHours: 1, projects: 1, userJoinDate: "$user_info.joinDate" } }
+    ]).exec(function (err, sheets) {
+        //db.timesheets.find(queryStr).toArray(function(err, sheets) {
+        _.each(sheets, function (sheetObj) {
             var weekDate = new Date(sheetObj.weekDate);
             var userJoinDate = new Date(sheetObj.userJoinDate);
-            if(weekDate > userJoinDate && sheetObj.userResourceType != "Intern"){
+            if (weekDate > userJoinDate && sheetObj.userResourceType != "Intern") {
                 sheetObj.sheetTimeoffHours = 0;
                 sheetObj.sheetSickLeaveHours = 0;
-                _.each(sheetObj.projects, function(projectObj){
+                _.each(sheetObj.projects, function (projectObj) {
                     sheetObj.sheetTimeoffHours += projectObj.timeoffHours;
                     sheetObj.sheetSickLeaveHours += projectObj.sickLeaveHours;
                 });
@@ -941,7 +940,7 @@ function userTakenLeaves(userId, financialYear=null) {
                     week: sheetObj.week,
                     weekDate: sheetObj.weekDate,
                     totalHours: sheetObj.totalHours,
-                    totalBillableHours: sheetObj.totalBillableHours 
+                    totalBillableHours: sheetObj.totalBillableHours
                 });
             }
         });
@@ -950,17 +949,17 @@ function userTakenLeaves(userId, financialYear=null) {
     return deferred.promise;
 }
 
-function userTakenLeaveBalance(userId, financialYear=null) {
+function userTakenLeaveBalance(userId, financialYear = null) {
     var deferred = Q.defer();
-    if(financialYear){
+    if (financialYear) {
         var financialYearArr = financialYear.split("-");
         var startDate = new Date(financialYearArr[0], 3, 1);
         var endDate = new Date(financialYearArr[1], 3, 1);
-    }else{
+    } else {
         var now = new Date();
-        var startYear = (now.getMonth()>=3)?now.getFullYear():now.getFullYear()-1; 
+        var startYear = (now.getMonth() >= 3) ? now.getFullYear() : now.getFullYear() - 1;
         var startDate = new Date(startYear, 3, 1);
-        var endDate = new Date((startYear+1), 3, 1);
+        var endDate = new Date((startYear + 1), 3, 1);
     }
     var queryStr = {
         userId: mongo.helper.toObjectID(userId),
@@ -982,26 +981,26 @@ function userTakenLeaveBalance(userId, financialYear=null) {
         totalTimeoffDays: 0.00
     };
     timesheet.aggregate([
-        {$match: queryStr},
-        {$lookup: {from: 'users', localField: 'userId', foreignField: '_id', as: 'user_info'}},
-        {$unwind:"$user_info"},
-        {$project: {week: 1, userId: 1, weekDate: 1, userResourceType: 1, totalHours: 1, totalBillableHours: 1, timeoffHours: 1, sickLeaveHours: 1, projects: 1, userJoinDate: "$user_info.joinDate"} }
-    ]).exec(function(err, sheets){
-        _.each(sheets, function(sheetObj) {
+        { $match: queryStr },
+        { $lookup: { from: 'users', localField: 'userId', foreignField: '_id', as: 'user_info' } },
+        { $unwind: "$user_info" },
+        { $project: { week: 1, userId: 1, weekDate: 1, userResourceType: 1, totalHours: 1, totalBillableHours: 1, timeoffHours: 1, sickLeaveHours: 1, projects: 1, userJoinDate: "$user_info.joinDate" } }
+    ]).exec(function (err, sheets) {
+        _.each(sheets, function (sheetObj) {
             var weekDate = new Date(sheetObj.weekDate);
             var userJoinDate = new Date(sheetObj.userJoinDate);
-            if(weekDate > userJoinDate && sheetObj.userResourceType != "Intern"){
+            if (weekDate > userJoinDate && sheetObj.userResourceType != "Intern") {
                 userSheetBalance.userId = sheetObj.userId;
-                _.each(sheetObj.projects, function(projectObj) {
+                _.each(sheetObj.projects, function (projectObj) {
                     userSheetBalance.sickLeaveHours += projectObj.sickLeaveHours;
                     userSheetBalance.timeoffHours += projectObj.timeoffHours;
                 });
                 userSheetBalance.totalTimeoffHours += sheetObj.timeoffHours;
             }
         });
-        userSheetBalance.sickLeaveDays = parseFloat(userSheetBalance.sickLeaveHours/8).toFixed(2);
-        userSheetBalance.timeoffDays = parseFloat(userSheetBalance.timeoffHours/8).toFixed(2);
-        userSheetBalance.totalTimeoffDays = parseFloat(userSheetBalance.totalTimeoffHours/8).toFixed(2);
+        userSheetBalance.sickLeaveDays = parseFloat(userSheetBalance.sickLeaveHours / 8).toFixed(2);
+        userSheetBalance.timeoffDays = parseFloat(userSheetBalance.timeoffHours / 8).toFixed(2);
+        userSheetBalance.totalTimeoffDays = parseFloat(userSheetBalance.totalTimeoffHours / 8).toFixed(2);
         deferred.resolve(userSheetBalance);
     });
     return deferred.promise;
@@ -1010,15 +1009,19 @@ function userTakenLeaveBalance(userId, financialYear=null) {
 function getTimesheetApproveProjectOwners(week) {
     var deferred = Q.defer();
     timesheet.aggregate([
-        {$unwind:{path:"$projects", preserveNullAndEmptyArrays: true}},
-        {$match: {week: week, 'projects.sheetStatus': 'Pending', $or: [{'projects.projectHours': {$gt: 0}}, {'projects.sickLeaveHours': {$gt: 0}}, {'projects.timeoffHours': {$gt: 0}}]}},
-        {$lookup: {from: 'projects', localField: 'projects.projectId', foreignField: '_id', as: 'project_info'}},
-        {$unwind:"$project_info"},
-        {$project:{week: 1, projectId: "$projects.projectId", projectName: "$projects.projectName", sheetStatus: "$projects.sheetStatus", 
-        ownerId: {'$toObjectId': '$project_info.ownerId'}, ownerName: "$project_info.ownerName", userName: "$user_info.name"}},
-        {$lookup: {from: 'users', localField: 'ownerId', foreignField: '_id', as: 'user_info'}},
-        {$unwind:"$user_info"},
-    ]).exec(function(error, response){
+        { $unwind: { path: "$projects", preserveNullAndEmptyArrays: true } },
+        { $match: { week: week, 'projects.sheetStatus': 'Pending', $or: [{ 'projects.projectHours': { $gt: 0 } }, { 'projects.sickLeaveHours': { $gt: 0 } }, { 'projects.timeoffHours': { $gt: 0 } }] } },
+        { $lookup: { from: 'projects', localField: 'projects.projectId', foreignField: '_id', as: 'project_info' } },
+        { $unwind: "$project_info" },
+        {
+            $project: {
+                week: 1, projectId: "$projects.projectId", projectName: "$projects.projectName", sheetStatus: "$projects.sheetStatus",
+                ownerId: { '$toObjectId': '$project_info.ownerId' }, ownerName: "$project_info.ownerName", userName: "$user_info.name"
+            }
+        },
+        { $lookup: { from: 'users', localField: 'ownerId', foreignField: '_id', as: 'user_info' } },
+        { $unwind: "$user_info" },
+    ]).exec(function (error, response) {
         if (error) deferred.reject(error);
         deferred.resolve(response);
     });

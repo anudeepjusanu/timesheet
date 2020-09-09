@@ -6,7 +6,6 @@ var leaveWalletService = require('services/leaveWallet.service');
 const InventoryService = require('../../services/inventory.service');
 
 var builder = require('botbuilder');
-const { async } = require('q');
 var connector = new builder.ChatConnector({
     appId: config.botId,
     appPassword: config.botPassword

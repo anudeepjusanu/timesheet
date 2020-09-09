@@ -8,11 +8,6 @@ var db = mongo.db(config.connectionString, { native_parser: true });
 db.bind('surveys');
 db.bind('users');
 
-//var mongoose = require('mongoose');
-//mongoose.connect(config.connectionString);
-
-
-
 var service = {};
 
 service.create = create;
@@ -32,7 +27,7 @@ function create(survey) {
     }
     db.surveys.insert(
         surveyObj,
-        function(err, survey) {
+        function (err, survey) {
             if (err) deferred.reject(err.name + ': ' + err.message);
             console.log(survey);
             deferred.resolve(survey.ops[0]);
@@ -42,7 +37,7 @@ function create(survey) {
 
 function getAll() {
     var deferred = Q.defer();
-    db.surveys.find().toArray(function(err, surveys) {
+    db.surveys.find().toArray(function (err, surveys) {
         if (err) deferred.reject(err.name + ': ' + err.message);
         if (surveys) {
             deferred.resolve(surveys);
