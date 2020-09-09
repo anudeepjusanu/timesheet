@@ -2,15 +2,20 @@
 var _ = require('lodash');
 var Q = require('q');
 var mongoose = require("mongoose");
-var InventoryModel = require("../models/inventory.model");
-var UserModel = require("../models/user.model");
+console.log("MONGODB_URI ", process.env.MONGODB_URI);
 (async () => {
     try {
-        const connected = await mongoose.connect(config.connectionString);
+        await mongoose.connect(config.connectionString, {
+            socketTimeoutMS: 30000,
+            keepAlive: true,
+            reconnectTries: 30000
+        });
     } catch (e) {
         console.log('Error happend while connecting to the DB: ', e.message)
     }
 })();
+var InventoryModel = require("../models/inventory.model");
+var UserModel = require("../models/user.model");
 
 var service = {};
 
