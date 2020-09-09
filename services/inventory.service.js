@@ -4,7 +4,13 @@ var Q = require('q');
 var mongoose = require("mongoose");
 var InventoryModel = require("../models/inventory.model");
 var UserModel = require("../models/user.model");
-mongoose.connect(config.connectionString);
+(async () => {
+    try {
+        const connected = await mongoose.connect(config.connectionString);
+    } catch (e) {
+        console.log('Error happend while connecting to the DB: ', e.message)
+    }
+})();
 
 var service = {};
 
