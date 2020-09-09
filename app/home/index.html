@@ -161,7 +161,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="panel-title-box">
@@ -194,22 +194,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <!-- START VISITORS BLOCK -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="panel-title-box">
-                        <h3>Timesheet</h3>
-                        <span>Capacity in hrs ({{vm.currentCapacity}})</span>
-                    </div>
-                </div>
-                <div class="panel-body padding-0">
-                    <canvas class="chart chart-pie" chart-colors="vm.hoursChart.colors"
-                        chart-options="vm.hoursChart.options" chart-data="vm.hoursChart.data"
-                        chart-labels="vm.hoursChart.labels">
-                    </canvas>
-                </div>
-            </div>
-            <!-- END VISITORS BLOCK -->
+
         </div>
     </div>
     <div ng-if="vm.user.admin">
