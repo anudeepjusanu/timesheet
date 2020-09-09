@@ -5,6 +5,7 @@ var mongoose = require("mongoose");
 (async () => {
     try {
         await mongoose.connect("mongodb://timesheet:nbostimesheet@localhost:27017/wltimesheet", {
+            useNewUrlParser: true,
             socketTimeoutMS: 30000,
             keepAlive: true,
             reconnectTries: 30000
