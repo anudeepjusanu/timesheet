@@ -2,10 +2,9 @@
 var _ = require('lodash');
 var Q = require('q');
 var mongoose = require("mongoose");
-console.log("MONGODB_URI ", process.env.MONGODB_URI);
 (async () => {
     try {
-        await mongoose.connect(config.connectionString, {
+        await mongoose.connect("mongodb://timesheet:nbostimesheet@localhost:27017/wltimesheet", {
             socketTimeoutMS: 30000,
             keepAlive: true,
             reconnectTries: 30000
