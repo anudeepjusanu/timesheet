@@ -58,7 +58,6 @@ function updateUserSkill(UserSkillId, UserSkillData) {
     return new Promise((resolve, reject) => {
         UserSkillData.userId = mongoose.Types.ObjectId(UserSkillData.userId);
         UserSkill.updateOne({ _id: mongoose.Types.ObjectId(UserSkillId) }, UserSkillData).exec().then((data) => {
-            console.log(data);
             resolve(data);
         }).catch((error) => {
             reject({ error: error.errmsg });
@@ -69,7 +68,6 @@ function updateUserSkill(UserSkillId, UserSkillData) {
 function deleteUserSkill(UserSkillId) {
     return new Promise((resolve, reject) => {
         UserSkill.deleteOne({ _id: mongoose.Types.ObjectId(UserSkillId) }).lean().exec().then((data) => {
-            console.log(data);
             resolve(data);
         }).catch((error) => {
             reject({ error: error.errmsg });

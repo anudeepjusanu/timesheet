@@ -5,22 +5,26 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Employees Reimbursements</h3>
+            <button class="btn btn-primary btn-rounded pull-right"
+                ng-click="vm.exportToExcel('tableToExport');">Export</button>
         </div>
         <div class="panel-body">
-            <table class="table table-condensed table-bordered table-striped" export-table>
+            <table id="tableToExport" class="table table-condensed table-bordered table-striped">
                 <thead>
                     <tr>
                         <th class="table-heading">#</th>
+                        <th class="table-heading">Employee ID</th>
                         <th class="table-heading">Employee Name</th>
                         <th class="table-heading">Project</th>
                         <th class="table-heading" style="width: 80px;">Month</th>
-                        <th class="table-heading" style="max-width: 240px;">Purpose</th>
+                        <th class="table-heading" style="width: 280px;">Purpose</th>
                         <th class="table-heading" style="width: 120px;">Status</th>
                         <th class="table-heading" style="width: 100px;">Total Amount</th>
                         <th class="table-heading" style="width: 80px;">Created On</th>
                         <th class="table-heading">Action</th>
                     </tr>
                     <tr>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -38,6 +42,7 @@
                 <tbody>
                     <tr ng-repeat="reimbursement in vm.reimbursements | ReimbursementsSearch: vm.searchObj">
                         <td class="table-heading">{{$index+1}}</td>
+                        <td class="table-heading">{{reimbursement.employeeId}}</td>
                         <td class="table-heading">{{reimbursement.userName}}</td>
                         <td class="table-heading">{{reimbursement.projectName}}</td>
                         <td class="table-heading">{{reimbursement.reimbursementMonth}}</td>

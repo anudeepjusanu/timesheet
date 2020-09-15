@@ -1,0 +1,40 @@
+<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+    close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+    {{alert.msg}}</div>
+<div class="content-wrapper">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Daily Task Categories</h3>
+            <a class="btn btn-primary btn-rounded pull-right" ng-click="vm.viewDailyTaskCategoryModel();">Add</a>
+        </div>
+        <div class="panel-body">
+            <table class="table table-condensed table-bordered table-striped" export-table>
+                <tr>
+                    <th style="width: 80px;">S.No</th>
+                    <th>Daily Task Category Short Name</th>
+                    <th>Daily Task Category Name</th>
+                    <th>Color Code</th>
+                    <th style="width: 240px;">Created On</th>
+                    <th style="width: 160px;" ng-if="vm.user.admin">Action</th>
+                </tr>
+                <tr ng-repeat="dailyTaskCategory in vm.dailyTaskCategories | orderBy:'taskCategoryName'">
+                    <td>{{$index+1}}</td>
+                    <td>{{dailyTaskCategory.taskCategoryShortName}}</td>
+                    <td>{{dailyTaskCategory.taskCategoryName}}</td>
+                    <td>{{dailyTaskCategory.taskColorCode}}</td>
+                    <td>{{dailyTaskCategory.createdOn}}</td>
+                    <td ng-if="vm.user.admin">
+                        <a class="btn btn-primary btn-icon btn-rounded"
+                            ng-click="vm.viewDailyTaskCategoryModel(dailyTaskCategory)">
+                            <span class="fa fa-pencil"></span>
+                        </a>
+                        <!-- <a class="btn btn-primary btn-icon btn-rounded"
+                            ng-click="vm.delDailyTaskCategory(dailyTaskCategory)">
+                            <span class="fa fa-times"></span>
+                        </a> -->
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

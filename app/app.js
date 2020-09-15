@@ -391,6 +391,14 @@
                 parent: 'layout',
                 data: { activeTab: 'dailyTaskCategories' }
             })
+            .state('manageJobOpenings', {
+                url: '/jobOpenings/manageJobOpenings',
+                templateUrl: 'jobOpenings/manageJobOpenings.html',
+                controller: 'JobOpening.DailyTaskCategoriesController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'manageJobOpenings' }
+            })
         ChartJsProvider.setOptions({ colors: ['#1caf9a', '#273541'] });
     }
 
