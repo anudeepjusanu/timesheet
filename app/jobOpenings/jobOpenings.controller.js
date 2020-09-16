@@ -4,7 +4,7 @@
     angular
         .module('app')
         .controller('JobOpenings.ManageJobOpeningsController', ManageJobOpeningsController)
-        .controller('JobOpenings.JobOpeningFormController', JobOpeningFormController)
+        .controller('JobOpenings.ManageJobOpeningModel', ManageJobOpeningModel)
         .filter('MyReceiptsSearch', function ($filter) {
             return function (input, searchObj) {
                 var output = input;
@@ -16,141 +16,113 @@
                 return output;
             }
         });
-    function ManageJobOpeningsController(UserService, ReimbursementService, $scope, $rootScope, _, $uibModal, $filter, $state) {
+    function ManageJobOpeningsController(UserService, DailyTrackerService, $uibModal, FlashService, noty) {
         var vm = this;
         vm.user = {};
-        vm.alerts = [];
-        vm.receipts = [];
-        vm.selected = [];
-        vm.selectAll = false;
-        vm.categories = ReimbursementService.getReimbursementCategories();
-        vm.searchObj = {
-            category: "",
-            status: "New"
-        };
-        vm.categories.unshift({ "categoryTypeId": "", "categoryTypeVal": "All" });
+        vm.jobOpenings = [];
 
-        $rootScope.$on("GetMyReceipts", function () {
-            $scope.getMyReceipts();
-        });
-
-        /**Function to get all the employee receipts */
-        $scope.getMyReceipts = function () {
-            ReimbursementService.getMyReceipts().then(function (response) {
-                vm.receipts = response.receipts;
-                _.each(vm.receipts, function (receipt) {
-                    receipt.selected = false;
-                    receipt.receiptDate = $filter('date')(receipt.receiptDate, "yyyy-MM-dd");
-                    receipt.receiptAmount = receipt.receiptAmount.toFixed(2);
-                });
-            }, function (error) {
-                console.log(error);
-            });
-        };
-
-        vm.addReimbursement = function (selectedReceipts) {
-            _.each(selectedReceipts, function (selectedReceipt) {
-                if (selectedReceipt.selected) {
-                    vm.selected.push(selectedReceipt);
+        function getManageJobOpenings() {
+            DailyTrackerService.getManageJobOpenings().then(function (data) {
+                if (data.jobOpenings) {
+                    vm.jobOpenings = data.jobOpenings;
                 }
+            }, function (errors) {
+                console.log(errors);
             });
-            $state.go('reimbursementForm', {
-                receipts: vm.selected
-            })
         }
 
-        vm.editReceipt = function (receipt) {
-            $state.go('receiptForm', {
-                receipt: receipt
-            })
-        }
-
-        vm.deleteReceipt = function (receiptId) {
+        vm.viewManageJobOpeningModel = function (JobOpeningObj) {
+            var JobOpening = {};
+            if (JobOpeningObj) {
+                JobOpening = JobOpeningObj;
+                JobOpening.isNew = false;
+            } else {
+                JobOpening.isNew = true;
+            }
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
-                templateUrl: 'common/modalConfirm.html',
-                controller: function (ReimbursementService, $uibModalInstance, receiptId, noty, _) {
-                    var vm = this;
-                    vm.confirmTitle = "Delete Receipt";
-                    vm.confirmMessage = "Are you sure, do you want to delete the receipt?";
-
-                    vm.confirmOk = function () {
-                        if (receiptId) {
-                            ReimbursementService.deleteReimbursementReceipt(receiptId).then(function (response) {
-                                noty.showSuccess("Receipt has been deleted successfully!");
-                            }, function (error) {
-                                if (error) {
-                                    vm.alerts.push({ msg: error, type: 'danger' });
-                                }
-                            });
-                        }
-                        $uibModalInstance.dismiss('cancel');
-                    }
-
-                    vm.close = function () {
-                        $uibModalInstance.dismiss('cancel');
-                    };
-                },
-                resolve: {
-                    receiptId: function () {
-                        return receiptId;
-                    }
-                },
+                templateUrl: 'jobOpenings/jobOpeningForm.html',
+                controller: 'JobOpenings.ManageJobOpeningModel',
                 controllerAs: 'vm',
-                size: 'xs'
-            }).result.then(function (obj) {
+                size: 'lg',
+                resolve: {
+                    JobOpening: function () {
+                        return JobOpening;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (JobOpeningObj) {
                 //vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
-                $scope.getMyReceipts();
+                getManageJobOpenings();
             }, function () {
-                $scope.getMyReceipts();
+                getManageJobOpenings();
             });
         }
 
-        vm.enableSubmitButton = function () {
-            vm.enableSubmitReimbursementBtn = false;
-            _.each(vm.receipts, function (receiptObj) {
-                if (receiptObj.selected === true) {
-                    vm.enableSubmitReimbursementBtn = true;
-                }
-            });
+        vm.delManageJobOpening = function (JobOpening) {
+            if (confirm("Do you want to delete this Job Opening?")) {
+                DailyTrackerService.delManageJobOpening(JobOpening).then(function (response) {
+                    getManageJobOpenings();
+                });
+            }
         }
 
-        vm.checkAll = function () {
-            _.each(vm.receipts, function (receipt) {
-                if (receipt.status == "New") {
-                    receipt.selected = vm.selectAll;
-                }
-            });
-            vm.enableSubmitButton();
-        }
-
-        vm.closeAlert = function (index) {
-            vm.alerts.splice(index, 1);
-        }
-
+        initController();
         function initController() {
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
             });
-            $scope.getMyReceipts();
+            getManageJobOpenings();
         }
+    }
 
-        initController();
-    };
-
-    function JobOpeningFormController(UserService, $scope, _) {
+    function ManageJobOpeningModel($uibModalInstance, DailyTrackerService, noty, JobOpening) {
         var vm = this;
-        vm.user = {};
+        vm.enableSaveBtn = true;
+        vm.alerts = [];
+        vm.JobOpening = JobOpening;
 
+        vm.saveManageJobOpening = function (form) {
+            if (form.$valid) {
+                console.log(vm.JobOpening);
+                vm.enableSaveBtn = false;
+                if (vm.JobOpening.isNew === true) {
+                    DailyTrackerService.addManageJobOpening(vm.JobOpening).then(function (response) {
+                        noty.showSuccess("Job Opening has been added successfully!");
+                        vm.enableSaveBtn = true;
+                        $uibModalInstance.close(vm.JobOpening);
+                    }, function (error) {
+                        if (error) {
+                            vm.alerts.push({ msg: error, type: 'danger' });
+                        }
+                        vm.enableSaveBtn = true;
+                        $uibModalInstance.close(vm.JobOpening);
+                    });
+                } else {
+                    DailyTrackerService.updateManageJobOpening(vm.JobOpening).then(function (response) {
+                        noty.showSuccess("Job Opening has been updated successfully!");
+                        vm.enableSaveBtn = true;
+                        $uibModalInstance.close(vm.JobOpening);
+                    }, function (error) {
+                        if (error) {
+                            vm.alerts.push({ msg: error, type: 'danger' });
+                        }
+                        vm.enableSaveBtn = true;
+                        $uibModalInstance.close(vm.JobOpening);
+                    });
+                }
+            } else {
+                vm.enableSaveBtn = true;
+                vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
+            }
+        };
 
-        function initController() {
-            UserService.GetCurrent().then(function (user) {
-                vm.user = user;
-            });
-        }
-        initController();
+        vm.cancelManageJobOpening = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
     };
 
 })();

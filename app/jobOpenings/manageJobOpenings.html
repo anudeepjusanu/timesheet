@@ -4,32 +4,31 @@
 <div class="content-wrapper">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Daily Task Categories</h3>
-            <a class="btn btn-primary btn-rounded pull-right" ng-click="vm.viewDailyTaskCategoryModel();">Add</a>
+            <h3 class="panel-title">Manage Job Openings</h3>
+            <a class="btn btn-primary btn-rounded pull-right" ng-click="vm.viewJobOpeningModel();">Add</a>
         </div>
         <div class="panel-body">
             <table class="table table-condensed table-bordered table-striped" export-table>
                 <tr>
                     <th style="width: 80px;">S.No</th>
-                    <th>Daily Task Category Short Name</th>
-                    <th>Daily Task Category Name</th>
-                    <th>Color Code</th>
+                    <th>Job Code</th>
+                    <th>Job Title</th>
+                    <th>Experience</th>
                     <th style="width: 240px;">Created On</th>
                     <th style="width: 160px;" ng-if="vm.user.admin">Action</th>
                 </tr>
-                <tr ng-repeat="dailyTaskCategory in vm.dailyTaskCategories | orderBy:'taskCategoryName'">
+                <tr ng-repeat="jobOpening in vm.jobOpenings | orderBy:'taskCategoryName'">
                     <td>{{$index+1}}</td>
-                    <td>{{dailyTaskCategory.taskCategoryShortName}}</td>
-                    <td>{{dailyTaskCategory.taskCategoryName}}</td>
-                    <td>{{dailyTaskCategory.taskColorCode}}</td>
-                    <td>{{dailyTaskCategory.createdOn}}</td>
+                    <td>{{jobOpening.jobCode}}</td>
+                    <td>{{jobOpening.jobTitle}}</td>
+                    <td>{{jobOpening.jobExperience}}</td>
+                    <td>{{jobOpening.createdOn}}</td>
                     <td ng-if="vm.user.admin">
-                        <a class="btn btn-primary btn-icon btn-rounded"
-                            ng-click="vm.viewDailyTaskCategoryModel(dailyTaskCategory)">
+                        <a class="btn btn-primary btn-icon btn-rounded" ng-click="vm.viewJobOpeningModel(jobOpening)">
                             <span class="fa fa-pencil"></span>
                         </a>
                         <!-- <a class="btn btn-primary btn-icon btn-rounded"
-                            ng-click="vm.delDailyTaskCategory(dailyTaskCategory)">
+                            ng-click="vm.delJobOpening(jobOpening)">
                             <span class="fa fa-times"></span>
                         </a> -->
                     </td>
