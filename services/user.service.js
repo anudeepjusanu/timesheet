@@ -4,15 +4,18 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var Q = require('q');
 var mongo = require('mongoskin');
+var mongoose = require("mongoose");
 var db = mongo.db(config.connectionString, { native_parser: true });
 db.bind('users');
 db.bind('poolLogs');
+var UserModel = require("../models/user.model");
 
 var service = {};
 
 service.authenticate = authenticate;
 service.loginAsUser = loginAsUser;
 service.getById = getById;
+//service.getCurrentUser = getCurrentUser;
 service.getUserById = getUserById;
 service.getAll = getAll;
 service.getUsers = getUsers;
@@ -75,6 +78,61 @@ function getById(_id) {
 
     return deferred.promise;
 }
+
+// function getCurrentUser(_id) {
+//     var deferred = Q.defer();
+//     var weekDate = new Date();
+//     db.users.findById(_id, async function (err, user) {
+//         if (err) deferred.reject(err.name + ': ' + err.message);
+//         if (user) {
+//             var activeProjects = [];
+//             var userProjects = await UserModel.aggregate([
+//                 { $match: { _id: mongoose.Types.ObjectId(_id) } },
+//                 { $project: { projects: 1 } },
+//                 { $unwind: { path: "$projects", preserveNullAndEmptyArrays: true } }
+//             ]);
+//             for (var i = 0; i < userProjects.length; i++) {
+//                 var projectObj = userProjects[i].projects;
+//                 var isActiveProject = false;
+//                 for (var j = 0; j < projectObj.billDates.length; j++) {
+//                     var billObj = projectObj.billDates[j];
+//                     if (billObj.start && billObj.end) {
+//                         var billStartDate = new Date(billObj.start);
+//                         var billEndDate = new Date(billObj.end);
+//                         if (billStartDate <= weekDate && billEndDate >= weekDate) {
+//                             isActiveProject = true
+//                         }
+//                     } else if (billObj.start) {
+//                         var billStartDate = new Date(billObj.start);
+//                         if (billStartDate <= weekDate) {
+//                             isActiveProject = true
+//                         }
+//                     } else if (billObj.end) {
+//                         var billEndDate = new Date(billObj.end);
+//                         if (billEndDate >= weekDate) {
+//                             isActiveProject = true
+//                         }
+//                     }
+//                     if (isActiveProject) {
+//                         break;
+//                     }
+//                 }
+//                 if (isActiveProject) {
+//                     activeProjects.push(projectObj);
+//                 }
+//             }
+//             user.activeProjects = activeProjects;
+
+//             // return user (without hashed password)
+//             deferred.resolve(_.omit(user, 'hash'));
+//         } else {
+//             // user not found
+//             deferred.resolve();
+//         }
+//     });
+
+//     return deferred.promise;
+// }
 
 function getUserById(_id) {
     var deferred = Q.defer();
@@ -323,7 +381,7 @@ function adminUpdate(id, userId, userParam) {
     });
 
     function update_user(userId, userParam) {
-        if(userParam.joinDate){
+        if (userParam.joinDate) {
             userParam.joinDate = new Date(userParam.joinDate);
         }
         db.users.update({ _id: mongo.helper.toObjectID(userId) }, { $set: userParam },

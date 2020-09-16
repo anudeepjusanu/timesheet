@@ -34,9 +34,9 @@ router.post('/receiptFile/:_id', upload.single('file'), updateReimbursementRecei
 
 router.put('/approveReimbursement/:_id', approveReimbursement);
 router.put('/rejectReimbursement/:_id', rejectReimbursement);
-router.put('/claimApproveReimbursement/:_id', claimApproveReimbursement);
-router.put('/claimRejectReimbursement/:_id', claimRejectReimbursement);
-router.put('/paymentProcessedReimbursement/:_id', paymentProcessedReimbursement);
+router.put('/expensesApproveReimbursement/:_id', expensesApproveReimbursement);
+router.put('/expencesRejectReimbursement/:_id', expencesRejectReimbursement);
+router.put('/paymentProcessReimbursement/:_id', paymentProcessReimbursement);
 
 router.get('/', getMyReimbursements);
 router.get('/:_id', getReimbursement);
@@ -89,7 +89,7 @@ function addReimbursement(req, res) {
 }
 
 function updateReimbursement(req, res) {
-    ReimbursementService.updateReimbursement(req.params._id, req.body).then(data => {
+    ReimbursementService.updateReimbursement(req.params._id, req.body, req.user.sub).then(data => {
         res.send({ reimbursement: data });
     }).catch(error => {
         res.status(400).send(error);
@@ -98,9 +98,11 @@ function updateReimbursement(req, res) {
 
 function approveReimbursement(req, res) {
     var dataObj = {
-        status: "Approved"
+        status: "Approved",
+        comment: req.body.comment,
+        receipts: req.body.receipts
     }
-    ReimbursementService.updateReimbursement(req.params._id, dataObj).then(data => {
+    ReimbursementService.updateReimbursement(req.params._id, dataObj, req.user.sub).then(data => {
         res.send({ reimbursement: data });
     }).catch(error => {
         res.status(400).send(error);
@@ -109,27 +111,29 @@ function approveReimbursement(req, res) {
 
 function rejectReimbursement(req, res) {
     var dataObj = {
-        status: "Rejected"
+        status: "Rejected",
+        comment: req.body.comment
     }
-    ReimbursementService.updateReimbursement(req.params._id, dataObj).then(data => {
+    ReimbursementService.updateReimbursement(req.params._id, dataObj, req.user.sub).then(data => {
         res.send({ reimbursement: data });
     }).catch(error => {
         res.status(400).send(error);
     });
 }
 
-function claimApproveReimbursement(req, res) {
+function expensesApproveReimbursement(req, res) {
     var dataObj = {
-        status: "Expenses Approved"
+        status: "Expenses Approved",
+        comment: req.body.comment ? req.body.comment : null
     }
-    ReimbursementService.updateReimbursement(req.params._id, dataObj).then(data => {
+    ReimbursementService.updateReimbursement(req.params._id, dataObj, req.user.sub).then(data => {
         res.send({ reimbursement: data });
     }).catch(error => {
         res.status(400).send(error);
     });
 }
 
-function claimRejectReimbursement(req, res) {
+function expencesRejectReimbursement(req, res) {
     var dataObj = {
         status: "Expenses Rejected",
         comment: req.body.comment ? req.body.comment : null
@@ -141,13 +145,15 @@ function claimRejectReimbursement(req, res) {
     });
 }
 
-function paymentProcessedReimbursement(req, res) {
+function paymentProcessReimbursement(req, res) {
     var dataObj = {
         status: "Payment Processed",
+        receipts: req.body.receipts,
+        paidDate: req.body.paidDate ? req.body.paidDate : null,
         paymentMode: req.body.paymentMode ? req.body.paymentMode : null,
         comment: req.body.comment ? req.body.comment : null
     }
-    ReimbursementService.updateReimbursement(req.params._id, dataObj).then(data => {
+    ReimbursementService.updateReimbursement(req.params._id, dataObj, req.user.sub).then(data => {
         res.send({ reimbursement: data });
     }).catch(error => {
         res.status(400).send(error);

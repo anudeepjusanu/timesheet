@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title" id="modal-title">Approval Reimbursement
+    <h3 class="modal-title" id="modal-title">Payment Reimbursement
         <a class="pull-right" ng-click="vm.close()">
             <span class="fa fa-times delete-bill-icon" aria-hidden="true"></span>
         </a>
@@ -49,8 +49,6 @@
                     <th class="table-heading" style="width: 80px;">Amount</th>
                     <th class="table-heading" style="width: 80px">Approved Amount</th>
                     <th class="table-heading" style="width: 70px;">Receipt</th>
-                    <th class="table-heading" style="width: 110px;" ng-if="vm.user.userRole=='finance'">
-                    </th>
                 </tr>
                 <tr ng-repeat="receipt in vm.reimbursement.receipts">
                     <td style="width: 100px;">{{receipt.receiptDate|date:short}}</td>
@@ -58,46 +56,22 @@
                     <td>{{receipt.receiptDescription}}</td>
                     <td style="width: 120px;">{{receipt.status}}</td>
                     <td style="width: 100px;"><span class="fa fa-inr"></span>{{receipt.receiptAmount}}</td>
-                    <td class="table-heading">
-                        <input ng-if="vm.user.userRole!='finance'" type="number" ng-model="receipt.approvedAmount"
-                            class="form-control" ng-change="vm.calReceiptsAmount();" />
-                        <span ng-if="vm.user.userRole=='finance'">{{receipt.approvedAmount}}</span>
-                    </td>
+                    <td class="table-heading">{{receipt.approvedAmount}}</td>
                     <td style="width: 80px; text-align: center;">
                         <a class="" href="/data/reimbursements/{{receipt.receiptFile}}" target="_blank">
                             <span class="fa fa-file-text-o"></span>
-                        </a>
-                    </td>
-                    <td ng-if="vm.user.userRole=='finance'">
-                        <a href="" class="btn btn-sm btn-success btn-rounded"
-                            ng-click="vm.approveReimbursementReceipt(receipt);">
-                            <span class="fa fa-check"></span>
-                        </a>
-                        <a href="" class="btn btn-sm btn-danger btn-rounded"
-                            ng-click="vm.rejectReimbursementReceipt(receipt);">
-                            <span class="fa fa-times"></span>
                         </a>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="5"></td>
                     <td><span class="fa fa-inr"></span> {{vm.reimbursement.totalAmount}}</td>
-                    <td colspan="2"></td>
+                    <td></td>
                 </tr>
             </table>
         </div>
     </div>
-    <div class="row">
-        <form class="form-horizontal" name="vm.rimbursementForm">
-            <div class="form-group">
-                <label class="col-md-2 col-xs-12 control-label">Comment</label>
-                <div class="col-md-8 col-xs-12">
-                    <textarea class="form-control" ng-model="vm.reimbursement.comment" rows="2"></textarea>
-                </div>
-            </div>
-        </form>
-    </div>
-    <!-- <div ng-if="vm.user.userRole=='finance'" class="row">
+    <div ng-if="vm.user.userRole=='finance'" class="row">
         <form class="form-horizontal" name="vm.rimbursementForm">
             <div class="form-group required">
                 <label class="col-md-2 col-xs-12 control-label">Paid Date</label>
@@ -128,20 +102,12 @@
                 </div>
             </div>
         </form>
-    </div> -->
-</div>
-<div ng-if="vm.user.userRole=='lead' || vm.user.userRole=='manager'" class="modal-footer">
-    <div class="text-center">
-        <button class="btn btn-success btn-rounded" ng-click="vm.approveReimbursement();">Approve</button>
-        <button class="btn btn-danger btn-rounded" ng-click="vm.rejectReimbursement();">Reject</button>
-        <button class="btn btn-danger btn-rounded" ng-click="vm.close();">Cancel</button>
     </div>
 </div>
-<div ng-if="vm.user.userRole=='finance'" class="modal-footer" class="modal-footer">
+<div class="modal-footer" class="modal-footer">
     <div class="text-center">
-        <button class="btn btn-primary btn-rounded" ng-disabled="!vm.enablePayBtn"
-            ng-click="vm.expensesApproveReimbursement(vm.rimbursementForm);">Expenses Approve</button>
-        <button class="btn btn-danger btn-rounded" ng-click="vm.expencesRejectReimbursement();">Expenses Reject</button>
+        <button class="btn btn-primary btn-rounded"
+            ng-click="vm.paymentProcessReimbursement(vm.rimbursementForm);">Payment Process</button>
         <button class="btn btn-danger btn-rounded" ng-click="vm.close();">Cancel</button>
     </div>
 </div>

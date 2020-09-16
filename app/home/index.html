@@ -60,6 +60,114 @@
     </div>
     <!-- END WIDGETS -->
     <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title-box">
+                        <h3>Careers</h3>
+                    </div>
+                </div>
+                <div class="panel-body padding-0">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th width="120px;">Job Code</th>
+                                <th>Job Title</th>
+                                <th>Experience</th>
+                                <th width="90px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="job in vm.jobs">
+                                <td><strong>{{job.jobCode}}</strong></td>
+                                <td><strong>{{job.jobTitle}}</strong></td>
+                                <td><strong>{{job.experience}}</strong></td>
+                                <td>
+                                    <a class="btn btn-primary btn-rounded"
+                                        href="mailto:hr@wavelabs.ai?subject=Reference for {{job.jobTitle}}">Referral</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title-box">
+                        <h3>Employee Referral Scheme</h3>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <p>
+                        This policy is envisioned to cheer employees to refer their friends and connections to a
+                        suitable position in Wavelabs
+                        Technologies and strengthen the bonding between the employees and the company in order to make
+                        the environment lively
+                        and the work as pleasing as possible. 
+                        An employee can refer any number of resumes against a specific vacancy, for which HR will
+                        announce the requirements from
+                        time to time.  Once a resume is received, it will go through the standard recruitment processes
+                        and in the event of a
+                        referred candidate being offered and joined, the employee who referred the said candidate will
+                        be eligible to claim a
+                        Referral Bonus, as indicated below, after 3 months from the joining date:
+                    </p>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <td><strong>Designation</strong></td>
+                                <td><strong>Indicative Experience Range</strong></td>
+                                <td><strong>Referral Bonus</strong></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Engineer</strong></td>
+                                <td>1.5 to 3 years</td>
+                                <td><strong>Rs. 15,000/-</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Senior Engineer</strong></td>
+                                <td>3 to 5 years</td>
+                                <td><strong>Rs. 25,000/-</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Lead Engineer</strong></td>
+                                <td>5 to 7 years</td>
+                                <td><strong>Rs. 35,000/-</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Architect/Manager & above</strong></td>
+                                <td>7 years & above</td>
+                                <td><strong>Rs. 50,000/-</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Video Specialist 2</strong></td>
+                                <td>2 to 10 years</td>
+                                <td><strong>Rs. 15,000/-</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Video Specialist 1</strong></td>
+                                <td>3 to 10 years</td>
+                                <td><strong>Rs. 25,000/-</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>
+                        <li>All payments will be made subject to the prevailing Income Tax regulations/deductions.</li>
+                        <li>No bonus will be paid for referring candidates with less than 1.5 year of experience.</li>
+                        <li>HR Team Members, Senior Architect/Senior Managers & above are not eligible to receive any
+                            reward under this  policy.</li>
+                        <li>All the resumes to be sent to hr@wavelabs.ai by the employee from his/her own official email
+                            address.</li>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -93,56 +201,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <!-- START VISITORS BLOCK -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="panel-title-box">
-                        <h3>Timesheet</h3>
-                        <span>Capacity in hrs ({{vm.currentCapacity}})</span>
-                    </div>
-                </div>
-                <div class="panel-body padding-0">
-                    <canvas class="chart chart-pie" chart-colors="vm.hoursChart.colors"
-                        chart-options="vm.hoursChart.options" chart-data="vm.hoursChart.data"
-                        chart-labels="vm.hoursChart.labels">
-                    </canvas>
-                </div>
-            </div>
-            <!-- END VISITORS BLOCK -->
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <!-- START PROJECTS BLOCK -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="panel-title-box">
-                        <h3>Projects</h3>
-                        <span>Projects activity</span>
-                    </div>
-                </div>
-                <div class="panel-body panel-body-table" style="height: 205px; overflow-y: scroll;">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th width="30%">Client</th>
-                                    <th width="50%">Project</th>
-                                    <th>People</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="project in vm.projects">
-                                    <td><strong>{{project.clientName}}</strong></td>
-                                    <td><strong>{{project.projectName}}</strong></td>
-                                    <td><span class="label label-success">{{project.userCount}}</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <!-- END PROJECTS BLOCK -->
+
         </div>
     </div>
     <div ng-if="vm.user.admin">

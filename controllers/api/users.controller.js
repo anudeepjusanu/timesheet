@@ -84,18 +84,16 @@ function registerUser(req, res) {
         });
 }
 
-function getCurrentUser(req, res) {
-    userService.getById(req.user.sub)
-        .then(function (user) {
-            if (user) {
-                res.send(user);
-            } else {
-                res.sendStatus(404);
-            }
-        })
-        .catch(function (err) {
-            res.status(400).send(err);
-        });
+async function getCurrentUser(req, res) {
+    userService.getById(req.user.sub).then(function (user) {
+        if (user) {
+            res.send(user);
+        } else {
+            res.sendStatus(404);
+        }
+    }).catch(function (err) {
+        res.status(400).send(err);
+    });
 }
 
 function getUser(req, res) {

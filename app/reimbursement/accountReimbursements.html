@@ -5,22 +5,25 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Approved Reimbursements</h3>
+
         </div>
         <div class="panel-body">
-            <table class="table table-condensed table-bordered table-striped" export-table>
+            <table id="exportable" class="table table-condensed table-bordered table-striped" export-table>
                 <thead>
                     <tr>
                         <th class="table-heading">#</th>
+                        <th class="table-heading">Employee ID</th>
                         <th class="table-heading">Employee Name</th>
                         <th class="table-heading">Project</th>
                         <th class="table-heading" style="width: 80px;">Month</th>
                         <th class="table-heading">Purpose</th>
-                        <th class="table-heading" style="width: 120px;">Status</th>
+                        <th class="table-heading" style="width: 140px;">Status</th>
                         <th class="table-heading" style="width: 100px;">Approved Amount</th>
                         <th class="table-heading" style="width: 80px;">Created On</th>
-                        <th class="table-heading">Action</th>
+                        <th class="table-heading" style="width: 120px;">Action</th>
                     </tr>
                     <tr>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -38,17 +41,24 @@
                 <tbody>
                     <tr ng-repeat="reimbursement in vm.reimbursements | ReimbursementsSearch: vm.searchObj">
                         <td class="table-heading">{{$index+1}}</td>
+                        <td class="table-heading">{{reimbursement.employeeId}}</td>
                         <td class="table-heading">{{reimbursement.userName}}</td>
                         <td class="table-heading">{{reimbursement.projectName}}</td>
                         <td class="table-heading">{{reimbursement.reimbursementMonth}}</td>
-                        <td class="table-heading">{{reimbursement.purpose}}</td>
+                        <td class="table-heading" style="max-width: 240px;">{{reimbursement.purpose}}</td>
                         <td class="table-heading">{{reimbursement.status}}</td>
-                        <td class="table-heading"><span class="fa fa-inr"></span> {{reimbursement.approvedAmount}}</td>
+                        <td class="table-heading"><span class="fa fa-inr"></span> {{reimbursement.totalAmount}} </td>
                         <td class="table-heading">{{reimbursement.createdOn}}</td>
                         <td>
-                            <a class="btn btn-primary btn-icon btn-rounded"
+                            <a ng-if="reimbursement.status!='Payment Processed'"
+                                class="btn btn-primary btn-icon btn-rounded"
                                 ng-click="vm.openAccountReimbursementModal(reimbursement)">
                                 <span class="fa fa-list"></span>
+                            </a>
+                            <a ng-if="reimbursement.status=='Expenses Approved'"
+                                class="btn btn-primary btn-icon btn-rounded"
+                                ng-click="vm.paymentProcessReimbursement(reimbursement)">
+                                <span class="fa fa-money"></span>
                             </a>
                         </td>
                     </tr>

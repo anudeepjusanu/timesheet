@@ -1,0 +1,39 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">
+        <span ng-if="vm.dailyTaskCategory.isNew">Add Daily Task Category</span>
+        <span ng-if="vm.dailyTaskCategory.isNew===false">Edit Daily Task Category</span>
+    </h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+        close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
+    <div class="row">
+        <form class="form-horizontal" name="vm.dailyTaskCategoryForm">
+            <div class="form-group">
+                <label class="col-md-3 control-label">Task Category Short Name</label>
+                <div class="col-md-9">
+                    <input type="text" class="form-control" ng-model="vm.dailyTaskCategory.taskCategoryShortName"
+                        ng-required="true" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label">Task Category Name</label>
+                <div class="col-md-9">
+                    <input type="text" class="form-control" ng-model="vm.dailyTaskCategory.taskCategoryName"
+                        ng-required="true" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label">Color Code</label>
+                <div class="col-md-3">
+                    <input type="color" class="form-control" ng-model="vm.dailyTaskCategory.taskColorCode" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-disabled="!vm.enableSaveBtn"
+        ng-click="vm.saveDailyTaskCategory(vm.dailyTaskCategoryForm)">Save</button>
+    <button class="btn btn-warning" type="button" ng-click="vm.cancelDailyTaskCategory()">Cancel</button>
+</div>

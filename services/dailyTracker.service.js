@@ -4,7 +4,6 @@ var Q = require('q');
 var mongoose = require("mongoose");
 var UserModel = require("../models/user.model");
 var DailyTrackerModel = require("../models/dailyTracker.model");
-mongoose.connect(config.connectionString);
 
 var service = {};
 

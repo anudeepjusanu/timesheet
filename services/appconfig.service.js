@@ -1,4 +1,4 @@
-﻿var config = require(__dirname+'/../config.json');
+﻿var config = require(__dirname + '/../config.json');
 var _ = require('lodash');
 var Q = require('q');
 //var mongo = require('mongoskin');
@@ -6,7 +6,6 @@ var Q = require('q');
 //db.bind("appsettings");
 var mongoose = require("mongoose");
 var appSetting = require("../models/appsetting.model");
-mongoose.connect(config.connectionString);
 
 var service = {};
 
@@ -19,11 +18,11 @@ module.exports = service;
 
 function getSettings() {
     var deferred = Q.defer();
-    appSetting.find({}).exec(function(error, response){
+    appSetting.find({}).exec(function (error, response) {
         if (error) deferred.reject(error);
-        if(response){
+        if (response) {
             deferred.resolve(response);
-        }else{
+        } else {
             deferred.resolve([]);
         }
     });
@@ -32,11 +31,11 @@ function getSettings() {
 
 function getSetting() {
     var deferred = Q.defer();
-    appSetting.find({}).exec(function(error, response){
+    appSetting.find({}).exec(function (error, response) {
         if (error) deferred.reject(error);
-        if(response){
+        if (response) {
             deferred.resolve(response);
-        }else{
+        } else {
             deferred.resolve([]);
         }
     });
@@ -45,12 +44,12 @@ function getSetting() {
 
 function saveSetting(settingData) {
     var deferred = Q.defer();
-    appSetting.findOneAndUpdate({"keyName": settingData.keyName}, 
-        {$set:{keyName: settingData.keyName, keyVal: settingData.keyVal}}, 
-        {upsert: true}).exec(function(error, response){
-        if (error) deferred.reject(error);
-        deferred.resolve(response);
-    });
+    appSetting.findOneAndUpdate({ "keyName": settingData.keyName },
+        { $set: { keyName: settingData.keyName, keyVal: settingData.keyVal } },
+        { upsert: true }).exec(function (error, response) {
+            if (error) deferred.reject(error);
+            deferred.resolve(response);
+        });
     return deferred.promise;
 }
 
@@ -59,11 +58,11 @@ function deleteSetting(params) {
     var appSettingObj = new appSetting();
     appSettingObj.keyName = params.keyName;
     appSettingObj.keyVal = params.keyVal;
-    appSettingObj.save(function(error, response){
+    appSettingObj.save(function (error, response) {
         if (error) deferred.reject(error);
-        if(response){
+        if (response) {
             deferred.resolve(response);
-        }else{
+        } else {
             deferred.resolve([]);
         }
     });

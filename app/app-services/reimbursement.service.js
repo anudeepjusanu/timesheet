@@ -17,8 +17,9 @@
 
         service.approveReimbursement = approveReimbursement;
         service.rejectReimbursement = rejectReimbursement;
-        service.claimApproveReimbursement = claimApproveReimbursement;
-        service.claimRejectReimbursement = claimRejectReimbursement;
+        service.expensesApproveReimbursement = expensesApproveReimbursement;
+        service.expencesRejectReimbursement = expencesRejectReimbursement;
+        service.paymentProcessReimbursement = paymentProcessReimbursement;
 
         service.getMyReceipts = getMyReceipts;
         service.getApproveReceipts = getApproveReceipts;
@@ -66,12 +67,16 @@
             return $http.put('/api/reimbursement/rejectReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
         }
 
-        function claimApproveReimbursement(reimbursementId, formData = {}) {
-            return $http.put('/api/reimbursement/claimApproveReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
+        function expensesApproveReimbursement(reimbursementId, formData = {}) {
+            return $http.put('/api/reimbursement/expensesApproveReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
         }
 
-        function claimRejectReimbursement(reimbursementId, formData = {}) {
-            return $http.put('/api/reimbursement/claimRejectReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
+        function expencesRejectReimbursement(reimbursementId, formData = {}) {
+            return $http.put('/api/reimbursement/expencesRejectReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
+        }
+
+        function paymentProcessReimbursement(reimbursementId, formData = {}) {
+            return $http.put('/api/reimbursement/paymentProcessReimbursement/' + reimbursementId, formData).then(handleSuccess, handleError);
         }
 
         function deleteReimbursement(reimbursementId) {
@@ -147,24 +152,35 @@
         function getReimbursementCategories() {
             return [
                 { "categoryTypeId": "Business Cards", "categoryTypeVal": "Business Cards" },
-                { "categoryTypeId": "Business Meals", "categoryTypeVal": "Business Meals" },
+                { "categoryTypeId": "Computer Peripherals", "categoryTypeVal": "Computer Peripherals" },
+                { "categoryTypeId": "Conveyance Expenses", "categoryTypeVal": "Conveyance Expenses" },
+                { "categoryTypeId": "Domain & Renewals", "categoryTypeVal": "Domain & Renewals" },
                 { "categoryTypeId": "Dues", "categoryTypeVal": "Dues" },
+                { "categoryTypeId": "Electricity Expense", "categoryTypeVal": "Electricity Expense" },
+                { "categoryTypeId": "Food Expense", "categoryTypeVal": "Food Expense" },
                 { "categoryTypeId": "Legal Fees", "categoryTypeVal": "Legal Fees" },
                 { "categoryTypeId": "License Fees", "categoryTypeVal": "License Fees" },
+                { "categoryTypeId": "Internet Expense", "categoryTypeVal": "Internet Expense" },
                 { "categoryTypeId": "Mileage", "categoryTypeVal": "Mileage" },
                 { "categoryTypeId": "Office Supplies", "categoryTypeVal": "Office Supplies" },
                 { "categoryTypeId": "Passport fee", "categoryTypeVal": "Passport fee" },
                 { "categoryTypeId": "Postage", "categoryTypeVal": "Postage" },
                 { "categoryTypeId": "Printer Cartridges", "categoryTypeVal": "Printer Cartridges" },
                 { "categoryTypeId": "Printer Paper", "categoryTypeVal": "Printer Paper" },
+                { "categoryTypeId": "Postage & Courier", "categoryTypeVal": "Postage & Courier" },
+                { "categoryTypeId": "Printing & Stationary", "categoryTypeVal": "Printing & Stationary" },
+                { "categoryTypeId": "Proffessional Charges", "categoryTypeVal": "Proffessional Charges" },
                 { "categoryTypeId": "Software", "categoryTypeVal": "Software" },
                 { "categoryTypeId": "Stationery", "categoryTypeVal": "Stationery" },
                 { "categoryTypeId": "Subscriptions", "categoryTypeVal": "Subscriptions" },
-                { "categoryTypeId": "Telephones", "categoryTypeVal": "Telephones" },
+                { "categoryTypeId": "Staff Welfare / Team Lunch", "categoryTypeVal": "Staff Welfare / Team Lunch" },
+                { "categoryTypeId": "Telephone Expenses", "categoryTypeVal": "Telephone Expenses" },
                 { "categoryTypeId": "Tools", "categoryTypeVal": "Tools" },
                 { "categoryTypeId": "Training Fees", "categoryTypeVal": "Training Fees" },
                 { "categoryTypeId": "Travel", "categoryTypeVal": "Travel" },
+                { "categoryTypeId": "Rent Expenses", "categoryTypeVal": "Rent Expenses" },
                 { "categoryTypeId": "Work Clothing", "categoryTypeVal": "Work Clothing" },
+                { "categoryTypeId": "Vehicle Maintenance", "categoryTypeVal": "Vehicle Maintenance" },
                 { "categoryTypeId": "Other", "categoryTypeVal": "Other" }
             ];
         }

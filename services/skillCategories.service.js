@@ -3,7 +3,6 @@ var _ = require('lodash');
 var Q = require('q');
 var mongoose = require("mongoose");
 var skillCategories = require("../models/skillCategories.model");
-mongoose.connect(config.connectionString);
 
 var service = {};
 

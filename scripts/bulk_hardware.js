@@ -5,7 +5,6 @@ var _ = require('lodash');
 var mongoose = require("mongoose");
 var InventoryModel = require("../models/inventory.model");
 var UserModel = require("../models/user.model");
-const { async } = require('q');
 mongoose.connect(config.connectionString);
 
 var devices = [];

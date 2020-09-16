@@ -6,9 +6,6 @@ var ReimbursementModel = require("../models/reimbursement.model");
 var ReimbursementReciptModel = require("../models/reimbursementReceipt.model");
 var ProjectModel = require("../models/project.model");
 var UserModel = require("../models/user.model");
-const { async } = require('q');
-const { find } = require('lodash');
-mongoose.connect(config.connectionString);
 
 var service = {};
 
@@ -46,9 +43,9 @@ function getMyReimbursements(userId) {
             { $unwind: { path: "$project", preserveNullAndEmptyArrays: true } },
             {
                 $project: {
-                    userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1,
-                    createdBy: 1, createdOn: 1, receipts: 1, approveUserName: '$approveUser.name',
-                    userName: '$user.name', employeeId: '$user.employeeId', projectName: '$project.projectName'
+                    userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1, history: 1,
+                    createdBy: 1, createdOn: 1, receipts: 1, comment: 1, approveUserName: '$approveUser.name', userName: '$user.name',
+                    employeeId: '$user.employeeId', projectName: '$project.projectName'
                 }
             },
             { $sort: { createdOn: -1 } }
@@ -73,9 +70,9 @@ function getTeamReimbursements(userId) {
             { $unwind: { path: "$project", preserveNullAndEmptyArrays: true } },
             {
                 $project: {
-                    userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1,
-                    createdBy: 1, createdOn: 1, receipts: 1, items: 1, approveUserName: '$approveUser.name',
-                    userName: '$user.name', employeeId: '$user.employeeId', projectName: '$project.projectName'
+                    userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1, history: 1,
+                    createdBy: 1, createdOn: 1, receipts: 1, comment: 1, approveUserName: '$approveUser.name', userName: '$user.name',
+                    employeeId: '$user.employeeId', projectName: '$project.projectName'
                 }
             },
             { $sort: { createdOn: -1 } }
@@ -94,7 +91,7 @@ function getTeamReimbursements(userId) {
 function getAccountReimbursements(userId) {
     return new Promise((resolve, reject) => {
         ReimbursementModel.aggregate([
-            { $match: { status: { $in: ['Approved', 'Expenses Approved', 'Payment Rejected'] } } },
+            { $match: { status: { $in: ['Approved', 'Expenses Approved', 'Expenses Rejected', 'Payment Processed'] } } },
             { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "user" } },
             { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
             { $lookup: { from: "users", localField: "approveUserId", foreignField: "_id", as: "approveUser" } },
@@ -103,9 +100,9 @@ function getAccountReimbursements(userId) {
             { $unwind: { path: "$project", preserveNullAndEmptyArrays: true } },
             {
                 $project: {
-                    userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1,
-                    createdBy: 1, createdOn: 1, receipts: 1, approveUserName: '$approveUser.name',
-                    userName: '$user.name', employeeId: '$user.employeeId', projectName: '$project.projectName'
+                    userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1, history: 1,
+                    createdBy: 1, createdOn: 1, receipts: 1, comment: 1, approveUserName: '$approveUser.name', userName: '$user.name',
+                    employeeId: '$user.employeeId', projectName: '$project.projectName'
                 }
             },
             { $sort: { createdOn: -1 } }
@@ -128,7 +125,7 @@ function getReimbursement(ReimbursementId) {
             { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "user" } },
             {
                 $project: {
-                    userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1, createdBy: 1,
+                    userId: 1, approveUserId: 1, projectId: 1, reimbursementMonth: 1, purpose: 1, status: 1, totalAmount: 1, createdBy: 1, comment: 1,
                     createdOn: 1, receipts: 1, userName: '$user.name', employeeId: '$user.employeeId', projectName: '$project.projectName'
                 }
             }
@@ -177,16 +174,84 @@ function addReimbursement(reimbursementData) {
     });
 }
 
-function updateReimbursement(ReimbursementId, ReimbursementData) {
-    return new Promise((resolve, reject) => {
-        if (ReimbursementData.userId) {
-            ReimbursementData.userId = mongoose.Types.ObjectId(ReimbursementData.userId);
+function updateReimbursement(ReimbursementId, reimbursementData, sessionUserId = null) {
+    return new Promise(async (resolve, reject) => {
+        var historyObj = {
+            actionName: (reimbursementData.status) ? reimbursementData.status : "Updated",
+            comment: (reimbursementData.comment) ? reimbursementData.comment : "",
+            updatedBy: (sessionUserId !== null) ? mongoose.Types.ObjectId(sessionUserId) : null,
+            updatedOn: new Date()
+        };
+        if (reimbursementData.status == 'Submitted') {
+            for (var i = 0; i < reimbursementData.receipts.length; i++) {
+                reimbursementData.receipts[i] = mongoose.Types.ObjectId(reimbursementData.receipts[i]);
+            }
+            var receiptSum = await ReimbursementReciptModel.aggregate([
+                { $match: { "_id": { "$in": reimbursementData.receipts } } },
+                {
+                    $group: {
+                        _id: null,
+                        total: {
+                            $sum: "$receiptAmount"
+                        }
+                    }
+                }
+            ]).exec();
+            reimbursementData.totalAmount = (receiptSum[0]) ? receiptSum[0].total : 0.0;
+        } else if (reimbursementData.status == 'Approved') {
+            var totalApprovedAmount = 0;
+            for (var i = 0; i < reimbursementData.receipts.length; i++) {
+                var receiptObj = reimbursementData.receipts[i];
+                await ReimbursementReciptModel.updateOne({ '_id': mongoose.Types.ObjectId(receiptObj._id) },
+                    { $set: { approvedAmount: receiptObj.approvedAmount } }).exec();
+                totalApprovedAmount += parseFloat(receiptObj.approvedAmount);
+            }
+            reimbursementData = {
+                status: reimbursementData.status,
+                totalAmount: totalApprovedAmount,
+                comment: reimbursementData.comment
+            }
+        } else if (reimbursementData.status == 'Rejected') {
+            //reimbursementData['$push'] = { "history": {} }
+        } else if (reimbursementData.status == 'Payment Processed' && reimbursementData.receipts) {
+            for (var i = 0; i < reimbursementData.receipts.length; i++) {
+                var receiptObj = reimbursementData.receipts[i];
+                await ReimbursementReciptModel.updateOne({ '_id': mongoose.Types.ObjectId(receiptObj._id) },
+                    { $set: { status: "Paid" } }).exec();
+            }
         }
-        ReimbursementModel.updateOne({ _id: mongoose.Types.ObjectId(ReimbursementId) }, { $set: ReimbursementData }).exec().then((data) => {
-            resolve(data);
-        }).catch((error) => {
-            reject({ error: error.errmsg });
+        ReimbursementModel.findById(ReimbursementId, function (err, reimbursementObj) {
+            if (err) return reject(err);
+            reimbursementObj.history.push(historyObj);
+            if (reimbursementData.userId) {
+                reimbursementObj.userId = mongoose.Types.ObjectId(reimbursementData.userId);
+            }
+            if (reimbursementData.projectId) {
+                reimbursementObj.projectId = mongoose.Types.ObjectId(reimbursementData.projectId);
+            }
+            if (reimbursementData.approveUserId) {
+                reimbursementObj.approveUserId = mongoose.Types.ObjectId(reimbursementData.approveUserId);
+            }
+            reimbursementObj.reimbursementMonth = (reimbursementData.reimbursementMonth) ? reimbursementData.reimbursementMonth : reimbursementObj.reimbursementMonth;
+            reimbursementObj.purpose = (reimbursementData.purpose) ? reimbursementData.purpose : reimbursementObj.purpose;
+            reimbursementObj.status = (reimbursementData.status) ? reimbursementData.status : reimbursementObj.status;
+            reimbursementObj.comment = (reimbursementData.comment) ? reimbursementData.comment : reimbursementObj.comment;
+            if (reimbursementData.totalAmount) {
+                reimbursementObj.totalAmount = reimbursementData.totalAmount;
+            }
+            reimbursementObj.save(function (error) {
+                if (error) reject({ error });
+                resolve(reimbursementObj);
+            });
         });
+        // if (reimbursementData.userId) {
+        //     reimbursementData.userId = mongoose.Types.ObjectId(reimbursementData.userId);
+        // }
+        // ReimbursementModel.updateOne({ _id: mongoose.Types.ObjectId(ReimbursementId) }, { $set: reimbursementData }).exec().then((data) => {
+        //     resolve(data);
+        // }).catch((error) => {
+        //     reject({ error: error.errmsg });
+        // });
     });
 }
 
@@ -230,6 +295,7 @@ function addReimbursementReceipt(receiptData) {
         var receiptDataObj = {
             receiptDate: receiptData.receiptDate,
             receiptCategory: receiptData.receiptCategory,
+            receiptNumber: receiptData.receiptNumber,
             receiptDescription: receiptData.receiptDescription,
             receiptAmount: receiptData.receiptAmount
         };
@@ -257,6 +323,7 @@ function updateReimbursementReceipt(receiptId, receiptData) {
         var receiptDataObj = {
             receiptDate: receiptData.receiptDate,
             receiptCategory: receiptData.receiptCategory,
+            receiptNumber: receiptData.receiptNumber,
             receiptDescription: receiptData.receiptDescription,
             receiptAmount: receiptData.receiptAmount
         };

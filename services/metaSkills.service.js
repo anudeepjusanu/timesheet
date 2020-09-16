@@ -3,7 +3,6 @@ var _ = require('lodash');
 var Q = require('q');
 var mongoose = require("mongoose");
 var metaSkills = require("../models/metaSkills.model");
-mongoose.connect(config.connectionString);
 
 var service = {};
 

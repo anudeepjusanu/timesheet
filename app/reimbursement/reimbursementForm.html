@@ -12,57 +12,52 @@
     </div>
     <form class="form-horizontal" id="reimburseForm" name="vm.reimburseForm">
         <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
-                <div class="form-group required">
-                    <label class="col-md-2 col-xs-12 control-label">Employee</label>
-                    <div class="col-md-6 col-xs-12">
-                        <input type="text" ng-model="vm.reimbursementObj.userName" class="form-control"
-                            ng-disabled="true" />
-                    </div>
+            <div class="form-group required">
+                <label class="col-md-2 col-xs-12 control-label">Employee</label>
+                <div class="col-md-3 col-xs-12">
+                    <input type="text" ng-model="vm.reimbursementObj.userName" class="form-control"
+                        ng-disabled="true" />
                 </div>
-                <div class="form-group required">
-                    <label class="col-md-2 col-xs-12 control-label">Project</label>
-                    <div class="col-md-3 col-xs-12">
-                        <select class="form-control" ng-model="vm.reimbursementObj.project"
-                            ng-change="vm.changeProject();"
-                            ng-options="project as project.projectName for project in vm.activeProjects" required>
-                        </select>
-                    </div>
-                    <label class="col-md-2 col-xs-12 control-label">Approval</label>
-                    <div class="col-md-3 col-xs-12">
-                        <select class="form-control" ng-model="vm.reimbursementObj.approveUserId"
-                            ng-options="user._id as user.name for user in vm.approveActiveUsers" required>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group required">
-                    <label class="col-md-2 col-xs-12 control-label">Month</label>
-                    <div class="col-md-2 col-xs-12">
-                        <p class="input-group">
-                            <input type="text" id="fromDate" class="form-control" uib-datepicker-popup
-                                ng-model="vm.reimbursementObj.reimbursementMonth" is-open="vm.fromDateOpened"
-                                datepicker-options="vm.dateOptions" close-text="Close" required />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default"
-                                    ng-click="vm.fromDateOpened=!vm.fromDateOpened">
-                                    <i class="glyphicon glyphicon-calendar"></i>
-                                </button>
-                            </span>
-                        </p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 col-xs-12 control-label">Business Purpose</label>
-                    <div class="col-md-6 col-xs-12">
-                        <td>
-                            <textarea class="form-control" ng-model="vm.reimbursementObj.purpose"
-                                placeholder="Enter your purpose" rows="2"></textarea>
-                        </td>
-                    </div>
+                <label class="col-md-1 col-xs-12 control-label">Month</label>
+                <div class="col-md-2 col-xs-12">
+                    <p class="input-group">
+                        <input type="text" id="fromDate" class="form-control" uib-datepicker-popup
+                            ng-model="vm.reimbursementObj.reimbursementMonth" is-open="vm.fromDateOpened"
+                            datepicker-options="vm.dateOptions" close-text="Close" required />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default"
+                                ng-click="vm.fromDateOpened=!vm.fromDateOpened">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    </p>
                 </div>
             </div>
-            <div class="col-md-1"></div>
+            <div class="form-group required">
+                <label class="col-md-2 col-xs-12 control-label">Project</label>
+                <div class="col-md-3 col-xs-12">
+                    <select class="form-control" ng-model="vm.reimbursementObj.project" ng-change="vm.changeProject();"
+                        ng-options="project as project.projectName for project in vm.activeProjects" required>
+                    </select>
+                </div>
+                <label class="col-md-1 col-xs-12 control-label">Approval</label>
+                <div class="col-md-3 col-xs-12">
+                    <select class="form-control" ng-model="vm.reimbursementObj.approveUserId"
+                        ng-options="user._id as user.name for user in vm.approveActiveUsers" required>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 col-xs-12 control-label">Business Purpose</label>
+                <div class="col-md-6 col-xs-12">
+                    <textarea class="form-control" ng-model="vm.reimbursementObj.purpose"
+                        placeholder="Enter your purpose" rows="2"></textarea>
+                </div>
+            </div>
+            <div ng-if="vm.reimbursementObj.comment" class="form-group">
+                <label class="col-md-2 col-xs-12 control-label">Comment</label>
+                <div class="col-md-6 col-xs-12"> <span>{{vm.reimbursementObj.comment}}</span> </div>
+            </div>
         </div>
         <br />
         <div class="row">
@@ -75,6 +70,7 @@
                                 <tr>
                                     <th class="table-heading">Date</th>
                                     <th class="table-heading">Category</th>
+                                    <th class="table-heading">Number</th>
                                     <th class="table-heading">Description</th>
                                     <th class="table-heading">Amount</th>
                                     <th class="table-heading">Approved Amount</th>
@@ -83,9 +79,15 @@
                                 <tr ng-repeat="item in vm.reimbursementObj.receipts">
                                     <td class="table-heading" style="width: 100px;">{{item.receiptDate}}</td>
                                     <td class="table-heading" style="width: 180px;">{{item.receiptCategory}}</td>
+                                    <td class="table-heading" style="width: 180px;">{{item.receiptNumber}}</td>
                                     <td class="table-heading">{{item.receiptDescription}}</td>
-                                    <td class="table-heading" style="width: 100px;"><span class="fa fa-inr"></span> {{item.receiptAmount}}</td>
-                                    <td class="table-heading " style="width: 140px;"><span class="fa fa-inr"></span> {{item.approvedAmount}} </td>
+                                    <td class="table-heading" style="width: 100px;">
+                                        <span class="fa fa-inr"></span>
+                                        {{item.receiptAmount}}</td>
+                                    <td class="table-heading " style="width: 140px;">
+                                        <span class="fa fa-inr"></span>
+                                        {{item.approvedAmount}}
+                                    </td>
                                     <td class="table-heading text-center" style="width: 60px;">
                                         <a href="/data/reimbursements/{{item.receiptFile}}" target="_blank">
                                             <span class="fa fa-file-text-o"></span>
@@ -93,17 +95,16 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3" class="table-heading"> <span class="pull-right">Total : </span></td>
+                                    <td colspan="5" class="table-heading"> <span class="pull-right">Total : </span></td>
                                     <td><span class="fa fa-inr"></span> {{vm.reimbursementObj.totalAmount}}</td>
                                     <td></td>
                                 </tr>
-                                
                             </table>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-1"></div>
-                <div ng-if="vm.reimbursementObj.status=='New' || vm.reimbursementObj.status=='Submitted'"
+                <div ng-if="vm.reimbursementObj.status=='New' || vm.reimbursementObj.status=='Submitted' || vm.reimbursementObj.status=='Rejected'"
                     class="text-center">
                     <button class="btn btn-success btn-rounded" ng-disabled="!vm.reimburseForm.$valid"
                         ng-click="vm.submitReimbursement(vm.reimburseForm, vm.reimbursementObj)">Submit

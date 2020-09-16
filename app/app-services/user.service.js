@@ -109,7 +109,7 @@
                 { id: "lead", name: "Lead" },
                 { id: "manager", name: "Manager" },
                 { id: "itsupport", name: "IT Support" },
-                { id: "account", name: "Account" }
+                { id: "finance", name: "Finance" }
             ];
         }
 

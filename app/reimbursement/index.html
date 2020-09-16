@@ -20,7 +20,7 @@
             </a>
         </div>
     </div>
-    
+
     <div class="row">
         <div class="col-md-6">
             <a ui-sref="teamReimbursements" ng-if="vm.user.userRole=='lead' || vm.user.userRole=='manager'"
@@ -31,7 +31,7 @@
             </a>
         </div>
         <div class="col-md-6">
-            <a ui-sref="accountReimbursements" ng-if="vm.user.userRole=='account'" class="tile tile-info"
+            <a ui-sref="accountReimbursements" ng-if="vm.user.userRole=='finance'" class="tile tile-info"
                 ng-class-even="tile-valign" style="font-size: 16px;">
                 Approved Reimbursements
                 <div class="informer informer-default"></div>

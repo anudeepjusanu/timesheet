@@ -5,8 +5,8 @@
     <div class="">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">My Receipts</h3>
-                <a class="btn btn-primary btn-rounded pull-right" ui-sref="receiptForm">Add Receipt</a>
+                <h3 class="panel-title">My Expenses</h3>
+                <a class="btn btn-primary btn-rounded pull-right" ui-sref="receiptForm">Add Expense</a>
             </div>
             <div class="panel-body tab-content">
                 <table class="table table-condensed table-bordered table-striped" export-table>
@@ -19,10 +19,11 @@
                             <th class="heading" style="width: 40px;">#</th>
                             <th class="table-heading" style="width: 100px;">Date</th>
                             <th class="table-heading" style="width: 160px;">Category</th>
+                            <th class="table-heading" style="width: 160px;">Receipt/Bill Number</th>
                             <th class="table-heading">Description</th>
                             <th class="table-heading" style="width: 120px;">Status</th>
                             <th class="table-heading" style="width: 80px;">Amount</th>
-                            <th class="table-heading" style="width: 80px;">Receipt</th>
+                            <th class="table-heading" style="width: 80px;">Attach</th>
                             <th class="table-heading" style="width: 120px;">Actions</th>
                         </tr>
                         <tr>
@@ -33,6 +34,7 @@
                                 <select class="form-control" ng-model="vm.searchObj.category"
                                     ng-options="categoryType.categoryTypeId as categoryType.categoryTypeVal for categoryType in vm.categories"></select>
                             </th>
+                            <th></th>
                             <th></th>
                             <th>
                                 <select class="form-control" ng-model="vm.searchObj.status"
@@ -52,11 +54,12 @@
                             <td class="table-heading">{{$index + 1}}</td>
                             <td class="table-heading">{{receipt.receiptDate}}</td>
                             <td class="table-heading">{{receipt.receiptCategory}}</td>
+                            <td class="table-heading">{{receipt.receiptNumber}}</td>
                             <td class="table-heading">{{receipt.receiptDescription}}</td>
                             <td class="table-heading">{{receipt.status}}</td>
                             <td class="table-heading "><span class="fa fa-inr"></span> {{receipt.receiptAmount}}</td>
-                            <td class="text-center" ng-controller="popupControl">
-                                <a href="/data/reimbursements/{{receipt.receiptFile}}">
+                            <td class="text-center">
+                                <a target="_blank" href="/data/reimbursements/{{receipt.receiptFile}}">
                                     <span class="fa fa-file-text-o"></span>
                                 </a>
                             </td>

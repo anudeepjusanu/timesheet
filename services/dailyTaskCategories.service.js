@@ -3,7 +3,6 @@ var _ = require('lodash');
 var Q = require('q');
 var mongoose = require("mongoose");
 const DailyTaskCategory = require("../models/dailyTaskCategories.model");
-mongoose.connect(config.connectionString);
 
 var service = {};
 
