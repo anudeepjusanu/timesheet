@@ -4,6 +4,40 @@
 <head>
     <meta charset="utf-8" />
     <title>Wavelabs</title>
+     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="bower_components/lodash/dist/lodash.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.4.14/angular-sanitize.min.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src='bower_components/angular-loading-bar/build/loading-bar.min.js'></script>
+    <script src='bower_components/angular-ui-select/dist/select.js'></script>
+    <script src="bower_components/angular-chips/dist/angular-chips.min.js"></script>
+    <script src="libs/tableExport.js"></script>
+    <script src="libs/xlsx.core.min.js"></script>
+    <script src="libs/jquery.base64.js"></script>
+    <script src="libs/ng-table.min.js"></script>
+    <script src="libs/pdfmake.min.js"></script>
+    <script src="libs/vfs_fonts.js"></script>
+    <script src='libs/js/plugins/noty/jquery.noty.js'></script>
+    <script src="libs/angular-noty.js"></script>
+    <!-- START PLUGINS -->
+    <script type="text/javascript" src="libs/js/plugins/jquery/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="libs/js/plugins/bootstrap/bootstrap.min.js"></script>
+    <!-- CHARTS -->
+    <script src="bower_components/chart.js/dist/Chart.min.js"></script>
+    <script src="bower_components/angular-chart.js/dist/angular-chart.min.js"></script>
+    <!-- END PLUGINS -->
+    <!-- START THIS PAGE PLUGINS-->
+    <script type='text/javascript' src='libs/js/plugins/icheck/icheck.min.js'></script>
+    <script type="text/javascript" src="libs/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+    <script type="text/javascript" src="libs/js/plugins/scrolltotop/scrolltopcontrol.js"></script>
+    <script type='text/javascript' src='libs/js/plugins/bootstrap/bootstrap-datepicker.js'></script>
+    <script type="text/javascript" src="libs/js/plugins/owl/owl.carousel.min.js"></script>
+    <script type="text/javascript" src="libs/js/plugins/moment.min.js"></script>
+    <script type="text/javascript" src="libs/js/plugins/daterangepicker/daterangepicker.js"></script>
+    <script type="text/javascript" src="app-content/jquery/jquery-ui.min.js"></script> 
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/angular-bootstrap-toggle@0.4.0/dist/angular-bootstrap-toggle.min.css">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -17,11 +51,14 @@
     <link href="app-content/wavelabs.css" rel="stylesheet" />
     <link rel="manifest" href="manifest.json" />
 
+
 </head>
 
 <body>
+    <script type="text/javascript" src="app-content/jquery/jquery-ui.min.js"></script>
     <div ui-view></div>
     <div class="regId"></div>
+
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./service-worker.js', {
@@ -77,39 +114,7 @@
         }
     </script>
     <!-- external scripts -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="bower_components/lodash/dist/lodash.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.4.14/angular-sanitize.min.js"></script>
-    <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
-    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script src='bower_components/angular-loading-bar/build/loading-bar.min.js'></script>
-    <script src='bower_components/angular-ui-select/dist/select.js'></script>
-    <script src="bower_components/angular-chips/dist/angular-chips.min.js"></script>
-    <script src="libs/tableExport.js"></script>
-    <script src="libs/xlsx.core.min.js"></script>
-    <script src="libs/jquery.base64.js"></script>
-    <script src="libs/ng-table.min.js"></script>
-    <script src="libs/pdfmake.min.js"></script>
-    <script src="libs/vfs_fonts.js"></script>
-    <script src='libs/js/plugins/noty/jquery.noty.js'></script>
-    <script src="libs/angular-noty.js"></script>
-    <!-- START PLUGINS -->
-    <script type="text/javascript" src="libs/js/plugins/jquery/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="libs/js/plugins/bootstrap/bootstrap.min.js"></script>
-    <!-- CHARTS -->
-    <script src="bower_components/chart.js/dist/Chart.min.js"></script>
-    <script src="bower_components/angular-chart.js/dist/angular-chart.min.js"></script>
-    <!-- END PLUGINS -->
-    <!-- START THIS PAGE PLUGINS-->
-    <script type='text/javascript' src='libs/js/plugins/icheck/icheck.min.js'></script>
-    <script type="text/javascript" src="libs/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
-    <script type="text/javascript" src="libs/js/plugins/scrolltotop/scrolltopcontrol.js"></script>
-    <script type='text/javascript' src='libs/js/plugins/bootstrap/bootstrap-datepicker.js'></script>
-    <script type="text/javascript" src="libs/js/plugins/owl/owl.carousel.min.js"></script>
-    <script type="text/javascript" src="libs/js/plugins/moment.min.js"></script>
-    <script type="text/javascript" src="libs/js/plugins/daterangepicker/daterangepicker.js"></script>
+   
 
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/3.6.6/firebase.js"></script>

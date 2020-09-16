@@ -1,4 +1,4 @@
-﻿(function () {
+﻿ (function () {
     'use strict';
 
     angular
@@ -411,6 +411,7 @@
                 } else { }
             }
         });
+        
         // update active tab on state change
         $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
             $timeout(function () {
