@@ -16,13 +16,13 @@
                 return output;
             }
         });
-    function ManageJobOpeningsController(UserService, DailyTrackerService, $uibModal, FlashService, noty) {
+    function ManageJobOpeningsController(UserService, JobOpeningService, $uibModal, FlashService, noty) {
         var vm = this;
         vm.user = {};
         vm.jobOpenings = [];
 
         function getManageJobOpenings() {
-            DailyTrackerService.getManageJobOpenings().then(function (data) {
+            JobOpeningService.getAllJobOpenings().then(function (data) {
                 if (data.jobOpenings) {
                     vm.jobOpenings = data.jobOpenings;
                 }
@@ -31,25 +31,25 @@
             });
         }
 
-        vm.viewManageJobOpeningModel = function (JobOpeningObj) {
-            var JobOpening = {};
-            if (JobOpeningObj) {
-                JobOpening = JobOpeningObj;
-                JobOpening.isNew = false;
+        vm.viewManageJobOpeningModel = function (jobOpeningObj) {
+            var jobOpening = {};
+            if (jobOpeningObj) {
+                jobOpening = jobOpeningObj;
+                jobOpening.isNew = false;
             } else {
-                JobOpening.isNew = true;
+                jobOpening.isNew = true;
             }
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
-                templateUrl: 'jobOpenings/jobOpeningForm.html',
+                templateUrl: 'jobOpenings/manageJobOpeningForm.html',
                 controller: 'JobOpenings.ManageJobOpeningModel',
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
-                    JobOpening: function () {
-                        return JobOpening;
+                    jobOpening: function () {
+                        return jobOpening;
                     }
                 }
             });
@@ -64,7 +64,7 @@
 
         vm.delManageJobOpening = function (JobOpening) {
             if (confirm("Do you want to delete this Job Opening?")) {
-                DailyTrackerService.delManageJobOpening(JobOpening).then(function (response) {
+                JobOpeningService.delJobOpening(JobOpening).then(function (response) {
                     getManageJobOpenings();
                 });
             }
@@ -79,39 +79,38 @@
         }
     }
 
-    function ManageJobOpeningModel($uibModalInstance, DailyTrackerService, noty, JobOpening) {
+    function ManageJobOpeningModel($uibModalInstance, JobOpeningService, noty, jobOpening) {
         var vm = this;
         vm.enableSaveBtn = true;
         vm.alerts = [];
-        vm.JobOpening = JobOpening;
+        vm.jobOpening = jobOpening;
 
         vm.saveManageJobOpening = function (form) {
             if (form.$valid) {
-                console.log(vm.JobOpening);
                 vm.enableSaveBtn = false;
-                if (vm.JobOpening.isNew === true) {
-                    DailyTrackerService.addManageJobOpening(vm.JobOpening).then(function (response) {
+                if (vm.jobOpening.isNew === true) {
+                    JobOpeningService.addJobOpening(vm.jobOpening).then(function (response) {
                         noty.showSuccess("Job Opening has been added successfully!");
                         vm.enableSaveBtn = true;
-                        $uibModalInstance.close(vm.JobOpening);
+                        $uibModalInstance.close(vm.jobOpening);
                     }, function (error) {
                         if (error) {
                             vm.alerts.push({ msg: error, type: 'danger' });
                         }
                         vm.enableSaveBtn = true;
-                        $uibModalInstance.close(vm.JobOpening);
+                        $uibModalInstance.close(vm.jobOpening);
                     });
                 } else {
-                    DailyTrackerService.updateManageJobOpening(vm.JobOpening).then(function (response) {
+                    JobOpeningService.updateJobOpening(vm.jobOpening).then(function (response) {
                         noty.showSuccess("Job Opening has been updated successfully!");
                         vm.enableSaveBtn = true;
-                        $uibModalInstance.close(vm.JobOpening);
+                        $uibModalInstance.close(vm.jobOpening);
                     }, function (error) {
                         if (error) {
                             vm.alerts.push({ msg: error, type: 'danger' });
                         }
                         vm.enableSaveBtn = true;
-                        $uibModalInstance.close(vm.JobOpening);
+                        $uibModalInstance.close(vm.jobOpening);
                     });
                 }
             } else {
