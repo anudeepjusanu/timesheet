@@ -253,6 +253,7 @@ app.use('/api/chatbot', require('./controllers/api/chatbot.controller'));
 app.use('/data', require('./controllers/api/fileData.controller'));
 app.use('/api/reimbursement', require('./controllers/api/reimbursement.controller'));
 app.use('/api/dailyTracker', require('./controllers/api/dailyTracker.controller'));
+app.use('/api/jobOpening', require('./controllers/api/jobOpening.controller'));
 
 // make '/app' default route
 app.get('/', function (req, res) {

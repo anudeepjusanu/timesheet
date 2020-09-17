@@ -394,7 +394,7 @@
             .state('manageJobOpenings', {
                 url: '/jobOpenings/manageJobOpenings',
                 templateUrl: 'jobOpenings/manageJobOpenings.html',
-                controller: 'JobOpening.DailyTaskCategoriesController',
+                controller: 'JobOpenings.ManageJobOpeningsController',
                 controllerAs: 'vm',
                 parent: 'layout',
                 data: { activeTab: 'manageJobOpenings' }

@@ -2,11 +2,13 @@
 var _ = require('lodash');
 var Q = require('q');
 var mongoose = require("mongoose");
-var JobOpeningModel = require("../models/userskill.model");
+var JobOpeningModel = require("../models/jobOpening.model");
+var JobOpeningReferModel = require("../models/jobOpeningRefer.model");
 
 var service = {};
 
-service.getJobOpenings = getJobOpenings;
+service.getActiveJobOpenings = getActiveJobOpenings;
+service.referJobOpening = referJobOpening;
 service.getAllJobOpenings = getAllJobOpenings;
 service.getJobOpening = getJobOpening;
 service.addJobOpening = addJobOpening;
@@ -15,13 +17,25 @@ service.deleteJobOpening = deleteJobOpening;
 
 module.exports = service;
 
-function getJobOpenings() {
+function getActiveJobOpenings() {
     return new Promise((resolve, reject) => {
         JobOpeningModel.find({ isActive: true }).exec().then((data) => {
             resolve(data);
         }).catch((error) => {
             console.log(error);
             reject({ error: (error.errmsg ? error.errmsg : "Unexpected error") });
+        });
+    });
+}
+
+function referJobOpening(JobOpeningReferData) {
+    return new Promise((resolve, reject) => {
+        JobOpeningReferModel = new JobOpeningReferModel(JobOpeningReferData);
+        JobOpeningReferModel.save(function (error, data) {
+            if (error) {
+                reject({ error: error });
+            }
+            resolve(data);
         });
     });
 }
@@ -47,9 +61,14 @@ function getJobOpening(JobOpeningId) {
     });
 }
 
-function addJobOpening(JobOpeningData) {
+function addJobOpening(jobOpening) {
     return new Promise((resolve, reject) => {
-        JobOpeningObj = new JobOpeningModel(JobOpeningData);
+        var jobOpeningData = {
+            jobCode: jobOpening.jobCode ? jobOpening.jobCode : null,
+            jobTitle: jobOpening.jobTitle,
+            jobExperience: jobOpening.jobExperience
+        };
+        JobOpeningObj = new JobOpeningModel(jobOpeningData);
         JobOpeningObj.save(function (error, data) {
             if (error) {
                 reject({ error: error });
@@ -59,9 +78,15 @@ function addJobOpening(JobOpeningData) {
     });
 }
 
-function updateJobOpening(JobOpeningId, JobOpeningData) {
+function updateJobOpening(JobOpeningId, jobOpening) {
     return new Promise((resolve, reject) => {
-        JobOpeningModel.updateOne({ _id: mongoose.Types.ObjectId(JobOpeningId) }, { $set: JobOpeningData }).exec().then((data) => {
+        var jobOpeningData = {
+            jobCode: jobOpening.jobCode ? jobOpening.jobCode : null,
+            jobTitle: jobOpening.jobTitle,
+            jobExperience: jobOpening.jobExperience,
+            isActive: jobOpening.isActive
+        };
+        JobOpeningModel.updateOne({ _id: mongoose.Types.ObjectId(JobOpeningId) }, { $set: jobOpeningData }).exec().then((data) => {
             resolve(data);
         }).catch((error) => {
             reject({ error: error.errmsg });
