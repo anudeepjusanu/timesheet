@@ -4,6 +4,8 @@ var router = express.Router();
 const JobOpeningService = require('../../services/jobOpenings.service');
 
 // routes
+router.get('/activeJobOpenings', getActiveJobOpenings);
+router.get('/referJobOpening', referJobOpening);
 
 router.get('/jobOpenings', getJobOpenings);
 router.get('/jobOpening/:_id', getJobOpening);
@@ -13,8 +15,22 @@ router.delete('/jobOpening/:_id', delJobOpening);
 
 module.exports = router;
 
-/** Daily Tracker Task */
+/** Active Job Openings */
+function getActiveJobOpenings(req, res) {
+    JobOpeningService.getActiveJobOpenings().then(data => {
+        res.send({ jobOpenings: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
 
+function referJobOpening(req, res) {
+    JobOpeningService.referJobOpening(req.body).then(data => {
+        res.send({ jobOpening: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
 
 /** Manage Job Openings */
 function getJobOpenings(req, res) {

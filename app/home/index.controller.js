@@ -108,7 +108,7 @@
             }
         })
 
-    function Controller(UserService, TimesheetService, ProjectService, $filter, _, $interval, $window) {
+    function Controller(UserService, TimesheetService, JobOpeningService, ProjectService, $filter, _, $interval, $window) {
         var vm = this;
         var currentDate;
         vm.widgetDate;
@@ -353,17 +353,26 @@
         tick();
         $interval(tick, 1000);
 
-        vm.jobs = [
-            { jobCode: "ML001", jobTitle: "Machine Learning Engineer", experience: "4+ years" },
-            { jobCode: "JAVA002", jobTitle: "Java Developer", experience: "5 - 7 years" },
-            { jobCode: "GO003", jobTitle: "Golang Developer", experience: "4+ years" },
-            { jobCode: "BIG004", jobTitle: "Big Data Engineer", experience: "4+ years" },
-            { jobCode: "UI005", jobTitle: "UI Lead", experience: "8+ years" },
-            { jobCode: "COREUI006", jobTitle: "Core UI Developer", experience: "3 - 5 years" },
-            { jobCode: "REACT007", jobTitle: "ReactJs Developer", experience: "3+ years" },
-            { jobCode: "DATA008", jobTitle: "Data Engineer", experience: "3 - 5 years" },
-            { jobCode: "SALES009", jobTitle: "Salesforce Developer", experience: "3 - 5 years" },
-        ];
+        // vm.jobs = [
+        //     { jobCode: "ML001", jobTitle: "Machine Learning Engineer", experience: "4+ years" },
+        //     { jobCode: "JAVA002", jobTitle: "Java Developer", experience: "5 - 7 years" },
+        //     { jobCode: "GO003", jobTitle: "Golang Developer", experience: "4+ years" },
+        //     { jobCode: "BIG004", jobTitle: "Big Data Engineer", experience: "4+ years" },
+        //     { jobCode: "UI005", jobTitle: "UI Lead", experience: "8+ years" },
+        //     { jobCode: "COREUI006", jobTitle: "Core UI Developer", experience: "3 - 5 years" },
+        //     { jobCode: "REACT007", jobTitle: "ReactJs Developer", experience: "3+ years" },
+        //     { jobCode: "DATA008", jobTitle: "Data Engineer", experience: "3 - 5 years" },
+        //     { jobCode: "SALES009", jobTitle: "Salesforce Developer", experience: "3 - 5 years" },
+        // ];
+        vm.jobs = [];
+
+        function getActiveJobOpenings() {
+            JobOpeningService.getActiveJobOpenings().then(function (response) {
+                console.log(response);
+                vm.jobs = response.jobOpenings;
+            })
+        };
+        getActiveJobOpenings();
 
         function getUsers() {
             UserService.getUsers().then(function (users) {
