@@ -5,6 +5,7 @@
         .module('app')
         .controller('JobOpenings.ManageJobOpeningsController', ManageJobOpeningsController)
         .controller('JobOpenings.ManageJobOpeningModel', ManageJobOpeningModel)
+        .controller('JobOpenings.ReferJobOpeningController', ReferJobOpeningController)
         .filter('MyReceiptsSearch', function ($filter) {
             return function (input, searchObj) {
                 var output = input;
@@ -80,6 +81,51 @@
     }
 
     function ManageJobOpeningModel($uibModalInstance, JobOpeningService, noty, jobOpening) {
+        var vm = this;
+        vm.enableSaveBtn = true;
+        vm.alerts = [];
+        vm.jobOpening = jobOpening;
+
+        vm.saveManageJobOpening = function (form) {
+            if (form.$valid) {
+                vm.enableSaveBtn = false;
+                if (vm.jobOpening.isNew === true) {
+                    JobOpeningService.addJobOpening(vm.jobOpening).then(function (response) {
+                        noty.showSuccess("Job Opening has been added successfully!");
+                        vm.enableSaveBtn = true;
+                        $uibModalInstance.close(vm.jobOpening);
+                    }, function (error) {
+                        if (error) {
+                            vm.alerts.push({ msg: error, type: 'danger' });
+                        }
+                        vm.enableSaveBtn = true;
+                        $uibModalInstance.close(vm.jobOpening);
+                    });
+                } else {
+                    JobOpeningService.updateJobOpening(vm.jobOpening).then(function (response) {
+                        noty.showSuccess("Job Opening has been updated successfully!");
+                        vm.enableSaveBtn = true;
+                        $uibModalInstance.close(vm.jobOpening);
+                    }, function (error) {
+                        if (error) {
+                            vm.alerts.push({ msg: error, type: 'danger' });
+                        }
+                        vm.enableSaveBtn = true;
+                        $uibModalInstance.close(vm.jobOpening);
+                    });
+                }
+            } else {
+                vm.enableSaveBtn = true;
+                vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
+            }
+        };
+
+        vm.cancelManageJobOpening = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+    };
+
+    function ReferJobOpeningController(JobOpeningService, noty, jobOpening) {
         var vm = this;
         vm.enableSaveBtn = true;
         vm.alerts = [];
