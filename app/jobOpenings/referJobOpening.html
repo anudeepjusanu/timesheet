@@ -1,0 +1,42 @@
+<div class="content-wrapper">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Refer Job Opening</h3>
+        </div>
+        <div class="panel-body">
+            <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts"
+                ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="3000">
+                {{alert.msg}}</div>
+            <div class="row">
+                <form class="form-horizontal" name="vm.refrerJobOpeningForm">
+                    <div class="form-group required">
+                        <label class="col-md-3 control-label">Subject</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" ng-model="vm.refrerJobOpening.subject"
+                                ng-required="true" />
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label class="col-md-3 control-label">Body</label>
+                        <div class="col-md-6">
+                            <textarea class="form-control" rows="10" ng-model="vm.refrerJobOpening.body"
+                                ng-required="true"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label class="col-md-3 control-label">Resume</label>
+                        <div class="col-md-4">
+                            <input type="file" class="form-control" ng-model="vm.refrerJobOpening.resume"
+                                ng-required="true" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="panel-footer text-center">
+            <button class="btn btn-primary btn-rounded" ng-disabled="vm.enableSaveBtn"
+                ng-click="vm.addReferJobOpening(vm.refrerJobOpeningForm)">Save</button>
+            <a class="btn btn-warning btn-rounded" ui-sref="home">Cancel</a>
+        </div>
+    </div>
+</div>

@@ -399,6 +399,14 @@
                 parent: 'layout',
                 data: { activeTab: 'manageJobOpenings' }
             })
+            .state('referJobOpening', {
+                url: '/jobOpenings/referJobOpening/:jobOpeningId',
+                templateUrl: 'jobOpenings/referJobOpening.html',
+                controller: 'JobOpenings.ReferJobOpeningController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'home' }
+            })
         ChartJsProvider.setOptions({ colors: ['#1caf9a', '#273541'] });
     }
 
