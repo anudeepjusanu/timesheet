@@ -66,7 +66,10 @@ function addJobOpening(jobOpening) {
         var jobOpeningData = {
             jobCode: jobOpening.jobCode ? jobOpening.jobCode : null,
             jobTitle: jobOpening.jobTitle,
-            jobExperience: jobOpening.jobExperience
+            jobExperience: jobOpening.jobExperience,
+            jobPositions: jobOpening.jobPositions ? jobOpening.jobPositions : 1,
+            jobDescription: jobOpening.jobDescription ? jobOpening.jobDescription : "",
+            isActive: jobOpening.isActive === false ? false : true
         };
         JobOpeningObj = new JobOpeningModel(jobOpeningData);
         JobOpeningObj.save(function (error, data) {
@@ -84,7 +87,9 @@ function updateJobOpening(JobOpeningId, jobOpening) {
             jobCode: jobOpening.jobCode ? jobOpening.jobCode : null,
             jobTitle: jobOpening.jobTitle,
             jobExperience: jobOpening.jobExperience,
-            isActive: jobOpening.isActive
+            jobPositions: jobOpening.jobPositions ? jobOpening.jobPositions : 1,
+            jobDescription: jobOpening.jobDescription ? jobOpening.jobDescription : "",
+            isActive: jobOpening.isActive === false ? false : true
         };
         JobOpeningModel.updateOne({ _id: mongoose.Types.ObjectId(JobOpeningId) }, { $set: jobOpeningData }).exec().then((data) => {
             resolve(data);
