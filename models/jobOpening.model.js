@@ -15,6 +15,11 @@ var JobOpeningSchema = new Schema({
         type: String,
         required: true
     },
+    jobPositions: {
+        type: Number,
+        default: 1,
+        required: true
+    },
     jobDescription: {
         type: String
     },

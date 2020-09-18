@@ -42,7 +42,7 @@ function getJobOpenings(req, res) {
 }
 
 function getJobOpening(req, res) {
-    JobOpeningService.getJobOpening(req.query._id).then(data => {
+    JobOpeningService.getJobOpening(req.params._id).then(data => {
         res.send({ jobOpening: data });
     }).catch(error => {
         res.status(400).send(error);
@@ -58,7 +58,7 @@ function addJobOpening(req, res) {
 }
 
 function updateJobOpening(req, res) {
-    JobOpeningService.updateJobOpening(req.body._id, req.body).then(data => {
+    JobOpeningService.updateJobOpening(req.params._id, req.body).then(data => {
         res.send({ jobOpening: data, req: req.query });
     }).catch(error => {
         res.status(400).send(error);
@@ -66,7 +66,7 @@ function updateJobOpening(req, res) {
 }
 
 function delJobOpening(req, res) {
-    JobOpeningService.deleteJobOpening(req.params._id,).then(data => {
+    JobOpeningService.deleteJobOpening(req.params._id).then(data => {
         res.send({ jobOpening: data });
     }).catch(error => {
         res.status(400).send(error);

@@ -404,7 +404,8 @@
                 templateUrl: 'jobOpenings/referJobOpening.html',
                 controller: 'JobOpenings.ReferJobOpeningController',
                 controllerAs: 'vm',
-                parent: 'layout'
+                parent: 'layout',
+                data: { activeTab: 'home' }
             })
         ChartJsProvider.setOptions({ colors: ['#1caf9a', '#273541'] });
     }

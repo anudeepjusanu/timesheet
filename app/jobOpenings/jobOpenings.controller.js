@@ -125,49 +125,51 @@
         };
     };
 
-    function ReferJobOpeningController(JobOpeningService, noty, jobOpening) {
+    function ReferJobOpeningController(JobOpeningService, $stateParams, noty) {
         var vm = this;
         vm.enableSaveBtn = true;
         vm.alerts = [];
-        vm.jobOpening = jobOpening;
+        vm.jobOpening = {};
+        vm.refrerJobOpening = {};
 
-        vm.saveManageJobOpening = function (form) {
+        vm.addReferJobOpening = function (form) {
             if (form.$valid) {
                 vm.enableSaveBtn = false;
-                if (vm.jobOpening.isNew === true) {
-                    JobOpeningService.addJobOpening(vm.jobOpening).then(function (response) {
-                        noty.showSuccess("Job Opening has been added successfully!");
-                        vm.enableSaveBtn = true;
-                        $uibModalInstance.close(vm.jobOpening);
-                    }, function (error) {
-                        if (error) {
-                            vm.alerts.push({ msg: error, type: 'danger' });
-                        }
-                        vm.enableSaveBtn = true;
-                        $uibModalInstance.close(vm.jobOpening);
-                    });
-                } else {
-                    JobOpeningService.updateJobOpening(vm.jobOpening).then(function (response) {
-                        noty.showSuccess("Job Opening has been updated successfully!");
-                        vm.enableSaveBtn = true;
-                        $uibModalInstance.close(vm.jobOpening);
-                    }, function (error) {
-                        if (error) {
-                            vm.alerts.push({ msg: error, type: 'danger' });
-                        }
-                        vm.enableSaveBtn = true;
-                        $uibModalInstance.close(vm.jobOpening);
-                    });
-                }
+                JobOpeningService.addJobOpening(vm.jobOpening).then(function (response) {
+                    noty.showSuccess("Job Opening has been added successfully!");
+                    vm.enableSaveBtn = true;
+                    $uibModalInstance.close(vm.jobOpening);
+                }, function (error) {
+                    if (error) {
+                        vm.alerts.push({ msg: error, type: 'danger' });
+                    }
+                    vm.enableSaveBtn = true;
+                    $uibModalInstance.close(vm.jobOpening);
+                });
             } else {
                 vm.enableSaveBtn = true;
                 vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
             }
         };
 
-        vm.cancelManageJobOpening = function () {
-            $uibModalInstance.dismiss('cancel');
-        };
+        function getJobOpening(jobOpeningId) {
+            JobOpeningService.getJobOpening(jobOpeningId).then(function (data) {
+                console.log(data);
+                if (data.jobOpening) {
+                    vm.jobOpening = data.jobOpening;
+                    vm.refrerJobOpening.subject = "Refer " + vm.jobOpening.jobTitle;
+                }
+            }, function (errors) {
+                console.log(errors);
+            });
+        }
+
+        function init() {
+            if ($stateParams.jobOpeningId) {
+                getJobOpening($stateParams.jobOpeningId);
+            }
+        }
+        init();
     };
 
 })();
