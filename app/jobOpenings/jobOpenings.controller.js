@@ -147,8 +147,7 @@
         vm.referJobOpening = {};
 
         vm.addReferJobOpening = function (form) {
-            console.log(vm.referJobOpening);
-            if (form.$valid) {
+            if (form.$valid && vm.referJobOpening.resume) {
                 vm.enableSaveBtn = false;
                 var referFormData = new FormData();
                 referFormData.append('file', vm.referJobOpening.resume);
