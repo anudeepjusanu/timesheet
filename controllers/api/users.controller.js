@@ -85,7 +85,7 @@ function registerUser(req, res) {
 }
 
 async function getCurrentUser(req, res) {
-    userService.getById(req.user.sub).then(function (user) {
+    userService.getCurrentUser(req.user.sub).then(function (user) {
         if (user) {
             res.send(user);
         } else {
