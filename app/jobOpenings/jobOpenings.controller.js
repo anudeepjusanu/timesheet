@@ -6,6 +6,20 @@
         .controller('JobOpenings.ManageJobOpeningsController', ManageJobOpeningsController)
         .controller('JobOpenings.ManageJobOpeningModel', ManageJobOpeningModel)
         .controller('JobOpenings.ReferJobOpeningController', ReferJobOpeningController)
+        .directive('fileModel', ['$parse', function ($parse) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attrs) {
+                    var model = $parse(attrs.fileModel);
+                    var modelSetter = model.assign;
+                    element.bind('change', function () {
+                        scope.$apply(function () {
+                            modelSetter(scope, element[0].files[0]);
+                        });
+                    });
+                }
+            };
+        }])
         .filter('MyReceiptsSearch', function ($filter) {
             return function (input, searchObj) {
                 var output = input;
@@ -125,39 +139,39 @@
         };
     };
 
-    function ReferJobOpeningController(JobOpeningService, $stateParams, noty) {
+    function ReferJobOpeningController(JobOpeningService, $stateParams, noty, $state) {
         var vm = this;
         vm.enableSaveBtn = true;
         vm.alerts = [];
         vm.jobOpening = {};
-        vm.refrerJobOpening = {};
+        vm.referJobOpening = {};
 
         vm.addReferJobOpening = function (form) {
+            console.log(vm.referJobOpening);
             if (form.$valid) {
                 vm.enableSaveBtn = false;
-                JobOpeningService.addJobOpening(vm.jobOpening).then(function (response) {
-                    noty.showSuccess("Job Opening has been added successfully!");
-                    vm.enableSaveBtn = true;
-                    $uibModalInstance.close(vm.jobOpening);
+                var referFormData = new FormData();
+                referFormData.append('file', vm.referJobOpening.resume);
+                referFormData.append('subject', vm.referJobOpening.subject);
+                referFormData.append('body', vm.referJobOpening.body);
+                JobOpeningService.addReferJobOpening(referFormData).then(function (response) {
+                    noty.showSuccess("Job Opening Refrer has been added successfully!");
+                    $state.go('home');
                 }, function (error) {
                     if (error) {
                         vm.alerts.push({ msg: error, type: 'danger' });
                     }
-                    vm.enableSaveBtn = true;
-                    $uibModalInstance.close(vm.jobOpening);
                 });
             } else {
-                vm.enableSaveBtn = true;
                 vm.alerts.push({ msg: "Please fill the required fields", type: 'danger' });
             }
         };
 
         function getJobOpening(jobOpeningId) {
             JobOpeningService.getJobOpening(jobOpeningId).then(function (data) {
-                console.log(data);
                 if (data.jobOpening) {
                     vm.jobOpening = data.jobOpening;
-                    vm.refrerJobOpening.subject = "Refer " + vm.jobOpening.jobTitle;
+                    vm.referJobOpening.subject = "Refer " + vm.jobOpening.jobTitle;
                 }
             }, function (errors) {
                 console.log(errors);

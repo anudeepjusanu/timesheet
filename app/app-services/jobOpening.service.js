@@ -8,7 +8,7 @@
     function JobOpeningService($http, $q) {
         var service = {};
         service.getActiveJobOpenings = getActiveJobOpenings;
-        service.referJobOpening = referJobOpening;
+        service.addReferJobOpening = addReferJobOpening;
 
         service.getAllJobOpenings = getAllJobOpenings;
         service.getJobOpening = getJobOpening;
@@ -22,8 +22,11 @@
             return $http.get('/api/jobOpening/activeJobOpenings/', paramObj).then(handleSuccess, handleError);
         }
 
-        function referJobOpening(paramObj = {}) {
-            return $http.post('/api/jobOpening/referJobOpening/', paramObj).then(handleSuccess, handleError);
+        function addReferJobOpening(paramObj = {}) {
+            return $http.post('/api/jobOpening/referJobOpening/', paramObj, {
+                transformRequest: angular.identity,
+                headers: { 'Content-Type': undefined }
+            }).then(handleSuccess, handleError);
         }
 
         /** Manage Job Openings */

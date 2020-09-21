@@ -2,10 +2,23 @@
 var express = require('express');
 var router = express.Router();
 const JobOpeningService = require('../../services/jobOpenings.service');
+const path = require('path');
+var multer = require('multer');
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/data/jobOpeningResumes/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, 'resume-' + Date.now() + path.extname(file.originalname));
+    }
+});
+var upload = multer({
+    storage: storage
+});
 
 // routes
 router.get('/activeJobOpenings', getActiveJobOpenings);
-router.get('/referJobOpening', referJobOpening);
+router.post('/referJobOpening', upload.single('file'), referJobOpening);
 
 router.get('/jobOpenings', getJobOpenings);
 router.get('/jobOpening/:_id', getJobOpening);
@@ -25,6 +38,9 @@ function getActiveJobOpenings(req, res) {
 }
 
 function referJobOpening(req, res) {
+    if (req.file) {
+        req.body.resume = req.file.filename;
+    }
     JobOpeningService.referJobOpening(req.body).then(data => {
         res.send({ jobOpening: data });
     }).catch(error => {
