@@ -14,6 +14,7 @@
                     <th>Job Title</th>
                     <th>Experience</th>
                     <th>Job Code</th>
+                    <th>Status</th>
                     <th style="width: 240px;">Created On</th>
                     <th style="width: 160px;" ng-if="vm.user.admin">Action</th>
                 </tr>
@@ -22,6 +23,10 @@
                     <td>{{jobOpening.jobTitle}}</td>
                     <td>{{jobOpening.jobExperience}}</td>
                     <td>{{jobOpening.jobCode}}</td>
+                    <td>
+                        <span ng-if="jobOpening.isActive==true">Active</span>
+                        <span ng-if="jobOpening.isActive==false">Inactive</span>
+                    </td>
                     <td>{{jobOpening.createdOn}}</td>
                     <td ng-if="vm.user.admin">
                         <a class="btn btn-primary btn-icon btn-rounded"
