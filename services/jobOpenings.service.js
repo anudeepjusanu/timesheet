@@ -44,7 +44,7 @@ function referJobOpening(JobOpeningReferData) {
             });
             var messageObj = {
                 from: '"Refer Program" <lbsastry@wavelabs.ai>', // sender address
-                to: "sastrylal@gmail.com", // list of receivers
+                to: "hr@wavelabs.ai", // list of receivers
                 subject: JobOpeningReferData.subject, // Subject line
                 text: JobOpeningReferData.body, // plain text body
             }
