@@ -94,27 +94,29 @@ function getCurrentUser(_id) {
             for (var i = 0; i < userProjects.length; i++) {
                 var projectObj = userProjects[i].projects;
                 var isActiveProject = false;
-                for (var j = 0; j < projectObj.billDates.length; j++) {
-                    var billObj = projectObj.billDates[j];
-                    if (billObj.start && billObj.end) {
-                        var billStartDate = new Date(billObj.start);
-                        var billEndDate = new Date(billObj.end);
-                        if (billStartDate <= weekDate && billEndDate >= weekDate) {
-                            isActiveProject = true
+                if (projectObj.billDates) {
+                    for (var j = 0; j < projectObj.billDates.length; j++) {
+                        var billObj = projectObj.billDates[j];
+                        if (billObj.start && billObj.end) {
+                            var billStartDate = new Date(billObj.start);
+                            var billEndDate = new Date(billObj.end);
+                            if (billStartDate <= weekDate && billEndDate >= weekDate) {
+                                isActiveProject = true
+                            }
+                        } else if (billObj.start) {
+                            var billStartDate = new Date(billObj.start);
+                            if (billStartDate <= weekDate) {
+                                isActiveProject = true
+                            }
+                        } else if (billObj.end) {
+                            var billEndDate = new Date(billObj.end);
+                            if (billEndDate >= weekDate) {
+                                isActiveProject = true
+                            }
                         }
-                    } else if (billObj.start) {
-                        var billStartDate = new Date(billObj.start);
-                        if (billStartDate <= weekDate) {
-                            isActiveProject = true
+                        if (isActiveProject) {
+                            break;
                         }
-                    } else if (billObj.end) {
-                        var billEndDate = new Date(billObj.end);
-                        if (billEndDate >= weekDate) {
-                            isActiveProject = true
-                        }
-                    }
-                    if (isActiveProject) {
-                        break;
                     }
                 }
                 if (isActiveProject) {
