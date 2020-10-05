@@ -684,7 +684,7 @@
             _.each(vm.timesheet.projects, function (project) {
                 project.overtimeHours = 0;
                 if (project.billableMaxHours > 0 && project.projectHours > project.billableMaxHours) {
-                    project.overtimeHours = project.projectHours - project.billableMaxHours;
+                    project.overtimeHours = project.projectHours + project.corpHolidayHours - project.billableMaxHours;
                 }
                 if (!project.corpHolidayHours) {
                     project.corpHolidayHours = 0;
@@ -995,7 +995,7 @@
             _.each(vm.timesheet.projects, function (project) {
                 project.overtimeHours = 0;
                 if (project.billableMaxHours > 0 && project.projectHours > project.billableMaxHours) {
-                    project.overtimeHours = project.projectHours - project.billableMaxHours;
+                    project.overtimeHours = project.projectHours + project.corpHolidayHours - project.billableMaxHours;
                 }
                 if (!project.corpHolidayHours) {
                     project.corpHolidayHours = 0;
