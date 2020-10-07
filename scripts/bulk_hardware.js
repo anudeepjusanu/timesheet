@@ -41,18 +41,17 @@ fs.createReadStream('./wavelabs_hardware.csv').pipe(csv()).on('data', (row) => {
             devicedata.userId = assignedUser._id;
             devicedata.currentStatus = 'Assigned';
         }
-
+        console.log("Device ID : ", deviceObj.deviceId);
         InventoryModel.findOne({ deviceId: deviceObj.deviceId }).exec().then((response) => {
             if (response === null) {
                 var inventoryObj = new InventoryModel(devicedata);
                 inventoryObj.save(function (err, inventory) {
                     //if (err) console.log(err);
-                    //console.log("New :", inventory);
+                    console.log("New :", inventory);
                 });
             } else {
-
                 InventoryModel.updateOne({ deviceId: deviceObj.deviceId }, devicedata).exec().then((data) => {
-
+                    console.log("Updated :", data);
                 }).catch((error) => {
 
                 });
