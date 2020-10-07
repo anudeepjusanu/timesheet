@@ -81,15 +81,15 @@
                     <td class="row" min-width="580px">
                         <table class="table table-bordered">
                             <tr ng-repeat="timesheet in user.timesheet">
-                                <td>{{timesheet.projectName}}</td>
-                                <td>{{timesheet.resourceType}}</td>
-                                <td>{{timesheet.billableHours}}</td>
-                                <td>{{timesheet.sickLeaveHours}}</td>
-                                <td>{{timesheet.timeoffHours}}</td>
-                                <td>{{timesheet.overtimeHours}}</td>
-                                <td>{{timesheet.createdOn}}</td>
-                                <td>{{timesheet.corpHolidayHours}}</td>
-                                <td>
+                                <td width="120px;">{{timesheet.projectName}}</td>
+                                <td width="120px;">{{timesheet.resourceType}}</td>
+                                <td width="80px;">{{timesheet.billableHours}}</td>
+                                <td width="80px;">{{timesheet.sickLeaveHours}}</td>
+                                <td width="80px;">{{timesheet.timeoffHours}}</td>
+                                <td width="80px;">{{timesheet.overtimeHours}}</td>
+                                <td width="80px;">{{timesheet.corpHolidayHours}}</td>
+                                <td width="120px;">{{timesheet.createdOn | date: 'mediumDate'}}</td>
+                                <td width="100px;">
                                     <div ng-if="!(timesheet | isEmpty)">
                                         <div ng-if="timesheet.sheetStatus != 'Approved'">
                                             <select class="form-control" ng-model="timesheet.sheetStatus"

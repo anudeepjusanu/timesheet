@@ -1708,6 +1708,7 @@
                             _.each(timesheet.projects, function (project) {
                                 if (vm.currentProject._id == project.projectId) {
                                     project.sheetId = timesheet._id;
+                                    project.createdOn = timesheet.createdOn;
                                     project.isSelect = true;
                                 }
                                 if (!project.sheetStatus) {
