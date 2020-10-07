@@ -88,7 +88,7 @@
                                 <td width="80px;">{{timesheet.timeoffHours}}</td>
                                 <td width="80px;">{{timesheet.overtimeHours}}</td>
                                 <td width="80px;">{{timesheet.corpHolidayHours}}</td>
-                                <td width="120px;">{{timesheet.createdOn | date: 'mediumDate'}}</td>
+                                <td width="120px;">{{timesheet.createdOn | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
                                 <td width="100px;">
                                     <div ng-if="!(timesheet | isEmpty)">
                                         <div ng-if="timesheet.sheetStatus != 'Approved'">
