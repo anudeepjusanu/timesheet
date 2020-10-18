@@ -12,7 +12,7 @@
             return function (input, searchObj) {
                 var output = input;
                 var filterFields = ['deviceId', 'deviceType', 'deviceName', 'userName', 'location', 'hostname', 'deviceBrand',
-                    'deviceModel', 'deviceSerial', 'deviceOS', 'deviceCPU', 'deviceRAM'];
+                    'deviceModel', 'deviceSerial', 'deviceOS', 'deviceCPU', 'deviceRAM', 'note'];
                 _.each(filterFields, function (filterField) {
                     if (searchObj[filterField] && searchObj[filterField].length > 0) {
                         var searchQuery = {};
