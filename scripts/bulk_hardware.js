@@ -35,7 +35,7 @@ fs.createReadStream('./wavelabs_hardware.csv').pipe(csv()).on('data', (row) => {
             deviceRAM: deviceObj.memory,
             deviceCost: deviceObj.deviceCost,
             purchaseDate: deviceObj.purhaseDate,
-            comment: deviceObj.comment
+            note: deviceObj.note
         };
 
         var assignedUser = _.find(users, { employeeId: deviceObj.employeeId });
