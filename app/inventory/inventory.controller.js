@@ -68,7 +68,8 @@
             "deviceCPU": { label: "CPU", selected: false },
             "deviceRAM": { label: "RAM", selected: false },
             "latestComment": { label: "Comment", selected: false },
-            "purchaseDate": { label: "purchaseDate", selected: false }
+            "purchaseDate": { label: "purchaseDate", selected: false },
+            "note": { label: "Note", selected: false }
         };
 
         function getInventories() {

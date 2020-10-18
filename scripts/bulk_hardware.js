@@ -18,11 +18,11 @@ fs.createReadStream('./wavelabs_hardware.csv').pipe(csv()).on('data', (row) => {
     users = await UserModel.find({}).exec();
 
     _.each(devices, function (deviceObj) {
-        //console.log(deviceObj);
+        console.log(deviceObj);
         var devicedata = {
             deviceId: deviceObj.deviceId,
             deviceType: deviceObj.deviceType,
-            deviceName: "",
+            deviceName: deviceObj.deviceId,
             location: deviceObj.location,
             hostname: deviceObj.hostname,
             client: deviceObj.client,
@@ -33,7 +33,9 @@ fs.createReadStream('./wavelabs_hardware.csv').pipe(csv()).on('data', (row) => {
             deviceOS: deviceObj.os,
             deviceCPU: deviceObj.cpu,
             deviceRAM: deviceObj.memory,
-            purchaseDate: deviceObj.purhaseDate
+            deviceCost: deviceObj.deviceCost,
+            purchaseDate: deviceObj.purhaseDate,
+            comment: deviceObj.comment
         };
 
         var assignedUser = _.find(users, { employeeId: deviceObj.employeeId });

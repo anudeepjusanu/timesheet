@@ -30,6 +30,7 @@ var InventrySchema = new Schema({
 
     description: { type: String },
     isActive: { type: Boolean, default: true },
+    note: { type: String },
     latestComment: { type: String },
     createdBy: { type: mongoose.ObjectId },
     createdOn: { type: Date, default: Date.now },
