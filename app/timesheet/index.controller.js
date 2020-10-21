@@ -1681,7 +1681,7 @@
                     _.remove(response, function (user) {
                         if (user.billDates && user.billDates.length > 0) {
                             var endDate = user.billDates[user.billDates.length - 1].end;
-                            if (endDate && currentDay > new Date(endDate)) {
+                            if (endDate && vm.currentWeek > new Date(endDate)) {
                                 return user;
                             }
                         }
