@@ -143,6 +143,7 @@ function updateTimesheet(sheetId, userParam, currentUser) {
 
         db.timesheets.findById(sheetId, function (err, sheetObj) {
             if (err) deferred.reject(err.name + ': ' + err.message);
+
             if (sheetObj && (sheetObj.userId == currentUserId || currentUser.admin === true)) {
                 db.users.findById(sheetObj.userId, function (err, sheetUserObj) {
                     _.each(userParam.projects, function (projectObj) {
