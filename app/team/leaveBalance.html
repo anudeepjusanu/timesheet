@@ -1,11 +1,12 @@
-<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+    close="vm.closeAlert($index)" dismiss-on-timeout="1000">
     {{alert.msg}}</div>
 <div class="content-wrapper">
     <div class="" ng-if="vm.user.admin">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Employees</h3>
-                
+
                 <div class="dropdown pull-right">
                     <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
                         Columns<b class="caret"></b>
@@ -13,98 +14,119 @@
                     <div class="dropdown-menu dropdown-menu-form" role="menu" ng-click="vm.stopPropagation($event)">
                         <div class="dropdown-item" ng-repeat="column in vm.userColumns">
                             <label class="checkbox">
-                                <input type="checkbox" ng-model="column.selected"/> {{column.label}}
+                                <input type="checkbox" ng-model="column.selected" /> {{column.label}}
                             </label>
                         </div>
                     </div>
                 </div>
                 <div class="pull-right">
-                    <select class="form-control" ng-model="vm.financialYear" ng-options="opt as opt for opt in vm.financialYears" ng-change="vm.getUserLeaves();"></select>
+                    <select class="form-control" ng-model="vm.financialYear"
+                        ng-options="opt as opt for opt in vm.financialYears" ng-change="vm.getUserLeaves();"></select>
                 </div>
                 <div class="pull-right">
                     <button class="btn btn-primary" ng-click="vm.exportTable()">Export</button> &nbsp; &nbsp;
+                </div>
+                <div class="pull-right">
+                    <a class="btn btn-primary" ui-sref="monthlyLeaveBalance">Mothly Leave Balance</a> &nbsp; &nbsp;
                 </div>
             </div>
             <div class="panel-body">
                 <table class="table table-condensed table-bordered table-striped" export-table>
                     <thead>
-                    <tr>
-                        <th>#</th>
-                        <th ng-show="vm.userColumns['employeeId'].selected"  class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='employeeId'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='employeeId'&&vm.search.sortDESC===true}">
-                            <a ng-click="vm.sorting('employeeId');">EMP ID</a>
-                        </th>
-                        <th style="width:150px;" ng-show="vm.userColumns['name'].selected" class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='name'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='name'&&vm.search.sortDESC===true}">
-                            <a ng-click="vm.sorting('name');">Name</a>
-                        </th>
-                        <th ng-show="vm.userColumns['phone'].selected">Mobile</th>
-                        <th style="width:100px;" ng-show="vm.userColumns['joinDate'].selected">Join Date</th>
-                        <th ng-show="vm.userColumns['employeeCategory'].selected" class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='employeeCategory'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='employeeCategory'&&vm.search.sortDESC===true}">
-                            <a ng-click="vm.sorting('employeeCategory');">Category</a>
-                        </th>
-                        <th ng-show="vm.userColumns['employeeType'].selected">Employee Type</th>
-                        <th ng-show="vm.userColumns['totalAccruedLeaves'].selected">Accrued Leaves</th>
-                        <th ng-show="vm.userColumns['totalCreditedLeaves'].selected">Credited Leaves</th>
-                        <th ng-show="vm.userColumns['timeoffDays'].selected" class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='timeoffDays'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='timeoffDays'&&vm.search.sortDESC===true}">
-                            <a ng-click="vm.sorting('timeoffDays');">TimeOff Days</a>
-                        </th>
-                        <th ng-show="vm.userColumns['totalDeductedLOP'].selected" class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='totalDeductedLOP'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='totalDeductedLOP'&&vm.search.sortDESC===true}">
-                            <a ng-click="vm.sorting('totalDeductedLOP');">LOP Days</a>
-                        </th>
-                        <th ng-show="vm.userColumns['totalBalance'].selected" class="sorting" ng-class="{'sorting_asc':vm.search.orderBy=='leaveWallet'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='leaveWallet'&&vm.search.sortDESC===true}">
-                            <a ng-click="vm.sorting('totalBalance');">Leave Balance</a>
-                        </th>
-                        <th ng-show="vm.userColumns['isActive'].selected" >Status</th>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td ng-show="vm.userColumns['employeeId'].selected"></td>
-                        <td ng-show="vm.userColumns['name'].selected"><input class="form-control" type="text" ng-model="vm.search.userName" /></td>
-                        <td ng-show="vm.userColumns['phone'].selected"></td>
-                        <td ng-show="vm.userColumns['joinDate'].selected"></td>
-                        <td ng-show="vm.userColumns['employeeCategory'].selected">
-                            <select class="form-control" ng-model="vm.search.employeeCategory" 
-                                ng-options="opt as opt for opt in ['All', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10']">
-                            </select>
-                        </td>
-                        <td ng-show="vm.userColumns['employeeType'].selected"></td>
-                        <td ng-show="vm.userColumns['totalAccruedLeaves'].selected"></td>
-                        <td ng-show="vm.userColumns['totalCreditedLeaves'].selected"></td>
-                        <td ng-show="vm.userColumns['timeoffDays'].selected"></td>
-                        <td ng-show="vm.userColumns['totalDeductedLOP'].selected"></td>
-                        <td ng-show="vm.userColumns['totalBalance'].selected"></td>
-                        <td ng-show="vm.userColumns['isActive'].selected">
-                            <select class="form-control" ng-model="vm.search.isActive" ng-options="opt.id as opt.label for opt in [{id:'', label:'All'}, {id:'true', label:'Active'}, {id:'false', label:'Inactive'}]"></select>
-                        </td>
-                    </tr>
+                        <tr>
+                            <th>#</th>
+                            <th ng-show="vm.userColumns['employeeId'].selected" class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='employeeId'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='employeeId'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('employeeId');">EMP ID</a>
+                            </th>
+                            <th style="width:150px;" ng-show="vm.userColumns['name'].selected" class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='name'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='name'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('name');">Name</a>
+                            </th>
+                            <th ng-show="vm.userColumns['phone'].selected">Mobile</th>
+                            <th style="width:100px;" ng-show="vm.userColumns['joinDate'].selected">Join Date</th>
+                            <th ng-show="vm.userColumns['employeeCategory'].selected" class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='employeeCategory'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='employeeCategory'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('employeeCategory');">Category</a>
+                            </th>
+                            <th ng-show="vm.userColumns['employeeType'].selected">Employee Type</th>
+                            <th ng-show="vm.userColumns['totalAccruedLeaves'].selected">Accrued Leaves</th>
+                            <th ng-show="vm.userColumns['totalCreditedLeaves'].selected">Credited Leaves</th>
+                            <th ng-show="vm.userColumns['timeoffDays'].selected" class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='timeoffDays'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='timeoffDays'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('timeoffDays');">TimeOff Days</a>
+                            </th>
+                            <th ng-show="vm.userColumns['totalDeductedLOP'].selected" class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='totalDeductedLOP'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='totalDeductedLOP'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('totalDeductedLOP');">LOP Days</a>
+                            </th>
+                            <th ng-show="vm.userColumns['totalBalance'].selected" class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='leaveWallet'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='leaveWallet'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('totalBalance');">Leave Balance</a>
+                            </th>
+                            <th ng-show="vm.userColumns['isActive'].selected">Status</th>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td ng-show="vm.userColumns['employeeId'].selected"></td>
+                            <td ng-show="vm.userColumns['name'].selected"><input class="form-control" type="text"
+                                    ng-model="vm.search.userName" /></td>
+                            <td ng-show="vm.userColumns['phone'].selected"></td>
+                            <td ng-show="vm.userColumns['joinDate'].selected"></td>
+                            <td ng-show="vm.userColumns['employeeCategory'].selected">
+                                <select class="form-control" ng-model="vm.search.employeeCategory"
+                                    ng-options="opt as opt for opt in ['All', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10']">
+                                </select>
+                            </td>
+                            <td ng-show="vm.userColumns['employeeType'].selected"></td>
+                            <td ng-show="vm.userColumns['totalAccruedLeaves'].selected"></td>
+                            <td ng-show="vm.userColumns['totalCreditedLeaves'].selected"></td>
+                            <td ng-show="vm.userColumns['timeoffDays'].selected"></td>
+                            <td ng-show="vm.userColumns['totalDeductedLOP'].selected"></td>
+                            <td ng-show="vm.userColumns['totalBalance'].selected"></td>
+                            <td ng-show="vm.userColumns['isActive'].selected">
+                                <select class="form-control" ng-model="vm.search.isActive"
+                                    ng-options="opt.id as opt.label for opt in [{id:'', label:'All'}, {id:'true', label:'Active'}, {id:'false', label:'Inactive'}]"></select>
+                            </td>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="user in vm.users | allUserSearch:vm.search | orderBy:vm.search.orderBy:vm.search.sortDESC">
-                        <td>{{$index + 1}}</td>
-                        <td ng-show="vm.userColumns['employeeId'].selected">{{user.employeeId}}</td>
-                        <td ng-show="vm.userColumns['name'].selected">{{user.name}}</td>
-                        <td ng-show="vm.userColumns['phone'].selected">{{user.phone}}</td>
-                        <td ng-show="vm.userColumns['joinDate'].selected">{{user.joinDate | date : 'mediumDate'}}</td>
-                        <td ng-show="vm.userColumns['employeeCategory'].selected">{{user.employeeCategory}}</td>
-                        <td ng-show="vm.userColumns['employeeType'].selected">{{user.employeeType}}</td>
+                        <tr
+                            ng-repeat="user in vm.users | allUserSearch:vm.search | orderBy:vm.search.orderBy:vm.search.sortDESC">
+                            <td>{{$index + 1}}</td>
+                            <td ng-show="vm.userColumns['employeeId'].selected">{{user.employeeId}}</td>
+                            <td ng-show="vm.userColumns['name'].selected">{{user.name}}</td>
+                            <td ng-show="vm.userColumns['phone'].selected">{{user.phone}}</td>
+                            <td ng-show="vm.userColumns['joinDate'].selected">{{user.joinDate | date : 'mediumDate'}}
+                            </td>
+                            <td ng-show="vm.userColumns['employeeCategory'].selected">{{user.employeeCategory}}</td>
+                            <td ng-show="vm.userColumns['employeeType'].selected">{{user.employeeType}}</td>
 
-                        <td ng-show="vm.userColumns['totalAccruedLeaves'].selected">{{user.totalAccruedLeaves | number}}
-                            <span> <i style="float:right;margin-right:15px;cursor:pointer;" class="fa fa-file-text-o" ng-click="vm.viewLeavesModel(user)"></i></span>
-                        </td>
-                        <td ng-show="vm.userColumns['totalCreditedLeaves'].selected"> {{user.totalCreditedLeaves | number}}
-                            <span> <i style="float:right;margin-right:15px;cursor:pointer;" class="fa fa-plus" ng-click="vm.viewAddLeavesModel(user)"></i></span>
-                        </td>
-                        <td ng-show="vm.userColumns['timeoffDays'].selected">{{user.timeoffDays | number}}
-                            <span> <i style="float:right;margin-right:15px;cursor:pointer;" class="fa fa-file-text-o" ng-click="vm.viewTimeoffLeavesModel(user)"></i></span>
-                        </td>
-                        <td ng-show="vm.userColumns['totalDeductedLOP'].selected"> {{user.totalDeductedLOP | number}}
-                            <span> <i style="float:right;margin-right:15px;cursor:pointer;" class="fa fa-plus" ng-click="vm.viewLOPLeavesModel(user)"></i></span>
-                        </td>
-                        <td ng-show="vm.userColumns['totalBalance'].selected">{{user.totalBalance | number}}</td>
-                        <td ng-show="vm.userColumns['isActive'].selected">
-                            <span ng-if="user.isActive==true">Active</span>
-                            <span ng-if="user.isActive==false">Inactive</span>
-                        </td>
-                    </tr>
+                            <td ng-show="vm.userColumns['totalAccruedLeaves'].selected">
+                                {{user.totalAccruedLeaves | number}}
+                                <span> <i style="float:right;margin-right:15px;cursor:pointer;"
+                                        class="fa fa-file-text-o" ng-click="vm.viewLeavesModel(user)"></i></span>
+                            </td>
+                            <td ng-show="vm.userColumns['totalCreditedLeaves'].selected">
+                                {{user.totalCreditedLeaves | number}}
+                                <span> <i style="float:right;margin-right:15px;cursor:pointer;" class="fa fa-plus"
+                                        ng-click="vm.viewAddLeavesModel(user)"></i></span>
+                            </td>
+                            <td ng-show="vm.userColumns['timeoffDays'].selected">{{user.timeoffDays | number}}
+                                <span> <i style="float:right;margin-right:15px;cursor:pointer;"
+                                        class="fa fa-file-text-o" ng-click="vm.viewTimeoffLeavesModel(user)"></i></span>
+                            </td>
+                            <td ng-show="vm.userColumns['totalDeductedLOP'].selected">
+                                {{user.totalDeductedLOP | number}}
+                                <span> <i style="float:right;margin-right:15px;cursor:pointer;" class="fa fa-plus"
+                                        ng-click="vm.viewLOPLeavesModel(user)"></i></span>
+                            </td>
+                            <td ng-show="vm.userColumns['totalBalance'].selected">{{user.totalBalance | number}}</td>
+                            <td ng-show="vm.userColumns['isActive'].selected">
+                                <span ng-if="user.isActive==true">Active</span>
+                                <span ng-if="user.isActive==false">Inactive</span>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

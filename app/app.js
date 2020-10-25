@@ -1,4 +1,4 @@
-﻿ (function () {
+﻿(function () {
     'use strict';
 
     angular
@@ -271,6 +271,14 @@
                 parent: 'layout',
                 data: { activeTab: 'leaveBalance' }
             })
+            .state('monthlyLeaveBalance', {
+                url: '/monthlyLeaveBalance',
+                templateUrl: 'team/monthlyLeaveBalance.html',
+                controller: 'Team.MonthlyLeaveBalanceController',
+                controllerAs: 'vm',
+                parent: 'layout',
+                data: { activeTab: 'monthlyLeaveBalance' }
+            })
             .state('allTimesheetApprove', {
                 url: '/allTimesheetApprove',
                 templateUrl: 'timesheet/allTimesheetApprove.html',
@@ -427,7 +435,7 @@
                 } else { }
             }
         });
-        
+
         // update active tab on state change
         $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
             $timeout(function () {

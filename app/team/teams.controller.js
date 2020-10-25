@@ -9,6 +9,7 @@
         .controller('Team.UserTimeoffLeavesModel', UserTimeoffLeavesModel)
         .controller('Team.UserAddLeavesModel', UserAddLeavesModel)
         .controller('Team.UserLOPLeavesModel', UserLOPLeavesModel)
+        .controller('Team.MonthlyLeaveBalanceController', MonthlyLeaveBalanceController)
         .directive('exportTable', function () {
             return {
                 restrict: 'A',
@@ -670,5 +671,108 @@
             });
         }
     };
+
+    function MonthlyLeaveBalanceController(UserService, TimesheetService, ProjectService, AppConfigService, $scope, $filter) {
+        var vm = this;
+        vm.users = [];
+        var now = new Date();
+        vm.financialYears = [];
+        vm.financialYear = null;
+        var navYear = 2017;
+        var endYear = now.getFullYear();
+        if (now.getMonth() >= 3) {
+            var endYear = now.getFullYear() + 1;
+        }
+        while (endYear > navYear) {
+            var fYear = navYear + "-" + (navYear + 1);
+            vm.financialYears.push(fYear);
+            navYear += 1;
+        }
+        vm.financialYear = fYear;
+        var startYear = endYear - 1;
+        vm.financialYearMonths = [
+            startYear + "-04",
+            startYear + "-05",
+            startYear + "-06",
+            startYear + "-07",
+            startYear + "-08",
+            startYear + "-09",
+            startYear + "-10",
+            startYear + "-11",
+            startYear + "-12",
+            endYear + "-01",
+            endYear + "-02",
+            endYear + "-03"
+        ];
+
+
+        vm.exportTable = function () {
+            $scope.$broadcast('export-excl', { "date": vm.filterDate });
+        }
+
+        vm.getUserLeaves = function () {
+            TimesheetService.usersLeaveBalance(vm.financialYear).then(function (response) {
+                if (response) {
+                    _.each(response, function (userSheet) {
+                        var userObj = _.find(vm.users, { _id: userSheet.userId });
+                        if (userObj) {
+                            userObj.accruedLeavesInfo = userSheet.leavesInfo;
+                            userObj.accruedLeaves = [];
+                            userObj.takenLeaves = [];
+                            userObj.timesheets = userSheet.timesheets;
+                            console.log(userSheet);
+                            _.each(vm.financialYearMonths, function (yearMonth) {
+                                userObj.accruedLeaves[yearMonth] = 0;
+                                userObj.takenLeaves[yearMonth] = 0;
+                            });
+                            _.each(userObj.accruedLeavesInfo, function (leaveObj) {
+                                userObj.accruedLeaves[leaveObj.yearMonth] = leaveObj.accruedLeaves + leaveObj.creditedLeaves;
+                            });
+                            _.each(userObj.timesheets, function (sheetObj) {
+                                var weekDate = new Date(sheetObj.weekDate);
+                                var yearMonth = weekDate.getFullYear() + "-" + (weekDate.getMonth() <= 9 ? "0" + weekDate.getMonth() : weekDate.getMonth());
+                                userObj.takenLeaves[yearMonth] += sheetObj.timeoffHours;
+                            });
+                            userObj.totalAccruedLeaves = userSheet.totalAccruedLeaves;
+                            userObj.totalCreditedLeaves = userSheet.totalCreditedLeaves;
+                            userObj.totalAccruedLeaves = parseFloat(userObj.totalAccruedLeaves) + parseFloat(userObj.totalCreditedLeaves);
+                            userObj.totalDeductedLOP = userSheet.totalDeductedLOP;
+                            userObj.totalTimeOffHours = userSheet.totalTimeOffHours;
+                            userObj.timeoffDays = parseFloat((userObj.totalTimeOffHours / 8)).toFixed(2);
+                            userObj.timeoffDays = parseFloat(userObj.timeoffDays);
+                            userObj.totalBalance = parseFloat(userObj.totalAccruedLeaves + userObj.totalCreditedLeaves + userObj.totalDeductedLOP - userObj.timeoffDays).toFixed(2);
+                            _.each(vm.financialYearMonths, function (yearMonth) {
+                                userObj.takenLeaves[yearMonth] = parseFloat((userObj.takenLeaves[yearMonth] / 8)).toFixed(0);;
+                            });
+                        }
+                    });
+                }
+            }, function (error) {
+                console.log(error);
+            });
+        }
+
+        function initController() {
+            UserService.GetAll().then(function (users) {
+                vm.users = [];
+                _.each(users, function (userObj) {
+                    var haveProject = _.findIndex(userObj.projects, { projectName: "Openexec-Managed Services" });
+                    if (haveProject >= 0 && userObj.isActive === true) {
+                        vm.users.push({
+                            _id: userObj._id,
+                            employeeId: userObj.employeeId,
+                            name: userObj.name,
+                            username: userObj.username,
+                            joinDate: userObj.joinDate,
+                            userResourceType: userObj.userResourceType,
+                            userRole: userObj.userRole
+                        });
+                    }
+                });
+                vm.getUserLeaves();
+            });
+        };
+        initController();
+    }
 
 })();

@@ -1,0 +1,46 @@
+<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+    close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+    {{alert.msg}}</div>
+<div class="content-wrapper">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Employees</h3>
+
+            <div class="pull-right">
+                <button class="btn btn-primary" ng-click="vm.exportTable()">Export</button> &nbsp; &nbsp;
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="" style="overflow:scroll hidden;">
+                <table class="table table-condensed table-bordered table-striped" export-table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th style="width: 240px;">Name</th>
+                            <th style="width: 80px;" ng-repeat="month in vm.financialYearMonths">{{month}}</th>
+                            <th>Total Entitlement</th>
+                            <th ng-repeat="month in vm.financialYearMonths">{{month}}</th>
+                            <th>Total Utilisation</th>
+                            <th>Closing Leave Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="user in vm.users">
+                            <td>{{user.employeeId}}</td>
+                            <td>{{user.name}}</td>
+                            <td ng-repeat="month in vm.financialYearMonths" class="text-center">
+                                {{user.accruedLeaves[month]}}
+                            </td>
+                            <td class="text-center">{{user.totalAccruedLeaves}}</td>
+                            <td ng-repeat="month in vm.financialYearMonths" class="text-center">
+                                {{user.takenLeaves[month]}}
+                            </td>
+                            <td class="text-center">{{user.timeoffDays}}</td>
+                            <td class="text-center">{{user.totalBalance}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
