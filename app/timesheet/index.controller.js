@@ -1721,10 +1721,10 @@
                         }
                     });
                 });
-                _.remove(vm.currentProject.users, function (userObj) {
-                    var haveCurrentProject = _.find(userObj.timesheet, { "projectId": projectId });
-                    return (typeof haveCurrentProject === 'undefined');
-                });
+                // _.remove(vm.currentProject.users, function (userObj) {
+                //     var haveCurrentProject = _.findIndex(userObj.timesheet, { "projectId": projectId });
+                //     return (haveCurrentProject !== -1);
+                // });
             });
         };
 
