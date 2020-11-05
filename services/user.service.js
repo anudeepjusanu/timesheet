@@ -80,60 +80,63 @@ function getById(_id) {
 }
 
 function getCurrentUser(_id) {
-    //var deferred = Q.defer();
+    var deferred = Q.defer();
     var weekDate = new Date();
-    return new Promise((resolve, reject) => {
-        UserModel.findOne({ _id: mongoose.Types.ObjectId(_id) }).lean().exec().then(async (user) => {
-            if (user) {
-                var activeProjects = [];
-                var userProjects = await UserModel.aggregate([
-                    { $match: { _id: mongoose.Types.ObjectId(_id) } },
-                    { $project: { projects: 1 } },
-                    { $unwind: { path: "$projects", preserveNullAndEmptyArrays: true } }
-                ]);
-                for (var i = 0; i < userProjects.length; i++) {
-                    var projectObj = userProjects[i].projects;
-                    var isActiveProject = false;
-                    if (projectObj.billDates) {
-                        for (var j = 0; j < projectObj.billDates.length; j++) {
-                            var billObj = projectObj.billDates[j];
-                            if (billObj.start && billObj.end) {
-                                var billStartDate = new Date(billObj.start);
-                                var billEndDate = new Date(billObj.end);
-                                if (billStartDate <= weekDate && billEndDate >= weekDate) {
-                                    isActiveProject = true
-                                }
-                            } else if (billObj.start) {
-                                var billStartDate = new Date(billObj.start);
-                                if (billStartDate <= weekDate) {
-                                    isActiveProject = true
-                                }
-                            } else if (billObj.end) {
-                                var billEndDate = new Date(billObj.end);
-                                if (billEndDate >= weekDate) {
-                                    isActiveProject = true
-                                }
-                            }
-                            if (isActiveProject) {
-                                break;
-                            }
-                        }
-                    }
-                    if (isActiveProject) {
-                        activeProjects.push(projectObj);
-                    }
-                }
-                user.activeProjects = activeProjects;
 
-                // return user (without hashed password)
-                resolve(_.omit(user, 'hash'));
-            } else {
-                resolve();
-            }
-        }).catch((error) => {
-            reject({ error: error.errmsg });
-        });
+    UserModel.findOne({ _id: mongoose.Types.ObjectId(_id) }).lean().exec().then(async (user) => {
+        if (user) {
+            // var activeProjects = [];
+            // var userProjects = await UserModel.aggregate([
+            //     { $match: { _id: mongoose.Types.ObjectId(_id) } },
+            //     { $project: { projects: 1 } },
+            //     { $unwind: { path: "$projects", preserveNullAndEmptyArrays: true } }
+            // ]);
+            // for (var i = 0; i < userProjects.length; i++) {
+            //     var projectObj = userProjects[i].projects;
+            //     var isActiveProject = false;
+            //     if (projectObj.billDates) {
+            //         for (var j = 0; j < projectObj.billDates.length; j++) {
+            //             var billObj = projectObj.billDates[j];
+            //             if (billObj.start && billObj.end) {
+            //                 var billStartDate = new Date(billObj.start);
+            //                 var billEndDate = new Date(billObj.end);
+            //                 if (billStartDate <= weekDate && billEndDate >= weekDate) {
+            //                     isActiveProject = true
+            //                 }
+            //             } else if (billObj.start) {
+            //                 var billStartDate = new Date(billObj.start);
+            //                 if (billStartDate <= weekDate) {
+            //                     isActiveProject = true
+            //                 }
+            //             } else if (billObj.end) {
+            //                 var billEndDate = new Date(billObj.end);
+            //                 if (billEndDate >= weekDate) {
+            //                     isActiveProject = true
+            //                 }
+            //             }
+            //             if (isActiveProject) {
+            //                 break;
+            //             }
+            //         }
+            //     }
+            //     if (isActiveProject) {
+            //         activeProjects.push(projectObj);
+            //     }
+            // }
+            // user.activeProjects = activeProjects;
+
+            // return user (without hashed password)
+            //resolve(_.omit(user, 'hash'));
+            deferred.resolve(_.omit(user, 'hash'));
+        } else {
+            deferred.resolve();
+        }
+    }).catch((error) => {
+        console.log(error);
+        deferred.reject(error);
+        //reject({ error: error.errmsg });
     });
+    return deferred.promise;
     // return true;
     // db.users.findById(_id, async function (err, user) {
     //     if (err) deferred.reject(err.name + ': ' + err.message);
