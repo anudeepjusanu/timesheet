@@ -41,9 +41,13 @@
                                 ng-class="{'sorting_asc':vm.search.orderBy=='deviceName'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='deviceName'&&vm.search.sortDESC===true}">
                                 <a ng-click="vm.sorting('deviceName');">Device Name</a>
                             </th>
-                            <th ng-show="vm.inventoryColumns['userId'].selected" class="sorting"
-                                ng-class="{'sorting_asc':vm.search.orderBy=='userId'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='userId'&&vm.search.sortDESC===true}">
-                                <a ng-click="vm.sorting('userId');">Assigned</a>
+                            <th ng-show="vm.inventoryColumns['employeeId'].selected" class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='employeeId'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='employeeId'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('employeeId');">Employee ID</a>
+                            </th>
+                            <th ng-show="vm.inventoryColumns['userName'].selected" class="sorting"
+                                ng-class="{'sorting_asc':vm.search.orderBy=='userName'&&vm.search.sortDESC===false, 'sorting_desc':vm.search.orderBy=='userName'&&vm.search.sortDESC===true}">
+                                <a ng-click="vm.sorting('userName');">Assigned</a>
                             </th>
                             <th ng-show="vm.inventoryColumns['deviceStatus'].selected">Device Status</th>
                             <th ng-show="vm.inventoryColumns['location'].selected" class="sorting"
@@ -102,7 +106,10 @@
                             <td ng-show="vm.inventoryColumns['deviceName'].selected">
                                 <input class="form-control" type="text" ng-model="vm.search.deviceName" />
                             </td>
-                            <td ng-show="vm.inventoryColumns['userId'].selected">
+                            <td ng-show="vm.inventoryColumns['employeeId'].selected">
+                                <input class="form-control" type="text" ng-model="vm.search.employeeId" />
+                            </td>
+                            <td ng-show="vm.inventoryColumns['userName'].selected">
                                 <input class="form-control" type="text" ng-model="vm.search.userName" />
                             </td>
                             <td ng-show="vm.inventoryColumns['deviceStatus'].selected">
@@ -150,7 +157,8 @@
                             <td ng-show="vm.inventoryColumns['deviceId'].selected">{{inventory.deviceId}}</td>
                             <td ng-show="vm.inventoryColumns['deviceType'].selected">{{inventory.deviceType}}</td>
                             <td ng-show="vm.inventoryColumns['deviceName'].selected">{{inventory.deviceName}}</td>
-                            <td ng-show="vm.inventoryColumns['userId'].selected">
+                            <td ng-show="vm.inventoryColumns['employeeId'].selected">{{inventory.employeeId}}</td>
+                            <td ng-show="vm.inventoryColumns['userName'].selected">
                                 {{inventory.userName}}
                                 <!-- <a class="btn btn-link pull-right" ng-click="vm.inventoryAssignUser(inventory)">
                                     <span class="fa fa-user"></span>

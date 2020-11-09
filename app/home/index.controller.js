@@ -762,7 +762,7 @@
             vm.search.orderBy = orderBy;
         };
 
-        function deleteUser(id) {
+        vm.deleteUser = function (id) {
             UserService.Delete(id).then(function (users) {
                 getAllUsers();
             });
