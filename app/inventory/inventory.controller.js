@@ -11,7 +11,7 @@
         .filter('InventorySearch', function ($filter) {
             return function (input, searchObj) {
                 var output = input;
-                var filterFields = ['deviceId', 'deviceType', 'deviceName', 'userName', 'location', 'hostname', 'deviceBrand',
+                var filterFields = ['deviceId', 'deviceType', 'deviceName', 'employeeId', 'userName', 'location', 'hostname', 'deviceBrand',
                     'deviceModel', 'deviceSerial', 'deviceOS', 'deviceCPU', 'deviceRAM', 'note'];
                 _.each(filterFields, function (filterField) {
                     if (searchObj[filterField] && searchObj[filterField].length > 0) {
@@ -57,7 +57,8 @@
             "deviceId": { label: "Device ID", selected: true },
             "deviceType": { label: "Device Type", selected: true },
             "deviceName": { label: "Device Name", selected: false },
-            "userId": { label: "User", selected: true },
+            "employeeId": { label: "Employee ID", selected: true },
+            "userName": { label: "User", selected: true },
             "deviceStatus": { label: "Device Status", selected: true },
             "location": { label: "Location", selected: false },
             "hostname": { label: "Hostname", selected: false },
@@ -78,6 +79,7 @@
                 _.each(vm.inventories, function (inventoryObj) {
                     if (inventoryObj.assignedUser && inventoryObj.assignedUser.name) {
                         inventoryObj.userName = inventoryObj.assignedUser.name;
+                        inventoryObj.employeeId = inventoryObj.assignedUser.employeeId;
                     }
                 });
             }, function (error) {
@@ -210,7 +212,6 @@
             formatYear: 'yy',
             startingDay: 1
         };
-        console.log(usersList);
 
         vm.saveInventory = function (inventoryForm) {
             if (inventoryForm.$valid) {
@@ -264,6 +265,7 @@
             formatYear: 'yy',
             startingDay: 1
         };
+        vm.activeUsers = _.sortBy(vm.activeUsers, 'name');
         vm.activeUsers.unshift({ _id: "", name: "None" });
         if (vm.inventoryObj.userId) {
             vm.assignObj.userId = vm.inventoryObj.userId;
@@ -310,6 +312,7 @@
             formatYear: 'yy',
             startingDay: 1
         };
+        vm.activeUsers = _.sortBy(vm.activeUsers, 'name');
         vm.activeUsers.unshift({ _id: "", name: "None" });
         if (vm.inventoryObj.userId) {
             vm.deviceObj.userId = vm.inventoryObj.userId;
