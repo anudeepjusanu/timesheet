@@ -25,6 +25,14 @@
                         output = $filter('filter')(output, function (item) {
                             return (item.deviceStatus == "Available" || item.deviceStatus == "Assigned");
                         });
+                    } else if (searchObj.deviceStatus == "Assigned Multiple") {
+                        output = $filter('filter')(output, function (item) {
+                            return (item.deviceStatus == searchObj.deviceStatus);
+                        });
+                    } else if (searchObj.deviceStatus == "Available For Freshers") {
+                        output = $filter('filter')(output, function (item) {
+                            return (item.deviceStatus == searchObj.deviceStatus);
+                        });
                     } else {
                         output = $filter('filter')(output, function (item) {
                             return (item.deviceStatus == searchObj.deviceStatus);
@@ -111,6 +119,17 @@
             }, function () {
                 getInventories();
             });
+        }
+
+        vm.delInventory = function (inventoryObj) {
+            if (confirm("Do you want to delete this item?")) {
+                InventoryService.delInventory(inventoryObj._id).then(function (response) {
+                    getInventories();
+                }, function (error) {
+                    console.log(error);
+                    getInventories();
+                });
+            }
         }
 
         vm.inventoryAssignUser = function (inventoryObj) {

@@ -114,7 +114,7 @@
                             </td>
                             <td ng-show="vm.inventoryColumns['deviceStatus'].selected">
                                 <select class="form-control" ng-model="vm.search.deviceStatus"
-                                    ng-options="opt as opt for opt in ['All', 'Working', 'Assigned', 'Available', 'Repair', 'Scrap']"></select>
+                                    ng-options="opt as opt for opt in ['All', 'Working', 'Assigned', 'Assigned Multiple', 'Available', 'Available For Freshers', 'Collect Laptop', 'Repair', 'Scrap']"></select>
                             </td>
                             <td ng-show="vm.inventoryColumns['location'].selected">
                                 <input class="form-control" type="text" ng-model="vm.search.location" />
@@ -190,9 +190,10 @@
                                     ng-show="vm.user.admin || vm.user.userRole==='itsupport'">
                                     <span class="fa fa-pencil"></span>
                                 </a>
-                                <!-- <a class="btn btn-primary btn-icon btn-rounded">
+                                <a class="btn btn-primary btn-icon btn-rounded" ng-click="vm.delInventory(inventory)"
+                                    ng-show="vm.user.admin || vm.user.userRole==='itsupport'">
                                     <span class="fa fa-times"></span>
-                                </a> -->
+                                </a>
                             </td>
                         </tr>
                     </tbody>

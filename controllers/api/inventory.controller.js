@@ -48,7 +48,7 @@ function updateInventory(req, res) {
 }
 
 function delInventory(req, res) {
-    InventoryService.delInventory(req.params._id,).then(data => {
+    InventoryService.deleteInventory(req.params._id,).then(data => {
         res.send({ inventory: data });
     }).catch(error => {
         res.status(400).send(error);
