@@ -25,14 +25,6 @@
                         output = $filter('filter')(output, function (item) {
                             return (item.deviceStatus == "Available" || item.deviceStatus == "Assigned");
                         });
-                    } else if (searchObj.deviceStatus == "Assigned Multiple") {
-                        output = $filter('filter')(output, function (item) {
-                            return (item.deviceStatus == searchObj.deviceStatus);
-                        });
-                    } else if (searchObj.deviceStatus == "Available For Freshers") {
-                        output = $filter('filter')(output, function (item) {
-                            return (item.deviceStatus == searchObj.deviceStatus);
-                        });
                     } else {
                         output = $filter('filter')(output, function (item) {
                             return (item.deviceStatus == searchObj.deviceStatus);
