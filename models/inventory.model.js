@@ -13,7 +13,10 @@ var InventrySchema = new Schema({
 
     location: { type: String },
     hostname: { type: String },
-    client: { type: String },
+    clientId: {
+        type: mongoose.ObjectId,
+        default: null
+    },
     userId: {
         type: mongoose.ObjectId,
         default: null

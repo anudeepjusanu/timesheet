@@ -23,6 +23,7 @@ function getInventories() {
         var aggregateQuery = [
             { $match: {} },
             { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "assignedUser" } },
+            { $lookup: { from: "clients", localField: "clientId", foreignField: "_id", as: "client" } },
             { $unwind: { path: "$assignedUser", preserveNullAndEmptyArrays: true } }
             //{ $project: {} }
         ];
@@ -119,7 +120,6 @@ function assignUser(InventoryId, assignData) {
 
 function changeStatus(InventoryId, inventoryData) {
     return new Promise((resolve, reject) => {
-
         if (["Repair", "Repair Done", "Scrap"].includes(inventoryData.deviceStatus)) {
             InventoryModel.findById(InventoryId, function (err, InventoryObj) {
                 if (err) return handleError(err);
