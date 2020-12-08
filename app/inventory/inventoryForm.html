@@ -1,92 +1,197 @@
 <div class="modal-header">
-    <h3 class="modal-title" id="modal-title"> {{ (vm.inventoryObj&&vm.inventoryObj._id)?"Edit":"Add" }} Inventory</h3>
+  <h3 class="modal-title" id="modal-title">
+    {{ (vm.inventoryObj&&vm.inventoryObj._id)?"Edit":"Add" }} Inventory
+  </h3>
 </div>
 <div class="modal-body" id="modal-body">
-    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
-        close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
-    <form class="form-horizontal" name="inventoryForm">
-        <div class="form-group required">
-            <label class="col-md-3 col-xs-12 control-label">Device ID</label>
-            <div class="col-md-6 col-xs-12">
-                <input type="text" required="true" ng-model="vm.inventoryObj.deviceId" class="form-control" />
-            </div>
+  <div
+    uib-alert
+    class="wl-alerts"
+    ng-repeat="alert in vm.alerts"
+    ng-class="'alert-' + (alert.type || 'warning')"
+    close="vm.closeAlert($index)"
+    dismiss-on-timeout="3000"
+  >
+    {{alert.msg}}
+  </div>
+  <form class="form-horizontal" name="inventoryForm">
+    <div class="row">
+      <div class="col-md-6 col-xs-12 form-group required">
+        <label class="col-md-4 col-xs-12 control-label">Device ID</label>
+        <div class="col-md-8 col-xs-12">
+          <input
+            type="text"
+            required="true"
+            ng-model="vm.inventoryObj.deviceId"
+            class="form-control"
+          />
         </div>
-        <div class="form-group required">
-            <label class="col-md-3 col-xs-12 control-label">Device Type</label>
-            <div class="col-md-6 col-xs-12">
-                <input type="text" required="true" ng-model="vm.inventoryObj.deviceType" class="form-control" />
-            </div>
+      </div>
+
+      <div class="col-md-6 col-xs-12 form-group required">
+        <label class="col-md-4 col-xs-12 control-label">Device Type</label>
+        <div class="col-md-8 col-xs-12">
+          <input
+            type="text"
+            required="true"
+            ng-model="vm.inventoryObj.deviceType"
+            class="form-control"
+          />
         </div>
-        <div class="form-group required">
-            <label class="col-md-3 col-xs-12 control-label">Device Name</label>
-            <div class="col-md-6 col-xs-12">
-                <input type="text" required="true" ng-model="vm.inventoryObj.deviceName" class="form-control" />
-            </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-xs-12 form-group required">
+        <label class="col-md-4 col-xs-12 control-label">Device Name</label>
+        <div class="col-md-8 col-xs-12">
+          <input
+            type="text"
+            required="true"
+            ng-model="vm.inventoryObj.deviceName"
+            class="form-control"
+          />
         </div>
-        <div class="form-group">
-            <label class="col-md-3 col-xs-12 control-label">Host Name</label>
-            <div class="col-md-6 col-xs-12">
-                <input type="text" ng-model="vm.inventoryObj.hostName" class="form-control" />
-            </div>
+      </div>
+      
+      <div class="col-md-6 col-xs-12 form-group">
+        <label class="col-md-4 col-xs-12 control-label">Device Brand</label>
+        <div class="col-md-8 col-xs-12">
+          <input
+            type="text"
+            ng-model="vm.inventoryObj.deviceBrand"
+            class="form-control"
+          />
         </div>
-        <div class="form-group">
-            <label class="col-md-3 col-xs-12 control-label">Location</label>
-            <div class="col-md-6 col-xs-12">
-                <input type="text" ng-model="vm.inventoryObj.location" class="form-control" />
-            </div>
+      </div>
+
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-xs-12 form-group">
+          <label class="col-md-4 col-xs-12 control-label">Device Model</label>
+          <div class="col-md-8 col-xs-12">
+            <input
+              type="text"
+              ng-model="vm.inventoryObj.deviceModel"
+              class="form-control"
+            />
+          </div>
         </div>
-        <div class="form-group">
-            <label class="col-md-3 col-xs-12 control-label">Device Brand</label>
-            <div class="col-md-6 col-xs-12">
-                <input type="text" ng-model="vm.inventoryObj.deviceBrand" class="form-control" />
-            </div>
+        <div class="col-md-6 col-xs-12 form-group">
+          <label class="col-md-4 col-xs-12 control-label">Device Serial</label>
+          <div class="col-md-8 col-xs-12">
+            <input
+              type="text"
+              ng-model="vm.inventoryObj.deviceSerial"
+              class="form-control"
+            />
+          </div>
         </div>
-        <div class="form-group">
-            <label class="col-md-3 col-xs-12 control-label">Device Model</label>
-            <div class="col-md-6 col-xs-12">
-                <input type="text" ng-model="vm.inventoryObj.deviceModel" class="form-control" />
-            </div>
+      </div>
+  
+
+    <div class="row">
+      <div class="col-md-6 col-xs-12 form-group">
+        <label class="col-md-4 col-xs-12 control-label">Location</label>
+        <div class="col-md-8 col-xs-12">
+          <input
+            type="text"
+            ng-model="vm.inventoryObj.location"
+            class="form-control"
+          />
         </div>
-        <div class="form-group">
-            <label class="col-md-3 col-xs-12 control-label">Device Serial</label>
-            <div class="col-md-6 col-xs-12">
-                <input type="text" ng-model="vm.inventoryObj.deviceSerial" class="form-control" />
-            </div>
+      </div>
+      <div class="col-md-6 col-xs-12 form-group">
+        <label class="col-md-4 col-xs-12 control-label">Host Name</label>
+        <div class="col-md-8 col-xs-12">
+          <input
+            type="text"
+            ng-model="vm.inventoryObj.hostName"
+            class="form-control"
+          />
         </div>
-        <div class="form-group">
-            <label class="col-md-3 col-xs-12 control-label">OS</label>
-            <div class="col-md-6 col-xs-12">
-                <input type="text" ng-model="vm.inventoryObj.deviceOS" class="form-control" />
-            </div>
+      </div>
+
+
+    </div>
+
+   
+    <div class="row">
+      <div class="col-md-6 col-xs-12 form-group">
+        <label class="col-md-4 col-xs-12 control-label">OS</label>
+        <div class="col-md-8 col-xs-12">
+          <input
+            type="text"
+            ng-model="vm.inventoryObj.deviceOS"
+            class="form-control"
+          />
         </div>
-        <div class="form-group">
-            <label class="col-md-3 col-xs-12 control-label">CPU</label>
-            <div class="col-md-6 col-xs-12">
-                <input type="text" ng-model="vm.inventoryObj.deviceCPU" class="form-control" />
-            </div>
+      </div>
+      <div class="col-md-6 col-xs-12 form-group">
+        <label class="col-md-4 col-xs-12 control-label">CPU</label>
+        <div class="col-md-8 col-xs-12">
+          <input
+            type="text"
+            ng-model="vm.inventoryObj.deviceCPU"
+            class="form-control"
+          />
         </div>
-        <div class="form-group">
-            <label class="col-md-3 col-xs-12 control-label">RAM</label>
-            <div class="col-md-6 col-xs-12">
-                <input type="text" ng-model="vm.inventoryObj.deviceRAM" class="form-control" />
-            </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 col-xs-12 form-group">
+        <label class="col-md-4 col-xs-12 control-label">RAM</label>
+        <div class="col-md-8 col-xs-12">
+          <input
+            type="text"
+            ng-model="vm.inventoryObj.deviceRAM"
+            class="form-control"
+          />
         </div>
-        <div class="form-group">
-            <label class="col-md-3 col-xs-12 control-label">Purchase Date</label>
-            <div class="col-md-6 col-xs-12">
-                <p class="input-group">
-                    <input type="text" id="purchaseDate" class="form-control" uib-datepicker-popup
-                        ng-model="vm.inventoryObj.purchaseDate" is-open="vm.purchaseDateOpened"
-                        datepicker-options="vm.dateOptions" close-text="Close" />
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default"
-                            ng-click="vm.purchaseDateOpened=!vm.purchaseDateOpened"><i
-                                class="glyphicon glyphicon-calendar"></i></button>
-                    </span>
-                </p>
-            </div>
+      </div>
+      <div class="col-md-6 col-xs-12 form-group">
+        <label class="col-md-4 col-xs-12 control-label">Purchase Date</label>
+        <div class="col-md-8 col-xs-12">
+          <p class="input-group">
+            <input
+              type="text"
+              id="purchaseDate"
+              class="form-control"
+              uib-datepicker-popup
+              ng-model="vm.inventoryObj.purchaseDate"
+              is-open="vm.purchaseDateOpened"
+              datepicker-options="vm.dateOptions"
+              close-text="Close"
+            />
+            <span class="input-group-btn">
+              <button
+                type="button"
+                class="btn btn-default"
+                ng-click="vm.purchaseDateOpened=!vm.purchaseDateOpened"
+              >
+                <i class="glyphicon glyphicon-calendar"></i>
+              </button>
+            </span>
+          </p>
         </div>
-        <!-- <div class="form-group">
+      </div>
+    </div>
+   
+    <div class="row">
+        <div class="col-md-6 col-xs-12 form-group">
+          <label class="col-md-4 col-xs-12 control-label">Clients</label>
+          <div class="col-md-8 col-xs-12">
+            <select class="form-control" ng-model="vm.inventoryObj.clientId"
+            ng-options="client._id as client.clientName for client in vm.clients"></select>
+
+          </div>
+        </div>
+             </div>
+
+    <!-- <div class="form-group">
             <label class="col-md-3 col-xs-12 control-label">Active</label>
             <div class="col-md-6 col-xs-12">
                 <label class="switch">
@@ -95,10 +200,18 @@
                 </label>
             </div>
         </div> -->
-    </form>
+  </form>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-disabled="!vm.enableSaveBtn"
-        ng-click="vm.saveInventory(inventoryForm);">Save</button>
-    <button class="btn btn-warning" type="button" ng-click="vm.closeInventory()">Cancel</button>
+  <button
+    class="btn btn-primary"
+    type="button"
+    ng-disabled="!vm.enableSaveBtn"
+    ng-click="vm.saveInventory(inventoryForm);"
+  >
+    Save
+  </button>
+  <button class="btn btn-warning" type="button" ng-click="vm.closeInventory()">
+    Cancel
+  </button>
 </div>
