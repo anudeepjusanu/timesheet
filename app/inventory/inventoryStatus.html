@@ -9,7 +9,7 @@
             <label class="col-md-3 col-xs-12 control-label">Action</label>
             <div class="col-md-6 col-xs-12">
                 <select class="form-control" ng-model="vm.deviceObj.action"
-                    ng-options="opt as opt for opt in ['Assign', 'Assigned Multiple', 'Unassign', 'Available For Freshers', 'Repair', 'Repair Done', 'Collect Laptop', 'Scrap']"></select>
+                    ng-options="opt as opt for opt in ['Assign', 'Assigned Multiple', 'Assigned OE Client', 'Unassign', 'Available For Freshers', 'Repair', 'Repair Done', 'Collect Laptop', 'Scrap']"></select>
             </div>
         </div>
         <div ng-if="vm.deviceObj.action=='Assign'" class="form-group required">
