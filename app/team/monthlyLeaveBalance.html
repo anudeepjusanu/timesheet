@@ -13,32 +13,28 @@
         <div class="panel-body">
             <div class="" style="overflow:scroll hidden;">
                 <table class="table table-condensed table-bordered table-striped" export-table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th style="width: 240px;">Name</th>
-                            <th style="width: 80px;" ng-repeat="month in vm.financialYearMonths">{{month}}</th>
-                            <th>Total Entitlement</th>
-                            <th ng-repeat="month in vm.financialYearMonths">{{month}}</th>
-                            <th>Total Utilisation</th>
-                            <th>Closing Leave Balance</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="user in vm.users">
-                            <td>{{user.employeeId}}</td>
-                            <td>{{user.name}}</td>
-                            <td ng-repeat="month in vm.financialYearMonths" class="text-center">
-                                {{user.accruedLeaves[month]}}
-                            </td>
-                            <td class="text-center">{{user.totalAccruedLeaves}}</td>
-                            <td ng-repeat="month in vm.financialYearMonths" class="text-center">
-                                {{user.takenLeaves[month]}}
-                            </td>
-                            <td class="text-center">{{user.timeoffDays}}</td>
-                            <td class="text-center">{{user.totalBalance}}</td>
-                        </tr>
-                    </tbody>
+                    <tr>
+                        <th>EMP ID</th>
+                        <th style="width: 240px;">Name</th>
+                        <th style="width: 80px;" ng-repeat="month in vm.financialYearMonths">{{month}}</th>
+                        <th>Total Entitlement</th>
+                        <th ng-repeat="month in vm.financialYearMonths">{{month}}</th>
+                        <th>Total Utilisation</th>
+                        <th>Closing Leave Balance</th>
+                    </tr>
+                    <tr ng-repeat="user in vm.users">
+                        <td>{{user.employeeId}}</td>
+                        <td>{{user.name}}</td>
+                        <td ng-repeat="month in vm.financialYearMonths" class="text-center">
+                            {{user.accruedLeaves[month]}}
+                        </td>
+                        <td class="text-center">{{user.totalAccruedLeaves}}</td>
+                        <td ng-repeat="month in vm.financialYearMonths" class="text-center">
+                            {{user.takenLeaves[month]}}
+                        </td>
+                        <td class="text-center">{{user.timeoffDays}}</td>
+                        <td class="text-center">{{user.totalBalance}}</td>
+                    </tr>
                 </table>
             </div>
         </div>

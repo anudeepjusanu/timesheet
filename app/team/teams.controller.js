@@ -21,13 +21,11 @@
                                 escape: false
                             });
                         });
-                    var excel = scope.$on('export-excl',
+                    scope.$on('export-excl-file',
                         function (e, d) {
                             elem.tableExport({
                                 type: 'excel',
                                 escape: 'false',
-                                ignoreColumn: [4],
-                                ignoreRow: [1],
                                 worksheetName: d.date
                             });
                         });
@@ -40,7 +38,7 @@
                         });
 
                     scope.$on('$destroy', function () {
-                        excel();
+                        //excel();
                     });
                 }
             };
@@ -490,7 +488,7 @@
         vm.financialYear = fYear;
 
         vm.exportTable = function () {
-            $scope.$broadcast('export-excl', { "date": vm.filterDate });
+            $scope.$broadcast('export-excl-file', { "date": vm.filterDate });
         }
 
         vm.getUserLeaves = function () {
@@ -707,7 +705,7 @@
 
 
         vm.exportTable = function () {
-            $scope.$broadcast('export-excl', { "date": vm.filterDate });
+            $scope.$broadcast('export-excl-file', { "date": vm.filterDate });
         }
 
         vm.getUserLeaves = function () {
