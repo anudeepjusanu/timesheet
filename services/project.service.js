@@ -39,6 +39,8 @@ function create(projectParam) {
     var projectObj = {
         clientId: mongo.helper.toObjectID(projectParam.clientId),
         projectName: projectParam.projectName,
+        projectCode: projectParam.projectCode,
+        billingCycle: projectParam.billingCycle,
         clientName: projectParam.clientName,
         startDate: projectParam.startDate,
         projectBillType: projectParam.projectBillType,
@@ -70,6 +72,8 @@ function update(_id, params) {
     var projectObj = {
         clientId: mongo.helper.toObjectID(params.clientId),
         projectName: params.projectName,
+        projectCode: params.projectCode,
+        billingCycle: params.billingCycle,
         clientName: params.clientName,
         startDate: params.startDate,
         projectBillType: params.projectBillType,

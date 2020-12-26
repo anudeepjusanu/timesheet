@@ -65,6 +65,23 @@
                                     </p>
                                 </div>
                             </div>
+                            <div class="form-group required">
+                                <label class="col-md-3 control-label" for="projectCode">Project Code For Sales</label>
+                                <div class="col-md-9">
+                                    <input id="projectCode" name="projectCode" type="text" min="0" max="70"
+                                        placeholder="Project Name" class="form-control" ng-model="vm.obj.projectCode"
+                                        ng-required="true">
+                                </div>
+                            </div>
+                            <div class="form-group required">
+                                <label class="col-md-3 control-label" for="billingCycle">Billing Cycle</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" id="billingCycle" ng-model="vm.obj.billingCycle"
+                                        ng-required="true"
+                                        ng-options="opt.id as opt.label for opt in [{id: 'H', label: 'Hourly'}, {id: 'M', label: 'Monthly'}]"
+                                        ng-required="true"></select>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="col-md-3 control-label" for="projectBillType">Project Bill Type</label>
                                 <div class="col-md-9">
