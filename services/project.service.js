@@ -468,6 +468,7 @@ function createClient(clientParam) {
     var deferred = Q.defer();
     var clientObj = {
         clientName: clientParam.clientName,
+        clientCode: clientParam.clientCode,
         createdOn: new Date(),
         updatedOn: new Date()
     }
@@ -481,7 +482,8 @@ function createClient(clientParam) {
 function updateClient(_id, clientParam) {
     var deferred = Q.defer();
     var clientObj = {
-        clientName: clientParam.clientName
+        clientName: clientParam.clientName,
+        clientCode: clientParam.clientCode
     }
     clientObj.updatedOn = new Date();
     db.clients.update({ _id: mongo.helper.toObjectID(_id) }, { '$set': clientObj }, true, function (err, client) {
@@ -490,7 +492,6 @@ function updateClient(_id, clientParam) {
             deferred.resolve(client);
         });
     });
-
     return deferred.promise;
 }
 
