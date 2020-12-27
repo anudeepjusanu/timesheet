@@ -129,14 +129,14 @@ function getProjectById(projectId) {
 
 function getAllProjects() {
     var deferred = Q.defer();
-    db.projects.find().sort({ clientName: 1, projectName: 1 }).toArray(function (err, projects) {
-        if (err) deferred.reject(err.name + ': ' + err.message);
-        if (projects) {
-            deferred.resolve(projects);
-        } else {
-            // project not found
-            deferred.resolve();
-        }
+    projects.aggregate([
+        { $match: { isActive: true } },
+        { $lookup: { from: 'clients', localField: 'clientId', foreignField: '_id', as: 'client_info' } },
+        { $unwind: { path: "$client_info", preserveNullAndEmptyArrays: true } },
+        { $sort: { clientName: 1, projectName: 1 } }
+    ]).exec(function (error, response) {
+        if (error) deferred.reject(error);
+        deferred.resolve(response);
     });
     return deferred.promise;
 }

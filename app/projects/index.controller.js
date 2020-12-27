@@ -332,8 +332,10 @@
             UserService.getUsers().then(function (response) {
                 vm.users = [];
                 _.each(response, function (userObj) {
+                    console.log(userObj);
                     vm.users.push({
                         userName: userObj.name,
+                        employeeId: userObj.employeeId,
                         userId: userObj._id
                     });
                 });
@@ -450,6 +452,9 @@
     function AssignUserModel($uibModalInstance, ProjectService, UserService, noty, user, project) {
         var vm = this;
         vm.alerts = [];
+        vm.closeAlert = function (index) {
+            vm.alerts.splice(index, 1);
+        };
         vm.enableSaveBtn = true;
         vm.resourceTypes = [
             { "resourceTypeId": "shadow", "resourceTypeVal": "Shadow" },
@@ -466,6 +471,7 @@
 
         vm.users = [];
         vm.projects = [];
+        vm.defaultSalesItemId = "";
         vm.user = user;
         vm.user.chooseUser = false;
         if (!user.userId) {
@@ -488,6 +494,8 @@
             getProjects();
             vm.project.chooseProject = true;
         }
+        vm.selectedUser = {};
+        vm.selectedProject = {};
         var currentDay = new Date().getDay();
         vm.open2 = function () {
             vm.popup2.opened = true;
@@ -502,20 +510,44 @@
         };
 
         vm.addBillDate = function () {
-            if (!vm.user.billDates) {
-                vm.user.billDates = [];
+            if (vm.user.userId && vm.user.userId) {
+                vm.generateSalesItemId();
+                if (!vm.user.billDates) {
+                    vm.user.billDates = [];
+                }
+                vm.user.billDates.push({ "start": "", "end": "", "salesItemId": vm.defaultSalesItemId });
+            } else {
+                vm.alerts.push({ msg: "Please select User or Project!", type: 'danger' });
             }
-            vm.user.billDates.push({ "start": "", "end": "" });
         }
 
         vm.deleteBillDate = function (billDate, index) {
             vm.user.billDates.splice(index, 1);
         }
 
+        vm.generateSalesItemId = function () {
+            vm.defaultSalesItemId = "";
+            vm.defaultSalesItemId += (vm.project.client_info && vm.project.client_info.clientCode) ? vm.project.client_info.clientCode + ":" : "";
+            vm.defaultSalesItemId += (vm.project.projectCode) ? vm.project.projectCode + ":" : "";
+            vm.defaultSalesItemId += (vm.project.billingCycle) ? vm.project.billingCycle + ":" : "";
+            vm.defaultSalesItemId += (vm.user.employeeId) ? vm.user.employeeId : "";
+        }
+
+        vm.selectAssignUser = function () {
+            vm.user.userId = vm.selectedUser.userId;
+            vm.user.employeeId = vm.selectedUser.employeeId;
+            vm.generateSalesItemId();
+        }
+        vm.selectAssignProject = function () {
+            vm.generateSalesItemId();
+        }
+        vm.generateSalesItemId();
+
         vm.ok = function (form) {
             if (form.$valid) {
                 vm.enableSaveBtn = false;
                 var assignedUsers = [];
+                console.log(vm.user);
                 assignedUsers.push(vm.user);
                 ProjectService.assignUsers(vm.project._id, assignedUsers).then(function (response) {
                     noty.showSuccess("Saved successfully!");
@@ -544,10 +576,12 @@
                 _.each(response, function (userObj) {
                     vm.users.push({
                         userName: userObj.name,
+                        employeeId: userObj.employeeId,
                         userId: userObj._id
                     });
                 });
                 vm.users = _.sortBy(vm.users, 'userName');
+                vm.generateSalesItemId();
             }, function (error) {
                 if (error) {
                     vm.alerts.push({ msg: error, type: 'danger' });
@@ -566,6 +600,7 @@
                         }
                     });
                 }
+                vm.generateSalesItemId();
             }, function (error) {
                 console.log(error);
             });
