@@ -1,0 +1,1764 @@
+<style>
+.fileUploadInput {
+  display: grid;
+  grid-gap: 5px;
+  position: relative;
+  z-index: 1;
+margin-top: 10px;
+margin-bottom: 20px;
+
+}
+  
+  .fileUploadInput label {
+    display: flex;
+    align-items: center;
+    color: setColor(primary, 0.5);
+    background: setColor(white);
+    transition: .4s ease;
+    font-family: arial, sans-serif;
+    font-size: .75em;
+    font-weight: regular; }
+    
+  .fileUploadInput input {
+    position: relative;
+    z-index: 1;
+    padding: 0 gap(m);
+    height: 40px;
+    border: 1px solid #323262;
+    border-radius: 3px;
+    font-family: arial, sans-serif;
+    font-size: 1rem;
+    font-weight: regular; }
+    .fileUploadInput input[type="file"] {
+      padding: 0 gap(m); }
+      .fileUploadInput input[type="file"]::-webkit-file-upload-button {
+        visibility: hidden;
+        margin-left: 10px;
+        padding: 0;
+        height: 40px;
+        width: 0; }
+        
+  .fileUploadInput button {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 50px;
+    height: 40px;
+    line-height: 0;
+    user-select: none;
+    color: white;
+    background-color: #323262;
+    border-radius: 0 3px 3px 0;
+    font-family: arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 800; }
+    .fileUploadInput button svg {
+      width: auto;
+      height: 50%; }
+
+
+</style>
+<div class="content-wrapper">
+    <div class="panel panel-default">
+                <div class="panel-body">
+                    <form class="form-horizontal" name="investmentDeclaration">
+
+            <table cellspacing="0" border="0">
+                <colgroup width="73"></colgroup>
+                <colgroup span="9" width="68"></colgroup>
+                <colgroup width="83"></colgroup>
+                <colgroup width="105"></colgroup>
+                <colgroup span="3" width="68"></colgroup>
+                <colgroup width="71"></colgroup>
+                <tr>
+                    <td colspan=12 height="20" align="center"><b><font color="#000000">DECLARATION / INVESTMENT PROPOSAL FOR THE FINANCIAL YEAR 2020-2021</font></b></td>
+                                   </tr>
+                <tr>
+                    <td colspan=12 height="20" align="center"><b><font color="#000000"> (For Income Tax Deduction at Source purpose)</font></b></td>
+                    
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 height="20" align="left"><font color="#000000">Name</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=6 align="left" bgcolor="#FFCC99">
+                        
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.Name"
+                        readonly="readonly"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height: 20px;"
+                      />
+                      </td>
+                    <td align="left"><font color="#000000"> &nbsp;PAN</font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.Pan"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height: 20px;"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 height="21" align="left"><font color="#000000">Designation</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=6 align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        readonly="readonly"
+                        ng-model="vm.investmentDeclaration.Designation"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height: 20px;"
+                      />
+                    
+                    </td>
+                    <td align="left"><font color="#000000"> &nbsp;Date of &nbsp;Joining</font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" bgcolor="#FFCC99" sdnum="1033;1033;[$-409]DD-MMM-YY;@"> 
+                        <input
+                        type="text"
+                        readonly="readonly"
+                        ng-model="vm.investmentDeclaration.DOJ"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height: 20px;"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font face="Trebuchet MS" color="#000000"><br></font></td>
+                    <td align="left" bgcolor="#FFFFFF"><font face="Trebuchet MS" color="#000000"><br></font></td>
+                    <td align="center" sdnum="1033;1033;D-MMM-YY"><font face="Trebuchet MS" color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 height="21" align="left"><font color="#000000">Employee ID</font></td>
+                    <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=6 align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        readonly="readonly"
+                        ng-model="vm.investmentDeclaration.EmpId"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height: 20px;"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 rowspan=2 height="42" align="left" valign=middle><b><font color="#000000">Choose scheme of Income tax regime</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=8 align="left" bgcolor="#CCCCFF"><font color="#000000">New Slabs for FY 2020-21, AY 2021-22</font></td>
+                    <td style="border-top: 2px solid #000000; border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.schemeNew"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=8 align="left" bgcolor="#CCCCFF"><font color="#000000">Old Slabs, mandatory upto FY 2019-20 and optional from FY2020-21</font></td>
+                    <td style="border-top: 2px solid #000000; border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.schemeOld"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="20" align="left" colspan=10><b><font color="#000000">As per the provisions of section 139A (5A) of the Income-Tax Act </font></b></td>
+                                    </tr>
+                <tr>
+                    <td height="20" align="left" colspan=10><b><font color="#000000">it is mandatory for you to intimate your correct PAN to the Company</font></b></td>
+                                    </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" valign=middle bgcolor="#969696"><b><font color="#000000">A.</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=top bgcolor="#969696"><b><font color="#000000">PARTICULARS OF INVESTMENT U/S. 80 C (Maximum of Rs.1, 50,000) </font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#969696"><b><font color="#000000">Amount in Rs.</font></b></td>
+                    <td align="left" bgcolor="#FFFF00"><b><font color="#000000">* Limit 1.5 lacs</font></b></td>
+                    <td align="left" bgcolor="#FFFF00"><font color="#000000"><br></font></td>
+                    <td align="left" bgcolor="#FFFF00"><font color="#000000"><br></font></td>
+                    <td align="left" bgcolor="#FFFF00"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" valign=middle bgcolor="#969696"><b><font color="#000000"><br></font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="center" valign=middle bgcolor="#969696"><u><font color="#0000FF"><a href="#Investment List.OLE_LINK3">Qualifying investments list</a></font></u></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#969696"><b><font color="#000000"><br></font></b></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" sdval="1" sdnum="1033;"><font color="#000000">1</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=top><font color="#000000">Life Insurance premium ( Self / Spouse / Children &ndash; Direct )&nbsp;</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secArow1"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" sdval="2" sdnum="1033;"><font color="#000000">2</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=top><font color="#000000">Deposit in Public Provident Fund (Self / Spouse / Children) -  <b>PPF&nbsp;</b> </font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secArow2"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" sdval="3" sdnum="1033;"><font color="#000000">3</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=top><font color="#000000">Contribution to Unit Linked Insurance Plan of LIC / UTI (Self / Spouse / Children) <b>ULIP&nbsp;</b></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secArow3"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" sdval="4" sdnum="1033;"><font color="#000000">4</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=top><font color="#000000">Subscription to <b>&quot;Home Loan Account Scheme'</b> of National Housing Bank&nbsp;</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secArow4"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" sdval="5" sdnum="1033;"><font color="#000000">5</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=top><font color="#000000">Investment in notified Equity Linked Saving Schemes ELSS&nbsp;</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secArow5"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" sdval="6" sdnum="1033;"><font color="#000000">6</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=top><font color="#000000">N S C purchase during <b>01.04.20&ndash; 31.03.21&nbsp;</b>(for Self only)</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secArow6"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" sdval="7" sdnum="1033;"><font color="#000000">7</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=top><font color="#000000">Repayment of <b>Housing Loan Principal</b>: Amount payable (April '20 to March '21)*</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99" sdnum="1033;0;#,##0">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secArow7"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left" bgcolor="#FFFF00"><font color="#000000">*Max Rs.</font></td>
+                    <td align="right" bgcolor="#FFFF00" sdval="150000" sdnum="1033;"><font color="#000000">150000</font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" sdval="8" sdnum="1033;"><font color="#000000">8</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=top><font color="#000000">Contribution to Pension scheme (For Self Only) &nbsp;</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secArow8"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" sdval="9" sdnum="1033;"><font color="#000000">9</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=top><font color="#000000">Contribution to Retirement Benefit Unit Scheme of UTI&nbsp;</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secArow9"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" sdval="10" sdnum="1033;"><font color="#000000">10</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=top><font color="#000000">Children Education for two children (Tuition Fees only)&nbsp;</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99"> <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secArow10"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      /></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" rowspan=2 height="40" align="center" valign=middle sdval="11" sdnum="1033;"><font color="#000000">11</font></td>
+                    <td style="border-top: 1px solid #000000; border-left: 1px solid #000000" align="left" colspan="6"><font color="#000000">No. of school going children.   a) Day Scholars  in Nos </font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                    
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secArow11a"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td style="border-top: 1px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-right: 1px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=top bgcolor="#FFCC99"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#FF0000">Max two children are covered.</font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+
+                    <td style="border-bottom: 1px solid #000000;" align="left" colspan="3"><font color="#000000"> b) Hostel             in Nos</font></td>
+                                        <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" bgcolor="#FFCC99" sdval="0" sdnum="1033;">
+                                            <input
+                                            type="text"
+                                            ng-model="vm.investmentDeclaration.secArow11b"
+                                            class="form-control"
+                                            style="background-color: transparent;border: none;color: black;height:20px"
+                                          />
+                          
+                                        
+                                        </td>
+                    <td style="border-bottom: 1px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 1px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=top bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secArow11"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" sdval="12" sdnum="1033;"><font color="#000000">12</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=top><font color="#000000">Other (please specify)(Tax saver Mutual Funds with Three years Lock-in period)</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secArow12"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" sdval="13" sdnum="1033;"><font color="#000000">13</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" colspan=10 align="left" valign=top><font color="#000000">Employees Contribution to PF</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secArow13"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+
+                    </td>
+                    <td align="left"><font color="#FF0000">Standard contribution of Rs. 1800</font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" sdval="14" sdnum="1033;"><font color="#000000">14</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" colspan=10 align="left" valign=top><font color="#000000">Employees Voluntary Contribution to PF</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secArow14"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+
+                    </td>
+                    <td align="left"><font color="#FF0000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center"><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" colspan=10 align="left" valign=top><b><font color="#000000">Sub Total Under Section 80C*</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" sdval="0" sdnum="1033;"><b><font color="#000000">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secArowSubTotal"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+
+                    </font></b></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><b><font color="#000000"><br></font></b></td>
+                    <td align="left"><b><font color="#000000"><br></font></b></td>
+                    <td align="left"><b><font color="#000000"><br></font></b></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" sdval="15" sdnum="1033;"><font color="#000000">15</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" colspan=10 align="left" valign=top><font color="#000000">Contribution to Rajiv Gandhi Equity Savings <b>Scheme (Sec 80 CCG)</b></font></td>
+                    
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secArow15"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    
+                    </td>
+                   
+                   
+                    <td align="left"><font color="#FF0000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" sdval="15" sdnum="1033;"><font color="#000000">16</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" colspan=10 align="left" valign=top><font color="#000000">NPS-2015 <br/>The additional deduction of Rs. 50,000/- under Section 80CCD(1B) is available to assess over and above the benefit of Rs. 1.50</font></td>
+                    
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secArow16"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                   
+                   
+                    <td align="left"><font color="#FF0000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+
+                <tr>
+                    <td  colspan="5">
+                        <!-- <input type="file"   id="upload" ng-file-model="vm.files" style="height: auto;"
+                        class="form-control"  multiple/> -->
+
+                            <div class="fileUploadInput">
+                            <label>Attachments</label>
+                            <input type="file" ng-file-model="vm.files" multiple/>
+                            <button>+</button></div>
+                        
+
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+
+
+
+
+
+<td>
+    <!-- <button
+    class="btn btn-primary"
+    type="button"
+    ng-click="vm.saveDoc();"
+  >
+    Upload
+  </button> -->
+
+</td>
+
+
+                   
+                                   </tr>
+
+<tr ng-repeat="file in vm.investmentDeclaration.sectionAFiles">
+    <td colspan="5">
+        <font color="#000000">{{file}}</font>
+       
+    </td>
+    
+</tr>
+
+
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" valign=middle bgcolor="#969696"><b><font color="#000000">B.</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-left: 1px solid #000000" colspan=10 align="left" bgcolor="#969696"><b><font color="#000000">PARTICULARS OF INVESTMENT / EXPENDITURE DEDUCTIBLE FROM GROSS TOTAL INCOME</font></b></td>
+                    <td align="right" bgcolor="#969696"><font color="#000000"> </font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" rowspan=3 height="60" align="center" valign=middle sdval="1" sdnum="1033;"><font color="#000000">1</font></td>
+                    <td style="border-top: 1px solid #000000; border-left: 1px solid #000000" colspan=8 align="left"><font color="#000000">Medical Insurance Premium &ndash; ( MEDICLAIM  PREMIUM) Up to Rs.25,000/- </font></td>
+                    <td style="border-top: 1px solid #000000; border-right: 1px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" rowspan=3 align="left" valign=middle><b><font color="#000000">(U/s.80D)</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" rowspan=3 align="right" valign=middle bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secBrow1"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-left: 1px solid #000000" colspan=8 align="left"><font color="#000000">(Paid for Self / Spouse / Dependent parents &amp; Dependent children)</font></td>
+                    <td style="border-right: 1px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-left: 1px solid #000000" colspan=8 align="left"><font color="#000000">Up to Rs.50,000 in case any member of the family is a Senior Citizen</font></td>
+                    <td style="border-right: 1px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" height="29" align="center" valign=middle sdval="2" sdnum="1033;"><font color="#000000">2</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=9 align="left" valign=middle><font color="#000000">Repayment of <b>Interest on Loan</b> taken for Higher Education from Govt Banks and Institutions</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><b><font color="#000000">(U/s.80E)</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secBrow2"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" height="32" align="center" valign=middle sdval="3" sdnum="1033;"><font color="#000000">3</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=9 align="center" valign=middle><font color="#000000">Exemption for physically handicapped (self) Rs.50,000 or Rs.75,000 in case of severe disability</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><b><font color="#000000">(U/s.80U)</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secBrow3"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#FF0000">For self</font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" height="31" align="center" valign=middle sdval="4" sdnum="1033;"><font color="#000000">4</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=9 align="left" valign=middle><font color="#000000">Interest on Deposits in Savings account</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><b><font color="#000000">(U/s 80TTA)</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secBrow4"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#FF0000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" height="32" align="center" valign=middle sdval="5" sdnum="1033;"><font color="#000000">5</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=9 align="left" valign=middle><font color="#000000">interest on income from deposits for senior citizens up 50000/-</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><b><font color="#000000">(U/s 80TTB)</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secBrow5"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#FF0000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" height="20" align="center" sdval="6" sdnum="1033;"><font color="#000000">6</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=9 align="left" bgcolor="#FFCC99"><font color="#000000">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secBrow6col1"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+
+                    </td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secBrow6"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      /></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" valign=middle bgcolor="#969696"><b><font color="#000000">C.</font></b></td>
+                    <td style="border-left: 1px solid #000000" colspan=10 align="left" bgcolor="#969696"><b><font color="#000000">Payment of Interest on Housing Loan </font></b></td>
+                    <td align="right" bgcolor="#969696"><font color="#000000"> </font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" valign=middle sdval="1" sdnum="1033;"><font color="#000000">1</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="left" valign=middle colspan="9"><font color="#000000">Loan taken prior to 1 April, 1999       &emsp;    &emsp;              <b>-Upto Rs.30,000</b></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secCrow1"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="48" align="center" valign=middle sdval="2" sdnum="1033;"><font color="#000000">2</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=middle><font color="#000000">Loan taken on or after 1 April, 1999 and acquisition /Construction completed within 3 years from the end of Financial year in which capital was <b>Borrowed &ndash; Upto Rs.150, 000 inclusive of (I) above</b></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secCrow2"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="24" align="center" valign=middle sdval="3" sdnum="1033;"><font color="#000000">3</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=9 align="left" valign=middle><font color="#000000">Interest on self occupied housing loan*</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><b><font color="#000000"><br></font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secCrow3"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left" bgcolor="#FFFF00"><b><font color="#000000">* Limit has been increased to 2.00 lacs</font></b></td>
+                    <td align="left" bgcolor="#FFFF00"><font color="#000000"><br></font></td>
+                    <td align="left" bgcolor="#FFFF00"><font color="#000000"><br></font></td>
+                    <td align="left" bgcolor="#FFFF00"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="24" align="center" valign=middle bgcolor="#969696"><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=middle bgcolor="#969696"><b><font color="#000000">Additional Information Required (U/s 80EE) -Only to the extent not cliamed in FY2020-21</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#969696"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="24" align="center" valign=middle><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 rowspan=2 align="left" valign=middle><font color="#000000">First time home buyers deduction can be claimed on home loan interest paid on home loan up to maximum Rs 50,000 per financial year.  You can claim this deduction until you have fully repaid the loan.</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle bgcolor="#FFCC99" sdnum="1033;1033;M/D/YYYY">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secCrow4row1"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="24" align="center" valign=middle><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle bgcolor="#FFCC99" sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secCrow4row2"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="24" align="center" valign=middle><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=middle><font color="#000000">Loan has been sanctioned by a Financial Institution or a Housing Finance Company</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle bgcolor="#FFCC99" sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secCrow5"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="24" align="center" valign=middle><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=middle><font color="#000000">Loan taken for this house is Rs 35 lakhs or less</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secCrow6"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="24" align="center" valign=middle bgcolor="#969696"><b><font color="#000000">D.</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=middle bgcolor="#969696"><b><font color="#000000">Income from Let Out Property</font></b></td>
+                    <td align="left"><b><font color="#000000"><br></font></b></td>
+                    <td align="left"><b><font color="#000000"><br></font></b></td>
+                    <td align="left"><b><font color="#000000"><br></font></b></td>
+                    <td align="left"><b><font color="#000000"><br></font></b></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="24" align="center" valign=middle><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=middle><font color="#000000">Rent Received during the year (Annual Value)</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secDrow1"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="24" align="center" valign=middle><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=middle><font color="#000000">Interest Paid during the year</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secDrow2"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="24" align="center" valign=middle><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left" valign=middle><font color="#000000">Municipal Taxes Paid (only for letout property)</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle bgcolor="#FFCC99">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secDrow3"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="46" align="center" valign=middle bgcolor="#969696"><b><font color="#000000">E.</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=top bgcolor="#969696"><b><font face="Arial" color="#000000">Rent paid/payable month wise for rented accommodation (for claiming exemption U/s. 10(13A)                          Please fill month wise.</font></b></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="right" sdval="43922" sdnum="1033;1033;MMM-YY"><b><font color="#000000">Apr-20</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" sdval="43953" sdnum="1033;1033;MMM-YY"><b><font color="#000000">May-20</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" sdval="43984" sdnum="1033;1033;MMM-YY"><b><font color="#000000">Jun-20</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" sdval="44015" sdnum="1033;1033;MMM-YY"><b><font color="#000000">Jul-20</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" sdval="44046" sdnum="1033;1033;MMM-YY"><b><font color="#000000">Aug-20</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" sdval="44077" sdnum="1033;1033;MMM-YY"><b><font color="#000000">Sep-20</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" sdval="44108" sdnum="1033;1033;MMM-YY"><b><font color="#000000">Oct-20</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" sdval="44139" sdnum="1033;1033;MMM-YY"><b><font color="#000000">Nov-20</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" sdval="44170" sdnum="1033;1033;MMM-YY"><b><font color="#000000">Dec-20</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" sdval="44201" sdnum="1033;1033;MMM-YY"><b><font color="#000000">Jan-21</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" sdval="44232" sdnum="1033;1033;MMM-YY"><b><font color="#000000">Feb-21</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" sdval="44263" sdnum="1033;1033;MMM-YY"><b><font color="#000000">Mar-21</font></b></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="30" align="left" bgcolor="#FFCC99" sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secEcol1"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />                    </td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99" sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secEcol2"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    
+                    </td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99" sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secEcol3"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99" sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secEcol4"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99" sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secEcol5"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99" sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secEcol6"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99" sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secEcol7"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99" sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secEcol8"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99" sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secEcol9"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99" sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secEcol10"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99" sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secEcol11"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99" sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secEcol12"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="22" align="center" valign=middle bgcolor="#969696"><b><font color="#000000">F.</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=top bgcolor="#969696"><b><font face="Arial" color="#000000">Reimbursement of expenses</font></b></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="24" align="center" sdval="1" sdnum="1033;"><font color="#000000">1</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left"><font color="#000000">The govt has removed the conveyance &amp; medical exemptions &amp; introduced a standard deduction of Rs. 50,000/-.</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99" sdnum="1033;0;@">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secFrow1"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" sdval="2" sdnum="1033;"><font color="#000000">2</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=10 align="left"><font color="#000000">Leave Travel Bills</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" bgcolor="#FFCC99" sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ "> 
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.secFrow2"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      /></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="20" align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-bottom: 2px solid #000000" height="21" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><b><font color="#000000"><br></font></b></td>
+                    <td style="border-bottom: 2px solid #000000" align="left" colspan="3">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.signature1"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="20" align="left" colspan=10><b><font face="Arial" color="#000000">** Original Proof of investments to be submitted by 31st December 2020</font></b></td>
+                                      <td align="left" colspan=6><b><font color="#000000">Signature of the Employee</font></b></td>
+                                    </tr>
+                <tr>
+                    <td height="20" align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="20" align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="20" align="left"><b><font face="Arial" color="#000000"><br></font></b></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="20" align="left" colspan=15><b><font face="Arial" color="#000000">** Section 80DDB &amp; 80 G (Donation) will not be taken for consideration for the salary part. Individual has to file </font></b></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="20" align="left" colspan=10><b><font face="Arial" color="#000000">       IT returns with these Sections along with his/her other Income.  </font></b></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="20" align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="20" align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td colspan=12 height="21" align="center"><b><u><font face="Times New Roman" size=3 color="#000000">Income from Previous Employer</font></u></b></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="20" align="left" colspan=10><font color="#000000">Please furnish these particulars if joined in the mid of the year i.e. April 1, 202 to March 31, 2021</font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" colspan=11 height="20" align="left" bgcolor="#969696"><b><font face="Times New Roman" color="#000000">Details of Previous Employment (Attach IT computation / Form 16)  **</font></b></td>
+                    <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" bgcolor="#969696"><b><font color="#000000">Amount</font></b></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 height="20" align="left"><font color="#000000">Taxable Salary Income</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.taxableSalaryIncome"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 height="20" align="left"><font color="#000000">Taxable Perquisites</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.taxPerquisites"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 height="20" align="left"><font color="#000000">PF Deducted</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.pfDeducted"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 height="20" align="left"><font color="#000000">Tax on profession deducted</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.professionDeducted"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 height="20" align="left"><font color="#000000">Income Tax deducted</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left"> <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.taxDeducted"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 height="20" align="left"><font color="#000000">Period of employment with previous employer</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left">
+                        <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.periOfEmployment"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="20" align="left" colspan=10><font face="Times New Roman" color="#000000">       ** Supported by Form 16 / IT computation sheet of previous employer with Form 12B.</font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="20" align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td colspan=12 height="20" align="center" bgcolor="#969696"><b><u><font color="#000000">DECLARATION</font></u></b></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="20" align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="46" align="center" valign=middle sdval="1" sdnum="1033;"><font color="#000000">1</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=top><font color="#000000">I understand that the eligibility to deductions under Chapter VI - A and investment / expenditure u/s. 80C and 80CCF is based on estimated projections which I will confirm with documentary evidence before 31st December 2020.</font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="45" align="center" valign=middle sdval="2" sdnum="1033;"><font color="#000000">2</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=top><font color="#000000">I shall intimate the Company of any change in my contributions/Investments/payments affecting my eligibility to deductions under Chapter VI -A before 31st December 2020</font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="63" align="center" valign=middle sdval="3" sdnum="1033;"><font color="#000000">3</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=top><font color="#000000">My claim for exemption of HRA (either full or part) is based on the rent actual paid by me and as per receipt obtained from the owner which will be furnished as assured. </font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="66" align="center" valign=middle sdval="4" sdnum="1033;"><font color="#000000">4</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=top><font color="#000000">I understand that no refund of excess tax, if any, deducted from my salary will be made to me by the Company under any circumstances and that any such refund will have to be claimed by me in my Tax Return, to be filed by me with the Income-tax authorities.</font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="54" align="center" valign=middle sdval="5" sdnum="1033;"><font color="#000000">5</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=top><font color="#000000">I hereby undertake, agree and confirm that I shall be fully responsible for any income tax liability that may arise if this declaration is found incorrect in any manner.</font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="66" align="center" valign=middle sdval="6" sdnum="1033;"><font color="#000000">6</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=top><font color="#000000">I here by declare that Information as stated above is true and correct . I am personally liable to Income Tax proceedings for any misstatements in the declaration or proofs submitted herewith if they are inconsistent with the requirement of Income Tax Act, 1961.</font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="43" align="center" valign=middle><font color="#000000"><br></font></td>
+                    <td align="left" valign=top><font color="#000000"><br></font></td>
+                    <td align="left" valign=top><font color="#000000"><br></font></td>
+                    <td align="left" valign=top><font color="#000000"><br></font></td>
+                    <td align="left" valign=top><font color="#000000"><br></font></td>
+                    <td align="left" valign=top><font color="#000000"><br></font></td>
+                    <td align="left" valign=top><font color="#000000"><br></font></td>
+                    <td align="left" valign=top><font color="#000000"><br></font></td>
+                    <td align="left" valign=top><font color="#000000"><br></font></td>
+                    <td align="left" valign=bottom colspan="3"> <input
+                        type="text"
+                        ng-model="vm.investmentDeclaration.signature2"
+                        class="form-control"
+                        style="background-color: transparent;border: none;color: black;height:20px"
+                      />
+                    </td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-bottom: 2px solid #000000" height="21" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left" colspan="6"><b><font color="#000000">Signature of the Employee</font></b></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-bottom: 2px solid #000000" align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="20" align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="20" align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="20" align="left" colspan=15><b><font color="#000000">Notes:   The rates of Income tax on taxable income for the F.Y. 2019-2020  are as mentioned below:</font></b></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="20" align="left"><font color="#000000"><br></font></td>
+                    <td align="left" colspan=5><b><u><font color="#000000">Income Tax Slabs</font></u></b></td>
+                  
+                </tr>
+                <tr>
+                    <td height="20" align="left"><font color="#000000"><br></font></td>
+                    <td align="left" colspan=10><b><u><font color="#FFFFFF">&ndash; Exemption limit raised from Rs. 1,60,000 to Rs. 1,80,000</font></u></b></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="21" align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><b><u><font face="Arial" size=1 color="#000000"><br></font></u></b></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="21" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=5 align="center" valign=top><b><font face="Arial" size=1 color="#000000">Upto Rs. 2,50,000</font></b></td>
+                    <td style="border-top: 2px solid #000000; border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="center" valign=top><b><font face="Arial" size=1 color="#000000">NIL</font></b></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="21" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=5 align="center" valign=top><b><font face="Arial" size=1 color="#000000">Rs. 2,50,001 to Rs. 5,00,000</font></b></td>
+                    <td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="center" valign=top sdval="0.05" sdnum="1033;0;0%"><b><font face="Arial" size=1 color="#000000">5%</font></b></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="20" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=5 align="center" valign=top><b><font face="Arial" size=1 color="#000000">Rs. 5,00,001 to Rs. 10,00,000</font></b></td>
+                    <td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="center" valign=top sdval="0.2" sdnum="1033;0;0%"><b><font face="Arial" size=1 color="#000000">20%</font></b></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="21" align="left"><font color="#000000"><br></font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=5 align="center" valign=top><b><font face="Arial" size=1 color="#000000">Above Rs. 10,00,000</font></b></td>
+                    <td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="center" valign=top sdval="0.3" sdnum="1033;0;0%"><b><font face="Arial" size=1 color="#000000">30%</font></b></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="21" align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td height="21" align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="21" align="center" sdval="1" sdnum="1033;"><font color="#000000">1</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left"><font color="#000000">Education Cess of 4% will be levied on tax as applicable</font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="17" align="center" sdval="2" sdnum="1033;"><font color="#000000">2</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left"><font color="#000000">The maximum amount eligible for deduction u/s 80 C is Rs.1, 50,000 and section 80CCF is Rs.20,000/-</font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="17" align="center" sdval="3" sdnum="1033;"><font color="#000000">3</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=top><font color="#000000">Investment made / expenditure incurred is 100 % deductible from salary income up to the amount mentioned. </font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="60" align="center" sdval="4" sdnum="1033;"><font color="#000000">4</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=top><font color="#000000"> If an employee is residing at different place other than his place of job, and if he has a property in his own place, which is neither self occupied nor let out he is eligible to claim both HRA exemption and interest on house property on providing a self-declaration.  </font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+                <tr>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="39" align="center" sdval="5" sdnum="1033;"><font color="#000000">5</font></td>
+                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=top><font color="#000000">For pervious employer income Form 12 B along with Certified tax computation sheet issued by previous employer should be submitted.</font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                    <td align="left"><font color="#000000"><br></font></td>
+                </tr>
+            </table>
+            </form>
+
+<div style="margin-top: 20px;" class="row"> 
+    <div class="col-md-4">
+
+    </div>
+    <div class="col-md-4">
+
+    </div>
+ <button
+    class="btn btn-primary col-md-2"
+    type="button"
+    ng-click="vm.saveInvestmentDeclaration(investmentDeclaration);"
+  >
+    Save
+  </button>
+   
+
+</div>
+
+
+
+        </div>
+    </div>
+</div>

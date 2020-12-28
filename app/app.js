@@ -347,6 +347,37 @@
                     receipts: []
                 }
             })
+
+// added for invesment decaration 
+.state('InvestmentDeclaration', {
+    url: '/investmentDeclaration',
+    templateUrl: 'InvestmentDeclaration/investmentDeclaration.html',
+    controller: 'Investment.IndexController',
+    controllerAs: 'vm',
+    parent: 'layout',
+    data: { activeTab: 'investmentDeclaration' }
+})
+
+.state('TaxOldRegime', {
+    url: '/investmentDeclaration/TaxOldRegime',
+    templateUrl: 'InvestmentDeclaration/TaxOldRegime.html',
+    controller: 'Investment.IndexController',
+    controllerAs: 'vm',
+    parent: 'layout',
+    data: { activeTab: 'investmentDeclaration' }
+})
+
+.state('TaxNewRegime', {
+    url: '/investmentDeclaration/TaxNewRegime',
+    templateUrl: 'InvestmentDeclaration/TaxNewRegime.html',
+    controller: 'Investment.IndexController',
+    controllerAs: 'vm',
+    parent: 'layout',
+    data: { activeTab: 'investmentDeclaration' }
+})
+
+
+
             .state('myReceipts', {
                 url: '/reimbursement/myReceipts',
                 templateUrl: 'reimbursement/myReceipts.html',

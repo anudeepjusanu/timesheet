@@ -105,9 +105,12 @@
                 size: 'lg',
                 resolve: {
                     inventoryObj: function () {
+                        console.log("inventoryObj", inventoryObj)
+
                         return inventoryObj;
                     },
                     usersList: function () {
+                        console.log("vm.users", vm.users)
                         return vm.users;
                     }
                 }
@@ -271,23 +274,27 @@
         }
 
         function getClients() {
-            console.log("clients", "calling")
 
             ProjectService.getClients().then(function (response) {
+                console.log(response)
             vm.clients = response;
-            vm.clients.unshift({ _id: "", "clientName": "All" });
+            vm.clients.unshift({ _id: "", "clientName": "None" });
 
-            console.log("clients", vm.clients)
             }, function (error) {
             if (error) {
             vm.alerts.push({ msg: error, type: 'danger' });
             }
             });
             }
-
+            // function convert(str) {
+            //     var date = new Date(str),
+            //       month = ("0" + (date.getMonth() + 1)).slice(-2),
+            //       day = ("0" + date.getDate()).slice(-2);
+            //     return [date.getFullYear(), month, day].join("-");
+            //   }
 
         function initController() {
-getClients();
+        getClients();
         };
         initController();
     };
@@ -361,8 +368,6 @@ getClients();
 
         vm.saveInventoryStatus = function (inventoryForm) {
             if (inventoryForm.$valid) {
-                console.log(vm.inventoryObj);
-                console.log(vm.deviceObj);
                 vm.deviceObj.affectedDate = new Date(vm.deviceObj.affDate);
                 vm.deviceObj.affectedDate = $filter('date')(vm.deviceObj.affectedDate, "yyyy-MM-dd");
                 if (vm.inventoryObj._id && (vm.deviceObj.action == "Assign" || vm.deviceObj.action == "Unassign")) {
