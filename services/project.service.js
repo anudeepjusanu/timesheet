@@ -39,6 +39,8 @@ function create(projectParam) {
     var projectObj = {
         clientId: mongo.helper.toObjectID(projectParam.clientId),
         projectName: projectParam.projectName,
+        projectCode: projectParam.projectCode,
+        billingCycle: projectParam.billingCycle,
         clientName: projectParam.clientName,
         startDate: projectParam.startDate,
         projectBillType: projectParam.projectBillType,
@@ -70,6 +72,8 @@ function update(_id, params) {
     var projectObj = {
         clientId: mongo.helper.toObjectID(params.clientId),
         projectName: params.projectName,
+        projectCode: params.projectCode,
+        billingCycle: params.billingCycle,
         clientName: params.clientName,
         startDate: params.startDate,
         projectBillType: params.projectBillType,
@@ -125,14 +129,14 @@ function getProjectById(projectId) {
 
 function getAllProjects() {
     var deferred = Q.defer();
-    db.projects.find().sort({ clientName: 1, projectName: 1 }).toArray(function (err, projects) {
-        if (err) deferred.reject(err.name + ': ' + err.message);
-        if (projects) {
-            deferred.resolve(projects);
-        } else {
-            // project not found
-            deferred.resolve();
-        }
+    projects.aggregate([
+        { $match: { isActive: true } },
+        { $lookup: { from: 'clients', localField: 'clientId', foreignField: '_id', as: 'client_info' } },
+        { $unwind: { path: "$client_info", preserveNullAndEmptyArrays: true } },
+        { $sort: { clientName: 1, projectName: 1 } }
+    ]).exec(function (error, response) {
+        if (error) deferred.reject(error);
+        deferred.resolve(response);
     });
     return deferred.promise;
 }
@@ -468,6 +472,7 @@ function createClient(clientParam) {
     var deferred = Q.defer();
     var clientObj = {
         clientName: clientParam.clientName,
+        clientCode: clientParam.clientCode,
         createdOn: new Date(),
         updatedOn: new Date()
     }
@@ -481,7 +486,8 @@ function createClient(clientParam) {
 function updateClient(_id, clientParam) {
     var deferred = Q.defer();
     var clientObj = {
-        clientName: clientParam.clientName
+        clientName: clientParam.clientName,
+        clientCode: clientParam.clientCode
     }
     clientObj.updatedOn = new Date();
     db.clients.update({ _id: mongo.helper.toObjectID(_id) }, { '$set': clientObj }, true, function (err, client) {
@@ -490,7 +496,6 @@ function updateClient(_id, clientParam) {
             deferred.resolve(client);
         });
     });
-
     return deferred.promise;
 }
 

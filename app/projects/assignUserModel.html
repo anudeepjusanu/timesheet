@@ -2,17 +2,21 @@
     <h3 class="modal-title" id="modal-title">Assign Project</h3>
 </div>
 <div class="modal-body" id="modal-body">
-    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
+    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+        close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
     <div class="row">
         <div class="col-md-2 image">
-            <img src="app-content/assets/user.jpg" class="img-circle group-item-img" style="height: 80px; margin-right: 20px;" alt="{{vm.user.userName}}">
+            <img src="app-content/assets/user.jpg" class="img-circle group-item-img"
+                style="height: 80px; margin-right: 20px;" alt="{{vm.user.userName}}">
         </div>
         <div class="col-md-10 info">
             <form class="form-horizontal" name="vm.assignForm">
                 <div class="form-group">
                     <label class="col-md-2 control-label">Name</label>
                     <div ng-if="vm.user.chooseUser" class="col-md-10">
-                        <select class="form-control" ng-model="vm.user.userId" ng-options="userObj.userId as userObj.userName for userObj in vm.users" ng-required="true"></select>
+                        <select class="form-control" ng-model="vm.selectedUser"
+                            ng-options="userObj as userObj.userName for userObj in vm.users"
+                            ng-change="vm.selectAssignUser();" ng-required="true"></select>
                     </div>
                     <div ng-if="vm.user.chooseUser===false" class="col-md-10">
                         {{vm.user.userName}}
@@ -21,16 +25,25 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label">Project Name</label>
                     <div ng-if="vm.project.chooseProject" class="col-md-10">
-                        <select class="form-control" ng-model="vm.project._id" ng-options="prjObj._id as prjObj.projectName for prjObj in vm.projects" ng-required="true"></select>
+                        <select class="form-control" ng-model="vm.project"
+                            ng-options="prjObj as prjObj.projectName for prjObj in vm.projects"
+                            ng-change="vm.selectAssignProject();" ng-required="true"></select>
                     </div>
                     <div ng-if="vm.project.chooseProject===false" class="col-md-10">
                         {{vm.project.projectName}}
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="col-md-2 control-label">Default Sales Item ID</label>
+                    <div class="col-md-10">
+                        {{vm.defaultSalesItemId}}
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="col-md-2 control-label">Billable Dates</label>
                     <div class="col-md-12">
-                        <button type="button" class="btn btn-xs btn-primary pull-right" ng-click="vm.addBillDate(vm.user)">Add</button>
+                        <button type="button" class="btn btn-xs btn-primary pull-right"
+                            ng-click="vm.addBillDate(vm.user)">Add</button>
                         <table id="" class="table">
                             <tr ng-if="vm.user.billDates.length > 0">
                                 <th>Start Date</th>
@@ -45,33 +58,47 @@
                             <tr ng-repeat="billDate in vm.user.billDates" class="">
                                 <td>
                                     <p class="input-group">
-                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="billDate.start" is-open="billDate.startOpened" datepicker-options="vm.dateOptions" close-text="Close" />
+                                        <input type="text" class="form-control" uib-datepicker-popup
+                                            ng-model="billDate.start" is-open="billDate.startOpened"
+                                            datepicker-options="vm.dateOptions" close-text="Close" />
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default" ng-click="billDate.startOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                            <button type="button" class="btn btn-default"
+                                                ng-click="billDate.startOpened=true;"><i
+                                                    class="glyphicon glyphicon-calendar"></i></button>
                                         </span>
                                     </p>
                                 </td>
                                 <td>
                                     <p class="input-group">
-                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="billDate.end" is-open="billDate.endOpened" datepicker-options="vm.dateOptions" close-text="Close" />
+                                        <input type="text" class="form-control" uib-datepicker-popup
+                                            ng-model="billDate.end" is-open="billDate.endOpened"
+                                            datepicker-options="vm.dateOptions" close-text="Close" />
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default" ng-click="billDate.endOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                            <button type="button" class="btn btn-default"
+                                                ng-click="billDate.endOpened=true;"><i
+                                                    class="glyphicon glyphicon-calendar"></i></button>
                                         </span>
                                     </p>
                                 </td>
-                                <td><input type="number" class="form-control" ng-model="billDate.allocatedHours" max="80" style="width: 80px;" /></td>
-                                <td><input type="number" class="form-control" ng-model="billDate.billableMaxHours" max="80" style="width: 80px;" /></td>
+                                <td><input type="number" class="form-control" ng-model="billDate.allocatedHours"
+                                        max="80" style="width: 80px;" /></td>
+                                <td><input type="number" class="form-control" ng-model="billDate.billableMaxHours"
+                                        max="80" style="width: 80px;" /></td>
                                 <td>
-                                    <select class="form-control" ng-model="billDate.resourceType" ng-options="resourceType.resourceTypeId as resourceType.resourceTypeVal for resourceType in vm.resourceTypes">
+                                    <select class="form-control" ng-model="billDate.resourceType"
+                                        ng-options="resourceType.resourceTypeId as resourceType.resourceTypeVal for resourceType in vm.resourceTypes">
                                     </select>
                                 </td>
                                 <td>
-                                    <select class="form-control" ng-model="billDate.resourceStatus" ng-options="opt as opt for opt in ['Open', 'Lock']">
+                                    <select class="form-control" ng-model="billDate.resourceStatus"
+                                        ng-options="opt as opt for opt in ['Open', 'Lock']">
                                     </select>
                                 </td>
-                                <td><input type="text" class="form-control" ng-model="billDate.salesItemId" max="80" style="width: 80px;" /></td>
+                                <td><input type="text" class="form-control" ng-model="billDate.salesItemId" max="80"
+                                        style="width: 80px;" /></td>
                                 <td>
-                                    <a ng-click="vm.deleteBillDate(billDate, $index)"><span class="fa fa-times"></span></a>
+                                    <a ng-click="vm.deleteBillDate(billDate, $index)"><span
+                                            class="fa fa-times"></span></a>
                                 </td>
                             </tr>
                         </table>
@@ -82,6 +109,7 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-disabled="!vm.enableSaveBtn" ng-click="vm.ok(vm.assignForm)">Save</button>
+    <button class="btn btn-primary" type="button" ng-disabled="!vm.enableSaveBtn"
+        ng-click="vm.ok(vm.assignForm)">Save</button>
     <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
 </div>

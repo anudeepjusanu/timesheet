@@ -5,6 +5,8 @@ var Schema = mongoose.Schema;
 
 var ProjectsSchema = new Schema({
     projectName: { type: String },
+    projectCode: { type: String, unique: true },
+    billingCycle: { type: String },
     projectType: { type: String },
     clientId: { type: mongoose.ObjectId },
     clientName: { type: String },

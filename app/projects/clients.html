@@ -1,8 +1,8 @@
-﻿<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+﻿<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+    close="vm.closeAlert($index)" dismiss-on-timeout="1000">
     {{alert.msg}}
 </div>
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
     <div class="">
         <!-- START DEFAULT TABLE EXPORT -->
         <div class="panel panel-default">
@@ -19,6 +19,7 @@
                     <tr>
                         <th>S.No</th>
                         <th>Customer Name</th>
+                        <th>Code</th>
                         <th>Created On</th>
                         <th>Updated On</th>
                         <th ng-if="vm.user.admin">Action</th>
@@ -26,6 +27,7 @@
                     <tr ng-repeat="client in vm.clients | orderBy:'name'">
                         <td>{{$index+1}}</td>
                         <td>{{client.clientName}}</td>
+                        <td>{{client.clientCode}}</td>
                         <td>{{client.createdOn}}</td>
                         <td>{{client.updatedOn}}</td>
                         <td ng-if="vm.user.admin">
