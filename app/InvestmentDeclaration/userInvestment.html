@@ -1,0 +1,67 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Investment Status 
+        <a class="pull-right" ng-click="vm.close()">
+            <span class="fa fa-times delete-bill-icon" aria-hidden="true"></span>
+        </a>
+    </h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+        close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
+    <div class="row">
+        <div class="col-md-2 image">
+            <img src="app-content/assets/user.jpg" class="img-circle group-item-img"
+                style="height: 100px; width: 100px; margin-left: 30px; margin-top: 30px;" alt="{{vm.user.userName}}" />
+        </div>
+        <div class="col-md-10 info">
+            <form class="form-horizontal" name="vm.assignForm">
+                <div class="form-group">
+                    <label class="col-md-3 col-xs-12 control-label">Employee Name:</label>
+                    <div class="col-md-3 col-xs-12 modal-padding">
+                        {{vm.investmentObj.userName}}
+                    </div>
+                    <label class="col-md-2 col-xs-12 control-label">Employee ID:</label>
+                    <div class="col-md-3 col-xs-12 modal-padding">{{vm.investmentObj.employeeId}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 col-xs-12 control-label">Created On:</label>
+                    <div class="col-md-3 col-xs-12 modal-padding">{{vm.investmentObj.createdOn}} </div>
+                    <label class="col-md-2 col-xs-12 control-label">Status:</label>
+                    <div class="col-md-3 col-xs-12 modal-padding">{{vm.investmentObj.status}}</div>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-12">
+            <table id="" class="table table-condensed table-bordered table-striped">
+                <tr>
+                    <th class="table-heading">Investment Form</th>
+                    <th class="table-heading">Attachments</th>
+                                       </th>
+                </tr>
+                <tr>
+
+                    <td style="width: 80px; text-align: center;">
+                        <a class="" ng-click="vm.getUserForm(vm.investmentObj)">
+                            <span class="fa fa-file-text-o"></span>
+                        </a>
+                    </td>
+                     <td  style="width: 80px; text-align: center;">
+                       <div ng-repeat="attachment in vm.investmentObj.attachments" class="modal-padding">
+                        <a class="" href={{attachment.link}} target="_blank">
+                            <span class="fa fa-file-text-o iconAlign"></span><span class="table-heading">{{attachment.name}}</span>
+                        </a>
+                       </div>
+                       
+                    </td>
+                </tr>
+                
+            </table>
+        </div>
+    </div>
+    </div>
+</div>

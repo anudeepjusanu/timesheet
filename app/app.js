@@ -361,10 +361,13 @@
 .state('TaxOldRegime', {
     url: '/investmentDeclaration/TaxOldRegime',
     templateUrl: 'InvestmentDeclaration/TaxOldRegime.html',
-    controller: 'Investment.IndexController',
+    controller: 'Investment.TaxOldRegimeController',
     controllerAs: 'vm',
     parent: 'layout',
-    data: { activeTab: 'investmentDeclaration' }
+    data: { activeTab: 'investmentDeclaration' },
+    params: {
+        investmentObj: {}
+        }
 })
 
 .state('TaxNewRegime', {
@@ -376,6 +379,14 @@
     data: { activeTab: 'investmentDeclaration' }
 })
 
+.state('accountInvestments', {
+    url: '/investmentDeclaration/AccountInvestments',
+    templateUrl: 'InvestmentDeclaration/accountInvestments.html',
+    controller: 'Investment.accountInvestmentController',
+    controllerAs: 'vm',
+    parent: 'layout',
+    data: { activeTab: 'investmentDeclaration' }
+})
 
 
             .state('myReceipts', {
