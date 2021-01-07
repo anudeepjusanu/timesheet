@@ -36,24 +36,26 @@ function getMyTaxSavings(req, res) {
 
 function getTaxSaving(req, res) {
     TaxSavingService.getTaxSaving(req.params._id).then(data => {
-        res.send({ reimbursement: data });
+        res.send({ tax: data });
     }).catch(error => {
         res.status(400).send(error);
     });
 }
 
 function addTaxSaving(req, res) {
-    req.body.userId = req.user.sub;
+    console.log("req.body", req.body)
+    //req.body.userId = req.user.sub;
     TaxSavingService.addTaxSaving(req.body).then(data => {
-        res.send({ reimbursement: data });
+        res.send({ addTaxSaving: data });
     }).catch(error => {
         res.status(400).send(error);
     });
 }
 
 function updateTaxSaving(req, res) {
-    TaxSavingService.updateTaxSaving(req.params._id, req.body, req.user.sub).then(data => {
-        res.send({ reimbursement: data });
+    console.log("req.params._id",req.params._id)
+    TaxSavingService.updateTaxSaving(req.params._id, req.body).then(data => {
+        res.send({ updateTaxSaving: data });
     }).catch(error => {
         res.status(400).send(error);
     });

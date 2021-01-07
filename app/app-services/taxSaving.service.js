@@ -35,6 +35,7 @@
         }
 
         function addTaxSaving(formData) {
+            console.log("formData",formData)
             return $http.post('/api/taxSaving/', formData).then(handleSuccess, handleError);
         }
 
