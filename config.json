@@ -1,5 +1,5 @@
 ﻿{
-    "connectionString": "mongodb://localhost:27017/wltimesheet",
+    "connectionString": "mongodb://timesheet:nbostimesheet@localhost:27017/wltimesheet",
     "connectionOptions": {
         "useNewUrlParser": true
     },
