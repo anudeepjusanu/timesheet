@@ -459,6 +459,8 @@
         vm.saveReceipt = function (receiptForm, receiptData) {
             var receiptFormData = new FormData();
          console.log("receiptFormData", receiptData)
+         console.log("receiptFormData.file", receiptData.file)
+
 
             receiptFormData.append('file', receiptData.file);
             receiptFormData.append('receiptDate', receiptData.receiptDate);

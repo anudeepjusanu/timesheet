@@ -203,12 +203,19 @@
       // var formData = new FormData();
 
       // formData.append('employeeId', JSON.stringify(vm.investmentDeclaration.employeeId));
-      //  console.log("taxFormData", formData);
+     //   console.log("formData.append(Object.keys(vm.investmentDeclaration.employeeId[i]),vm.investmentDeclaration.employeeId[i])",   formData.append(Object.keys(vm.investmentDeclaration.employeeId[i]),vm.investmentDeclaration.employeeId[i])      );
 
       var formData = new FormData();
-      formData.append("employeeId", vm.investmentDeclaration.employeeId);
-      formData.append("userId", "58a57dc1a494fa27d5456f90");
-      formData.append("status", "4");
+
+for(let [key, value] of Object.entries(vm.investmentDeclaration)){
+
+  formData.append(key,value);
+
+}
+      // formData.append("employeeId", vm.investmentDeclaration.employeeId);
+      // formData.append("userId", "58a57dc1a494fa27d5456f90");
+      // formData.append("status", "4");
+       formData.append("userId", vm.user._id);
 
       let data = Object.fromEntries(formData);
       console.log("data", data);
@@ -229,7 +236,7 @@
 
       //updateTaxSaving
 
-      TaxSavingService.updateTaxSaving("5ff6defce5019709abdbac0d", data).then(
+      TaxSavingService.updateTaxSaving(vm.investmentDeclaration._id, data).then(
         function (taxSavingForm) {
           console.log("taxSavingForm", taxSavingForm);
         }
@@ -275,15 +282,32 @@
       popupWinindow.popupWinindow();
     };
 
-    function getUserForm(employeeId, financialYear) {
-      InvestmentService.getMyInvestmentForm(employeeId).then(
+    function getUserForm() {
+      TaxSavingService.getTaxSaving(vm.user._id).then(
         function (response) {
-          if (response) {
+          if (response.tax.length) {
             console.log("response", response);
-            vm.investmentDeclaration = response;
-            vm.investmentDeclaration.dateOfJoin = convert(response.dateOfJoin);
+            response.tax[0].employee_name = "a"
+            vm.investmentDeclaration = response.tax[0];
+          //  vm.investmentDeclaration.dateOfJoin = convert(response.dateOfJoin);
           } else {
             //post call with emp id and financial year
+
+// post call
+var formData = new FormData();
+formData.append('userId',vm.user._id);
+formData.append('financialYear',vm.financialYear);
+
+let data = Object.fromEntries(formData);
+console.log("data",data)
+      TaxSavingService.addTaxSaving(data).then(function (taxSavingForm) {
+        console.log("taxSavingForm", taxSavingForm);
+
+      })
+
+
+
+
           }
         },
         function (error) {
@@ -302,6 +326,7 @@
       } else {
         UserService.GetCurrent().then(function (user) {
           console.log("user", user);
+          vm.user= user;
           vm.investmentDeclaration.employee_name = user.name;
           vm.investmentDeclaration.designation = user.designation;
           vm.investmentDeclaration.dateOfJoin = convert(user.joinDate);

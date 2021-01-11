@@ -54,7 +54,7 @@ function getAccountTaxSavings(userId) {
 function getTaxSaving(taxSavingId) {
     return new Promise((resolve, reject) => {
         TaxSavingModel.aggregate([
-            { $match: { _id: mongoose.Types.ObjectId(taxSavingId) } },
+            { $match: { userId: mongoose.Types.ObjectId(taxSavingId) } },
         ]).exec().then(async (data) => {
             resolve(data);
         }).catch((error) => {
