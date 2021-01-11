@@ -10,6 +10,7 @@
         service.getMyTaxSavings = getMyTaxSavings;
         service.getAccountTaxSavings = getAccountTaxSavings;
         service.getTaxSaving = getTaxSaving;
+        service.getMyTaxSaving = getMyTaxSaving;
         service.addTaxSaving = addTaxSaving;
         service.updateTaxSaving = updateTaxSaving;
         service.deleteTaxSaving = deleteTaxSaving;
@@ -34,8 +35,12 @@
             return $http.get('/api/taxSaving/' + taxSavingId).then(handleSuccess, handleError);
         }
 
+        function getMyTaxSaving(financialYear) {
+            return $http.get('/api/myTaxSaving/' + financialYear).then(handleSuccess, handleError);
+        }
+
         function addTaxSaving(formData) {
-            console.log("formData",formData)
+            console.log("formData", formData)
             return $http.post('/api/taxSaving/', formData).then(handleSuccess, handleError);
         }
 

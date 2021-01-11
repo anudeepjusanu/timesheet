@@ -17,6 +17,13 @@ var upload = multer({
 });
 
 // routes
+router.get('/myReceipts/:_id', getMyReceipts);
+router.get('/receipt/:receiptId', getTaxSavingReceipt);
+router.post('/receipt', upload.single('file'), addTaxSavingReceipt);
+router.put('/receipt/:receiptId', upload.single('file'), updateTaxSavingReceipt);
+router.delete('/receipt/:receiptId', deleteTaxSavingReceipt);
+
+router.get('/myTaxSaving/:financialYear', getMyTaxSaving);
 router.get('/', getMyTaxSavings);
 router.get('/:_id', getTaxSaving);
 router.post('/', addTaxSaving);
@@ -28,7 +35,15 @@ module.exports = router;
 /** tax saving */
 function getMyTaxSavings(req, res) {
     TaxSavingService.getMyTaxSavings(req.user.sub).then(data => {
-        res.send({ reimbursements: data });
+        res.send({ taxSavings: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
+
+function getMyTaxSaving(req, res) {
+    TaxSavingService.getMyTaxSaving(req.user.sub, req.params.financialYear).then(data => {
+        res.send({ taxSaving: data });
     }).catch(error => {
         res.status(400).send(error);
     });
@@ -36,26 +51,25 @@ function getMyTaxSavings(req, res) {
 
 function getTaxSaving(req, res) {
     TaxSavingService.getTaxSaving(req.params._id).then(data => {
-        res.send({ tax: data });
+        res.send({ taxSaving: data });
     }).catch(error => {
         res.status(400).send(error);
     });
 }
 
 function addTaxSaving(req, res) {
-    console.log("req.body", req.body)
-    //req.body.userId = req.user.sub;
+    req.body.userId = req.user.sub;
     TaxSavingService.addTaxSaving(req.body).then(data => {
-        res.send({ addTaxSaving: data });
+        res.send({ taxSaving: data });
     }).catch(error => {
         res.status(400).send(error);
     });
 }
 
 function updateTaxSaving(req, res) {
-    console.log("req.params._id",req.params._id)
+    console.log("req.params._id", req.params._id)
     TaxSavingService.updateTaxSaving(req.params._id, req.body).then(data => {
-        res.send({ updateTaxSaving: data });
+        res.send({ taxSaving: data });
     }).catch(error => {
         res.status(400).send(error);
     });
@@ -63,7 +77,7 @@ function updateTaxSaving(req, res) {
 
 function deleteTaxSaving(req, res) {
     TaxSavingService.deleteTaxSaving(req.params._id).then(data => {
-        res.send({ reimbursement: data });
+        res.send({ taxSaving: data });
     }).catch(error => {
         res.status(400).send(error);
     });
@@ -71,38 +85,21 @@ function deleteTaxSaving(req, res) {
 
 function getAccountTaxSavings(req, res) {
     TaxSavingService.getAccountTaxSavings(req.user.sub).then(data => {
-        res.send({ reimbursements: data });
-    }).catch(error => {
-        res.status(400).send(error);
-    });
-}
-
-function approveTaxSaving(req, res) {
-    var dataObj = {
-        status: "Approved",
-        comment: req.body.comment,
-        receipts: req.body.receipts
-    }
-    TaxSavingService.updateTaxSaving(req.params._id, dataObj, req.user.sub).then(data => {
-        res.send({ reimbursement: data });
-    }).catch(error => {
-        res.status(400).send(error);
-    });
-}
-
-function rejectTaxSaving(req, res) {
-    var dataObj = {
-        status: "Rejected",
-        comment: req.body.comment
-    }
-    TaxSavingService.updateTaxSaving(req.params._id, dataObj, req.user.sub).then(data => {
-        res.send({ reimbursement: data });
+        res.send({ taxSavings: data });
     }).catch(error => {
         res.status(400).send(error);
     });
 }
 
 // Files
+function getMyReceipts(req, res) {
+    TaxSavingService.getTaxSavingReceipts(req.params._id).then(data => {
+        res.send({ taxSavings: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
+
 function getTaxSavingReceipt(req, res) {
     TaxSavingService.getTaxSavingReceipt(req.params.receiptId).then(data => {
         res.send({ reimbursement: data });
@@ -134,38 +131,8 @@ function updateTaxSavingReceipt(req, res) {
     });
 }
 
-function approveTaxSavingReceipt(req, res) {
-    var objData = {
-        status: "Approved"
-    }
-    TaxSavingService.updateTaxSavingReceiptStatus(req.params.receiptId, objData).then(data => {
-        res.send({ receipt: data });
-    }).catch(error => {
-        res.status(400).send(error);
-    });
-}
-
-function rejectTaxSavingReceipt(req, res) {
-    var objData = {
-        status: "Rejected"
-    }
-    TaxSavingService.updateTaxSavingReceiptStatus(req.params.receiptId, objData).then(data => {
-        res.send({ receipt: data });
-    }).catch(error => {
-        res.status(400).send(error);
-    });
-}
-
 function deleteTaxSavingReceipt(req, res) {
     TaxSavingService.deleteTaxSavingReceipt(req.params.receiptId).then(data => {
-        res.send({ receipt: data });
-    }).catch(error => {
-        res.status(400).send(error);
-    });
-}
-
-function updateTaxSavingReceiptFile(req, res) {
-    TaxSavingService.updateTaxSavingReceiptFile(req.params._id, req.file).then(data => {
         res.send({ receipt: data });
     }).catch(error => {
         res.status(400).send(error);

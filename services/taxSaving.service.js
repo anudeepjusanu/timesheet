@@ -10,6 +10,7 @@ var service = {};
 service.getMyTaxSavings = getMyTaxSavings;
 service.getAccountTaxSavings = getAccountTaxSavings;
 service.getTaxSaving = getTaxSaving;
+service.getMyTaxSaving = getMyTaxSaving;
 service.addTaxSaving = addTaxSaving;
 service.updateTaxSaving = updateTaxSaving;
 service.deleteTaxSaving = deleteTaxSaving;
@@ -18,8 +19,6 @@ service.getTaxSavingReceipts = getTaxSavingReceipts;
 service.getTaxSavingReceipt = getTaxSavingReceipt;
 service.addTaxSavingReceipt = addTaxSavingReceipt;
 service.updateTaxSavingReceipt = updateTaxSavingReceipt;
-//service.updateTaxSavingReceiptStatus = updateTaxSavingReceiptStatus;
-//service.updateTaxSavingReceiptFile = updateTaxSavingReceiptFile;
 service.deleteTaxSavingReceipt = deleteTaxSavingReceipt;
 
 module.exports = service;
@@ -63,23 +62,42 @@ function getTaxSaving(taxSavingId) {
     });
 }
 
+function getMyTaxSaving(userId, financealYear) {
+    return new Promise((resolve, reject) => {
+        TaxSavingModel.aggregate([
+            { $match: { userId: mongoose.Types.ObjectId(userId), financealYear: financealYear } },
+        ]).exec().then(async (data) => {
+            if (data.length > 0) {
+                resolve(data);
+            } else {
+                var taxSavingObj = new TaxSavingModel({
+                    userId: mongoose.Types.ObjectId(userId),
+                    financealYear: financealYear
+                });
+                taxSavingObj.save(function (error, data) {
+                    if (error) {
+                        reject({ error: error, taxSaving: taxSavingObj });
+                    } else {
+                        resolve(data)
+                    }
+                });
+            }
+        }).catch((error) => {
+            reject({ error: error.errmsg });
+        });
+    });
+}
+
 function addTaxSaving(taxSavingData) {
     return new Promise(async (resolve, reject) => {
         taxSavingData.userId = (taxSavingData.userId) ? mongoose.Types.ObjectId(taxSavingData.userId) : null;
-       
-       console.log("taxSavingData",taxSavingData)
-        taxSavingObj = new TaxSavingModel(taxSavingData);
-        console.log("taxSavingObj",taxSavingObj)
 
+        var taxSavingObj = new TaxSavingModel(taxSavingData);
         taxSavingObj.save(function (error, data) {
-            console.log("error",error)
-            console.log("data",data)
-
             if (error) {
-                console.log("error",error)
-
+                console.log("error", error)
                 reject({ error: error, addTaxSaving: taxSavingObj });
-            }else{
+            } else {
                 resolve(data)
             }
         });
@@ -87,13 +105,13 @@ function addTaxSaving(taxSavingData) {
 }
 
 function updateTaxSaving(taxSavingId, taxSavingData) {
-    console.log("taxSavingData",taxSavingData)
-    console.log("taxSavingId",taxSavingId)
+    console.log("taxSavingData", taxSavingData)
+    console.log("taxSavingId", taxSavingId)
 
     return new Promise(async (resolve, reject) => {
         TaxSavingModel.findById(taxSavingId, function (err, taxSavingObj) {
             if (err) return reject(err);
-            console.log("taxSavingObj",taxSavingObj)
+            console.log("taxSavingObj", taxSavingObj)
             if (taxSavingData.userId) {
                 taxSavingObj.userId = taxSavingData.userId;
             }
@@ -104,7 +122,7 @@ function updateTaxSaving(taxSavingId, taxSavingData) {
                 taxSavingObj.status = taxSavingData.status;
             }
             taxSavingObj.save(function (error) {
-                
+
                 if (error) reject({ error });
                 resolve(taxSavingObj);
             });
@@ -150,18 +168,11 @@ function getTaxSavingReceipt(receiptId) {
 function addTaxSavingReceipt(receiptData) {
     return new Promise((resolve, reject) => {
         var receiptDataObj = {
-            receiptDate: receiptData.receiptDate,
             receiptCategory: receiptData.receiptCategory,
-            receiptNumber: receiptData.receiptNumber,
-            receiptDescription: receiptData.receiptDescription,
             receiptAmount: receiptData.receiptAmount
         };
-        receiptDataObj.userId = mongoose.Types.ObjectId(receiptData.userId)
         if (receiptData.receiptFile) {
             receiptDataObj.receiptFile = receiptData.receiptFile;
-        }
-        if (receiptData.status) {
-            receiptDataObj.receiptFile = receiptData.status;
         }
         var receiptObj = new TaxSavingReciptModel(receiptDataObj);
         receiptObj.save(function (error, data) {
@@ -178,17 +189,11 @@ function updateTaxSavingReceipt(receiptId, receiptData) {
     return new Promise((resolve, reject) => {
         var receiptDataObj = {};
         var receiptDataObj = {
-            receiptDate: receiptData.receiptDate,
-            receiptCategory: receiptData.receiptCategory,
-            receiptNumber: receiptData.receiptNumber,
-            receiptDescription: receiptData.receiptDescription,
-            receiptAmount: receiptData.receiptAmount
+            category: receiptData.category,
+            amount: receiptData.amount
         };
         if (receiptData.receiptFile) {
             receiptDataObj.receiptFile = receiptData.receiptFile;
-        }
-        if (receiptData.status) {
-            receiptDataObj.receiptFile = receiptData.status;
         }
         TaxSavingReciptModel.updateOne({ '_id': mongoose.Types.ObjectId(receiptId) },
             { $set: receiptDataObj }).exec().then((data) => {

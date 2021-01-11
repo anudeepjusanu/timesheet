@@ -9,10 +9,12 @@ var TaxSavingSchema = new Schema({
         required: true
     },
     employeeId: { type: String },
+    financialYear: { type: String },
     status: { type: String },
     receipts: [{
         category: { type: String },
         file: { type: String },
+        amount: { type: Number, default: 0.00 },
         createdOn: { type: Date, default: Date.now }
     }],
     totalAmount: {
