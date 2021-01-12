@@ -36,7 +36,7 @@ function getMyTaxSavings(userId) {
     });
 }
 
-function getAccountTaxSavings(userId) {
+function getAccountTaxSavings() {
     return new Promise((resolve, reject) => {
         TaxSavingModel.aggregate([
             { $match: { status: { $in: ['Submitted'] } } },

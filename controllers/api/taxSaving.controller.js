@@ -24,6 +24,7 @@ router.put('/receipt/:receiptId', upload.single('file'), updateTaxSavingReceipt)
 router.delete('/receipt/:receiptId', deleteTaxSavingReceipt);
 
 router.get('/myTaxSaving/:financialYear', getMyTaxSaving);
+router.get('/accountTaxSavings/', getAccountTaxSavings);
 router.get('/', getMyTaxSavings);
 router.get('/:_id', getTaxSaving);
 router.post('/', addTaxSaving);
@@ -83,7 +84,7 @@ function deleteTaxSaving(req, res) {
 }
 
 function getAccountTaxSavings(req, res) {
-    TaxSavingService.getAccountTaxSavings(req.user.sub).then(data => {
+    TaxSavingService.getAccountTaxSavings().then(data => {
         res.send({ taxSavings: data });
     }).catch(error => {
         res.status(400).send(error);
