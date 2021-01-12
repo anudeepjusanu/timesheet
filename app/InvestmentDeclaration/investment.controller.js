@@ -81,9 +81,9 @@
         vm.user.userRole = "finance";
         // get Tax saving
 
-        TaxSavingService.getMyTaxSavings().then(function (taxSavingUsers) {
-          console.log("taxSavingUsers", taxSavingUsers);
-        });
+        // TaxSavingService.getMyTaxSavings().then(function (taxSavingUsers) {
+        //   console.log("taxSavingUsers", taxSavingUsers);
+        // });
 
         //getAccountTaxSavings
 
@@ -119,12 +119,15 @@
     TaxSavingService
   ) {
     var vm = this;
-    (vm.user = {}), (vm.financialYear = "2020 - 2021"), (vm.print = false);
+    (vm.user = {}), (vm.financialYear = "2020-2021"),
+     vm.taxSavingId='',
+     vm.receipts = [],
+     (vm.print = false);
     vm.investmentDeclaration = {
-      Name: "",
-      Pan: "",
-      Designation: "",
-      DOJ: "",
+      employee_name: "",
+      panCard: "",
+      designation: "",
+      dateOfJoin: "",
       employeeId: "",
       schemeOld: "",
       schemeNew: "",
@@ -164,6 +167,9 @@
       secDrow1: "",
       secDrow2: "",
       secDrow3: "",
+      secEcol1: "",
+      secEcol3: "",
+      secEcol3: "",
       secEcol4: "",
       secEcol5: "",
       secEcol6: "",
@@ -182,8 +188,7 @@
       professionDeducted: "",
       taxDeducted: "",
       periOfEmployment: "",
-      signature2: "",
-      sectionAFiles: [],
+      signature2: ""
     };
     console.log("employeeId", $stateParams);
 
@@ -212,40 +217,50 @@ for(let [key, value] of Object.entries(vm.investmentDeclaration)){
   formData.append(key,value);
 
 }
-      // formData.append("employeeId", vm.investmentDeclaration.employeeId);
-      // formData.append("userId", "58a57dc1a494fa27d5456f90");
-      // formData.append("status", "4");
-       formData.append("userId", vm.user._id);
+           formData.append("userId", vm.user._id);
+         //  formData.append('file',vm.receipts[0]._file)
 
       let data = Object.fromEntries(formData);
       console.log("data", data);
 
-      // var formData = new FormData();
-
-      // formData.append("employeeId", 123456); // number 123456 is immediately converted to a string "123456"
-
-      //      formData.forEach((value,key) => {
-      //       console.log(key+" "+value)
-      //     });
-
+     
       // post call
       // TaxSavingService.addTaxSaving(data).then(function (taxSavingForm) {
       //   console.log("taxSavingForm", taxSavingForm);
 
       // })
 
+//add receipt 
+
+
+// var receiptFormData = new FormData();
+// receiptFormData.append('file',vm.receipts[0]._file)
+// console.log("receiptFormData", receiptFormData);
+
+
+// TaxSavingService.addTaxSavingReceipt(receiptFormData).then(function (taxSavingForm) {
+//         console.log("taxSavingForm", taxSavingForm);
+
+//       })
+
+
       //updateTaxSaving
 
-      TaxSavingService.updateTaxSaving(vm.investmentDeclaration._id, data).then(
+      TaxSavingService.updateTaxSaving(vm.taxSavingId, data).then(
         function (taxSavingForm) {
-          console.log("taxSavingForm", taxSavingForm);
-        }
-      );
-    };
+          console.log("updateTaxSaving", taxSavingForm);
+       }
+     );
+     };
+
+
+
 
     $scope.modelSetter = function (values) {
       console.log("values", values);
-      vm.investmentDeclaration.sectionAFiles = values;
+      vm.receipts = values
+
+      // vm.investmentDeclaration.sectionAFiles = values;
     };
 
     vm.printToPdf = function (printSection) {
@@ -283,29 +298,42 @@ for(let [key, value] of Object.entries(vm.investmentDeclaration)){
     };
 
     function getUserForm() {
+      //getTaxSaving
       TaxSavingService.getTaxSaving(vm.user._id).then(
         function (response) {
-          if (response.tax.length) {
+          if (response.taxSaving.length) {
             console.log("response", response);
-            response.tax[0].employee_name = "a"
-            vm.investmentDeclaration = response.tax[0];
+            vm.taxSavingId = response.taxSaving[0]._id;
+
+            vm.investmentDeclaration = response.taxSaving[0];
           //  vm.investmentDeclaration.dateOfJoin = convert(response.dateOfJoin);
           } else {
             //post call with emp id and financial year
 
 // post call
-var formData = new FormData();
-formData.append('userId',vm.user._id);
-formData.append('financialYear',vm.financialYear);
+// var formData = new FormData();
+// formData.append('userId',vm.user._id);
+// formData.append('financialYear',vm.financialYear);
 
-let data = Object.fromEntries(formData);
-console.log("data",data)
-      TaxSavingService.addTaxSaving(data).then(function (taxSavingForm) {
-        console.log("taxSavingForm", taxSavingForm);
+// let data = Object.fromEntries(formData);
+// console.log("data",data)
+//       TaxSavingService.addTaxSaving(data).then(function (taxSavingForm) {
+//         console.log("taxSavingForm", taxSavingForm);
+//         vm.taxSavingId = taxSavingForm.taxSaving._id
+//         console.log("vm.taxSavingId", vm.taxSavingId);
+
+//       })
+
+
+// getMyTaxSaving
+
+  TaxSavingService.getMyTaxSaving(vm.financialYear.trim()).then(function (getMyTaxSaving) {
+        console.log("getMyTaxSaving", getMyTaxSaving);
+        vm.taxSavingId = getMyTaxSaving.taxSaving._id
+
+
 
       })
-
-
 
 
           }
@@ -316,6 +344,11 @@ console.log("data",data)
           }
         }
       );
+
+
+
+
+
     }
 
     function initController() {
@@ -345,6 +378,7 @@ console.log("data",data)
     UserService,
     _,
     InvestmentService,
+    TaxSavingService,
     $uibModal
   ) {
     var vm = this;
@@ -385,6 +419,8 @@ console.log("data",data)
     };
 
     function getInvestments() {
+
+      
       InvestmentService.getInvestments().then(
         function (userInvestments) {
           console.log("userInvestments", userInvestments);
@@ -395,7 +431,13 @@ console.log("data",data)
             console.log("error", error);
           }
         }
-      );
+     );
+
+      // TaxSavingService.getAccountTaxSavings().then(function (getAccountTaxSaving) {
+      //   console.log("getAccountTaxSaving", getAccountTaxSaving);
+
+      // })
+
     }
 
     function initController() {

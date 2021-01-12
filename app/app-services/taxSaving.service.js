@@ -14,7 +14,6 @@
         service.addTaxSaving = addTaxSaving;
         service.updateTaxSaving = updateTaxSaving;
         service.deleteTaxSaving = deleteTaxSaving;
-
         service.getTaxSavingReceipts = getTaxSavingReceipts;
         service.getTaxSavingReceipt = getTaxSavingReceipt;
         service.addTaxSavingReceipt = addTaxSavingReceipt;
@@ -22,6 +21,12 @@
         service.deleteTaxSavingReceipt = deleteTaxSavingReceipt;
 
         return service;
+
+// function getMyTaxSaving(financialYear){
+//     return $http.get('/api/getMyTaxSaving/'+financialYear).then(handleSuccess, handleError);
+
+// }
+
 
         function getMyTaxSavings() {
             return $http.get('/api/taxSaving/').then(handleSuccess, handleError);
@@ -36,7 +41,8 @@
         }
 
         function getMyTaxSaving(financialYear) {
-            return $http.get('/api/myTaxSaving/' + financialYear).then(handleSuccess, handleError);
+            console.log("financialYear",financialYear)
+            return $http.get('/api/taxSaving/myTaxSaving/' + financialYear).then(handleSuccess, handleError);
         }
 
         function addTaxSaving(formData) {
@@ -61,6 +67,7 @@
         }
 
         function addTaxSavingReceipt(formData) {
+            console.log("formData",formData)
             return $http.post('/api/taxSaving/receipt', formData, {
                 transformRequest: angular.identity,
                 headers: { 'Content-Type': undefined }
