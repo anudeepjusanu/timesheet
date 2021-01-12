@@ -36,10 +36,10 @@ function getMyTaxSavings(userId) {
     });
 }
 
-function getAccountTaxSavings() {
+function getAccountTaxSavings(financialYear) {
     return new Promise((resolve, reject) => {
         TaxSavingModel.aggregate([
-            { $match: { status: { $in: ['Submitted'] } } },
+            { $match: { financialYear: financialYear, status: { $in: ['Submitted'] } } },
             { $sort: { createdOn: -1 } }
         ]).exec().then(async (data) => {
             resolve(data);
@@ -131,11 +131,8 @@ function deleteTaxSaving(taxSavingId) {
 
 function getTaxSavingReceipts(taxSavingId) {
     return new Promise((resolve, reject) => {
-        TaxSavingReciptModel.aggregate([
-            { $match: { _id: mongoose.Types.ObjectId(taxSavingId) } },
-            { $sort: { createdOn: -1 } }
-        ]).exec().then((data) => {
-            resolve(data[0].receipts);
+        TaxSavingModel.findOne({ _id: mongoose.Types.ObjectId(taxSavingId) }, function (err, taxSavingObj) {
+            resolve(taxSavingObj.receipts);
         }).catch((error) => {
             console.log(error);
             reject({ error: (error.errmsg ? error.errmsg : "Unexpected error") });
@@ -157,55 +154,52 @@ function getTaxSavingReceipt(receiptId) {
 function addTaxSavingReceipt(taxSavingId, receiptData) {
     return new Promise((resolve, reject) => {
         TaxSavingModel.findOne({ '_id': mongoose.Types.ObjectId(taxSavingId) }, function (err, taxSavingObj) {
-            console.log(taxSavingObj);
-            taxSavingObj.receipts.push(receiptData);
-            taxSavingObj.save((data) => {
-                resolve(taxSavingObj);
+            if (taxSavingObj) {
+                if (!Array.isArray(taxSavingObj.receipts)) {
+                    taxSavingObj.receipts = [];
+                }
+                taxSavingObj.receipts.push(receiptData);
+                taxSavingObj.save((data) => {
+                    resolve(taxSavingObj);
+                });
+            } else {
+                reject({ error: "Please enter valid tax saving" });
+            }
+        }).catch((error) => {
+            reject({ error: error.errmsg });
+        });
+    });
+}
+
+function updateTaxSavingReceipt(receiptData, receiptId, _id = null) {
+    return new Promise((resolve, reject) => {
+        console.log(receiptData);
+        var receiptDataObj = {
+            amount: receiptData.amount,
+            category: receiptData.category
+        }
+        TaxSavingModel.findOneAndUpdate({ _id: mongoose.Types.ObjectId(_id), 'receipts._id': mongoose.Types.ObjectId(receiptId) }, {
+            '$set': { 'receipts.$': receiptDataObj }
+        }).lean().exec().then((data) => {
+            TaxSavingModel.findOne({ '_id': mongoose.Types.ObjectId(_id) }).lean().exec().then((data) => {
+                resolve(data);
             });
         }).catch((error) => {
             reject({ error: error.errmsg });
         });
-        // var receiptDataObj = {
-        //     receiptCategory: receiptData.receiptCategory,
-        //     receiptAmount: receiptData.receiptAmount
-        // };
-        // if (receiptData.receiptFile) {
-        //     receiptDataObj.receiptFile = receiptData.receiptFile;
-        // }
-        // var receiptObj = new TaxSavingReciptModel(receiptDataObj);
-        // receiptObj.save(function (error, data) {
-        //     if (error) {
-        //         reject({ error: error });
-        //     } else {
-        //         resolve(data);
-        //     }
-        // });
     });
 }
 
-function updateTaxSavingReceipt(receiptId, receiptData) {
+function deleteTaxSavingReceipt(receiptId, _id = null) {
     return new Promise((resolve, reject) => {
-        var receiptDataObj = {};
-        var receiptDataObj = {
-            category: receiptData.category,
-            amount: receiptData.amount
-        };
-        if (receiptData.receiptFile) {
-            receiptDataObj.receiptFile = receiptData.receiptFile;
-        }
-        TaxSavingReciptModel.updateOne({ '_id': mongoose.Types.ObjectId(receiptId) },
-            { $set: receiptDataObj }).exec().then((data) => {
+        TaxSavingModel.findByIdAndUpdate({ _id: mongoose.Types.ObjectId(_id) }, {
+            '$pull': {
+                'receipts': { '_id': mongoose.Types.ObjectId(receiptId) }
+            }
+        }).lean().exec().then((data) => {
+            TaxSavingModel.findOne({ '_id': mongoose.Types.ObjectId(_id) }).lean().exec().then((data) => {
                 resolve(data);
-            }).catch((error) => {
-                reject({ error: error.errmsg });
             });
-    });
-}
-
-function deleteTaxSavingReceipt(receiptId) {
-    return new Promise((resolve, reject) => {
-        TaxSavingReciptModel.deleteOne({ _id: mongoose.Types.ObjectId(receiptId) }).lean().exec().then((data) => {
-            resolve(data);
         }).catch((error) => {
             reject({ error: error.errmsg });
         });

@@ -17,13 +17,14 @@ var upload = multer({
 });
 
 // routes
-router.get('/myReceipts/:_id', getMyReceipts);
+router.get('/receipts/:_id', getTaxSavingReceipts);
 router.get('/receipt/:receiptId', getTaxSavingReceipt);
 router.post('/receipt/:_id', upload.single('file'), addTaxSavingReceipt);
-router.put('/receipt/:receiptId', upload.single('file'), updateTaxSavingReceipt);
-router.delete('/receipt/:receiptId', deleteTaxSavingReceipt);
+router.put('/receipt/:_id/:receiptId', upload.single('file'), updateTaxSavingReceipt);
+router.delete('/receipt/:_id/:receiptId', deleteTaxSavingReceipt);
 
 router.get('/myTaxSaving/:financialYear', getMyTaxSaving);
+router.get('/myTaxSaving/', getMyTaxSaving);
 router.get('/accountTaxSavings/', getAccountTaxSavings);
 router.get('/', getMyTaxSavings);
 router.get('/:_id', getTaxSaving);
@@ -43,7 +44,20 @@ function getMyTaxSavings(req, res) {
 }
 
 function getMyTaxSaving(req, res) {
-    TaxSavingService.getMyTaxSaving(req.user.sub, req.params.financialYear).then(data => {
+    var financialYear = '';
+    if (req.params.financialYear) {
+        financialYear = req.params.financialYear;
+    } else {
+        var nowDate = new Date();
+        if (nowDate.getMonth() >= 3) {
+            financialYear = String(nowDate.getFullYear()) + "-";
+            financialYear += String(nowDate.getFullYear() + 1);
+        } else {
+            financialYear = String(nowDate.getFullYear() - 1) + "-";
+            financialYear += String(nowDate.getFullYear());
+        }
+    }
+    TaxSavingService.getMyTaxSaving(req.user.sub, financialYear).then(data => {
         res.send({ taxSaving: data });
     }).catch(error => {
         res.status(400).send(error);
@@ -84,7 +98,20 @@ function deleteTaxSaving(req, res) {
 }
 
 function getAccountTaxSavings(req, res) {
-    TaxSavingService.getAccountTaxSavings().then(data => {
+    var financialYear = '';
+    if (req.params.financialYear) {
+        financialYear = req.params.financialYear;
+    } else {
+        var nowDate = new Date();
+        if (nowDate.getMonth() >= 3) {
+            financialYear = String(nowDate.getFullYear()) + "-";
+            financialYear += String(nowDate.getFullYear() + 1);
+        } else {
+            financialYear = String(nowDate.getFullYear() - 1) + "-";
+            financialYear += String(nowDate.getFullYear());
+        }
+    }
+    TaxSavingService.getAccountTaxSavings(financialYear).then(data => {
         res.send({ taxSavings: data });
     }).catch(error => {
         res.status(400).send(error);
@@ -92,17 +119,17 @@ function getAccountTaxSavings(req, res) {
 }
 
 // Files
-function getMyReceipts(req, res) {
+function getTaxSavingReceipts(req, res) {
     TaxSavingService.getTaxSavingReceipts(req.params._id).then(data => {
-        res.send({ taxSavings: data });
+        res.send({ taxSavingReceipts: data });
     }).catch(error => {
         res.status(400).send(error);
     });
 }
 
 function getTaxSavingReceipt(req, res) {
-    TaxSavingService.getTaxSavingReceipt(req.params.receiptId).then(data => {
-        res.send({ reimbursement: data });
+    TaxSavingService.getTaxSavingReceipt(req.params.receiptId, req.params._id).then(data => {
+        res.send({ taxSaving: data });
     }).catch(error => {
         res.status(400).send(error);
     });
@@ -121,18 +148,18 @@ function addTaxSavingReceipt(req, res) {
 
 function updateTaxSavingReceipt(req, res) {
     if (req.file && req.file.filename) {
-        req.body.receiptFile = req.file.filename;
+        req.body.file = req.file.filename;
     }
-    TaxSavingService.updateTaxSavingReceipt(req.params.receiptId, req.body).then(data => {
-        res.send({ receipt: data });
+    TaxSavingService.updateTaxSavingReceipt(req.body, req.params.receiptId, req.params._id).then(data => {
+        res.send({ taxSaving: data });
     }).catch(error => {
         res.status(400).send(error);
     });
 }
 
 function deleteTaxSavingReceipt(req, res) {
-    TaxSavingService.deleteTaxSavingReceipt(req.params.receiptId).then(data => {
-        res.send({ receipt: data });
+    TaxSavingService.deleteTaxSavingReceipt(req.params.receiptId, req.params._id).then(data => {
+        res.send({ taxSaving: data });
     }).catch(error => {
         res.status(400).send(error);
     });
