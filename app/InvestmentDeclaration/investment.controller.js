@@ -119,10 +119,11 @@
     TaxSavingService
   ) {
     var vm = this;
-    (vm.user = {}), (vm.financialYear = "2020-2021"),
-     vm.taxSavingId='',
-     vm.receipts = [],
-     (vm.print = false);
+    (vm.user = {}),
+      (vm.financialYear = "2020-2021"),
+      (vm.taxSavingId = ""),
+      (vm.receipts = []),
+      (vm.print = false);
     vm.investmentDeclaration = {
       employee_name: "",
       panCard: "",
@@ -188,7 +189,7 @@
       professionDeducted: "",
       taxDeducted: "",
       periOfEmployment: "",
-      signature2: ""
+      signature2: "",
     };
     console.log("employeeId", $stateParams);
 
@@ -208,57 +209,48 @@
       // var formData = new FormData();
 
       // formData.append('employeeId', JSON.stringify(vm.investmentDeclaration.employeeId));
-     //   console.log("formData.append(Object.keys(vm.investmentDeclaration.employeeId[i]),vm.investmentDeclaration.employeeId[i])",   formData.append(Object.keys(vm.investmentDeclaration.employeeId[i]),vm.investmentDeclaration.employeeId[i])      );
+      //   console.log("formData.append(Object.keys(vm.investmentDeclaration.employeeId[i]),vm.investmentDeclaration.employeeId[i])",   formData.append(Object.keys(vm.investmentDeclaration.employeeId[i]),vm.investmentDeclaration.employeeId[i])      );
 
       var formData = new FormData();
 
-for(let [key, value] of Object.entries(vm.investmentDeclaration)){
-
-  formData.append(key,value);
-
-}
-           formData.append("userId", vm.user._id);
-         //  formData.append('file',vm.receipts[0]._file)
+      for (let [key, value] of Object.entries(vm.investmentDeclaration)) {
+        formData.append(key, value);
+      }
+      formData.append("userId", vm.user._id);
+      //  formData.append('file',vm.receipts[0]._file)
 
       let data = Object.fromEntries(formData);
       console.log("data", data);
 
-     
       // post call
       // TaxSavingService.addTaxSaving(data).then(function (taxSavingForm) {
       //   console.log("taxSavingForm", taxSavingForm);
 
       // })
 
-//add receipt 
+      //add receipt
 
+      var receiptFormData = new FormData();
+      receiptFormData.append('file',vm.receipts[0]._file)
+      console.log("receiptFormData", receiptFormData);
 
-// var receiptFormData = new FormData();
-// receiptFormData.append('file',vm.receipts[0]._file)
-// console.log("receiptFormData", receiptFormData);
+      TaxSavingService.addTaxSavingReceipt(receiptFormData).then(function (taxSavingForm) {
+              console.log("taxSavingForm", taxSavingForm);
 
-
-// TaxSavingService.addTaxSavingReceipt(receiptFormData).then(function (taxSavingForm) {
-//         console.log("taxSavingForm", taxSavingForm);
-
-//       })
-
+            })
 
       //updateTaxSaving
 
-      TaxSavingService.updateTaxSaving(vm.taxSavingId, data).then(
-        function (taxSavingForm) {
-          console.log("updateTaxSaving", taxSavingForm);
-       }
-     );
-     };
-
-
-
+      // TaxSavingService.updateTaxSaving(vm.taxSavingId, data).then(function (
+      //   taxSavingForm
+      // ) {
+      //   console.log("updateTaxSaving", taxSavingForm);
+      // });
+    };
 
     $scope.modelSetter = function (values) {
       console.log("values", values);
-      vm.receipts = values
+      vm.receipts = values;
 
       // vm.investmentDeclaration.sectionAFiles = values;
     };
@@ -298,57 +290,36 @@ for(let [key, value] of Object.entries(vm.investmentDeclaration)){
     };
 
     function getUserForm() {
-      //getTaxSaving
-      TaxSavingService.getTaxSaving(vm.user._id).then(
-        function (response) {
-          if (response.taxSaving.length) {
-            console.log("response", response);
-            vm.taxSavingId = response.taxSaving[0]._id;
+     
+      // getMyTaxSaving
 
-            vm.investmentDeclaration = response.taxSaving[0];
-          //  vm.investmentDeclaration.dateOfJoin = convert(response.dateOfJoin);
-          } else {
-            //post call with emp id and financial year
-
-// post call
-// var formData = new FormData();
-// formData.append('userId',vm.user._id);
-// formData.append('financialYear',vm.financialYear);
-
-// let data = Object.fromEntries(formData);
-// console.log("data",data)
-//       TaxSavingService.addTaxSaving(data).then(function (taxSavingForm) {
-//         console.log("taxSavingForm", taxSavingForm);
-//         vm.taxSavingId = taxSavingForm.taxSaving._id
-//         console.log("vm.taxSavingId", vm.taxSavingId);
-
-//       })
-
-
-// getMyTaxSaving
-
-  TaxSavingService.getMyTaxSaving(vm.financialYear.trim()).then(function (getMyTaxSaving) {
+      TaxSavingService.getMyTaxSaving(vm.financialYear.trim()).then(function (
+        getMyTaxSaving
+      ) {
         console.log("getMyTaxSaving", getMyTaxSaving);
-        vm.taxSavingId = getMyTaxSaving.taxSaving._id
+        vm.taxSavingId = getMyTaxSaving.taxSaving._id;
 
+        //getTaxSaving
+        TaxSavingService.getTaxSaving(vm.taxSavingId).then(
+          function (response) {
+            if (response) {
+              console.log("getTaxSaving response", response);
 
-
-      })
-
-
+              vm.investmentDeclaration = response.taxSaving;
+              vm.investmentDeclaration.dateOfJoin = convert(
+                response.taxSaving.dateOfJoin
+              );
+            } else {
+              //post call with emp id and financial year
+            }
+          },
+          function (error) {
+            if (error) {
+              console.log("error", error);
+            }
           }
-        },
-        function (error) {
-          if (error) {
-            console.log("error", error);
-          }
-        }
-      );
-
-
-
-
-
+        );
+      });
     }
 
     function initController() {
@@ -359,7 +330,7 @@ for(let [key, value] of Object.entries(vm.investmentDeclaration)){
       } else {
         UserService.GetCurrent().then(function (user) {
           console.log("user", user);
-          vm.user= user;
+          vm.user = user;
           vm.investmentDeclaration.employee_name = user.name;
           vm.investmentDeclaration.designation = user.designation;
           vm.investmentDeclaration.dateOfJoin = convert(user.joinDate);
@@ -419,8 +390,6 @@ for(let [key, value] of Object.entries(vm.investmentDeclaration)){
     };
 
     function getInvestments() {
-
-      
       InvestmentService.getInvestments().then(
         function (userInvestments) {
           console.log("userInvestments", userInvestments);
@@ -431,13 +400,12 @@ for(let [key, value] of Object.entries(vm.investmentDeclaration)){
             console.log("error", error);
           }
         }
-     );
+      );
 
       // TaxSavingService.getAccountTaxSavings().then(function (getAccountTaxSaving) {
       //   console.log("getAccountTaxSaving", getAccountTaxSaving);
 
       // })
-
     }
 
     function initController() {
