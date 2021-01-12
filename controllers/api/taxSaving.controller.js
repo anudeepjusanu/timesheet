@@ -19,7 +19,7 @@ var upload = multer({
 // routes
 router.get('/myReceipts/:_id', getMyReceipts);
 router.get('/receipt/:receiptId', getTaxSavingReceipt);
-router.post('/receipt', upload.single('file'), addTaxSavingReceipt);
+router.post('/receipt/:_id', upload.single('file'), addTaxSavingReceipt);
 router.put('/receipt/:receiptId', upload.single('file'), updateTaxSavingReceipt);
 router.delete('/receipt/:receiptId', deleteTaxSavingReceipt);
 
@@ -67,7 +67,6 @@ function addTaxSaving(req, res) {
 }
 
 function updateTaxSaving(req, res) {
-    console.log("req.params._id", req.params._id)
     TaxSavingService.updateTaxSaving(req.params._id, req.body).then(data => {
         res.send({ taxSaving: data });
     }).catch(error => {
@@ -109,12 +108,11 @@ function getTaxSavingReceipt(req, res) {
 }
 
 function addTaxSavingReceipt(req, res) {
-    req.body.userId = req.user.sub;
     if (req.file && req.file.filename) {
-        req.body.receiptFile = req.file.filename;
+        req.body.file = req.file.filename;
     }
-    TaxSavingService.addTaxSavingReceipt(req.body).then(data => {
-        res.send({ receipt: data });
+    TaxSavingService.addTaxSavingReceipt(req.params._id, req.body).then(data => {
+        res.send({ taxSaving: data });
     }).catch(error => {
         res.status(400).send(error);
     });
