@@ -1,0 +1,1385 @@
+{
+	"info": {
+		"_postman_id": "f1365712-7701-48b6-b9cb-b347c91ec282",
+		"name": "WaveLabs EMS ",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Inventory",
+			"item": [
+				{
+					"name": "My Inventory",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3010/api/users/myInventory/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"users",
+								"myInventory",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reimbursement",
+			"item": [
+				{
+					"name": "My Reimbursements",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3010/api/reimbursement/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"reimbursement",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Approve Users List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3010/api/reimbursement/approveUsersList",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"reimbursement",
+								"approveUsersList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reimbursement",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3010/api/reimbursement/5f271a80ab3ff8382ce420ce",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"reimbursement",
+								"5f271a80ab3ff8382ce420ce"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Reimbursement",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "purpose",
+									"value": "TESTING",
+									"type": "text"
+								},
+								{
+									"key": "approveUserId",
+									"value": "58a57519d551de26b1f0bb29",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/reimbursement/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"reimbursement",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Reimbursement",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"projectId\": \"5a1294cb2f539138f0cbe35a\",\n    \"purpose\": \"2002\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/reimbursement/5f271a80ab3ff8382ce420ce",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"reimbursement",
+								"5f271a80ab3ff8382ce420ce"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Reimbursement",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"projectId\": \"5a1294cb2f539138f0cbe35a\",\n    \"items\": [\n        {\n            \"billDate\": \"2020-05-01\",\n            \"billCategory\": \"Travel\",\n            \"billDescription\": \"TESTING001\",\n            \"billAmount\": \"40.00\"\n        },\n        {\n            \"billDate\": \"2020-05-02\",\n            \"billCategory\": \"\",\n            \"billDescription\": \"TESTING002\",\n            \"billAmount\": \"50.00\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/reimbursement/5f2bb8a5f461227cfcad807b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"reimbursement",
+								"5f2bb8a5f461227cfcad807b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reimbursement Item",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3010/api/reimbursement/item/5f2b1df086ef7e6606c22fb6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"reimbursement",
+								"item",
+								"5f2b1df086ef7e6606c22fb6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Reimbursement Item",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "billDate",
+									"value": "2020-05-01",
+									"type": "text"
+								},
+								{
+									"key": "billCategory",
+									"value": "Travel",
+									"type": "text"
+								},
+								{
+									"key": "billDescription",
+									"value": "TEST",
+									"type": "text"
+								},
+								{
+									"key": "billAmount",
+									"value": "40.50",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/reimbursement/item/5f2bb999c1b8e07dacaa95e4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"reimbursement",
+								"item",
+								"5f2bb999c1b8e07dacaa95e4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Reimbursement Item",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "billDate",
+									"value": "2020-06-02",
+									"type": "text"
+								},
+								{
+									"key": "billCategory",
+									"value": "TEST",
+									"type": "text"
+								},
+								{
+									"key": "billDescription",
+									"value": "TESTING",
+									"type": "text"
+								},
+								{
+									"key": "billAmount",
+									"value": "20",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/lbsastry/Desktop/test img/iphone2.jpg"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/reimbursement/item/5f28017ffb3d756bac10ae6c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"reimbursement",
+								"item",
+								"5f28017ffb3d756bac10ae6c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Reimbursement Item",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"projectId\": \"5a1294cb2f539138f0cbe35a\",\n    \"items\": [\n        {\n            \"billDate\": \"2020-05-01\",\n            \"billCategory\": \"Travel\",\n            \"billDescription\": \"TESTING001\",\n            \"billAmount\": \"40.00\"\n        },\n        {\n            \"billDate\": \"2020-05-02\",\n            \"billCategory\": \"\",\n            \"billDescription\": \"TESTING002\",\n            \"billAmount\": \"50.00\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/reimbursement/item/5f2739e0fae07d467b62b911",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"reimbursement",
+								"item",
+								"5f2739e0fae07d467b62b911"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Reimbursement Item File",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/lbsastry/Desktop/test img/apple1.jpg"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/reimbursement/itemFile/5f271aeaab3ff8382ce420d6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"reimbursement",
+								"itemFile",
+								"5f271aeaab3ff8382ce420d6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Timesheet",
+			"item": [
+				{
+					"name": "Current User Info",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYyMTA0MzB9.iEpIxvPw0olrIzP14r8q4ZMC2-IwRU76fQKaAwptRdA",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"anudeepd@wavelabs.ai\", \n    \"password\": \"c1psw\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/users/current",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"users",
+								"current"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Timesheets",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYyMTA0MzB9.iEpIxvPw0olrIzP14r8q4ZMC2-IwRU76fQKaAwptRdA",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM",
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman."
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"anudeepd@wavelabs.ai\", \n    \"password\": \"c1psw\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/timesheet/week/mine",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"timesheet",
+								"week",
+								"mine"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add My Timesheets",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYyMTA0MzB9.iEpIxvPw0olrIzP14r8q4ZMC2-IwRU76fQKaAwptRdA",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM",
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman."
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"weekDate\": \"2020-08-07T07:56:41.273Z\",\n    \"projects\": [\n        {\n            \"projectId\": \"5a280cb2d824ad7e711867b2\",\n            \"projectName\": \"Wavelabs-TimeSheet\",\n            \"allocatedHours\": 5,\n            \"billableMaxHours\": 40,\n            \"projectHours\": 10,\n            \"sickLeaveHours\": 4,\n            \"timeoffHours\": 8,\n            \"corpHolidayHours\": 0,\n            \"overtimeHours\": 0,\n            \"projectComment\": \"\",\n            \"isAssigned\": true,\n            \"sheetStatus\": \"Pending\",\n            \"resourceStatus\": null\n        },\n        {\n            \"projectId\": \"5c1cb879bf2c631334b4f2b8\",\n            \"projectName\": \"Evergent UI Development\",\n            \"allocatedHours\": 40,\n            \"billableMaxHours\": 40,\n            \"projectHours\": 20,\n            \"sickLeaveHours\": 0,\n            \"timeoffHours\": 0,\n            \"corpHolidayHours\": 0,\n            \"overtimeHours\": 0,\n            \"projectComment\": \"\",\n            \"isAssigned\": true,\n            \"sheetStatus\": \"Pending\",\n            \"resourceStatus\": null\n        }\n    ],\n    \"totalHours\": 30,\n    \"timeoffHours\": 12,\n    \"corpHolidayHours\": 0,\n    \"overtimeHours\": 0,\n    \"reportingTo\": \"5b3f40d158957e1d63346942\",\n    \"timesheetStatus\": null,\n    \"week\": \"2020-W32\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/timesheet/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"timesheet",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "tax saving",
+			"item": [
+				{
+					"name": "Get my tax saving",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYyMTA0MzB9.iEpIxvPw0olrIzP14r8q4ZMC2-IwRU76fQKaAwptRdA",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM",
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman."
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/taxSaving/myTaxSaving/2020-2021",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"taxSaving",
+								"myTaxSaving",
+								"2020-2021"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get my tax saving without passing financial year",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYyMTA0MzB9.iEpIxvPw0olrIzP14r8q4ZMC2-IwRU76fQKaAwptRdA",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM",
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman."
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/taxSaving/myTaxSaving/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"taxSaving",
+								"myTaxSaving",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get my all tax savings",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYyMTA0MzB9.iEpIxvPw0olrIzP14r8q4ZMC2-IwRU76fQKaAwptRdA",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM",
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman."
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/taxSaving/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"taxSaving",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Account submitted tax savings",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYyMTA0MzB9.iEpIxvPw0olrIzP14r8q4ZMC2-IwRU76fQKaAwptRdA",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM",
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman."
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/taxSaving/accountTaxSavings/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"taxSaving",
+								"accountTaxSavings",
+								""
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get tax saving",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYyMTA0MzB9.iEpIxvPw0olrIzP14r8q4ZMC2-IwRU76fQKaAwptRdA",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM",
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman."
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/taxSaving/5ffcdcd87d0fe70e0275899c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"taxSaving",
+								"5ffcdcd87d0fe70e0275899c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get tax saving receipts",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYyMTA0MzB9.iEpIxvPw0olrIzP14r8q4ZMC2-IwRU76fQKaAwptRdA",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM",
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman."
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/taxSaving/receipts/5ffd3897a586ae20d07aba9a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"taxSaving",
+								"receipts",
+								"5ffd3897a586ae20d07aba9a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add tax saving",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYyMTA0MzB9.iEpIxvPw0olrIzP14r8q4ZMC2-IwRU76fQKaAwptRdA",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM",
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman."
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"financialYear\": \"2019-2020\",\n    \"employeeId\": \"WL11120\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/taxSaving/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"taxSaving",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update tax saving",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYyMTA0MzB9.iEpIxvPw0olrIzP14r8q4ZMC2-IwRU76fQKaAwptRdA",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM",
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman."
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"financialYear\": \"2020-2021\",\n    \"employeeId\": \"WL11120\",\n    \"totalAmount\": \"203\",\n    \"col20\": \"2000\",\n    \"status\": \"Submitted\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/taxSaving/5ffd3897a586ae20d07aba9a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"taxSaving",
+								"5ffd3897a586ae20d07aba9a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete tax saving",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYyMTA0MzB9.iEpIxvPw0olrIzP14r8q4ZMC2-IwRU76fQKaAwptRdA",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM",
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman."
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/taxSaving/5ffcdcd87d0fe70e0275899c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"taxSaving",
+								"5ffcdcd87d0fe70e0275899c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add tax saving receipt",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYyMTA0MzB9.iEpIxvPw0olrIzP14r8q4ZMC2-IwRU76fQKaAwptRdA",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM",
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman."
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/lbsastry/Desktop/test img/apple1.jpg"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/taxSaving/receipt/5ffd3897a586ae20d07aba9a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"taxSaving",
+								"receipt",
+								"5ffd3897a586ae20d07aba9a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update tax saving receipt",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYyMTA0MzB9.iEpIxvPw0olrIzP14r8q4ZMC2-IwRU76fQKaAwptRdA",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM",
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman."
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/lbsastry/Desktop/test img/apple3.jpg"
+								},
+								{
+									"key": "amount",
+									"value": "400",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "test",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/taxSaving/receipt/5ffd3897a586ae20d07aba9a/5ffd4e5caa60a02bfb3b506a/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"taxSaving",
+								"receipt",
+								"5ffd3897a586ae20d07aba9a",
+								"5ffd4e5caa60a02bfb3b506a",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete tax saving receipt",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYyMTA0MzB9.iEpIxvPw0olrIzP14r8q4ZMC2-IwRU76fQKaAwptRdA",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYzNTY2MzB9.SiCzh-bVyHB2_QPdH9m6ryKQIlOd3vxN0die1jiRAOM",
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman."
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/lbsastry/Desktop/test img/apple1.jpg"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3010/api/taxSaving/receipt/5ffd3897a586ae20d07aba9a/5ffd4b89158a672ab9592084/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"api",
+								"taxSaving",
+								"receipt",
+								"5ffd3897a586ae20d07aba9a",
+								"5ffd4b89158a672ab9592084",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OGE1N2RjMWE0OTRmYTI3ZDU0NTZmOTAiLCJpYXQiOjE1OTYyMTA0MzB9.iEpIxvPw0olrIzP14r8q4ZMC2-IwRU76fQKaAwptRdA",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"anudeepd@wavelabs.ai\", \n    \"password\": \"Admin@123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3010/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
