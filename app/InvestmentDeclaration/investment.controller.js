@@ -5,6 +5,8 @@
     .module("app")
     .controller("Investment.IndexController", InvestmentController)
     .controller("Investment.TaxOldRegimeController", TaxOldRegimeController)
+    .controller("Investment.TaxNewRegimeController", TaxNewRegimeController)
+
     .controller(
       "Investment.accountInvestmentController",
       AccountInvestmentController
@@ -78,31 +80,12 @@
     function initController() {
       UserService.GetCurrent().then(function (user) {
         console.log("user", user);
+        localStorage.setItem("print", "false");
+        localStorage.removeItem("taxSavingId");
+
+
         vm.user.userRole = "finance";
-        // get Tax saving
-
-        // TaxSavingService.getMyTaxSavings().then(function (taxSavingUsers) {
-        //   console.log("taxSavingUsers", taxSavingUsers);
-        // });
-
-        //getAccountTaxSavings
-
-        // TaxSavingService.getAccountTaxSavings().then(function (taxSavingUsers) {
-        //   console.log("getAccountTaxSavings", taxSavingUsers);
-
-        // })
-
-        //getTaxSaving
-        // TaxSavingService.getTaxSaving("5ff31e468d1c3a0b838d3e2a").then(function (taxSavingUsers) {
-        //   console.log("getAccountTaxSavings", taxSavingUsers);
-
-        // })
-
-        //deleteTaxSaving
-        // TaxSavingService.deleteTaxSaving("WL11062").then(function (taxSavingUsers) {
-        //   console.log("getAccountTaxSavings", taxSavingUsers);
-
-        // })
+       
       });
     }
 
@@ -116,83 +99,102 @@
     InvestmentService,
     $state,
     $stateParams,
-    TaxSavingService
+    TaxSavingService,
+    noty
   ) {
     var vm = this;
     (vm.user = {}),
       (vm.financialYear = "2020-2021"),
       (vm.taxSavingId = ""),
       (vm.receipts = []),
-      (vm.print = false);
-    vm.investmentDeclaration = {
-      employee_name: "",
-      panCard: "",
-      designation: "",
-      dateOfJoin: "",
-      employeeId: "",
-      schemeOld: "",
-      schemeNew: "",
-      secArow1: "",
-      secArow2: "",
-      secArow3: "",
-      secArow4: "",
-      secArow5: "",
-      secArow6: "",
-      secArow7: "",
-      secArow8: "",
-      secArow9: "",
-      secArow10: "",
-      secArow11: "",
-      secArow11a: "",
-      secArow11b: "",
-      secArow12: "",
-      secArow13: "",
-      secArow14: "",
-      secArowSubTotal: 0,
-      secArow15: "",
-      secArow16: "",
-      secBrow1: "",
-      secBrow2: "",
-      secBrow3: "",
-      secBrow4: "",
-      secBrow5: "",
-      secBrow6col1: "Others (please specify)",
-      secBrow6: "",
-      secCrow1: "",
-      secCrow2: "",
-      secCrow3: "",
-      secCrow4row1: "",
-      secCrow4row2: "",
-      secCrow5: "",
-      secCrow6: "",
-      secDrow1: "",
-      secDrow2: "",
-      secDrow3: "",
-      secEcol1: "",
-      secEcol3: "",
-      secEcol3: "",
-      secEcol4: "",
-      secEcol5: "",
-      secEcol6: "",
-      secEcol7: "",
-      secEcol8: "",
-      secEcol9: "",
-      secEcol10: "",
-      secEcol11: "",
-      secEcol12: "",
-      secFrow1: "",
-      secFrow2: "",
-      signature1: "",
-      taxableSalaryIncome: "",
-      taxPerquisites: "",
-      pfDeducted: "",
-      professionDeducted: "",
-      taxDeducted: "",
-      periOfEmployment: "",
-      signature2: "",
-    };
+      vm.min=0,
+     vm.max= 400000,
+      (vm.print =  false);
+    (vm.schemeNew = "-"),
+      (vm.investmentDeclaration = {
+        employee_name: "",
+        panCard: "",
+        designation: "",
+        dateOfJoin: "",
+        employeeId: "",
+        schemeType: "old",
+        secArow1: "",
+        secArow2: "",
+        secArow3: "",
+        secArow4: "",
+        secArow5: "",
+        secArow6: "",
+        secArow7: "",
+        secArow8: "",
+        secArow9: "",
+        secArow10: "",
+        secArow11: "",
+        secArow11a: "",
+        secArow11b: "",
+        secArow12: "",
+        secArow13: "",
+        secArow14: "",
+        secArowSubTotal: "",
+        secArow15: "",
+        secArow16: "",
+        secBrow1: "",
+        secBrow2: "",
+        secBrow3: "",
+        secBrow4: "",
+        secBrow5: "",
+        secBrow6col1: "",
+        secBrow6: "",
+        secCrow1: "",
+        secCrow2: "",
+        secCrow3: "",
+        secCrow4row1: "",
+        secCrow4row2: "",
+        secCrow5: "",
+        secCrow6: "",
+        secDrow1: "",
+        secDrow2: "",
+        secDrow3: "",
+        secEcol1: "",
+        secEcol3: "",
+        secEcol3: "",
+        secEcol4: "",
+        secEcol5: "",
+        secEcol6: "",
+        secEcol7: "",
+        secEcol8: "",
+        secEcol9: "",
+        secEcol10: "",
+        secEcol11: "",
+        secEcol12: "",
+        secFrow1: "",
+        secFrow2: "",
+        signature1: "",
+        taxableSalaryIncome: "",
+        taxPerquisites: "",
+        pfDeducted: "",
+        professionDeducted: "",
+        taxDeducted: "",
+        periOfEmployment: "",
+        signature2: "",
+      });
     console.log("employeeId", $stateParams);
-
+    $scope.change = function () {
+      vm.investmentDeclaration.secArowSubTotal =
+        vm.investmentDeclaration.secArow1 +
+        vm.investmentDeclaration.secArow2 +
+        vm.investmentDeclaration.secArow3 +
+        vm.investmentDeclaration.secArow4 +
+        vm.investmentDeclaration.secArow5 +
+        vm.investmentDeclaration.secArow6 +
+        vm.investmentDeclaration.secArow7 +
+        vm.investmentDeclaration.secArow8 +
+        vm.investmentDeclaration.secArow9 +
+        vm.investmentDeclaration.secArow10 +
+        vm.investmentDeclaration.secArow11 +
+        vm.investmentDeclaration.secArow12 +
+        vm.investmentDeclaration.secArow13 +
+        vm.investmentDeclaration.secArow14;
+    };
     function convert(str) {
       var date = new Date(str),
         month = ("0" + (date.getMonth() + 1)).slice(-2),
@@ -200,10 +202,10 @@
       return [date.getFullYear(), month, day].join("-");
     }
 
-    vm.saveInvestmentDeclaration = function (
-      printSectionId,
-      investmentDeclaration
-    ) {
+    vm.sbmitNowInvestmentDeclaration = function (
+submit    ) {
+  console.log("submit", submit);
+
       console.log("form", vm.investmentDeclaration);
 
       // var formData = new FormData();
@@ -217,6 +219,10 @@
         formData.append(key, value);
       }
       formData.append("userId", vm.user._id);
+      if(submit){
+        formData.append("status","Submitted")
+
+      }
       //  formData.append('file',vm.receipts[0]._file)
 
       let data = Object.fromEntries(formData);
@@ -230,14 +236,28 @@
 
       //add receipt
 
-      var receiptFormData = new FormData();
-      receiptFormData.append('file',vm.receipts[0]._file)
-      console.log("receiptFormData", receiptFormData);
+      const promises = [];
 
-      TaxSavingService.addTaxSavingReceipt(receiptFormData).then(function (taxSavingForm) {
-              console.log("taxSavingForm", taxSavingForm);
+      for (let i = 0; i < vm.receipts.length; i++) {
+        //       ^^^−−−−−−−−−−−−−−−−−−−−−−−− added missing declaration
+        promises.push(fileUpload(vm.receipts[i]._file));
+      }
+      promises.push(updateTaxSaving(data));
 
-            })
+      Promise.all(promises)
+        .then((results) => {
+          console.log("All done", results);
+          if(submit){
+            noty.showSuccess("submitted successfully!");
+
+          }else{
+            noty.showSuccess("saved successfully!");
+
+          }
+        })
+        .catch((e) => {
+          console.log("All error", e);
+        });
 
       //updateTaxSaving
 
@@ -247,6 +267,37 @@
       //   console.log("updateTaxSaving", taxSavingForm);
       // });
     };
+
+    function updateTaxSaving(data) {
+      return new Promise((resolve) => {
+        delete data.receipts;
+        delete data._id;
+
+        TaxSavingService.updateTaxSaving(vm.taxSavingId, data).then(function (
+          taxSavingForm
+        ) {
+          console.log("updateTaxSaving", taxSavingForm);
+          resolve(taxSavingForm);
+        });
+      });
+    }
+
+    function fileUpload(file) {
+      return new Promise((resolve) => {
+        var receiptFormData = new FormData();
+        receiptFormData.append("file", file);
+        console.log("receiptFormData", receiptFormData);
+        let receiptData = Object.fromEntries(receiptFormData);
+        console.log("receiptData", receiptData);
+
+        TaxSavingService.addTaxSavingReceipt(vm.taxSavingId, receiptData).then(
+          function (taxSavingForm) {
+            console.log("taxSavingForm", taxSavingForm);
+            resolve(taxSavingForm);
+          }
+        );
+      });
+    }
 
     $scope.modelSetter = function (values) {
       console.log("values", values);
@@ -290,7 +341,6 @@
     };
 
     function getUserForm() {
-     
       // getMyTaxSaving
 
       TaxSavingService.getMyTaxSaving(vm.financialYear.trim()).then(function (
@@ -299,42 +349,101 @@
         console.log("getMyTaxSaving", getMyTaxSaving);
         vm.taxSavingId = getMyTaxSaving.taxSaving._id;
 
-        //getTaxSaving
-        TaxSavingService.getTaxSaving(vm.taxSavingId).then(
-          function (response) {
-            if (response) {
-              console.log("getTaxSaving response", response);
 
-              vm.investmentDeclaration = response.taxSaving;
-              vm.investmentDeclaration.dateOfJoin = convert(
-                response.taxSaving.dateOfJoin
-              );
-            } else {
-              //post call with emp id and financial year
-            }
-          },
-          function (error) {
-            if (error) {
-              console.log("error", error);
-            }
-          }
-        );
+        getPersonalUserForm(vm.taxSavingId);
+
+        
       });
     }
+    function convertIntObj(obj) {
+      const res = {};
+      for (const key in obj) {
+        res[key] = {};
+        for (const prop in obj[key]) {
+          const parsed = parseInt(obj[key][prop], 10);
+          res[key][prop] = isNaN(parsed) ? obj[key][prop] : parsed;
+        }
+      }
+      return res;
+    }
+function getPersonalUserForm (taxSavingId){
+//console.log("$localStorage.print",$localStorage.print)
+console.log(localStorage.getItem("print"));
+//getTaxSaving
+TaxSavingService.getTaxSaving(taxSavingId).then(
+  function (response) {
+  
+    if (response) {
+      console.log("getTaxSaving response", response);
+      if (!response.taxSaving.employee_name) {
+        vm.investmentDeclaration.employee_name = vm.user.name;
+        vm.investmentDeclaration.designation = vm.user.designation;
+        vm.investmentDeclaration.employeeId = vm.user.employeeId;
+        vm.investmentDeclaration.dateOfJoin = convert(vm.user.joinDate);
+      } else {
 
+
+        let investmentDeclaration = convertIntObj(response);
+        vm.investmentDeclaration = investmentDeclaration.taxSaving;
+        console.log(
+          "vm.investmentDeclaration",
+          vm.investmentDeclaration
+        );
+        vm.investmentDeclaration.userId = vm.user._id;
+        vm.investmentDeclaration.financialYear =
+          response.taxSaving.financialYear;
+        vm.investmentDeclaration.createdOn =
+          response.taxSaving.createdOn;
+
+        if (vm.investmentDeclaration.dateOfJoin) {
+          vm.investmentDeclaration.dateOfJoin = convert(
+            response.taxSaving.dateOfJoin
+          );
+        }
+        if(vm.investmentDeclaration.status === "Submitted" ){
+          let inputs =   document.getElementsByTagName('input')
+        //.setAttribute("readonly", "readonly"); 
+        for(var i = 0; i < inputs.length; i++) {
+          inputs[i].setAttribute("readonly", "true");
+      }
+         }
+    if(localStorage.getItem("print") === "true"){
+vm.print = true;
+    }else{
+      vm.print = false;
+
+    }
+
+        
+        TaxSavingService.getTaxSavingReceipt(
+          "600143043620ee6d05ff9642"
+        ).then(function (receipt) {
+          console.log("receipt info", receipt);
+        });
+      }
+    } else {
+      //post call with emp id and financial year
+    }
+  },
+  function (error) {
+    if (error) {
+      console.log("error", error);
+    }
+  }
+);
+
+}
     function initController() {
-      if ($stateParams.investmentObj.employeeId) {
-        vm.print = true;
-        console.log("employeeId", $stateParams.investmentObj.employeeId);
-        getUserForm($stateParams.investmentObj.employeeId);
+      if (localStorage.getItem("taxSavingId")) {
+        localStorage.setItem("print", "true");
+
+                getPersonalUserForm(localStorage.getItem("taxSavingId"));
+
+
       } else {
         UserService.GetCurrent().then(function (user) {
           console.log("user", user);
           vm.user = user;
-          vm.investmentDeclaration.employee_name = user.name;
-          vm.investmentDeclaration.designation = user.designation;
-          vm.investmentDeclaration.dateOfJoin = convert(user.joinDate);
-          vm.investmentDeclaration.employeeId = user.employeeId;
 
           // getCall
           getUserForm(user.employeeId, vm.financialYear);
@@ -344,6 +453,19 @@
     initController();
   }
 
+
+  function TaxNewRegimeController($scope, noty) {
+    var vm = this;
+
+    function initController() {
+      noty.showSuccess("Please contact your Administrator");
+
+    }
+
+    initController();
+  }
+
+   
   function AccountInvestmentController(
     $scope,
     UserService,
@@ -355,10 +477,10 @@
     var vm = this;
     vm.alerts = [];
     vm.searchObj = {
-      status: "All",
+      status: "Submitted",
     };
     vm.Investments = [];
-    vm.investmentStatus = ["All", "Submitted", "Pending"];
+    vm.investmentStatus = ["Submitted"];
 
     vm.openInvestmentModal = function (investmentObj) {
       var modalInstance = $uibModal
@@ -389,23 +511,31 @@
         );
     };
 
+    $scope.convert = function(str) {
+      var date = new Date(str),
+        month = ("0" + (date.getMonth() + 1)).slice(-2),
+        day = ("0" + date.getDate()).slice(-2);
+      return [date.getFullYear(), month, day].join("-");
+    }
+
     function getInvestments() {
-      InvestmentService.getInvestments().then(
-        function (userInvestments) {
-          console.log("userInvestments", userInvestments);
-          vm.Investments = userInvestments;
-        },
-        function (error) {
-          if (error) {
-            console.log("error", error);
-          }
-        }
-      );
+      // InvestmentService.getInvestments().then(
+      //   function (userInvestments) {
+      //     console.log("userInvestments", userInvestments);
+      //     vm.Investments = userInvestments;
+      //   },
+      //   function (error) {
+      //     if (error) {
+      //       console.log("error", error);
+      //     }
+      //   }
+      // );
 
-      // TaxSavingService.getAccountTaxSavings().then(function (getAccountTaxSaving) {
-      //   console.log("getAccountTaxSaving", getAccountTaxSaving);
+      TaxSavingService.getAccountTaxSavings().then(function (getAccountTaxSaving) {
+        console.log("getAccountTaxSaving", getAccountTaxSaving.taxSavings);
+          vm.Investments = getAccountTaxSaving.taxSavings;
 
-      // })
+      })
     }
 
     function initController() {
@@ -435,9 +565,12 @@
 
     vm.getUserForm = function (investmentObj) {
       $uibModalInstance.dismiss("cancel");
+      localStorage.setItem("print", "true");
+      localStorage.setItem("taxSavingId", investmentObj._id);
 
       $state.go("TaxOldRegime", {
         investmentObj: investmentObj,
+        print:true
       });
     };
   }

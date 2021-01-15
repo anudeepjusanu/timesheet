@@ -214,7 +214,10 @@ table .warningBackground {
 table .tableBorder {
   border: 0;
 }
-
+table .width{
+    width: 150px;
+  }
+  
 
 @media print /*--This is for Print--*/
 
@@ -362,7 +365,6 @@ table .tableBorder {
   table .tableBorder {
     border: 0;
   }
-  
   
     
 

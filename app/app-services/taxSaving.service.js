@@ -66,9 +66,9 @@
             return $http.get('/api/taxSaving/receipt/' + taxSavingReceiptId).then(handleSuccess, handleError);
         }
 
-        function addTaxSavingReceipt(formData) {
+        function addTaxSavingReceipt(taxSavingId,formData) {
             console.log("formData",formData)
-            return $http.post('/api/taxSaving/receipt', formData, {
+            return $http.post('/api/taxSaving/receipt/'+ taxSavingId, formData, {
                 transformRequest: angular.identity,
                 headers: { 'Content-Type': undefined }
             }).then(handleSuccess, handleError);

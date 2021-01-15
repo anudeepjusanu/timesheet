@@ -34,9 +34,9 @@
                     <tr ng-repeat="investment in vm.Investments | InvestmentsSearch: vm.searchObj">
                         <td class="table-heading">{{$index+1}}</td>
                         <td class="table-heading">{{investment.employeeId}}</td>
-                        <td class="table-heading">{{investment.userName}}</td>
+                        <td class="table-heading">{{investment.employee_name}}</td>
                         <td class="table-heading">{{investment.status}}</td>
-                        <td class="table-heading">{{investment.createdOn}}</td>
+                        <td class="table-heading">{{convert(investment.createdOn)}}</td>
                         <td>
                             <a 
                                 class="btn btn-primary btn-icon btn-rounded"

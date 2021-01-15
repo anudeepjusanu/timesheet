@@ -366,14 +366,15 @@
     parent: 'layout',
     data: { activeTab: 'investmentDeclaration' },
     params: {
-        investmentObj: {}
+        investmentObj: {},
+        print:false
         }
 })
 
 .state('TaxNewRegime', {
     url: '/investmentDeclaration/TaxNewRegime',
     templateUrl: 'InvestmentDeclaration/TaxNewRegime.html',
-    controller: 'Investment.IndexController',
+    controller: 'Investment.TaxNewRegimeController',
     controllerAs: 'vm',
     parent: 'layout',
     data: { activeTab: 'investmentDeclaration' }
