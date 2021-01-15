@@ -143,8 +143,16 @@ function getTaxSavingReceipts(taxSavingId) {
 /** Receipt */
 function getTaxSavingReceipt(receiptId) {
     return new Promise((resolve, reject) => {
-        TaxSavingModel.findOne({ '_id': mongoose.Types.ObjectId(receiptId) }).lean().exec().then((data) => {
-            resolve(data);
+        TaxSavingModel.findOne({ 'receipts._id': mongoose.Types.ObjectId(receiptId) }).lean().exec().then((taxSavingObj) => {
+            if (taxSavingObj.receipts) {
+                _.each(taxSavingObj.receipts, function (receiptObj) {
+                    if (receiptObj._id == receiptId) {
+                        resolve(receiptObj);
+                        return false;
+                    }
+                });
+            }
+            resolve({});
         }).catch((error) => {
             reject({ error: error.errmsg });
         });
