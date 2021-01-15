@@ -128,8 +128,8 @@ function getTaxSavingReceipts(req, res) {
 }
 
 function getTaxSavingReceipt(req, res) {
-    TaxSavingService.getTaxSavingReceipt(req.params.receiptId, req.params._id).then(data => {
-        res.send({ taxSaving: data });
+    TaxSavingService.getTaxSavingReceipt(req.params.receiptId).then(data => {
+        res.send({ taxSavingReceipt: data });
     }).catch(error => {
         res.status(400).send(error);
     });
