@@ -1446,15 +1446,50 @@ input[type=number] {
                 value={{vm.investmentDeclaration.secFrow2}}
                 /></td>
         </tr>
+
+
+
+
         <tr  ng-if = "!vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status">
           <td colspan="5">
             <!-- <input type="file"   id="upload" ng-file-model="vm.files" style="height: auto;"
                       class="form-control"  multiple/> -->
-
+                                         
             <div class="fileUploadInput">
-              <label>Attachments</label>
-              <input type="file" ng-file-model="vm.files" multiple />
-              <button>+</button>
+              <b>Attachments</b>
+              
+              <label>Select Category</label>
+              <select class="form-control" ng-model="vm.searchObj.status" ng-change="onCategoryChange(vm.searchObj.status)"
+              ng-options="opt as opt for opt in vm.fileStatus"></select>
+
+              <input
+              type="number"
+              id = "input"
+              placeholder="Amount"
+              ng-model="vm.amount"
+              class="form-control"
+              style="background-color: transparent;border: none;color: black;height:30px;border: 1px solid #D5D5D5 ;margin-top: 10px;"
+              value={{vm.amount}}
+              />
+            <div ng-if = "vm.searchObj.status === '80C-Rental Receipts'">
+        <div class="inputSection">
+         <label>Select Start Month</label>
+          <select class="form-control" ng-model="vm.searchObj.startMonth"
+             ng-options="opt as opt for opt in vm.months"></select>
+
+         </div>
+  <div class="inputSection">
+    <label>Select End Month</label>
+    <select class="form-control" ng-model="vm.searchObj.endMonth"
+    ng-options="opt as opt for opt in vm.months"></select>
+
+  </div>
+              
+
+</div>
+            
+       <input type="file" ng-file-model="vm.files" multiple class="inputSection"/>
+              <button class="inputSection">+</button>
             </div>
           </td>
           <td class="textLeft">

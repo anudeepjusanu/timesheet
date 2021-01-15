@@ -80,6 +80,14 @@ table .heading {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+.inputSection{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.inputSectionTop{
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
 
 .fileUploadInput label {
   display: flex;

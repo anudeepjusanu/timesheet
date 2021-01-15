@@ -1,6 +1,6 @@
 (function () {
   "use strict";
-
+  var values = [];
   angular
     .module("app")
     .controller("Investment.IndexController", InvestmentController)
@@ -19,7 +19,7 @@
     .directive("ngFileModel", [
       "$parse",
       function ($parse) {
-        var values = [];
+      
 
         return {
           restrict: "A",
@@ -47,6 +47,7 @@
                   scope.variable = scope.$eval(attrs.ngFileModel);
 
                   console.log("values", scope.variable);
+                 
                 } else {
                   modelSetter(scope, values[0]);
                   console.log("values", values);
@@ -83,9 +84,7 @@
         localStorage.setItem("print", "false");
         localStorage.removeItem("taxSavingId");
 
-
         vm.user.userRole = "finance";
-       
       });
     }
 
@@ -107,93 +106,151 @@
       (vm.financialYear = "2020-2021"),
       (vm.taxSavingId = ""),
       (vm.receipts = []),
-      vm.min=0,
-     vm.max= 400000,
-      (vm.print =  false);
+      (vm.min = 0),
+      (vm.max = 400000),
+      (vm.print = false);
     (vm.schemeNew = "-"),
-      (vm.investmentDeclaration = {
-        employee_name: "",
-        panCard: "",
-        designation: "",
-        dateOfJoin: "",
-        employeeId: "",
-        schemeType: "old",
-        secArow1: "",
-        secArow2: "",
-        secArow3: "",
-        secArow4: "",
-        secArow5: "",
-        secArow6: "",
-        secArow7: "",
-        secArow8: "",
-        secArow9: "",
-        secArow10: "",
-        secArow11: "",
-        secArow11a: "",
-        secArow11b: "",
-        secArow12: "",
-        secArow13: "",
-        secArow14: "",
-        secArowSubTotal: "",
-        secArow15: "",
-        secArow16: "",
-        secBrow1: "",
-        secBrow2: "",
-        secBrow3: "",
-        secBrow4: "",
-        secBrow5: "",
-        secBrow6col1: "",
-        secBrow6: "",
-        secCrow1: "",
-        secCrow2: "",
-        secCrow3: "",
-        secCrow4row1: "",
-        secCrow4row2: "",
-        secCrow5: "",
-        secCrow6: "",
-        secDrow1: "",
-        secDrow2: "",
-        secDrow3: "",
-        secEcol1: "",
-        secEcol3: "",
-        secEcol3: "",
-        secEcol4: "",
-        secEcol5: "",
-        secEcol6: "",
-        secEcol7: "",
-        secEcol8: "",
-        secEcol9: "",
-        secEcol10: "",
-        secEcol11: "",
-        secEcol12: "",
-        secFrow1: "",
-        secFrow2: "",
-        signature1: "",
-        taxableSalaryIncome: "",
-        taxPerquisites: "",
-        pfDeducted: "",
-        professionDeducted: "",
-        taxDeducted: "",
-        periOfEmployment: "",
-        signature2: "",
+      (vm.amount = 0),
+      (vm.searchObj = {
+        status: "80C-LIC",
+        startMonth: "Apr",
+        endMonth: "Mar",
       });
+    vm.months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    vm.fileStatus = [
+      "80C-LIC",
+      "80C-PPF",
+      "80C - ULIP",
+      "80C-Home Loan Account Scheme",
+      "80C-ELSS",
+      "80C-N S C purchase",
+      "80C-Housing Loan Principal",
+      "80C-Contribution to Pension scheme",
+      "80C-Contribution to Retirement",
+      "80C-Children Education",
+      "80C-No. of school going children",
+      "80C-Other",
+      "80C-Employees Contribution to PF",
+      "80C-Employees Voluntary Contribution to PF",
+      "80C-Scheme (Sec 80 CCG)",
+      "80C-NPS-2015",
+      "80C-Medical Insurance Premium",
+      "80C-(U/s.80D)",
+      "80C-(U/s.80E)",
+      "80C-(U/s.80U)",
+      "80C-(U/s 80TTA)",
+      "80C-(U/s 80TTB)",
+      "80C-Loan taken prior to 1 April, 1999",
+      "80C-Loan taken on or after 1 April, 1999",
+      "80C-Interest on self occupied housing loan*",
+      "80C-First time home buyers deduction",
+      "80C-Loan has been sanctioned",
+      "80C-Loan taken",
+      "80C-Rent Received",
+      "80C-Interest Paid",
+      "80C-Municipal Taxes",
+      "80C-Rental Receipts",
+      "80C- govt has removed the conveyance",
+      "80C-Leave Travel Bills",
+    ];
+    vm.investmentDeclaration = {
+      employee_name: "",
+      panCard: "",
+      designation: "",
+      dateOfJoin: "",
+      employeeId: "",
+      schemeType: "old",
+      secArow1: "",
+      secArow2: "",
+      secArow3: "",
+      secArow4: "",
+      secArow5: "",
+      secArow6: "",
+      secArow7: "",
+      secArow8: "",
+      secArow9: "",
+      secArow10: "",
+      secArow11: "",
+      secArow11a: "",
+      secArow11b: "",
+      secArow12: "",
+      secArow13: "",
+      secArow14: "",
+      secArowSubTotal: "",
+      secArow15: "",
+      secArow16: "",
+      secBrow1: "",
+      secBrow2: "",
+      secBrow3: "",
+      secBrow4: "",
+      secBrow5: "",
+      secBrow6col1: "",
+      secBrow6: "",
+      secCrow1: "",
+      secCrow2: "",
+      secCrow3: "",
+      secCrow4row1: "",
+      secCrow4row2: "",
+      secCrow5: "",
+      secCrow6: "",
+      secDrow1: "",
+      secDrow2: "",
+      secDrow3: "",
+      secEcol1: "",
+      secEcol3: "",
+      secEcol3: "",
+      secEcol4: "",
+      secEcol5: "",
+      secEcol6: "",
+      secEcol7: "",
+      secEcol8: "",
+      secEcol9: "",
+      secEcol10: "",
+      secEcol11: "",
+      secEcol12: "",
+      secFrow1: "",
+      secFrow2: "",
+      signature1: "",
+      taxableSalaryIncome: "",
+      taxPerquisites: "",
+      pfDeducted: "",
+      professionDeducted: "",
+      taxDeducted: "",
+      periOfEmployment: "",
+      signature2: "",
+    };
     console.log("employeeId", $stateParams);
     $scope.change = function () {
+      console.log("vm.investmentDeclaration total",vm.investmentDeclaration)
       vm.investmentDeclaration.secArowSubTotal =
-        vm.investmentDeclaration.secArow1 +
-        vm.investmentDeclaration.secArow2 +
-        vm.investmentDeclaration.secArow3 +
-        vm.investmentDeclaration.secArow4 +
-        vm.investmentDeclaration.secArow5 +
-        vm.investmentDeclaration.secArow6 +
-        vm.investmentDeclaration.secArow7 +
-        vm.investmentDeclaration.secArow8 +
-        vm.investmentDeclaration.secArow9 +
-        vm.investmentDeclaration.secArow10 +
-        vm.investmentDeclaration.secArow11 +
-        vm.investmentDeclaration.secArow12 +
-        vm.investmentDeclaration.secArow13 +
-        vm.investmentDeclaration.secArow14;
+       Number(vm.investmentDeclaration.secArow1 ) +
+      Number(vm.investmentDeclaration.secArow2)   +
+      Number(vm.investmentDeclaration.secArow3)   +
+      Number(vm.investmentDeclaration.secArow4)   +
+      Number(vm.investmentDeclaration.secArow5)   +
+      Number(vm.investmentDeclaration.secArow6)   +
+      Number(vm.investmentDeclaration.secArow7)   +
+      Number(vm.investmentDeclaration.secArow8)   +
+      Number(vm.investmentDeclaration.secArow9)   +
+      Number(vm.investmentDeclaration.secArow10)   +
+      Number(vm.investmentDeclaration.secArow11)   +
+      Number(vm.investmentDeclaration.secArow12)   +
+      Number(vm.investmentDeclaration.secArow13)   +
+      Number(vm.investmentDeclaration.secArow14)   
+ 
     };
     function convert(str) {
       var date = new Date(str),
@@ -202,40 +259,28 @@
       return [date.getFullYear(), month, day].join("-");
     }
 
-    vm.sbmitNowInvestmentDeclaration = function (
-submit    ) {
-  console.log("submit", submit);
+    $scope.onCategoryChange = function (value) {
+      console.log("changed value ", value);
+    };
+
+    vm.sbmitNowInvestmentDeclaration = function (submit) {
+      console.log("submit", submit);
 
       console.log("form", vm.investmentDeclaration);
-
-      // var formData = new FormData();
-
-      // formData.append('employeeId', JSON.stringify(vm.investmentDeclaration.employeeId));
-      //   console.log("formData.append(Object.keys(vm.investmentDeclaration.employeeId[i]),vm.investmentDeclaration.employeeId[i])",   formData.append(Object.keys(vm.investmentDeclaration.employeeId[i]),vm.investmentDeclaration.employeeId[i])      );
-
       var formData = new FormData();
 
       for (let [key, value] of Object.entries(vm.investmentDeclaration)) {
         formData.append(key, value);
       }
       formData.append("userId", vm.user._id);
-      if(submit){
-        formData.append("status","Submitted")
-
+      if (submit) {
+        formData.append("status", "Submitted");
       }
       //  formData.append('file',vm.receipts[0]._file)
 
       let data = Object.fromEntries(formData);
       console.log("data", data);
-
-      // post call
-      // TaxSavingService.addTaxSaving(data).then(function (taxSavingForm) {
-      //   console.log("taxSavingForm", taxSavingForm);
-
-      // })
-
       //add receipt
-
       const promises = [];
 
       for (let i = 0; i < vm.receipts.length; i++) {
@@ -247,12 +292,12 @@ submit    ) {
       Promise.all(promises)
         .then((results) => {
           console.log("All done", results);
-          if(submit){
+          vm.receipts=[];
+          values = [];
+          if (submit) {
             noty.showSuccess("submitted successfully!");
-
-          }else{
+          } else {
             noty.showSuccess("saved successfully!");
-
           }
         })
         .catch((e) => {
@@ -286,9 +331,16 @@ submit    ) {
       return new Promise((resolve) => {
         var receiptFormData = new FormData();
         receiptFormData.append("file", file);
-        console.log("receiptFormData", receiptFormData);
+        receiptFormData.append("category", vm.searchObj.status);
+        if (vm.searchObj.status === "80C-Rental Receipts") {
+          receiptFormData.append("startMonth", vm.searchObj.startMonth);
+          receiptFormData.append("endMonth", vm.searchObj.endMonth);
+        }
+
+        receiptFormData.append("amount", vm.amount);
         let receiptData = Object.fromEntries(receiptFormData);
         console.log("receiptData", receiptData);
+        console.log("vm.taxSavingId", vm.taxSavingId);
 
         TaxSavingService.addTaxSavingReceipt(vm.taxSavingId, receiptData).then(
           function (taxSavingForm) {
@@ -302,7 +354,6 @@ submit    ) {
     $scope.modelSetter = function (values) {
       console.log("values", values);
       vm.receipts = values;
-
       // vm.investmentDeclaration.sectionAFiles = values;
     };
 
@@ -349,10 +400,7 @@ submit    ) {
         console.log("getMyTaxSaving", getMyTaxSaving);
         vm.taxSavingId = getMyTaxSaving.taxSaving._id;
 
-
         getPersonalUserForm(vm.taxSavingId);
-
-        
       });
     }
     function convertIntObj(obj) {
@@ -366,80 +414,68 @@ submit    ) {
       }
       return res;
     }
-function getPersonalUserForm (taxSavingId){
-//console.log("$localStorage.print",$localStorage.print)
-console.log(localStorage.getItem("print"));
-//getTaxSaving
-TaxSavingService.getTaxSaving(taxSavingId).then(
-  function (response) {
-  
-    if (response) {
-      console.log("getTaxSaving response", response);
-      if (!response.taxSaving.employee_name) {
-        vm.investmentDeclaration.employee_name = vm.user.name;
-        vm.investmentDeclaration.designation = vm.user.designation;
-        vm.investmentDeclaration.employeeId = vm.user.employeeId;
-        vm.investmentDeclaration.dateOfJoin = convert(vm.user.joinDate);
-      } else {
+    function getPersonalUserForm(taxSavingId) {
+      //console.log("$localStorage.print",$localStorage.print)
+      console.log(localStorage.getItem("print"));
+      //getTaxSaving
+      TaxSavingService.getTaxSaving(taxSavingId).then(
+        function (response) {
+          if (response) {
+            console.log("getTaxSaving response", response);
+            if (!response.taxSaving.employee_name) {
+              vm.investmentDeclaration.employee_name = vm.user.name;
+              vm.investmentDeclaration.designation = vm.user.designation;
+              vm.investmentDeclaration.employeeId = vm.user.employeeId;
+              vm.investmentDeclaration.dateOfJoin = convert(vm.user.joinDate);
+            } else {
+              let investmentDeclaration = convertIntObj(response);
+              vm.investmentDeclaration = investmentDeclaration.taxSaving;
+              console.log("vm.investmentDeclaration", vm.investmentDeclaration);
+              vm.investmentDeclaration.userId = vm.user._id;
+              vm.investmentDeclaration.financialYear =
+                response.taxSaving.financialYear;
+              vm.investmentDeclaration.createdOn = response.taxSaving.createdOn;
 
-
-        let investmentDeclaration = convertIntObj(response);
-        vm.investmentDeclaration = investmentDeclaration.taxSaving;
-        console.log(
-          "vm.investmentDeclaration",
-          vm.investmentDeclaration
-        );
-        vm.investmentDeclaration.userId = vm.user._id;
-        vm.investmentDeclaration.financialYear =
-          response.taxSaving.financialYear;
-        vm.investmentDeclaration.createdOn =
-          response.taxSaving.createdOn;
-
-        if (vm.investmentDeclaration.dateOfJoin) {
-          vm.investmentDeclaration.dateOfJoin = convert(
-            response.taxSaving.dateOfJoin
-          );
+              if (vm.investmentDeclaration.dateOfJoin) {
+                vm.investmentDeclaration.dateOfJoin = convert(
+                  response.taxSaving.dateOfJoin
+                );
+              }
+              if (vm.investmentDeclaration.status === "Submitted") {
+                let inputs = document.getElementsByTagName("input");
+                //.setAttribute("readonly", "readonly");
+                for (var i = 0; i < inputs.length; i++) {
+                  inputs[i].setAttribute("readonly", "true");
+                }
+              }
+              if (localStorage.getItem("print") === "true") {
+                vm.print = true;
+              } else {
+                vm.print = false;
+              }
+              //testing for get receipt
+              // TaxSavingService.getTaxSavingReceipt(
+              //   "600143043620ee6d05ff9642"
+              // ).then(function (receipt) {
+              //   console.log("receipt info", receipt);
+              // });
+            }
+          } else {
+            //post call with emp id and financial year
+          }
+        },
+        function (error) {
+          if (error) {
+            console.log("error", error);
+          }
         }
-        if(vm.investmentDeclaration.status === "Submitted" ){
-          let inputs =   document.getElementsByTagName('input')
-        //.setAttribute("readonly", "readonly"); 
-        for(var i = 0; i < inputs.length; i++) {
-          inputs[i].setAttribute("readonly", "true");
-      }
-         }
-    if(localStorage.getItem("print") === "true"){
-vm.print = true;
-    }else{
-      vm.print = false;
-
+      );
     }
-
-        
-        TaxSavingService.getTaxSavingReceipt(
-          "600143043620ee6d05ff9642"
-        ).then(function (receipt) {
-          console.log("receipt info", receipt);
-        });
-      }
-    } else {
-      //post call with emp id and financial year
-    }
-  },
-  function (error) {
-    if (error) {
-      console.log("error", error);
-    }
-  }
-);
-
-}
     function initController() {
       if (localStorage.getItem("taxSavingId")) {
         localStorage.setItem("print", "true");
 
-                getPersonalUserForm(localStorage.getItem("taxSavingId"));
-
-
+        getPersonalUserForm(localStorage.getItem("taxSavingId"));
       } else {
         UserService.GetCurrent().then(function (user) {
           console.log("user", user);
@@ -453,19 +489,16 @@ vm.print = true;
     initController();
   }
 
-
   function TaxNewRegimeController($scope, noty) {
     var vm = this;
 
     function initController() {
       noty.showSuccess("Please contact your Administrator");
-
     }
 
     initController();
   }
 
-   
   function AccountInvestmentController(
     $scope,
     UserService,
@@ -511,12 +544,12 @@ vm.print = true;
         );
     };
 
-    $scope.convert = function(str) {
+    $scope.convert = function (str) {
       var date = new Date(str),
         month = ("0" + (date.getMonth() + 1)).slice(-2),
         day = ("0" + date.getDate()).slice(-2);
       return [date.getFullYear(), month, day].join("-");
-    }
+    };
 
     function getInvestments() {
       // InvestmentService.getInvestments().then(
@@ -531,11 +564,12 @@ vm.print = true;
       //   }
       // );
 
-      TaxSavingService.getAccountTaxSavings().then(function (getAccountTaxSaving) {
+      TaxSavingService.getAccountTaxSavings().then(function (
+        getAccountTaxSaving
+      ) {
         console.log("getAccountTaxSaving", getAccountTaxSaving.taxSavings);
-          vm.Investments = getAccountTaxSaving.taxSavings;
-
-      })
+        vm.Investments = getAccountTaxSaving.taxSavings;
+      });
     }
 
     function initController() {
@@ -570,7 +604,7 @@ vm.print = true;
 
       $state.go("TaxOldRegime", {
         investmentObj: investmentObj,
-        print:true
+        print: true,
       });
     };
   }
