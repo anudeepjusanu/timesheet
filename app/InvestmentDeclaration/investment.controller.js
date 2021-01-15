@@ -84,7 +84,7 @@
         localStorage.setItem("print", "false");
         localStorage.removeItem("taxSavingId");
 
-        vm.user.userRole = "finance";
+       // vm.user.userRole = "finance";
       });
     }
 
