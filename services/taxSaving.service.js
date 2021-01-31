@@ -4,6 +4,7 @@ var Q = require('q');
 var mongoose = require("mongoose");
 var TaxSavingModel = require("../models/taxSaving.model");
 var UserModel = require("../models/user.model");
+const { async } = require('q');
 
 var service = {};
 
@@ -181,17 +182,26 @@ function addTaxSavingReceipt(taxSavingId, receiptData) {
 
 function updateTaxSavingReceipt(receiptData, receiptId, _id = null) {
     return new Promise((resolve, reject) => {
-        console.log(receiptData);
-        var receiptDataObj = {
-            amount: receiptData.amount,
-            category: receiptData.category
-        }
-        TaxSavingModel.findOneAndUpdate({ _id: mongoose.Types.ObjectId(_id), 'receipts._id': mongoose.Types.ObjectId(receiptId) }, {
-            '$set': { 'receipts.$': receiptDataObj }
-        }).lean().exec().then((data) => {
-            TaxSavingModel.findOne({ '_id': mongoose.Types.ObjectId(_id) }).lean().exec().then((data) => {
-                resolve(data);
-            });
+        TaxSavingModel.findOne({ 'receipts._id': mongoose.Types.ObjectId(receiptId) }, function (err, taxSavingObj) {
+            if (err) {
+                reject({ error: err });
+            }
+            if (taxSavingObj && taxSavingObj.receipts) {
+                var receiptDataObj = {};
+                for (var i = 0; i < taxSavingObj.receipts.length; i++) {
+                    if (taxSavingObj.receipts[i]._id == receiptId) {
+                        receiptDataObj = taxSavingObj.receipts[i];
+                        taxSavingObj.receipts[i].amount = (receiptData.hasOwnProperty('amount')) ? receiptData.amount : receiptDataObj.amount;
+                        taxSavingObj.receipts[i].category = (receiptData.hasOwnProperty('category')) ? receiptData.category : receiptDataObj.category;
+                        taxSavingObj.receipts[i].file = (receiptData.hasOwnProperty('file')) ? receiptData.file : receiptDataObj.file;
+                        receiptDataObj = taxSavingObj.receipts[i];
+                    }
+                }
+                taxSavingObj.save();
+                resolve(receiptDataObj);
+            } else {
+                reject({ error: "Record not found!" });
+            }
         }).catch((error) => {
             reject({ error: error.errmsg });
         });

@@ -150,7 +150,8 @@ function updateTaxSavingReceipt(req, res) {
     if (req.file && req.file.filename) {
         req.body.file = req.file.filename;
     }
-    TaxSavingService.updateTaxSavingReceipt(req.body, req.params.receiptId, req.params._id).then(data => {
+    var paramData = JSON.parse(JSON.stringify(req.body));
+    TaxSavingService.updateTaxSavingReceipt(paramData, req.params.receiptId, req.params._id).then(data => {
         res.send({ taxSaving: data });
     }).catch(error => {
         res.status(400).send(error);
