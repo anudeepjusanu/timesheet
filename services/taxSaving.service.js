@@ -193,6 +193,8 @@ function updateTaxSavingReceipt(receiptData, receiptId, _id = null) {
                         taxSavingObj.receipts[i].amount = (receiptData.hasOwnProperty('amount')) ? receiptData.amount : receiptDataObj.amount;
                         taxSavingObj.receipts[i].category = (receiptData.hasOwnProperty('category')) ? receiptData.category : receiptDataObj.category;
                         taxSavingObj.receipts[i].file = (receiptData.hasOwnProperty('file')) ? receiptData.file : receiptDataObj.file;
+                        taxSavingObj.receipts[i].status = (receiptData.hasOwnProperty('status')) ? receiptData.status : receiptDataObj.status;
+
                         if (receiptDataObj.file && receiptData.hasOwnProperty('file')) {
                             try {
                                 fs.unlinkSync(receiptDataObj.file);

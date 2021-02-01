@@ -44,11 +44,8 @@
                 if (isMultiple) {
                   scope.modelSetter(values);
                   scope.variable = scope.$eval(attrs.ngFileModel);
-
-                  console.log("values", scope.variable);
                 } else {
                   scope.modelSetter(values[0]);
-                  console.log("values", values);
                 }
               });
             });
@@ -78,11 +75,10 @@
 
     function initController() {
       UserService.GetCurrent().then(function (user) {
-        console.log("user", user);
         localStorage.setItem("print", "false");
         localStorage.removeItem("taxSavingId");
 
-        vm.user.userRole = "finance";
+      //  vm.user.userRole = "finance";
       });
     }
 
@@ -108,6 +104,8 @@
       (vm.max = 400000),
       (vm.print = false);
     (vm.uploadFile = {}),
+      (vm.activeFileId = ""),
+      (vm.editFile = false),
       (vm.schemeNew = "-"),
       (vm.amount = 0),
       (vm.errMsg = ""),
@@ -232,7 +230,6 @@
       periOfEmployment: "",
       signature2: "",
     };
-    console.log("employeeId", $stateParams);
     $scope.change = function () {
       vm.investmentDeclaration.secArowSubTotal =
         Number(vm.investmentDeclaration.secArow1) +
@@ -268,12 +265,9 @@
         day = ("0" + date.getDate()).slice(-2);
       return [date.getFullYear(), month, day].join("-");
     }
-    $scope.onCategoryChange = function (value) {
-      console.log("changed value ", value);
-    };
+    $scope.onCategoryChange = function (value) {};
 
     vm.uploadFile = function () {
-      console.log("vm.uploadFileValue", vm.uploadFileValue);
       if (vm.amount <= 0) {
         // fileUpload(vm.uploadFileValue._file)
         noty.showError("Please enter amount");
@@ -284,44 +278,36 @@
       }
     };
     vm.deleteFile = function (file) {
-      console.log("deleted file", file);
       TaxSavingService.deleteTaxSavingReceipt(vm.taxSavingId, file._id).then(
         function (deleteFile) {
           noty.showSuccess("Deleted successfully");
-          console.log("deleteFile", deleteFile);
           totalUploadedFiles();
+          vm.amount = 0;
+          vm.searchObj.status = "80C-LIC";
+          vm.editFile = false;
         }
       );
     };
 
     vm.sbmitNowInvestmentDeclaration = function (submit) {
+      if (vm.errMsg === "" && vm.investmentDeclaration.panCard) {
+        var formData = new FormData();
 
-if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
-  console.log("submit", submit);
+        for (let [key, value] of Object.entries(vm.investmentDeclaration)) {
+          formData.append(key, value);
+        }
+        formData.append("userId", vm.user._id);
+        if (submit) {
+          formData.append("status", "Submitted");
+        }
+        //  formData.append('file',vm.receipts[0]._file)
 
-  console.log("form", vm.investmentDeclaration);
-  var formData = new FormData();
+        let data = Object.fromEntries(formData);
 
-  for (let [key, value] of Object.entries(vm.investmentDeclaration)) {
-    formData.append(key, value);
-  }
-  formData.append("userId", vm.user._id);
-  if (submit) {
-    formData.append("status", "Submitted");
-  }
-  //  formData.append('file',vm.receipts[0]._file)
-
-  let data = Object.fromEntries(formData);
-  console.log("data", data);
-
-  updateTaxSaving(data, submit);
- 
-}else{
-  noty.showError("Please enter all mandatory fields");
-
-}
-
-      
+        updateTaxSaving(data, submit);
+      } else {
+        noty.showError("Please enter all mandatory fields");
+      }
     };
 
     function updateTaxSaving(data, submit) {
@@ -331,14 +317,11 @@ if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
       TaxSavingService.updateTaxSaving(vm.taxSavingId, data).then(function (
         taxSavingForm
       ) {
-        console.log("updateTaxSaving", taxSavingForm);
         if (submit) {
           noty.showSuccess("Submitted successfully!");
           vm.investmentDeclaration.status = "Submitted";
-
         } else {
           noty.showSuccess("Saved successfully!");
-
         }
       });
     }
@@ -353,15 +336,11 @@ if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
       }
 
       receiptFormData.append("amount", vm.amount);
-      // let receiptData = Object.fromEntries(receiptFormData);
-      // console.log("receiptData", receiptData);
-      // console.log("vm.taxSavingId", vm.taxSavingId);
 
       TaxSavingService.addTaxSavingReceipt(
         vm.taxSavingId,
         receiptFormData
       ).then(function (taxSavingForm) {
-        console.log("taxSavingForm", taxSavingForm.taxSaving);
         //  vm.investmentDeclaration = taxSavingForm.taxSaving;
         vm.amount = 0;
         noty.showSuccess("Uploaded successfully");
@@ -372,10 +351,7 @@ if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
     }
 
     $scope.modelSetter = function (values) {
-      console.log("values", values);
       vm.uploadFileValue = values;
-      // vm.receipts = values;
-      // vm.investmentDeclaration.sectionAFiles = values;
     };
 
     vm.printToPdf = function (printSection) {
@@ -413,15 +389,10 @@ if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
     };
 
     function totalUploadedFiles() {
-      console.log("after upload", vm.investmentDeclaration);
       //get receipts
       TaxSavingService.getTaxSavingReceipts(vm.taxSavingId).then(function (
         getMyTaxSavingReceipts
       ) {
-        console.log(
-          "getMyTaxSavingReceipts",
-          getMyTaxSavingReceipts.taxSavingReceipts
-        );
         vm.receipts = getMyTaxSavingReceipts.taxSavingReceipts;
       });
     }
@@ -432,7 +403,6 @@ if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
       TaxSavingService.getMyTaxSaving(vm.financialYear.trim()).then(function (
         getMyTaxSaving
       ) {
-        console.log("getMyTaxSaving", getMyTaxSaving);
         vm.taxSavingId = getMyTaxSaving.taxSaving._id;
 
         getPersonalUserForm(vm.taxSavingId);
@@ -451,12 +421,10 @@ if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
     }
     function getPersonalUserForm(taxSavingId) {
       //console.log("$localStorage.print",$localStorage.print)
-      console.log(localStorage.getItem("print"));
       //getTaxSaving
       TaxSavingService.getTaxSaving(taxSavingId).then(
         function (response) {
           if (response) {
-            console.log("getTaxSaving response", response);
             if (!response.taxSaving.employee_name) {
               vm.investmentDeclaration.employee_name = vm.user.name;
               vm.investmentDeclaration.designation = vm.user.designation;
@@ -466,7 +434,6 @@ if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
             } else {
               let investmentDeclaration = convertIntObj(response);
               vm.investmentDeclaration = investmentDeclaration.taxSaving;
-              console.log("vm.investmentDeclaration", vm.investmentDeclaration);
               vm.investmentDeclaration.userId = vm.user._id;
               vm.investmentDeclaration.financialYear =
                 response.taxSaving.financialYear;
@@ -490,13 +457,6 @@ if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
               } else {
                 vm.print = false;
               }
-
-              //testing for get receipt
-              // TaxSavingService.getTaxSavingReceipt(
-              //   "600143043620ee6d05ff9642"
-              // ).then(function (receipt) {
-              //   console.log("receipt info", receipt);
-              // });
             }
           } else {
             //post call with emp id and financial year
@@ -516,7 +476,6 @@ if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
         getPersonalUserForm(localStorage.getItem("taxSavingId"));
       } else {
         UserService.GetCurrent().then(function (user) {
-          console.log("user", user);
           vm.user = user;
 
           // getCall
@@ -560,7 +519,6 @@ if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
     ];
 
     vm.openInvestmentModal = function (investmentObj) {
-      console.log("investmentObj", investmentObj);
       var modalInstance = $uibModal
         .open({
           animation: true,
@@ -599,22 +557,9 @@ if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
     };
 
     function getInvestments() {
-      // InvestmentService.getInvestments().then(
-      //   function (userInvestments) {
-      //     console.log("userInvestments", userInvestments);
-      //     vm.Investments = userInvestments;
-      //   },
-      //   function (error) {
-      //     if (error) {
-      //       console.log("error", error);
-      //     }
-      //   }
-      // );
-
       TaxSavingService.getAccountTaxSavings().then(function (
         getAccountTaxSaving
       ) {
-        console.log("getAccountTaxSaving", getAccountTaxSaving.taxSavings);
         vm.Investments = getAccountTaxSaving.taxSavings;
       });
     }
@@ -646,7 +591,6 @@ if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
       comment: "",
     };
     vm.Investments = [];
-    console.log("investmentObj", vm.investmentObj);
 
     vm.close = function () {
       $uibModalInstance.dismiss("cancel");
@@ -671,10 +615,6 @@ if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
       let status1 = "";
       let status2 = "";
       for (let i = 0; i < vm.uploadedReceipts.length; i++) {
-        console.log(
-          "vm.uploadedReceipts[i].status",
-          vm.uploadedReceipts[i].status
-        );
         if (vm.uploadedReceipts[i].status) {
           status1 = "Approved";
         } else {
@@ -684,6 +624,7 @@ if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
       var investmentFormData = new FormData();
 
       //formData.append("comment",  vm.investment.comment);
+      investmentFormData.append("comment", vm.investment.comment);
 
       if (status1 === "Approved" && status2 === "") {
         investmentFormData.append("status", "Approved");
@@ -693,12 +634,10 @@ if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
       //  formData.append('file',vm.receipts[0]._file)
 
       let data = Object.fromEntries(investmentFormData);
-      console.log("data", data);
 
       TaxSavingService.updateTaxSaving(investmentObj._id, data).then(function (
         taxSavingForm
       ) {
-        console.log("updateTaxSaving", taxSavingForm);
         if (status1 === "Approved" && status2 === "") {
           vm.investmentObj.status = "Approved";
         } else {
@@ -721,16 +660,26 @@ if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
         //  formData.append('file',vm.receipts[0]._file)
 
         let data = Object.fromEntries(rejectedInvestmentFormData);
-        console.log("data", data);
 
         TaxSavingService.updateTaxSaving(investmentObj._id, data).then(
           function (taxSavingForm) {
-            console.log("updateTaxSaving", taxSavingForm);
             vm.investmentObj.status = "Rejected";
             noty.showError("Rejected Successfully!");
           }
         );
       }
+    };
+    vm.submitComment = function () {
+      var commentInvestmentFormData = new FormData();
+
+      commentInvestmentFormData.append("comment", vm.investment.comment);
+      let data = Object.fromEntries(commentInvestmentFormData);
+
+      TaxSavingService.updateTaxSaving(investmentObj._id, data).then(function (
+        taxSavingForm
+      ) {
+        noty.showSuccess("Updated Successfully!");
+      });
     };
 
     vm.getUserForm = function (investmentObj) {
@@ -744,33 +693,29 @@ if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
       });
     };
     vm.enableSubmitButton = function (file) {
-      console.log("file", file);
       var data = new FormData();
       data.append("status", file.status);
-      console.log("data", data);
-
-      TaxSavingService.updateTaxSavingReceipt(investmentObj._id, file._id,data).then(function (
-        updatedReceipts
-      ) {
-        console.log(
-          "updatedReceipts",
-          updatedReceipts
-        );
-        
+      //data,receiptid,_id
+      TaxSavingService.updateTaxSavingReceipt(
+        investmentObj._id,
+        file._id,
+        data
+      ).then(function (updatedReceipts) {
+        vm.approveInvestment();
       });
-
     };
+
     function getTotalFiles() {
       TaxSavingService.getTaxSavingReceipts(investmentObj._id).then(function (
         getMyTaxSavingReceipts
       ) {
-        console.log(
-          "getMyTaxSavingReceipts",
-          getMyTaxSavingReceipts.taxSavingReceipts
-        );
         vm.uploadedReceipts = getMyTaxSavingReceipts.taxSavingReceipts;
         for (let i = 0; i <= vm.uploadedReceipts.length; i++) {
-          vm.uploadedReceipts[i].status = false;
+          if (vm.uploadedReceipts[i].status === "true") {
+            vm.uploadedReceipts[i].status = true;
+          } else {
+            vm.uploadedReceipts[i].status = false;
+          }
         }
       });
     }

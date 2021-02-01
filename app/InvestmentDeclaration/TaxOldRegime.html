@@ -11,8 +11,8 @@ input[type=number] {
 }
 
 </style>
-<div ng-if="vm.investmentDeclaration.status==='Rejected' " class="contentView">
-  <span class="errorMessage"><b>Rejected!!</b> &nbsp; {{vm.investmentDeclaration.comment}}</span>
+<div ng-if="vm.investmentDeclaration.status" class="contentView">
+  <span class="errorMessage"><b>{{vm.investmentDeclaration.status}}!!</b> &nbsp; {{vm.investmentDeclaration.comment}}</span>
 </div>
 
 <div class="content-wrapper">
@@ -22,7 +22,7 @@ input[type=number] {
         <div class="col-md-4"></div>
         <div class="col-md-4"></div>
         <button
-        ng-if = "(vm.investmentDeclaration.status === 'Submitted' || vm.investmentDeclaration.status==='Approved' || vm.investmentDeclaration.status==='Rejected') && vm.print"
+        ng-if = "(vm.investmentDeclaration.status === 'Submitted' || vm.investmentDeclaration.status==='Approved' || vm.investmentDeclaration.status==='Rejected' || vm.investmentDeclaration.status === 'Partially Approved') && vm.print"
           class="btn btn-primary col-md-2"
           type="button"
           ng-click="vm.printToPdf('printSectionId');"
@@ -1454,15 +1454,9 @@ input[type=number] {
                 value={{vm.investmentDeclaration.secFrow2}}
                 /></td>
         </tr>
-
-
-
-
-        <tr  ng-if = "(!vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected')&& !vm.print">
+        <tr  ng-if = "(!vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected'|| vm.investmentDeclaration.status === 'Partially Approved')&& !vm.print">
           <td colspan="15">
-            <!-- <input type="file"   id="upload" ng-file-model="vm.files" style="height: auto;"
-                      class="form-control"  multiple/> -->
-                                         
+            
             <div class="fileUploadInput">
               <b>Attachments</b>
 
@@ -1495,56 +1489,17 @@ input[type=number] {
 <label>Select End Month</label>
 <select class="form-control" ng-model="vm.searchObj.endMonth"
 ng-options="opt as opt for opt in vm.months"></select>
-
-        
-
 </div>
-
 </div>
-
-
-              
-              <!-- <label>Select Category</label>
-              <select class="form-control" ng-model="vm.searchObj.status" ng-change="onCategoryChange(vm.searchObj.status)"
-              ng-options="opt as opt for opt in vm.fileStatus"></select>
-
-              <input
-              type="number"
-              id = "input"
-              placeholder="Amount"
-              ng-model="vm.amount"
-              class="form-control"
-              style="background-color: transparent;border: none;color: black;height:30px;border: 1px solid #D5D5D5 ;margin-top: 10px;"
-              value={{vm.amount}}
-              /> -->
-            <!-- <div ng-if = "vm.searchObj.status === '80C-Rental Receipts'">
-        <div class="inputSection">
-         <label>Select Start Month</label>
-          <select class="form-control" ng-model="vm.searchObj.startMonth"
-             ng-options="opt as opt for opt in vm.months"></select>
-
-         </div>
-  <div class="inputSection">
-    <label>Select End Month</label>
-    <select class="form-control" ng-model="vm.searchObj.endMonth"
-    ng-options="opt as opt for opt in vm.months"></select>
-
-  </div>
-              
-
-</div> -->
-   <div style="display: flex;justify-content: flex-start;">
+ <div style="display: flex;justify-content: flex-start;">
     <div>
-      <input type="file" ng-file-model="vm.files" class="inputSectionTop"/>
-
-    </div>
+      <input type="file" ng-file-model="vm.files" id = "fileUploadInput" class="inputSectionTop"/>
+</div>
     <div>
       <button  ng-click="vm.uploadFile()" class="inputSection">upload</button>
-
-    </div>
+</div>
    </div>         
-      
-            </div>
+      </div>
           </td>
           <td class="textLeft">
             <span class="fontColor"><br /></span>
@@ -1552,12 +1507,8 @@ ng-options="opt as opt for opt in vm.months"></select>
 
           <td></td>
         </tr>
-
-
-
-        <tr>
-
-          <td ng-if="vm.receipts.length > 0" colspan="15" >
+ <tr>
+<td ng-if="vm.receipts.length > 0" colspan="15" >
           <table class="table table-condensed table-bordered table-striped tableSpace" export-table>
             <thead>
                 <tr>
@@ -1565,7 +1516,7 @@ ng-options="opt as opt for opt in vm.months"></select>
                     <th class="table-heading">Category</th>
                     <th class="table-heading">Amount</th>
                     <th class="table-heading">File</th>
-                    <th ng-if = "!vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected'" class="table-heading" style="width: 120px;">Action</th>
+                    <th ng-if = "!vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected' || vm.investmentDeclaration.status === 'Partially Approved'" class="table-heading" style="width: 120px;">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -1575,50 +1526,24 @@ ng-options="opt as opt for opt in vm.months"></select>
                     <td class="table-heading">{{file.amount}}</td>
                     <td class="table-heading">{{file.file}}</td>
                    
-                    <td ng-if = "!vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected'" class="table-heading">
-                      <!-- <a 
-                      class="btn btn-primary btn-icon btn-rounded"
-                      ng-click="vm.openInvestmentModal(investment)">
-                      <span class="fa fa-list"></span>
-                  </a> -->
-                  <a
+                    <td ng-if = "!vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected' || vm.investmentDeclaration.status === 'Partially Approved' " class="table-heading">
+                     <a 
+                ng-if = "file.status === 'false'"
           class="btn btn-danger btn-icon btn-rounded"
           title="Delete Receipt"
           ng-click="vm.deleteFile(file)"
         >
           <span class="fa fa-trash-o" aria-hidden="true"></span>
         </a>
-                    </td>
+ </td>
                    
                 </tr>
             </tbody>
         </table>
           </td>
-          <!-- <td colspan="4">
-            <div
-              style="
-                border: 1px solid black;
-                padding: 5px;
-                border-radius: 5px;
-                margin-bottom: 10px;
-              "
-            >
-              <span class="fontColor">{{file.name}}</span>
-            </div>
-          </td>
-          <td>
-            <a
-              class="btn btn-danger btn-icon btn-rounded"
-              title="Delete Receipt"
-              style="margin-bottom: 10px"
-            >
-              <span class="fa fa-trash-o" aria-hidden="true"></span>
-            </a>
-          </td> -->
+         
         </tr>
-
-
-        <tr>
+ <tr>
             <td height="20" class="textLeft"><span class="fontColor" ><br></span ></td>
         </tr>
         <tr>
@@ -1897,7 +1822,7 @@ ng-options="opt as opt for opt in vm.months"></select>
         <div class="col-md-4">
         </button>
         <button
-        ng-if = "(vm.investmentDeclaration.status === ''|| !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected') && !vm.print"
+        ng-if = "(vm.investmentDeclaration.status === ''|| !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected' || vm.investmentDeclaration.status === 'Partially Approved') && !vm.print"
         class="btn btn-primary "
           type="button"
           ng-click="vm.sbmitNowInvestmentDeclaration(submit = false);"
@@ -1909,7 +1834,7 @@ ng-options="opt as opt for opt in vm.months"></select>
         <div class="col-md-4">
 
         <button
-        ng-if = "(vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected') && !vm.print"
+        ng-if = "(vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected' || vm.investmentDeclaration.status === 'Partially Approved') && !vm.print"
         class="btn btn-primary "
           type="button"
           ng-click="vm.sbmitNowInvestmentDeclaration(submit = true);"

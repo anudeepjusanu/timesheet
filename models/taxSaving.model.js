@@ -15,7 +15,8 @@ var TaxSavingSchema = new Schema({
         category: { type: String },
         file: { type: String },
         amount: { type: Number, default: 0.00 },
-        createdOn: { type: Date, default: Date.now }
+        createdOn: { type: Date, default: Date.now },
+        status: { type: String , default: 'false'}
     }],
     totalAmount: {
         type: Number,
