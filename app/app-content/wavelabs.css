@@ -30,6 +30,15 @@ table .heading {
 .reimbursement-buttons {
   margin: 7px 7px;
 }
+.errorMessage {
+  color:red;
+  font-size: small;
+  padding:5px;
+}
+.btnLink{
+  background-color: transparent;
+  border:none;
+}
 .button-success {
   font-size: 14px !important;
   margin-left: 5px !important;
@@ -82,7 +91,9 @@ table .heading {
 }
 .inputSection{
   margin-top: 10px;
-  margin-bottom: 10px;
+}
+.inputSectionSpace{
+  margin-right: 10px;
 }
 .inputSectionTop{
   margin-top: 10px;
@@ -123,13 +134,13 @@ table .heading {
 }
 
 .fileUploadInput button {
-  position: absolute;
+  /* position: absolute;
   right: 0;
-  bottom: 0;
+  bottom: 0; */
   width: 50px;
   height: 40px;
-  line-height: 0;
-  user-select: none;
+  /* line-height: 0;
+  user-select: none; */
   color: white;
   background-color: #323262;
   border-radius: 0 3px 3px 0;
@@ -157,8 +168,7 @@ table .inputStyle {
 
 table .inputSmLeft {
   border-top: 1px solid #000000;
-  border-left: 1px solid #000000
-    "
+  border-left: 1px solid #000000;
 }
 table .inputSmRight{
 
@@ -225,7 +235,17 @@ table .tableBorder {
 table .width{
     width: 150px;
   }
-  
+  .tableSpace{
+    margin-top: 10px;
+  }
+  .contentView{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #ffffff;
+  }
 
 @media print /*--This is for Print--*/
 

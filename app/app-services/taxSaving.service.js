@@ -74,15 +74,15 @@
             }).then(handleSuccess, handleError);
         }
 
-        function updateTaxSavingReceipt(taxSavingReceiptId, formData) {
-            return $http.post('/api/taxSaving/receipt/' + taxSavingReceiptId, formData, {
+        function updateTaxSavingReceipt(taxSavingId,taxSavingReceiptId, formData) {
+            return $http.put('/api/taxSaving/receipt/' + taxSavingId + '/'+ taxSavingReceiptId, formData, {
                 transformRequest: angular.identity,
                 headers: { 'Content-Type': undefined }
             }).then(handleSuccess, handleError);
         }
 
-        function deleteTaxSavingReceipt(taxSavingReceiptId) {
-            return $http.delete('/api/taxSaving/receipt/' + taxSavingReceiptId).then(handleSuccess, handleError);
+        function deleteTaxSavingReceipt(taxSavingId,taxSavingReceiptId) {
+            return $http.delete('/api/taxSaving/receipt/'+ taxSavingId + '/' + taxSavingReceiptId).then(handleSuccess, handleError);
         }
 
         // private functions

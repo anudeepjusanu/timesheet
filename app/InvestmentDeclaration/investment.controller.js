@@ -1,6 +1,7 @@
 (function () {
   "use strict";
   var values = [];
+
   angular
     .module("app")
     .controller("Investment.IndexController", InvestmentController)
@@ -19,8 +20,6 @@
     .directive("ngFileModel", [
       "$parse",
       function ($parse) {
-      
-
         return {
           restrict: "A",
           link: function (scope, element, attrs) {
@@ -47,9 +46,8 @@
                   scope.variable = scope.$eval(attrs.ngFileModel);
 
                   console.log("values", scope.variable);
-                 
                 } else {
-                  modelSetter(scope, values[0]);
+                  scope.modelSetter(values[0]);
                   console.log("values", values);
                 }
               });
@@ -84,7 +82,7 @@
         localStorage.setItem("print", "false");
         localStorage.removeItem("taxSavingId");
 
-       // vm.user.userRole = "finance";
+        vm.user.userRole = "finance";
       });
     }
 
@@ -109,8 +107,10 @@
       (vm.min = 0),
       (vm.max = 400000),
       (vm.print = false);
-    (vm.schemeNew = "-"),
+    (vm.uploadFile = {}),
+      (vm.schemeNew = "-"),
       (vm.amount = 0),
+      (vm.errMsg = ""),
       (vm.searchObj = {
         status: "80C-LIC",
         startMonth: "Apr",
@@ -234,126 +234,147 @@
     };
     console.log("employeeId", $stateParams);
     $scope.change = function () {
-      console.log("vm.investmentDeclaration total",vm.investmentDeclaration)
       vm.investmentDeclaration.secArowSubTotal =
-       Number(vm.investmentDeclaration.secArow1 ) +
-      Number(vm.investmentDeclaration.secArow2)   +
-      Number(vm.investmentDeclaration.secArow3)   +
-      Number(vm.investmentDeclaration.secArow4)   +
-      Number(vm.investmentDeclaration.secArow5)   +
-      Number(vm.investmentDeclaration.secArow6)   +
-      Number(vm.investmentDeclaration.secArow7)   +
-      Number(vm.investmentDeclaration.secArow8)   +
-      Number(vm.investmentDeclaration.secArow9)   +
-      Number(vm.investmentDeclaration.secArow10)   +
-      Number(vm.investmentDeclaration.secArow11)   +
-      Number(vm.investmentDeclaration.secArow12)   +
-      Number(vm.investmentDeclaration.secArow13)   +
-      Number(vm.investmentDeclaration.secArow14)   
- 
+        Number(vm.investmentDeclaration.secArow1) +
+        Number(vm.investmentDeclaration.secArow2) +
+        Number(vm.investmentDeclaration.secArow3) +
+        Number(vm.investmentDeclaration.secArow4) +
+        Number(vm.investmentDeclaration.secArow5) +
+        Number(vm.investmentDeclaration.secArow6) +
+        Number(vm.investmentDeclaration.secArow7) +
+        Number(vm.investmentDeclaration.secArow8) +
+        Number(vm.investmentDeclaration.secArow9) +
+        Number(vm.investmentDeclaration.secArow10) +
+        Number(vm.investmentDeclaration.secArow11) +
+        Number(vm.investmentDeclaration.secArow12) +
+        Number(vm.investmentDeclaration.secArow13) +
+        Number(vm.investmentDeclaration.secArow14);
     };
+
+    $scope.validatePanCard = function () {
+      let regpan = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;
+      if (regpan.test(vm.investmentDeclaration.panCard)) {
+        // valid pan card number
+        vm.errMsg = "";
+      } else {
+        // invalid pan card number
+        vm.errMsg = "PAN not valid";
+      }
+    };
+
     function convert(str) {
       var date = new Date(str),
         month = ("0" + (date.getMonth() + 1)).slice(-2),
         day = ("0" + date.getDate()).slice(-2);
       return [date.getFullYear(), month, day].join("-");
     }
-
     $scope.onCategoryChange = function (value) {
       console.log("changed value ", value);
     };
 
-    vm.sbmitNowInvestmentDeclaration = function (submit) {
-      console.log("submit", submit);
-
-      console.log("form", vm.investmentDeclaration);
-      var formData = new FormData();
-
-      for (let [key, value] of Object.entries(vm.investmentDeclaration)) {
-        formData.append(key, value);
+    vm.uploadFile = function () {
+      console.log("vm.uploadFileValue", vm.uploadFileValue);
+      if (vm.amount <= 0) {
+        // fileUpload(vm.uploadFileValue._file)
+        noty.showError("Please enter amount");
+      } else if (!vm.uploadFileValue) {
+        noty.showError("Please upload Receipt");
+      } else {
+        fileUpload(vm.uploadFileValue._file);
       }
-      formData.append("userId", vm.user._id);
-      if (submit) {
-        formData.append("status", "Submitted");
-      }
-      //  formData.append('file',vm.receipts[0]._file)
-
-      let data = Object.fromEntries(formData);
-      console.log("data", data);
-      //add receipt
-      const promises = [];
-
-      for (let i = 0; i < vm.receipts.length; i++) {
-        //       ^^^−−−−−−−−−−−−−−−−−−−−−−−− added missing declaration
-        promises.push(fileUpload(vm.receipts[i]._file));
-      }
-      promises.push(updateTaxSaving(data));
-
-      Promise.all(promises)
-        .then((results) => {
-          console.log("All done", results);
-          vm.receipts=[];
-          values = [];
-          if (submit) {
-            noty.showSuccess("submitted successfully!");
-          } else {
-            noty.showSuccess("saved successfully!");
-          }
-        })
-        .catch((e) => {
-          console.log("All error", e);
-        });
-
-      //updateTaxSaving
-
-      // TaxSavingService.updateTaxSaving(vm.taxSavingId, data).then(function (
-      //   taxSavingForm
-      // ) {
-      //   console.log("updateTaxSaving", taxSavingForm);
-      // });
+    };
+    vm.deleteFile = function (file) {
+      console.log("deleted file", file);
+      TaxSavingService.deleteTaxSavingReceipt(vm.taxSavingId, file._id).then(
+        function (deleteFile) {
+          noty.showSuccess("Deleted successfully");
+          console.log("deleteFile", deleteFile);
+          totalUploadedFiles();
+        }
+      );
     };
 
-    function updateTaxSaving(data) {
-      return new Promise((resolve) => {
-        delete data.receipts;
-        delete data._id;
+    vm.sbmitNowInvestmentDeclaration = function (submit) {
 
-        TaxSavingService.updateTaxSaving(vm.taxSavingId, data).then(function (
-          taxSavingForm
-        ) {
-          console.log("updateTaxSaving", taxSavingForm);
-          resolve(taxSavingForm);
-        });
+if(vm.errMsg ==="" && vm.investmentDeclaration.panCard){
+  console.log("submit", submit);
+
+  console.log("form", vm.investmentDeclaration);
+  var formData = new FormData();
+
+  for (let [key, value] of Object.entries(vm.investmentDeclaration)) {
+    formData.append(key, value);
+  }
+  formData.append("userId", vm.user._id);
+  if (submit) {
+    formData.append("status", "Submitted");
+  }
+  //  formData.append('file',vm.receipts[0]._file)
+
+  let data = Object.fromEntries(formData);
+  console.log("data", data);
+
+  updateTaxSaving(data, submit);
+ 
+}else{
+  noty.showError("Please enter all mandatory fields");
+
+}
+
+      
+    };
+
+    function updateTaxSaving(data, submit) {
+      delete data.receipts;
+      delete data._id;
+
+      TaxSavingService.updateTaxSaving(vm.taxSavingId, data).then(function (
+        taxSavingForm
+      ) {
+        console.log("updateTaxSaving", taxSavingForm);
+        if (submit) {
+          noty.showSuccess("Submitted successfully!");
+          vm.investmentDeclaration.status = "Submitted";
+
+        } else {
+          noty.showSuccess("Saved successfully!");
+
+        }
       });
     }
 
     function fileUpload(file) {
-      return new Promise((resolve) => {
-        var receiptFormData = new FormData();
-        receiptFormData.append("file", file);
-        receiptFormData.append("category", vm.searchObj.status);
-        if (vm.searchObj.status === "80C-Rental Receipts") {
-          receiptFormData.append("startMonth", vm.searchObj.startMonth);
-          receiptFormData.append("endMonth", vm.searchObj.endMonth);
-        }
+      var receiptFormData = new FormData();
+      receiptFormData.append("file", file);
+      receiptFormData.append("category", vm.searchObj.status);
+      if (vm.searchObj.status === "80C-Rental Receipts") {
+        receiptFormData.append("startMonth", vm.searchObj.startMonth);
+        receiptFormData.append("endMonth", vm.searchObj.endMonth);
+      }
 
-        receiptFormData.append("amount", vm.amount);
-        let receiptData = Object.fromEntries(receiptFormData);
-        console.log("receiptData", receiptData);
-        console.log("vm.taxSavingId", vm.taxSavingId);
+      receiptFormData.append("amount", vm.amount);
+      // let receiptData = Object.fromEntries(receiptFormData);
+      // console.log("receiptData", receiptData);
+      // console.log("vm.taxSavingId", vm.taxSavingId);
 
-        TaxSavingService.addTaxSavingReceipt(vm.taxSavingId, receiptData).then(
-          function (taxSavingForm) {
-            console.log("taxSavingForm", taxSavingForm);
-            resolve(taxSavingForm);
-          }
-        );
+      TaxSavingService.addTaxSavingReceipt(
+        vm.taxSavingId,
+        receiptFormData
+      ).then(function (taxSavingForm) {
+        console.log("taxSavingForm", taxSavingForm.taxSaving);
+        //  vm.investmentDeclaration = taxSavingForm.taxSaving;
+        vm.amount = 0;
+        noty.showSuccess("Uploaded successfully");
+        values = [];
+
+        totalUploadedFiles();
       });
     }
 
     $scope.modelSetter = function (values) {
       console.log("values", values);
-      vm.receipts = values;
+      vm.uploadFileValue = values;
+      // vm.receipts = values;
       // vm.investmentDeclaration.sectionAFiles = values;
     };
 
@@ -391,6 +412,20 @@
       popupWinindow.popupWinindow();
     };
 
+    function totalUploadedFiles() {
+      console.log("after upload", vm.investmentDeclaration);
+      //get receipts
+      TaxSavingService.getTaxSavingReceipts(vm.taxSavingId).then(function (
+        getMyTaxSavingReceipts
+      ) {
+        console.log(
+          "getMyTaxSavingReceipts",
+          getMyTaxSavingReceipts.taxSavingReceipts
+        );
+        vm.receipts = getMyTaxSavingReceipts.taxSavingReceipts;
+      });
+    }
+
     function getUserForm() {
       // getMyTaxSaving
 
@@ -427,6 +462,7 @@
               vm.investmentDeclaration.designation = vm.user.designation;
               vm.investmentDeclaration.employeeId = vm.user.employeeId;
               vm.investmentDeclaration.dateOfJoin = convert(vm.user.joinDate);
+              totalUploadedFiles();
             } else {
               let investmentDeclaration = convertIntObj(response);
               vm.investmentDeclaration = investmentDeclaration.taxSaving;
@@ -441,6 +477,7 @@
                   response.taxSaving.dateOfJoin
                 );
               }
+              totalUploadedFiles();
               if (vm.investmentDeclaration.status === "Submitted") {
                 let inputs = document.getElementsByTagName("input");
                 //.setAttribute("readonly", "readonly");
@@ -453,6 +490,7 @@
               } else {
                 vm.print = false;
               }
+
               //testing for get receipt
               // TaxSavingService.getTaxSavingReceipt(
               //   "600143043620ee6d05ff9642"
@@ -510,12 +548,19 @@
     var vm = this;
     vm.alerts = [];
     vm.searchObj = {
-      status: "Submitted",
+      status: "All",
     };
     vm.Investments = [];
-    vm.investmentStatus = ["Submitted"];
+    vm.investmentStatus = [
+      "All",
+      "Submitted",
+      "Approved",
+      "Partially Approved",
+      "Rejected",
+    ];
 
     vm.openInvestmentModal = function (investmentObj) {
+      console.log("investmentObj", investmentObj);
       var modalInstance = $uibModal
         .open({
           animation: true,
@@ -530,6 +575,8 @@
               return vm.user;
             },
             investmentObj: function () {
+              //   console.log("investmentObj in return", investmentObj)
+
               return investmentObj;
             },
           },
@@ -584,17 +631,106 @@
     ReimbursementService,
     investmentObj,
     _,
+    $scope,
     $uibModal,
+    noty,
     $uibModalInstance,
     $filter,
-    $state
+    $state,
+    TaxSavingService
   ) {
     var vm = this;
     vm.investmentObj = investmentObj;
-    console.log("investmentObj", investmentObj);
+    vm.uploadedReceipts = [];
+    vm.investment = {
+      comment: "",
+    };
+    vm.Investments = [];
+    console.log("investmentObj", vm.investmentObj);
 
     vm.close = function () {
       $uibModalInstance.dismiss("cancel");
+    };
+
+    vm.openLink = function (file) {
+      window.open(
+        "/data/taxsavings/" + file,
+        "example",
+        "width=700,height=500,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0"
+      );
+      return false;
+    };
+    $scope.convert = function (str) {
+      var date = new Date(str),
+        month = ("0" + (date.getMonth() + 1)).slice(-2),
+        day = ("0" + date.getDate()).slice(-2);
+      return [date.getFullYear(), month, day].join("-");
+    };
+
+    vm.approveInvestment = function () {
+      let status1 = "";
+      let status2 = "";
+      for (let i = 0; i < vm.uploadedReceipts.length; i++) {
+        console.log(
+          "vm.uploadedReceipts[i].status",
+          vm.uploadedReceipts[i].status
+        );
+        if (vm.uploadedReceipts[i].status) {
+          status1 = "Approved";
+        } else {
+          status2 = "Rejected";
+        }
+      }
+      var investmentFormData = new FormData();
+
+      //formData.append("comment",  vm.investment.comment);
+
+      if (status1 === "Approved" && status2 === "") {
+        investmentFormData.append("status", "Approved");
+      } else {
+        investmentFormData.append("status", "Partially Approved");
+      }
+      //  formData.append('file',vm.receipts[0]._file)
+
+      let data = Object.fromEntries(investmentFormData);
+      console.log("data", data);
+
+      TaxSavingService.updateTaxSaving(investmentObj._id, data).then(function (
+        taxSavingForm
+      ) {
+        console.log("updateTaxSaving", taxSavingForm);
+        if (status1 === "Approved" && status2 === "") {
+          vm.investmentObj.status = "Approved";
+        } else {
+          vm.investmentObj.status = "Partially Approved";
+        }
+
+        noty.showSuccess("Approved Successfully!");
+      });
+    };
+
+    vm.rejectInvestment = function () {
+      if (vm.investment.comment === "") {
+        noty.showError("Pease enter comment");
+      } else {
+        var rejectedInvestmentFormData = new FormData();
+
+        rejectedInvestmentFormData.append("comment", vm.investment.comment);
+
+        rejectedInvestmentFormData.append("status", "Rejected");
+        //  formData.append('file',vm.receipts[0]._file)
+
+        let data = Object.fromEntries(rejectedInvestmentFormData);
+        console.log("data", data);
+
+        TaxSavingService.updateTaxSaving(investmentObj._id, data).then(
+          function (taxSavingForm) {
+            console.log("updateTaxSaving", taxSavingForm);
+            vm.investmentObj.status = "Rejected";
+            noty.showError("Rejected Successfully!");
+          }
+        );
+      }
     };
 
     vm.getUserForm = function (investmentObj) {
@@ -607,5 +743,42 @@
         print: true,
       });
     };
+    vm.enableSubmitButton = function (file) {
+      console.log("file", file);
+      var data = new FormData();
+      data.append("status", file.status);
+      console.log("data", data);
+
+      TaxSavingService.updateTaxSavingReceipt(investmentObj._id, file._id,data).then(function (
+        updatedReceipts
+      ) {
+        console.log(
+          "updatedReceipts",
+          updatedReceipts
+        );
+        
+      });
+
+    };
+    function getTotalFiles() {
+      TaxSavingService.getTaxSavingReceipts(investmentObj._id).then(function (
+        getMyTaxSavingReceipts
+      ) {
+        console.log(
+          "getMyTaxSavingReceipts",
+          getMyTaxSavingReceipts.taxSavingReceipts
+        );
+        vm.uploadedReceipts = getMyTaxSavingReceipts.taxSavingReceipts;
+        for (let i = 0; i <= vm.uploadedReceipts.length; i++) {
+          vm.uploadedReceipts[i].status = false;
+        }
+      });
+    }
+
+    function initController() {
+      getTotalFiles();
+    }
+
+    initController();
   }
 })();

@@ -24,6 +24,6 @@ var TaxSavingSchema = new Schema({
     comment: { type: String },
     createdBy: { type: mongoose.ObjectId },
     createdOn: { type: Date, default: Date.now }
-});
+},{ strict: false });
 
 module.exports = mongoose.model('taxSavings', TaxSavingSchema);

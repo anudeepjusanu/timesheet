@@ -11,6 +11,10 @@ input[type=number] {
 }
 
 </style>
+<div ng-if="vm.investmentDeclaration.status==='Rejected' " class="contentView">
+  <span class="errorMessage"><b>Rejected!!</b> &nbsp; {{vm.investmentDeclaration.comment}}</span>
+</div>
+
 <div class="content-wrapper">
   <div class="panel panel-default">
     <div class="panel-body">
@@ -18,7 +22,7 @@ input[type=number] {
         <div class="col-md-4"></div>
         <div class="col-md-4"></div>
         <button
-        ng-if = "vm.investmentDeclaration.status === 'Submitted' && vm.print"
+        ng-if = "(vm.investmentDeclaration.status === 'Submitted' || vm.investmentDeclaration.status==='Approved' || vm.investmentDeclaration.status==='Rejected') && vm.print"
           class="btn btn-primary col-md-2"
           type="button"
           ng-click="vm.printToPdf('printSectionId');"
@@ -57,7 +61,7 @@ input[type=number] {
           </tr>
           <tr>
             <td class="cell" colspan="2" height="20" class="textLeft">
-              <span class="fontColor">Name</span>
+              <span class="fontColor">Name</span><span class="dangerText">*</span>
             </td>
             <td class="cell inputBackground" colspan="6" class="textLeft">
               <input
@@ -74,13 +78,14 @@ input[type=number] {
                 value={{vm.investmentDeclaration.employee_name}}
               />
             </td>
-            <td class="textLeft"><span class="fontColor"> &nbsp;PAN</span></td>
+            <td class="textLeft"><span class="fontColor"> &nbsp;PAN</span><span class="dangerText">*</span></td>
             <td class="textLeft">
               <span class="fontColor"><br /></span>
             </td>
             <td class="cell textCenter inputBackground" colspan="2">
               <input
                 type="text"
+                ng-change="validatePanCard()"
                 ng-model="vm.investmentDeclaration.panCard"
                 class="form-control"
                 style="
@@ -92,10 +97,12 @@ input[type=number] {
                 value={{vm.investmentDeclaration.panCard}}
               />
             </td>
+            <td colspan="3" class="textLeft "><span class=" errorMessage">{{vm.errMsg}} </span></td>
+
           </tr>
           <tr>
             <td class="cell" colspan="2" height="21" class="textLeft">
-              <span class="fontColor">Designation</span>
+              <span class="fontColor">Designation</span><span class="dangerText">*</span>
             </td>
             <td class="cell inputBackground" colspan="6" class="textLeft">
               <input
@@ -113,7 +120,7 @@ input[type=number] {
               />
             </td>
             <td class="textLeft">
-              <span class="fontColor"> &nbsp;Date of &nbsp;Joining</span>
+              <span class="fontColor"> &nbsp;Date of &nbsp;Joining</span><span class="dangerText">*</span>
             </td>
             <td class="textLeft">
               <span class="fontColor"><br /></span>
@@ -152,7 +159,7 @@ input[type=number] {
           </tr>
           <tr>
             <td class="cell" colspan="2" height="21" class="textLeft">
-              <span class="fontColor">Employee ID</span>
+              <span class="fontColor">Employee ID</span><span class="dangerText">*</span>
             </td>
             <td
               class="inputSmRightLeft inputBackground"
@@ -777,6 +784,7 @@ input[type=number] {
                 ><span class="fontColor">
                   <input
                     type="number"
+                    readonly="readonly"
                     ng-model="vm.investmentDeclaration.secArowSubTotal"
                     class="form-control"
                     id = "input"
@@ -1450,15 +1458,53 @@ input[type=number] {
 
 
 
-        <tr  ng-if = "!vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status">
-          <td colspan="5">
+        <tr  ng-if = "(!vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected')&& !vm.print">
+          <td colspan="15">
             <!-- <input type="file"   id="upload" ng-file-model="vm.files" style="height: auto;"
                       class="form-control"  multiple/> -->
                                          
             <div class="fileUploadInput">
               <b>Attachments</b>
+
+<div style="display: flex;justify-content: flex-start;"> 
+<div class="inputSectionSpace">
+  <label>Select Category</label>
+  <select class="form-control" ng-model="vm.searchObj.status" ng-change="onCategoryChange(vm.searchObj.status)"
+  ng-options="opt as opt for opt in vm.fileStatus"></select>
+
+</div>
+<div class="inputSectionSpace">
+  <label>Amount</label>
+<input
+  type="number"
+  id = "input"
+  placeholder="Amount"
+  ng-model="vm.amount"
+  class="form-control"
+  style="background-color: transparent;border: none;color: black;height:30px;border: 1px solid #D5D5D5 ;"
+  value={{vm.amount}}
+  />
+</div>
+  <div  ng-if = "vm.searchObj.status === '80C-Rental Receipts'" class="inputSectionSpace">
+   <label>Select Start Month</label>
+    <select class="form-control" ng-model="vm.searchObj.startMonth"
+       ng-options="opt as opt for opt in vm.months"></select>
+
+   </div>
+<div  ng-if = "vm.searchObj.status === '80C-Rental Receipts'">
+<label>Select End Month</label>
+<select class="form-control" ng-model="vm.searchObj.endMonth"
+ng-options="opt as opt for opt in vm.months"></select>
+
+        
+
+</div>
+
+</div>
+
+
               
-              <label>Select Category</label>
+              <!-- <label>Select Category</label>
               <select class="form-control" ng-model="vm.searchObj.status" ng-change="onCategoryChange(vm.searchObj.status)"
               ng-options="opt as opt for opt in vm.fileStatus"></select>
 
@@ -1470,8 +1516,8 @@ input[type=number] {
               class="form-control"
               style="background-color: transparent;border: none;color: black;height:30px;border: 1px solid #D5D5D5 ;margin-top: 10px;"
               value={{vm.amount}}
-              />
-            <div ng-if = "vm.searchObj.status === '80C-Rental Receipts'">
+              /> -->
+            <!-- <div ng-if = "vm.searchObj.status === '80C-Rental Receipts'">
         <div class="inputSection">
          <label>Select Start Month</label>
           <select class="form-control" ng-model="vm.searchObj.startMonth"
@@ -1486,10 +1532,18 @@ input[type=number] {
   </div>
               
 
-</div>
-            
-       <input type="file" ng-file-model="vm.files" multiple class="inputSection"/>
-              <button class="inputSection">+</button>
+</div> -->
+   <div style="display: flex;justify-content: flex-start;">
+    <div>
+      <input type="file" ng-file-model="vm.files" class="inputSectionTop"/>
+
+    </div>
+    <div>
+      <button  ng-click="vm.uploadFile()" class="inputSection">upload</button>
+
+    </div>
+   </div>         
+      
             </div>
           </td>
           <td class="textLeft">
@@ -1499,8 +1553,48 @@ input[type=number] {
           <td></td>
         </tr>
 
-        <tr ng-repeat="file in vm.receipts">
-          <td colspan="4">
+
+
+        <tr>
+
+          <td ng-if="vm.receipts.length > 0" colspan="15" >
+          <table class="table table-condensed table-bordered table-striped tableSpace" export-table>
+            <thead>
+                <tr>
+                    <th class="table-heading">#</th>
+                    <th class="table-heading">Category</th>
+                    <th class="table-heading">Amount</th>
+                    <th class="table-heading">File</th>
+                    <th ng-if = "!vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected'" class="table-heading" style="width: 120px;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="file in vm.receipts">
+                    <td class="table-heading">{{$index+1}}</td>
+                    <td class="table-heading">{{file.category}}</td>
+                    <td class="table-heading">{{file.amount}}</td>
+                    <td class="table-heading">{{file.file}}</td>
+                   
+                    <td ng-if = "!vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected'" class="table-heading">
+                      <!-- <a 
+                      class="btn btn-primary btn-icon btn-rounded"
+                      ng-click="vm.openInvestmentModal(investment)">
+                      <span class="fa fa-list"></span>
+                  </a> -->
+                  <a
+          class="btn btn-danger btn-icon btn-rounded"
+          title="Delete Receipt"
+          ng-click="vm.deleteFile(file)"
+        >
+          <span class="fa fa-trash-o" aria-hidden="true"></span>
+        </a>
+                    </td>
+                   
+                </tr>
+            </tbody>
+        </table>
+          </td>
+          <!-- <td colspan="4">
             <div
               style="
                 border: 1px solid black;
@@ -1520,7 +1614,7 @@ input[type=number] {
             >
               <span class="fa fa-trash-o" aria-hidden="true"></span>
             </a>
-          </td>
+          </td> -->
         </tr>
 
 
@@ -1803,7 +1897,7 @@ input[type=number] {
         <div class="col-md-4">
         </button>
         <button
-        ng-if = "vm.investmentDeclaration.status === ''|| !vm.investmentDeclaration.status "
+        ng-if = "(vm.investmentDeclaration.status === ''|| !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected') && !vm.print"
         class="btn btn-primary "
           type="button"
           ng-click="vm.sbmitNowInvestmentDeclaration(submit = false);"
@@ -1815,7 +1909,7 @@ input[type=number] {
         <div class="col-md-4">
 
         <button
-        ng-if = "vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status"
+        ng-if = "(vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected') && !vm.print"
         class="btn btn-primary "
           type="button"
           ng-click="vm.sbmitNowInvestmentDeclaration(submit = true);"

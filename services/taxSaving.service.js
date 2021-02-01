@@ -39,7 +39,7 @@ function getMyTaxSavings(userId) {
 function getAccountTaxSavings(financialYear) {
     return new Promise((resolve, reject) => {
         TaxSavingModel.aggregate([
-            { $match: { financialYear: financialYear, status: { $in: ['Submitted'] } } },
+            { $match: { financialYear: financialYear, status: { $in: ['Submitted','Approved','Rejected','Partially Approved'] } } },
             { $sort: { createdOn: -1 } }
         ]).exec().then(async (data) => {
             resolve(data);
@@ -53,7 +53,7 @@ function getAccountTaxSavings(financialYear) {
 function getTaxSaving(taxSavingId) {
     return new Promise((resolve, reject) => {
         TaxSavingModel.aggregate([
-            { $match: { userId: mongoose.Types.ObjectId(taxSavingId) } },
+            { $match: { _id: mongoose.Types.ObjectId(taxSavingId) } },
         ]).exec().then(async (data) => {
             resolve(data[0]);
         }).catch((error) => {
