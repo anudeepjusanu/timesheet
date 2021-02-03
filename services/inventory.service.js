@@ -120,7 +120,7 @@ function assignUser(InventoryId, assignData) {
 
 function changeStatus(InventoryId, inventoryData) {
     return new Promise((resolve, reject) => {
-        if (["Repair", "Repair Done", "Scrap", "Available For Freshers", "Assigned Multiple", "Assigned OE Client", "Collect Laptop"].includes(inventoryData.deviceStatus)) {
+        if (["Repair", "Repair Done", "Scrap", "Available For Freshers", "Assigned Multiple", "Assigned OE Client", "Collect Laptop", "Lost"].includes(inventoryData.deviceStatus)) {
             InventoryModel.findById(InventoryId, function (err, InventoryObj) {
                 if (err) return handleError(err);
 

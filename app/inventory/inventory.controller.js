@@ -35,19 +35,16 @@
             }
         });
 
-    function InventoryController(UserService,ProjectService, InventoryService, _, $uibModal, $filter, $state) {
+    function InventoryController(UserService, ProjectService, InventoryService, _, $uibModal, $filter, $state) {
         var vm = this;
         vm.users = [];
-        vm.inventories = [];        
+        vm.inventories = [];
         vm.search = {
             deviceId: '',
             deviceName: '',
             orderBy: 'deviceId',
             orderDESC: false,
-
         }
-
-
 
         vm.sorting = function (orderBy) {
             if (vm.search.orderBy == orderBy) {
@@ -90,9 +87,6 @@
                 console.log(error);
             });
         };
-
-       
-
 
         vm.viewInventoryForm = function (inventoryObj) {
             var modalInstance = $uibModal.open({
@@ -210,7 +204,7 @@
             e.stopPropagation();
         }
 
-       
+
 
         function initController() {
             UserService.GetCurrent().then(function (user) {
@@ -222,11 +216,11 @@
         initController();
     };
 
-    function InventoryModel($uibModalInstance,ProjectService, UserService, InventoryService, inventoryObj, usersList, noty) {
+    function InventoryModel($uibModalInstance, ProjectService, UserService, InventoryService, inventoryObj, usersList, noty) {
         var vm = this;
         vm.enableSaveBtn = true;
         vm.clients = [];
-       vm.alerts = [];
+        vm.alerts = [];
         vm.temp = "sowmya"
         vm.inventoryObj = inventoryObj;
         vm.activeUsers = [...usersList];
@@ -235,7 +229,7 @@
             startingDay: 1
         };
         vm.search = {
-            clientId :''
+            clientId: ''
         }
         vm.saveInventory = function (inventoryForm) {
             if (inventoryForm.$valid) {
@@ -274,20 +268,20 @@
             console.log("clients", "calling")
 
             ProjectService.getClients().then(function (response) {
-            vm.clients = response;
-            vm.clients.unshift({ _id: "", "clientName": "All" });
+                vm.clients = response;
+                vm.clients.unshift({ _id: "", "clientName": "All" });
 
-            console.log("clients", vm.clients)
+                console.log("clients", vm.clients)
             }, function (error) {
-            if (error) {
-            vm.alerts.push({ msg: error, type: 'danger' });
-            }
+                if (error) {
+                    vm.alerts.push({ msg: error, type: 'danger' });
+                }
             });
-            }
+        }
 
 
         function initController() {
-getClients();
+            getClients();
         };
         initController();
     };
