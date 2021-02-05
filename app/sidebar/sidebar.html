@@ -47,6 +47,13 @@
                 <span class="xn-text">My Reimbursements</span>
             </a>
         </li>
+
+        <li class="" ng-class="{active: activeTab === 'investmentDeclaration'}">
+            <a ui-sref="investmentDeclaration"><span class="fa fa-file-excel-o"></span>
+                <span class="xn-text">Investment Declaration</span>
+            </a>
+        </li>
+
         <li class="" ng-if="vm.user.admin===true || vm.user.userRole=='manager'"
             ng-class="{active: activeTab === 'timesheet'}">
             <a ui-sref="timesheet"><span class="fa fa-file-excel-o"></span> <span class="xn-text">Timesheets</span></a>

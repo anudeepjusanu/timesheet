@@ -347,6 +347,49 @@
                     receipts: []
                 }
             })
+
+// added for invesment decaration 
+.state('InvestmentDeclaration', {
+    url: '/investmentDeclaration',
+    templateUrl: 'InvestmentDeclaration/investmentDeclaration.html',
+    controller: 'Investment.IndexController',
+    controllerAs: 'vm',
+    parent: 'layout',
+    data: { activeTab: 'investmentDeclaration' }
+})
+
+.state('TaxOldRegime', {
+    url: '/investmentDeclaration/TaxOldRegime',
+    templateUrl: 'InvestmentDeclaration/TaxOldRegime.html',
+    controller: 'Investment.TaxOldRegimeController',
+    controllerAs: 'vm',
+    parent: 'layout',
+    data: { activeTab: 'investmentDeclaration' },
+    params: {
+        investmentObj: {},
+        print:false
+        }
+})
+
+.state('TaxNewRegime', {
+    url: '/investmentDeclaration/TaxNewRegime',
+    templateUrl: 'InvestmentDeclaration/TaxNewRegime.html',
+    controller: 'Investment.TaxNewRegimeController',
+    controllerAs: 'vm',
+    parent: 'layout',
+    data: { activeTab: 'investmentDeclaration' }
+})
+
+.state('accountInvestments', {
+    url: '/investmentDeclaration/AccountInvestments',
+    templateUrl: 'InvestmentDeclaration/accountInvestments.html',
+    controller: 'Investment.accountInvestmentController',
+    controllerAs: 'vm',
+    parent: 'layout',
+    data: { activeTab: 'investmentDeclaration' }
+})
+
+
             .state('myReceipts', {
                 url: '/reimbursement/myReceipts',
                 templateUrl: 'reimbursement/myReceipts.html',
@@ -450,7 +493,7 @@
         // get JWT token from server
         $.get('/app/token', function (token) {
             window.jwtToken = token;
-            //console.log(token);
+            //console.log("token",token);
             angular.bootstrap(document, ['app']);
         });
     });

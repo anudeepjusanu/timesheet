@@ -1,68 +1,402 @@
 .chip-out-focus {
-    border: 1px solid #e0e0e0;
+  border: 1px solid #e0e0e0;
 }
 
 .wl-chips {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
-.panel-body.panel-body-table td, .panel-body.panel-body-table th{
-    padding: 4px 5px!important;
+.panel-body.panel-body-table td,
+.panel-body.panel-body-table th {
+  padding: 4px 5px !important;
 }
 .dropdown-menu-form {
-    padding: 5px 10px 0;
-    max-height: 240px;
-    overflow-y: scroll;
+  padding: 5px 10px 0;
+  max-height: 240px;
+  overflow-y: scroll;
 }
-.dropdown-item{
-    padding-left: 20px;
+.dropdown-item {
+  padding-left: 20px;
 }
 
 /* Reimbursement Styles */
 table .heading {
-    text-align: center;
+  text-align: center;
 }
 .delete-bill-icon {
-    font-size: 26px;
-    color:red;
-    cursor: pointer;
+  font-size: 26px;
+  color: red;
+  cursor: pointer;
 }
 .reimbursement-buttons {
-    margin: 7px 7px;
+  margin: 7px 7px;
+}
+.errorMessage {
+  color:red;
+  font-size: small;
+  padding:5px;
+}
+.btnLink{
+  background-color: transparent;
+  border:none;
 }
 .button-success {
-    font-size: 14px !important;
-    margin-left: 5px !important;
-    margin-right: 5px !important;
-    background: rgb(80, 219, 80)!important;
-    color: black !important;
-    padding: 4px 16px !important;
+  font-size: 14px !important;
+  margin-left: 5px !important;
+  margin-right: 5px !important;
+  background: rgb(80, 219, 80) !important;
+  color: black !important;
+  padding: 4px 16px !important;
 }
 .button-warning {
-    font-size: 14px !important;
-    margin-left: 5px !important;
-    margin-right: 5px !important;
-    background: orange !important;
-    color: black !important;
-    padding: 4px 16px !important;
+  font-size: 14px !important;
+  margin-left: 5px !important;
+  margin-right: 5px !important;
+  background: orange !important;
+  color: black !important;
+  padding: 4px 16px !important;
 }
 .button-primary {
-    font-size: 14px !important;
-    margin-left: 5px !important;
-    margin-right: 5px !important;
-    background:lightskyblue !important;
-    color: black !important;
-    padding: 4px 16px !important;
-    margin: 2px;
+  font-size: 14px !important;
+  margin-left: 5px !important;
+  margin-right: 5px !important;
+  background: lightskyblue !important;
+  color: black !important;
+  padding: 4px 16px !important;
+  margin: 2px;
 }
 .modal-content {
-    border-width: 0px !important;
-    border-radius: 6px !important;
+  border-width: 0px !important;
+  border-radius: 6px !important;
 }
 .modal-padding {
-    padding-top: 7px;
+  padding-top: 7px;
 }
-.tbl-check-box{
-    width: 16px; 
-    height: 16px; 
-    cursor: pointer;
+.tbl-check-box {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
 }
+.iconAlign{
+  margin-right: 5px;
+
+}
+/* investment - component */
+.fileUploadInput {
+  display: grid;
+  grid-gap: 5px;
+  position: relative;
+  z-index: 1;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.inputSection{
+  margin-top: 10px;
+}
+.inputSectionSpace{
+  margin-right: 10px;
+}
+.inputSectionTop{
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+.fileUploadInput label {
+  display: flex;
+  align-items: center;
+  color: setColor(primary, 0.5);
+  background: setColor(white);
+  transition: 0.4s ease;
+  font-family: arial, sans-serif;
+  font-size: 0.75em;
+  font-weight: regular;
+}
+
+.fileUploadInput input {
+  position: relative;
+  z-index: 1;
+  padding: 0 gap(m);
+  height: 40px;
+  border: 1px solid #323262;
+  border-radius: 3px;
+  font-family: arial, sans-serif;
+  font-size: 1rem;
+  font-weight: regular;
+}
+.fileUploadInput input[type="file"] {
+  padding: 0 gap(m);
+}
+.fileUploadInput input[type="file"]::-webkit-file-upload-button {
+  visibility: hidden;
+  margin-left: 10px;
+  padding: 0;
+  height: 40px;
+  width: 0;
+}
+
+.fileUploadInput button {
+  /* position: absolute;
+  right: 0;
+  bottom: 0; */
+  width: 50px;
+  height: 40px;
+  /* line-height: 0;
+  user-select: none; */
+  color: white;
+  background-color: #323262;
+  border-radius: 0 3px 3px 0;
+  font-family: arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+}
+.fileUploadInput button svg {
+  width: auto;
+  height: 50%;
+}
+
+table .cell {
+  border-top: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+  border-left: 1px solid #000000;
+  border-right: 1px solid #000000;
+}
+
+table .inputStyle {
+  border-top: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  border-right: 2px solid #000000;
+}
+
+table .inputSmLeft {
+  border-top: 1px solid #000000;
+  border-left: 1px solid #000000;
+}
+table .inputSmRight{
+
+border-top: 1px solid #000000; border-right: 1px solid #000000}
+table .inputSmRightLeft{
+    border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000
+}
+table .cellTopStyle{
+    border-top: 1px solid #000000
+}
+
+table .cellBottomStyle{
+    border-bottom: 1px solid #000000;
+}
+table .cellBtmRht{
+    border-bottom: 1px solid #000000; border-right: 1px solid #000000
+}
+table .cellBtmLeftRht{
+    border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000
+}
+table .cellTopBtmLeft{
+    border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000
+}
+
+table .cellTopBtmRight{
+    border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000";
+}
+table .cellBorder {
+  border-bottom: 2px solid #000000;
+}
+table .fontColor {
+  color: #000000;
+}
+table .dangerText {
+  color: #ff0000;
+}
+table .textCenter {
+  text-align: center;
+}
+table .textLeft {
+  text-align: left;
+}
+table .textRight {
+  text-align: right;
+}
+table .darkBackground {
+  background-color: #969696;
+}
+table .inputBackground {
+  background-color: #ffcc99;
+}
+table .inputWhiteBackground {
+  background-color: #ffffff;
+}
+table .inputIndicationBackground {
+  background-color: #ccccff;
+}
+table .warningBackground {
+  background-color: #ffff00;
+}
+table .tableBorder {
+  border: 0;
+}
+table .width{
+    width: 150px;
+  }
+  .tableSpace{
+    margin-top: 10px;
+  }
+  .contentView{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #ffffff;
+  }
+
+@media print /*--This is for Print--*/
+
+{
+
+  .fileUploadInput {
+    display: grid;
+    grid-gap: 5px;
+    position: relative;
+    z-index: 1;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .fileUploadInput label {
+    display: flex;
+    align-items: center;
+    color: setColor(primary, 0.5);
+    background: setColor(white) !important;
+    transition: 0.4s ease;
+    font-family: arial, sans-serif;
+    font-size: 0.75em;
+    font-weight: regular;
+  }
+  
+  .fileUploadInput input {
+    position: relative;
+    z-index: 1;
+    padding: 0 gap(m);
+    height: 40px;
+    border: 1px solid #323262;
+    border-radius: 3px;
+    font-family: arial, sans-serif;
+    font-size: 1rem;
+    font-weight: regular;
+  }
+  .fileUploadInput input[type="file"] {
+    padding: 0 gap(m);
+  }
+  .fileUploadInput input[type="file"]::-webkit-file-upload-button {
+    visibility: hidden;
+    margin-left: 10px;
+    padding: 0;
+    height: 40px;
+    width: 0;
+  }
+  
+  .fileUploadInput button {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 50px;
+    height: 40px;
+    line-height: 0;
+    user-select: none;
+    color: white;
+    background-color: #323262 !important;
+    border-radius: 0 3px 3px 0;
+    font-family: arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+  }
+  .fileUploadInput button svg {
+    width: auto;
+    height: 50%;
+  }
+  
+  table .cell {
+    border-top: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-left: 1px solid #000000;
+    border-right: 1px solid #000000;
+  }
+  
+  table .inputStyle {
+    border-top: 2px solid #000000;
+    border-bottom: 2px solid #000000;
+    border-right: 2px solid #000000;
+  }
+  
+  table .inputSmLeft {
+    border-top: 1px solid #000000;
+    border-left: 1px solid #000000
+      "
+  }
+  table .inputSmRight{
+  
+  border-top: 1px solid #000000; border-right: 1px solid #000000}
+  table .inputSmRightLeft{
+      border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000
+  }
+  table .cellTopStyle{
+      border-top: 1px solid #000000
+  }
+  
+  table .cellBottomStyle{
+      border-bottom: 1px solid #000000;
+  }
+  table .cellBtmRht{
+      border-bottom: 1px solid #000000; border-right: 1px solid #000000
+  }
+  table .cellBtmLeftRht{
+      border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000
+  }
+  table .cellTopBtmLeft{
+      border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000
+  }
+  
+  table .cellTopBtmRight{
+      border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000";
+  }
+  table .cellBorder {
+    border-bottom: 2px solid #000000;
+  }
+  table .fontColor {
+    color: #000000;
+  }
+  table .dangerText {
+    color: #ff0000 !important;
+  }
+  table .textCenter {
+    text-align: center;
+  }
+  table .textLeft {
+    text-align: left;
+  }
+  table .textRight {
+    text-align: right;
+  }
+  table .darkBackground {
+    background-color: #969696 !important;
+  }
+  table .inputBackground {
+    background-color: #ffcc99 !important;
+  }
+  table .inputWhiteBackground {
+    background-color: #ffffff !important;
+  }
+  table .inputIndicationBackground {
+    background-color: #ccccff !important;
+  }
+  table .warningBackground {
+    background-color: #ffff00 !important;
+  }
+  table .tableBorder {
+    border: 0;
+  }
+  
+    
+
+   
+
+}
+

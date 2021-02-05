@@ -1,0 +1,53 @@
+<div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+    close="vm.closeAlert($index)" dismiss-on-timeout="1000">
+    {{alert.msg}}</div>
+<div class="content-wrapper">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Account Investments</h3>
+
+        </div>
+        <div class="panel-body">
+            <table id="exportable" class="table table-condensed table-bordered table-striped" export-table>
+                <thead>
+                    <tr>
+                        <th class="table-heading">#</th>
+                        <th class="table-heading">Employee ID</th>
+                        <th class="table-heading">Employee Name</th>
+                        <th class="table-heading" style="width: 140px;">Status</th>
+                        <th class="table-heading" style="width: 80px;">Created On</th>
+                        <th class="table-heading" style="width: 120px;">Action</th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>
+                            <select class="form-control" ng-model="vm.searchObj.status"
+                                ng-options="opt as opt for opt in vm.investmentStatus"></select>
+                        </th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="investment in vm.Investments | InvestmentsSearch: vm.searchObj">
+                        <td class="table-heading">{{$index+1}}</td>
+                        <td class="table-heading">{{investment.employeeId}}</td>
+                        <td class="table-heading">{{investment.employee_name}}</td>
+                        <td class="table-heading">{{investment.status}}</td>
+                        <td class="table-heading">{{convert(investment.createdOn)}}</td>
+                        <td>
+                            <a 
+                                class="btn btn-primary btn-icon btn-rounded"
+                                ng-click="vm.openInvestmentModal(investment)">
+                                <span class="fa fa-list"></span>
+                            </a>
+    
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

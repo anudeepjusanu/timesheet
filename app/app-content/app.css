@@ -941,6 +941,9 @@ a:focus {
     text-align: center;
     line-height: 35px;
 }
+.headerText{
+    text-align: center;
+}
 
 .control-sidebar-menu .menu-info {
     margin-left: 45px;
@@ -2626,7 +2629,6 @@ a:focus {
 .timeline-inverse>li>.timeline-item>.timeline-header {
     border-bottom-color: #ddd;
 }
-
 
 /*
  * Component: Button
