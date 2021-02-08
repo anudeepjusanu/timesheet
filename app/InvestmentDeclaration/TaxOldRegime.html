@@ -1837,7 +1837,7 @@ ng-options="opt as opt for opt in vm.months"></select>
         ng-if = "(vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected' || vm.investmentDeclaration.status === 'Partially Approved') && !vm.print"
         class="btn btn-primary "
           type="button"
-          ng-click="vm.sbmitNowInvestmentDeclaration(submit = true);"
+          ng-click="vm.submitNowConfirm(submit = true);"
         >
           Submit Now
 </button>
