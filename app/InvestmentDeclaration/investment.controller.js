@@ -77,8 +77,8 @@
       UserService.GetCurrent().then(function (user) {
         localStorage.setItem("print", "false");
         localStorage.removeItem("taxSavingId");
-
-      //  vm.user.userRole = "finance";
+        vm.user = user;
+        //  vm.user.userRole = "finance";
       });
     }
 
@@ -289,25 +289,51 @@
       );
     };
 
-    vm.sbmitNowInvestmentDeclaration = function (submit) {
-      if (vm.errMsg === "" && vm.investmentDeclaration.panCard) {
-        var formData = new FormData();
+vm.submitNowConfirm = function (submit) {
+  if (submit) {
 
-        for (let [key, value] of Object.entries(vm.investmentDeclaration)) {
-          formData.append(key, value);
-        }
-        formData.append("userId", vm.user._id);
-        if (submit) {
-          formData.append("status", "Submitted");
-        }
-        //  formData.append('file',vm.receipts[0]._file)
+    if (
+      confirm(
+      "You can not modify after submit, Are you sure you want to submit?"
+      )
+      ) {
+      
+        vm.sbmitNowInvestmentDeclaration(submit)
 
-        let data = Object.fromEntries(formData);
-
-        updateTaxSaving(data, submit);
       } else {
-        noty.showError("Please enter all mandatory fields");
+      // Do nothing!
+      console.log("Thing was not saved to the database.");
       }
+      
+
+  }
+
+}
+
+
+
+    vm.sbmitNowInvestmentDeclaration = function (submit) {
+      
+        // Save it!
+        if (vm.errMsg === "" && vm.investmentDeclaration.panCard) {
+          var formData = new FormData();
+
+          for (let [key, value] of Object.entries(vm.investmentDeclaration)) {
+            formData.append(key, value);
+          }
+          formData.append("userId", vm.user._id);
+          if (submit) {
+            formData.append("status", "Submitted");
+          }
+          //  formData.append('file',vm.receipts[0]._file)
+
+          let data = Object.fromEntries(formData);
+
+          updateTaxSaving(data, submit);
+        } else {
+          noty.showError("Please enter all mandatory fields");
+        }
+     
     };
 
     function updateTaxSaving(data, submit) {
