@@ -65,12 +65,19 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="form-group required">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="costAccount">Cost Account</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" id="costAccount" ng-model="vm.obj.costAccount"
+                                        ng-options="item as item for item in ['', 'S&M', 'G&A', 'DELIVERY']"></select>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-class="{'required': vm.obj.costAccount === 'DELIVERY'}">
                                 <label class="col-md-3 control-label" for="projectCode">Project Code For Sales</label>
                                 <div class="col-md-9">
                                     <input id="projectCode" name="projectCode" type="text" min="0" max="70"
                                         placeholder="Project Name" class="form-control" ng-model="vm.obj.projectCode"
-                                        ng-required="true">
+                                        ng-required="vm.obj.costAccount === 'DELIVERY'">
                                 </div>
                             </div>
                             <div class="form-group required">
@@ -103,13 +110,7 @@
                                         ng-options="option as option for option in vm.projectBusinessUnits"></select>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label" for="costAccount">Cost Account</label>
-                                <div class="col-md-9">
-                                    <select class="form-control" id="costAccount" ng-model="vm.obj.costAccount"
-                                        ng-options="item as item for item in ['', 'S&M', 'G&A', 'DELIVERY']"></select>
-                                </div>
-                            </div>
+                           
                             <div class="form-group">
                                 <label class="col-md-3 control-label" for="projectName">Estimated Hours</label>
                                 <div class="col-md-9">

@@ -6,51 +6,62 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Projects</h3>
-                <div class="clearfix row">
-                    <div class="col-sm-6">
-                        <a class="btn btn-primary" ui-sref="addProject" ng-if="vm.user.admin">Add Project</a>
+                        <a class="btn btn-primary pull-right" ui-sref="addProject" ng-if="vm.user.admin">Add Project</a>
+                <div class="dropdown pull-right">
+                    <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
+                        Columns<b class="caret"></b>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-form" role="menu" ng-click="vm.stopPropagation($event)">
+                        <div class="dropdown-item" ng-repeat="column in vm.projectColumns">
+                            <label class="checkbox">
+                                <input type="checkbox" ng-model="column.selected" /> {{column.label}}
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="panel-body panel-body-table">
+            <div class="panel-body">
                 <table class="table table-condensed table-bordered table-striped" export-table>
                     <tr>
                         <th>S.No</th>
-                        <th>Customer Name</th>
-                        <th>Project Name</th>
-                        <th>Project Bill Type</th>
-                        <th>Project Type</th>
-                        <th>Business Unit</th>
-                        <th>Owner</th>
-                        <th>Status</th>
-                        <th>Start Date</th>
+                        <th ng-show="vm.projectColumns['clientName'].selected">Customer Name</th>
+                        <th ng-show="vm.projectColumns['projectName'].selected">Project Name</th>
+                        <th ng-show="vm.projectColumns['projectBillType'].selected">Project Bill Type</th>
+                        <th ng-show="vm.projectColumns['projectType'].selected">Project Type</th>
+                        <th ng-show="vm.projectColumns['businessUnit'].selected">Business Unit</th>
+                        <th ng-show="vm.projectColumns['ownerName'].selected">Owner</th>
+                        <th ng-show="vm.projectColumns['Status'].selected">Status</th>
+                        <th ng-show="vm.projectColumns['costAccount'].selected">Cost Account</th>
+                        <th ng-show="vm.projectColumns['startDate'].selected">Start Date</th>
                         <th ng-if="vm.user.admin">Action</th>
                     </tr>
                     <tr>
                         <th></th>
-                        <th><select class="form-control" ng-model="vm.search.clientId" ng-options="client._id as client.clientName for client in vm.clients"></select></th>
-                        <th><input type="text" class="form-control" ng-model="vm.search.projectName" /></th>
-                        <th><select class="form-control" ng-model="vm.search.projectBillType" ng-options="prj.projectBillId as prj.projectBillName for prj in vm.projectBillTypes"></select></th>
-                        <th><select class="form-control" ng-model="vm.search.projectType" ng-options="prj.projectTypeId as prj.projectTypeName for prj in vm.projectTypes"></select></th>
-                        <th><select class="form-control" ng-model="vm.search.businessUnit" ng-options="option as option for option in vm.projectBusinessUnits" ng-change="vm.search.projectId=''; vm.search.clientId=''; vm.getConsolidatedProjects();"></select></th>
-                        <th><input type="text" class="form-control" ng-model="vm.search.ownerName" /></th>
-                        <th><select class="form-control" ng-model="vm.search.isActive" ng-options="opt.id as opt.label for opt in [{id:null , label:'All'}, {id: true, label:'Active'}, {id: false, label:'Inactive'}]"></select></th>
-                        <th></th>
+                        <th ng-show="vm.projectColumns['clientName'].selected"><select class="form-control" ng-model="vm.search.clientId" ng-options="client._id as client.clientName for client in vm.clients"></select></th>
+                        <th ng-show="vm.projectColumns['projectName'].selected"><input type="text" class="form-control" ng-model="vm.search.projectName" /></th>
+                        <th ng-show="vm.projectColumns['projectBillType'].selected"><select class="form-control" ng-model="vm.search.projectBillType" ng-options="prj.projectBillId as prj.projectBillName for prj in vm.projectBillTypes"></select></th>
+                        <th ng-show="vm.projectColumns['projectType'].selected"><select class="form-control" ng-model="vm.search.projectType" ng-options="prj.projectTypeId as prj.projectTypeName for prj in vm.projectTypes"></select></th>
+                        <th ng-show="vm.projectColumns['businessUnit'].selected"><select class="form-control" ng-model="vm.search.businessUnit" ng-options="option as option for option in vm.projectBusinessUnits" ng-change="vm.search.projectId=''; vm.search.clientId=''; vm.getConsolidatedProjects();"></select></th>
+                        <th ng-show="vm.projectColumns['ownerName'].selected"><input type="text" class="form-control" ng-model="vm.search.ownerName" /></th>
+                        <th ng-show="vm.projectColumns['Status'].selected"><select class="form-control" ng-model="vm.search.isActive" ng-options="opt.id as opt.label for opt in [{id:null , label:'All'}, {id: true, label:'Active'}, {id: false, label:'Inactive'}]"></select></th>
+                        <th ng-show="vm.projectColumns['costAccount'].selected"><select class="form-control" ng-model="vm.search.costAccount"  ng-options="option as option for option in ['', 'S&M', 'G&A', 'DELIVERY']"></select></th>
+                        <th ng-show="vm.projectColumns['startDate'].selected"></th>
                         <th ng-if="vm.user.admin"></th>
                     </tr>
                     <tr ng-repeat="project in vm.projects | searchProject:vm.search | orderBy:'name'">
                         <td>{{$index+1}}</td>
-                        <td>{{project.clientName}}</td>
-                        <td>{{project.projectName}}</td>
-                        <td>{{project.projectBillType}}</td>
-                        <td>{{project.projectType}}</td>
-                        <td>{{project.businessUnit}}</td>
-                        <td>{{project.ownerName}}</td>
-                        <td>
+                        <td ng-show="vm.projectColumns['clientName'].selected">{{project.clientName}}</td>
+                        <td ng-show="vm.projectColumns['projectName'].selected">{{project.projectName}}</td>
+                        <td ng-show="vm.projectColumns['projectBillType'].selected">{{project.projectBillType}}</td>
+                        <td ng-show="vm.projectColumns['projectType'].selected">{{project.projectType}}</td>
+                        <td ng-show="vm.projectColumns['businessUnit'].selected">{{project.businessUnit}}</td>
+                        <td ng-show="vm.projectColumns['ownerName'].selected">{{project.ownerName}}</td>
+                        <td ng-show="vm.projectColumns['Status'].selected">
                             <span ng-if="project.isActive==true">Active</span>
                             <span ng-if="project.isActive==false">Inactive</span>
                         </td>
-                        <td>{{project.startDate | date: 'mediumDate'}}</td>
+                        <td ng-show="vm.projectColumns['costAccount'].selected">{{project.costAccount}}</td>
+                        <td ng-show="vm.projectColumns['startDate'].selected">{{project.startDate | date: 'mediumDate'}}</td>
                         <td ng-if="vm.user.admin">
                             <a class="btn btn-primary btn-xs" ng-click="vm.viewProject(project);">View</i></a>
                             <a class="btn btn-primary btn-xs" ui-sref="editProject({id: project._id})">Edit</a>

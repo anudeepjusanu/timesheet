@@ -39,6 +39,8 @@
         function getProjects() {
             ProjectService.getAll().then(function (response) {
                 vm.projects = response;
+                console.log("vm.projects", vm.projects);
+ 
             }, function (error) {
                 console.log(error);
             });
@@ -49,13 +51,35 @@
             projectBillType: "",
             projectType: "",
             businessUnit: "All",
+            costAccount:"",
             isActive: true
         };
+        vm.projectColumns = {
+            "clientName": { label: "Customer Name", selected: true },
+            "projectName": { label: "Project Name", selected: true },
+            "projectBillType": { label: "Project Bill Type", selected: false },
+            "projectType": { label: "Project Type", selected: false },
+
+            "businessUnit": { label: "Business Unit", selected: false },
+            "ownerName": { label: "Owner", selected: true },
+            "Status": { label: "Status", selected: false },
+            "costAccount": { label: "Cost Account", selected: true },
+            "startDate": { label: "Start Date", selected: false },
+
+
+        }
+
+        vm.stopPropagation = function (e) {
+            e.stopPropagation();
+        }
+
 
         function getClients() {
             ProjectService.getClients().then(function (response) {
                 vm.clients = response;
                 vm.clients.unshift({ _id: "", "clientName": "All" });
+                console.log("vm.clients",vm.clients);
+
             }, function (error) {
                 console.log(error);
             });
@@ -131,6 +155,9 @@
             if (searchObj.isActive === true || searchObj.isActive === false) {
                 output = $filter('filter')(output, { isActive: searchObj.isActive });
             }
+            if (searchObj.costAccount && searchObj.costAccount.length > 0) {
+                output = $filter('filter')(output, { costAccount: searchObj.costAccount });
+            }
             return output;
         }
     }
@@ -157,7 +184,8 @@
         };
         vm.obj = {
             visibility: 'Private',
-            isActive: true
+            isActive: true,
+            billingCycle:'M'
         };
         vm.isNew = true;
         vm.projectTypes = [
