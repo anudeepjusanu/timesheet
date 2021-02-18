@@ -56,6 +56,7 @@
     .filter("InvestmentsSearch", function ($filter) {
       return function (input, searchObj) {
         var output = input;
+        console.log("output", output);
         if (
           searchObj.status &&
           searchObj.status.length > 0 &&
@@ -65,6 +66,15 @@
             return item.status == searchObj.status;
           });
         }
+        if (searchObj.query && searchObj.query.length > 0) {
+          console.log("searchObj.query", searchObj.query);
+          output = $filter("filter")(output, function (item) {
+            return (
+              item.employeeId.toUpperCase() == searchObj.query.toUpperCase()
+            );
+          });
+        }
+
         return output;
       };
     });
@@ -78,7 +88,7 @@
         localStorage.setItem("print", "false");
         localStorage.removeItem("taxSavingId");
         vm.user = user;
-        //  vm.user.userRole = "finance";
+         //vm.user.userRole = "finance";
       });
     }
 
@@ -289,51 +299,41 @@
       );
     };
 
-vm.submitNowConfirm = function (submit) {
-  if (submit) {
-
-    if (
-      confirm(
-      "You can not modify after submit, Are you sure you want to submit?"
-      )
-      ) {
-      
-        vm.sbmitNowInvestmentDeclaration(submit)
-
-      } else {
-      // Do nothing!
-      console.log("Thing was not saved to the database.");
+    vm.submitNowConfirm = function (submit) {
+      if (submit) {
+        if (
+          confirm(
+            "You can not modify after submit, Are you sure you want to submit?"
+          )
+        ) {
+          vm.sbmitNowInvestmentDeclaration(submit);
+        } else {
+          // Do nothing!
+          console.log("Thing was not saved to the database.");
+        }
       }
-      
-
-  }
-
-}
-
-
+    };
 
     vm.sbmitNowInvestmentDeclaration = function (submit) {
-      
-        // Save it!
-        if (vm.errMsg === "" && vm.investmentDeclaration.panCard) {
-          var formData = new FormData();
+      // Save it!
+      if (vm.errMsg === "" && vm.investmentDeclaration.panCard) {
+        var formData = new FormData();
 
-          for (let [key, value] of Object.entries(vm.investmentDeclaration)) {
-            formData.append(key, value);
-          }
-          formData.append("userId", vm.user._id);
-          if (submit) {
-            formData.append("status", "Submitted");
-          }
-          //  formData.append('file',vm.receipts[0]._file)
-
-          let data = Object.fromEntries(formData);
-
-          updateTaxSaving(data, submit);
-        } else {
-          noty.showError("Please enter all mandatory fields");
+        for (let [key, value] of Object.entries(vm.investmentDeclaration)) {
+          formData.append(key, value);
         }
-     
+        formData.append("userId", vm.user._id);
+        if (submit) {
+          formData.append("status", "Submitted");
+        }
+        //  formData.append('file',vm.receipts[0]._file)
+
+        let data = Object.fromEntries(formData);
+
+        updateTaxSaving(data, submit);
+      } else {
+        noty.showError("Please enter all mandatory fields");
+      }
     };
 
     function updateTaxSaving(data, submit) {
@@ -534,6 +534,7 @@ vm.submitNowConfirm = function (submit) {
     vm.alerts = [];
     vm.searchObj = {
       status: "All",
+      query: "",
     };
     vm.Investments = [];
     vm.investmentStatus = [
@@ -543,6 +544,9 @@ vm.submitNowConfirm = function (submit) {
       "Partially Approved",
       "Rejected",
     ];
+    vm.query = {};
+    vm.queryBy = "Name";
+    vm.searchByNameId = ["Name", "Id"];
 
     vm.openInvestmentModal = function (investmentObj) {
       var modalInstance = $uibModal
