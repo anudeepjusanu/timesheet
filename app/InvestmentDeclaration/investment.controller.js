@@ -68,10 +68,8 @@
         }
         if (searchObj.query && searchObj.query.length > 0) {
           console.log("searchObj.query", searchObj.query);
-          output = $filter("filter")(output, function (item) {
-            return (
-              item.employeeId.toUpperCase() == searchObj.query.toUpperCase()
-            );
+          output = $filter("filter")(output, {
+            employee_name: searchObj.query,
           });
         }
 
@@ -88,7 +86,7 @@
         localStorage.setItem("print", "false");
         localStorage.removeItem("taxSavingId");
         vm.user = user;
-         //vm.user.userRole = "finance";
+        //vm.user.userRole = "finance";
       });
     }
 
