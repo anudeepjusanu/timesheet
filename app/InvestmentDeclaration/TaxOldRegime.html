@@ -1,38 +1,35 @@
 <style>
   input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 
-/* Firefox */
-input[type=number] {
-  -moz-appearance: textfield;
-}
-
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
 </style>
 <div ng-if="vm.investmentDeclaration.status" class="contentView">
-  <span class="errorMessage"><b>{{vm.investmentDeclaration.status}}!!</b> &nbsp; {{vm.investmentDeclaration.comment}}</span>
+  <span class="errorMessage"><b>{{vm.investmentDeclaration.status}}!!</b> &nbsp;
+    {{vm.investmentDeclaration.comment}}</span>
 </div>
 
 <div class="content-wrapper">
   <div class="panel panel-default">
     <div class="panel-body">
-      <div  class="row">
+      <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4"></div>
         <button
-        ng-if = "(vm.investmentDeclaration.status === 'Submitted' || vm.investmentDeclaration.status==='Approved' || vm.investmentDeclaration.status==='Rejected' || vm.investmentDeclaration.status === 'Partially Approved') && vm.print"
-          class="btn btn-primary col-md-2"
-          type="button"
-          ng-click="vm.printToPdf('printSectionId');"
-        >
+          ng-if="(vm.investmentDeclaration.status === 'Submitted' || vm.investmentDeclaration.status==='Approved' || vm.investmentDeclaration.status==='Rejected' || vm.investmentDeclaration.status === 'Partially Approved') && vm.print"
+          class="btn btn-primary col-md-2" type="button" ng-click="vm.printToPdf('printSectionId');">
           Print
         </button>
       </div>
 
 
-      <form  id="printSectionId" class="form-horizontal" name="investmentDeclaration">
+      <form id="printSectionId" class="form-horizontal" name="investmentDeclaration">
         <table cellspacing="0" class="tableBorder">
           <colgroup width="73"></colgroup>
           <colgroup span="9" width="68"></colgroup>
@@ -42,21 +39,14 @@ input[type=number] {
           <colgroup width="71"></colgroup>
           <tr>
             <td colspan="12" height="20" class="textCenter">
-              <b
-                ><span class="fontColor"
-                  >DECLARATION / INVESTMENT PROPOSAL FOR THE FINANCIAL YEAR
-                  2020-2021</span
-                ></b
-              >
+              <b><span class="fontColor">DECLARATION / INVESTMENT PROPOSAL FOR THE FINANCIAL YEAR
+                  2021-2022</span></b>
             </td>
           </tr>
           <tr>
             <td colspan="12" height="20" class="textCenter">
-              <b
-                ><span class="fontColor">
-                  (For Income Tax Deduction at Source purpose)</span
-                ></b
-              >
+              <b><span class="fontColor">
+                  (For Income Tax Deduction at Source purpose)</span></b>
             </td>
           </tr>
           <tr>
@@ -64,38 +54,26 @@ input[type=number] {
               <span class="fontColor">Name</span><span class="dangerText">*</span>
             </td>
             <td class="cell inputBackground" colspan="6" class="textLeft">
-              <input
-                type="text"
-                ng-model="vm.investmentDeclaration.employee_name"
-                readonly="readonly"
-                class="form-control"
-                style="
+              <input type="text" ng-model="vm.investmentDeclaration.employee_name" readonly="readonly"
+                class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.employee_name}}
-              />
+                " value={{vm.investmentDeclaration.employee_name}} />
             </td>
             <td class="textLeft"><span class="fontColor"> &nbsp;PAN</span><span class="dangerText">*</span></td>
             <td class="textLeft">
               <span class="fontColor"><br /></span>
             </td>
             <td class="cell textCenter inputBackground" colspan="2">
-              <input
-                type="text"
-                ng-change="validatePanCard()"
-                ng-model="vm.investmentDeclaration.panCard"
-                class="form-control"
-                style="
+              <input type="text" ng-change="validatePanCard()" ng-model="vm.investmentDeclaration.panCard"
+                class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.panCard}}
-              />
+                " value={{vm.investmentDeclaration.panCard}} />
             </td>
             <td colspan="3" class="textLeft "><span class=" errorMessage">{{vm.errMsg}} </span></td>
 
@@ -105,19 +83,13 @@ input[type=number] {
               <span class="fontColor">Designation</span><span class="dangerText">*</span>
             </td>
             <td class="cell inputBackground" colspan="6" class="textLeft">
-              <input
-                type="text"
-                readonly="readonly"
-                ng-model="vm.investmentDeclaration.designation"
-                class="form-control"
-                style="
+              <input type="text" readonly="readonly" ng-model="vm.investmentDeclaration.designation"
+                class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.designation}}
-              />
+                " value={{vm.investmentDeclaration.designation}} />
             </td>
             <td class="textLeft">
               <span class="fontColor"> &nbsp;Date of &nbsp;Joining</span><span class="dangerText">*</span>
@@ -125,24 +97,14 @@ input[type=number] {
             <td class="textLeft">
               <span class="fontColor"><br /></span>
             </td>
-            <td
-              class="cell textCenter inputBackground"
-              colspan="2"
-              sdnum="1033;1033;[$-409]DD-MMM-YY;@"
-            >
-              <input
-                type="text"
-                readonly="readonly"
-                ng-model="vm.investmentDeclaration.dateOfJoin"
-                class="form-control"
+            <td class="cell textCenter inputBackground" colspan="2" sdnum="1033;1033;[$-409]DD-MMM-YY;@">
+              <input type="text" readonly="readonly" ng-model="vm.investmentDeclaration.dateOfJoin" class="form-control"
                 style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.dateOfJoin}}
-              />
+                " value={{vm.investmentDeclaration.dateOfJoin}} />
             </td>
             <td class="textLeft">
               <span class="fontColor"><br /></span>
@@ -161,118 +123,67 @@ input[type=number] {
             <td class="cell" colspan="2" height="21" class="textLeft">
               <span class="fontColor">Employee ID</span><span class="dangerText">*</span>
             </td>
-            <td
-              class="inputSmRightLeft inputBackground"
-              colspan="6"
-              class="textLeft"
-            >
-              <input
-                type="text"
-                readonly="readonly"
-                ng-model="vm.investmentDeclaration.employeeId"
-                class="form-control"
+            <td class="inputSmRightLeft inputBackground" colspan="6" class="textLeft">
+              <input type="text" readonly="readonly" ng-model="vm.investmentDeclaration.employeeId" class="form-control"
                 style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.employeeId}}
-              />
+                " value={{vm.investmentDeclaration.employeeId}} />
             </td>
           </tr>
           <tr>
-            <td
-              class="cell textLeft"
-              colspan="2"
-              rowspan="2"
-              height="42"
-              valign="middle"
-            >
-              <b
-                ><span class="fontColor"
-                  >Choose scheme of Income tax regime</span
-                ></b
-              >
+            <td class="cell textLeft" colspan="2" rowspan="2" height="42" valign="middle">
+              <b><span class="fontColor">Choose scheme of Income tax regime</span></b>
             </td>
             <td class="cell textLeft inputIndicationBackground" colspan="8">
-              <span class="fontColor"
-                >New Slabs for FY 2020-21, AY 2021-22</span
-              >
+              <span class="fontColor">New Slabs for FY 2020-21, AY 2021-22</span>
             </td>
             <td class="inputStyle textLeft">
-              <input
-                type="text"
-                readonly="readonly"
-                ng-model="vm.schemeNew"
-                class="form-control"
-                style="
+              <input type="text" readonly="readonly" ng-model="vm.schemeNew" class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.schemeType}}
-              />
+                " value={{vm.investmentDeclaration.schemeType}} />
             </td>
           </tr>
           <tr>
             <td class="cell textLeft inputIndicationBackground" colspan="8">
-              <span class="fontColor"
-                >Old Slabs, mandatory upto FY 2019-20 and optional from
-                FY2020-21</span
-              >
+              <span class="fontColor">Old Slabs, mandatory upto FY 2019-20 and optional from
+                FY2020-21</span>
             </td>
             <td class="inputStyle textLeft">
-              <input
-                type="text"
-                readonly="readonly"
-                ng-model="vm.investmentDeclaration.schemeType"
-                class="form-control"
+              <input type="text" readonly="readonly" ng-model="vm.investmentDeclaration.schemeType" class="form-control"
                 style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.schemeType}}
-              />
+                " value={{vm.investmentDeclaration.schemeType}} />
             </td>
           </tr>
           <tr>
             <td height="20" class="textLeft" colspan="10">
-              <b
-                ><span class="fontColor"
-                  >As per the provisions of section 139A (5A) of the Income-Tax
+              <b><span class="fontColor">As per the provisions of section 139A (5A) of the Income-Tax
                   Act
-                </span></b
-              >
+                </span></b>
             </td>
           </tr>
           <tr>
             <td height="20" class="textLeft" colspan="10">
-              <b
-                ><span class="fontColor"
-                  >it is mandatory for you to intimate your correct PAN to the
-                  Company</span
-                ></b
-              >
+              <b><span class="fontColor">it is mandatory for you to intimate your correct PAN to the
+                  Company</span></b>
             </td>
           </tr>
           <tr>
-            <td
-              class="cell textCenter darkBackground"
-              height="20"
-              valign="middle"
-            >
+            <td class="cell textCenter darkBackground" height="20" valign="middle">
               <b><span class="fontColor">A.</span></b>
             </td>
             <td class="cell textLeft darkBackground" colspan="10" valign="top">
-              <b
-                ><span class="fontColor"
-                  >PARTICULARS OF INVESTMENT U/S. 80 C (Maximum of Rs.1, 50,000)
-                </span></b
-              >
+              <b><span class="fontColor">PARTICULARS OF INVESTMENT U/S. 80 C (Maximum of Rs.1, 50,000)
+                </span></b>
             </td>
             <td class="cell textCenter darkBackground" valign="middle">
               <b><span class="fontColor">Amount in Rs.</span></b>
@@ -282,32 +193,14 @@ input[type=number] {
             </td>
           </tr>
           <tr>
-            <td
-              class="cell textCenter darkBackground"
-              height="20"
-              valign="middle"
-            >
-              <b
-                ><span class="fontColor"><br /></span
-              ></b>
+            <td class="cell textCenter darkBackground" height="20" valign="middle">
+              <b><span class="fontColor"><br /></span></b>
             </td>
-            <td
-              class="cell textCenter darkBackground"
-              colspan="10"
-              valign="middle"
-            >
-              <u
-                ><span color="#0000FF"
-                  ><a href="#Investment List.OLE_LINK3"
-                    >Qualifying investments list</a
-                  ></span
-                ></u
-              >
+            <td class="cell textCenter darkBackground" colspan="10" valign="middle">
+              <u><span color="#0000FF"><a href="#Investment List.OLE_LINK3">Qualifying investments list</a></span></u>
             </td>
             <td class="cell textCenter darkBackground" valign="middle">
-              <b
-                ><span class="fontColor"><br /></span
-              ></b>
+              <b><span class="fontColor"><br /></span></b>
             </td>
           </tr>
           <tr>
@@ -315,26 +208,17 @@ input[type=number] {
               <span class="fontColor">1</span>
             </td>
             <td class="cell textLeft" colspan="10" valign="top">
-              <span class="fontColor"
-                >Life Insurance premium ( Self / Spouse / Children &ndash;
-                Direct )&nbsp;</span
-              >
+              <span class="fontColor">Life Insurance premium ( Self / Spouse / Children &ndash;
+                Direct )&nbsp;</span>
             </td>
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                ng-change="change()"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secArow1"
-                class="form-control"
-                style="
+              <input type="number" ng-change="change()" id="input" ng-model="vm.investmentDeclaration.secArow1"
+                class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.secArow1}}
-              />
+                " value={{vm.investmentDeclaration.secArow1}} />
             </td>
           </tr>
           <tr>
@@ -342,27 +226,18 @@ input[type=number] {
               <span class="fontColor">2</span>
             </td>
             <td class="cell textLeft" colspan="10" valign="top">
-              <span class="fontColor"
-                >Deposit in Public Provident Fund (Self / Spouse / Children) -
+              <span class="fontColor">Deposit in Public Provident Fund (Self / Spouse / Children) -
                 <b>PPF&nbsp;</b>
               </span>
             </td>
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                id = "input"
-                ng-change="change()"
-                ng-model="vm.investmentDeclaration.secArow2"
-                class="form-control"
-                style="
+              <input type="number" id="input" ng-change="change()" ng-model="vm.investmentDeclaration.secArow2"
+                class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.secArow2}}
-
-              />
+                " value={{vm.investmentDeclaration.secArow2}} />
             </td>
           </tr>
           <tr>
@@ -370,26 +245,17 @@ input[type=number] {
               <span class="fontColor">3</span>
             </td>
             <td class="cell textLeft" colspan="10" valign="top">
-              <span class="fontColor"
-                >Contribution to Unit Linked Insurance Plan of LIC / UTI (Self /
-                Spouse / Children) <b>ULIP&nbsp;</b></span
-              >
+              <span class="fontColor">Contribution to Unit Linked Insurance Plan of LIC / UTI (Self /
+                Spouse / Children) <b>ULIP&nbsp;</b></span>
             </td>
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                ng-change="change()"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secArow3"
-                class="form-control"
-                style="
+              <input type="number" ng-change="change()" id="input" ng-model="vm.investmentDeclaration.secArow3"
+                class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                  "
-                  value={{vm.investmentDeclaration.secArow3}}
-              />
+                  " value={{vm.investmentDeclaration.secArow3}} />
             </td>
           </tr>
           <tr>
@@ -397,26 +263,17 @@ input[type=number] {
               <span class="fontColor">4</span>
             </td>
             <td class="cell textLeft" colspan="10" valign="top">
-              <span class="fontColor"
-                >Subscription to <b>&quot;Home Loan Account Scheme'</b> of
-                National Housing Bank&nbsp;</span
-              >
+              <span class="fontColor">Subscription to <b>&quot;Home Loan Account Scheme'</b> of
+                National Housing Bank&nbsp;</span>
             </td>
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                ng-model="vm.investmentDeclaration.secArow4"
-                id = "input"
-                ng-change="change()"
-                class="form-control"
-                style="
+              <input type="number" ng-model="vm.investmentDeclaration.secArow4" id="input" ng-change="change()"
+                class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.secArow4}}
-              />
+                " value={{vm.investmentDeclaration.secArow4}} />
             </td>
           </tr>
           <tr>
@@ -424,26 +281,17 @@ input[type=number] {
               <span class="fontColor">5</span>
             </td>
             <td class="cell textLeft" colspan="10" valign="top">
-              <span class="fontColor"
-                >Investment in notified Equity Linked Saving Schemes
-                ELSS&nbsp;</span
-              >
+              <span class="fontColor">Investment in notified Equity Linked Saving Schemes
+                ELSS&nbsp;</span>
             </td>
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secArow5"
-                ng-change="change()"
-                class="form-control"
-                style="
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secArow5" ng-change="change()"
+                class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.secArow5}}
-              />
+                " value={{vm.investmentDeclaration.secArow5}} />
             </td>
           </tr>
           <tr>
@@ -451,26 +299,17 @@ input[type=number] {
               <span class="fontColor">6</span>
             </td>
             <td class="cell textLeft" colspan="10" valign="top">
-              <span class="fontColor"
-                >N S C purchase during <b>01.04.20&ndash; 31.03.21&nbsp;</b>(for
-                Self only)</span
-              >
+              <span class="fontColor">N S C purchase during <b>01.04.20&ndash; 31.03.21&nbsp;</b>(for
+                Self only)</span>
             </td>
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secArow6"
-                ng-change="change()"
-                class="form-control"
-                style="
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secArow6" ng-change="change()"
+                class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.secArow6}}
-              />
+                " value={{vm.investmentDeclaration.secArow6}} />
             </td>
           </tr>
           <tr>
@@ -478,35 +317,22 @@ input[type=number] {
               <span class="fontColor">7</span>
             </td>
             <td class="cell textLeft" colspan="10" valign="top">
-              <span class="fontColor"
-                >Repayment of <b>Housing Loan Principal</b>: Amount payable
-                (April '20 to March '21)*</span
-              >
+              <span class="fontColor">Repayment of <b>Housing Loan Principal</b>: Amount payable
+                (April '20 to March '21)*</span>
             </td>
             <td class="cell textLeft inputBackground" sdnum="1033;0;#,##0">
-              <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secArow7"
-                ng-change="change()"
-                class="form-control"
-                style="
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secArow7" ng-change="change()"
+                class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.secArow7}}
-              />
+                " value={{vm.investmentDeclaration.secArow7}} />
             </td>
             <td class="textLeft warningBackground">
               <span class="fontColor">*Max Rs.</span>
             </td>
-            <td
-              class="textRight warningBackground"
-              sdval="150000"
-              sdnum="1033;"
-            >
+            <td class="textRight warningBackground" sdval="150000" sdnum="1033;">
               <span class="fontColor">150000</span>
             </td>
           </tr>
@@ -515,25 +341,16 @@ input[type=number] {
               <span class="fontColor">8</span>
             </td>
             <td class="cell textLeft" colspan="10" valign="top">
-              <span class="fontColor"
-                >Contribution to Pension scheme (For Self Only) &nbsp;</span
-              >
+              <span class="fontColor">Contribution to Pension scheme (For Self Only) &nbsp;</span>
             </td>
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secArow8"
-                ng-change="change()"
-                class="form-control"
-                style="
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secArow8" ng-change="change()"
+                class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.secArow8}}
-              />
+                " value={{vm.investmentDeclaration.secArow8}} />
             </td>
           </tr>
           <tr>
@@ -541,26 +358,17 @@ input[type=number] {
               <span class="fontColor">9</span>
             </td>
             <td class="cell textLeft" colspan="10" valign="top">
-              <span class="fontColor"
-                >Contribution to Retirement Benefit Unit Scheme of
-                UTI&nbsp;</span
-              >
+              <span class="fontColor">Contribution to Retirement Benefit Unit Scheme of
+                UTI&nbsp;</span>
             </td>
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secArow9"
-                ng-change="change()"
-                class="form-control"
-                style="
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secArow9" ng-change="change()"
+                class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.secArow9}}
-              />
+                " value={{vm.investmentDeclaration.secArow9}} />
             </td>
           </tr>
           <tr>
@@ -568,58 +376,34 @@ input[type=number] {
               <span class="fontColor">10</span>
             </td>
             <td class="cell textLeft" colspan="10" valign="top">
-              <span class="fontColor"
-                >Children Education for two children (Tuition Fees
-                only)&nbsp;</span
-              >
+              <span class="fontColor">Children Education for two children (Tuition Fees
+                only)&nbsp;</span>
             </td>
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secArow10"
-                ng-change="change()"
-                class="form-control"
-                style="
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secArow10" ng-change="change()"
+                class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.secArow10}}
-              />
+                " value={{vm.investmentDeclaration.secArow10}} />
             </td>
           </tr>
           <tr>
-            <td
-              class="cell textCenter"
-              rowspan="2"
-              height="40"
-              valign="middle"
-              sdval="11"
-              sdnum="1033;"
-            >
+            <td class="cell textCenter" rowspan="2" height="40" valign="middle" sdval="11" sdnum="1033;">
               <span class="fontColor">11</span>
             </td>
             <td class="inputSmLeft textLeft" colspan="6">
-              <span class="fontColor"
-                >No. of school going children. a) Day Scholars in Nos
+              <span class="fontColor">No. of school going children. a) Day Scholars in Nos
               </span>
             </td>
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secArow11a"
-                class="form-control"
-                style="
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secArow11a" class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.secArow11a}}
-              />
+                " value={{vm.investmentDeclaration.secArow11a}} />
             </td>
             <td class="cellTopStyle textLeft">
               <span class="fontColor"><br /></span>
@@ -652,19 +436,12 @@ input[type=number] {
               <span class="fontColor"> b) Hostel in Nos</span>
             </td>
             <td class="cell textLeft inputBackground" sdval="0" sdnum="1033;">
-              <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secArow11b"
-                class="form-control"
-                style="
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secArow11b" class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                 value={{vm.investmentDeclaration.secArow11b}}
-              />
+                " value={{vm.investmentDeclaration.secArow11b}} />
             </td>
             <td class="cellBottomStyle textLeft">
               <span class="fontColor"><br /></span>
@@ -676,20 +453,13 @@ input[type=number] {
               <span class="fontColor"><br /></span>
             </td>
             <td class="cellBtmLeftRht textLeft inputBackground" valign="top">
-              <input
-                type="number"
-                ng-model="vm.investmentDeclaration.secArow11"
-                ng-change="change()"
-                id = "input"
-                class="form-control"
-                style="
+              <input type="number" ng-model="vm.investmentDeclaration.secArow11" ng-change="change()" id="input"
+                class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                 value={{vm.investmentDeclaration.secArow11}}
-              />
+                " value={{vm.investmentDeclaration.secArow11}} />
             </td>
           </tr>
           <tr>
@@ -697,26 +467,17 @@ input[type=number] {
               <span class="fontColor">12</span>
             </td>
             <td class="cell textLeft" colspan="10" valign="top">
-              <span class="fontColor"
-                >Other (please specify)(Tax saver Mutual Funds with Three years
-                Lock-in period)</span
-              >
+              <span class="fontColor">Other (please specify)(Tax saver Mutual Funds with Three years
+                Lock-in period)</span>
             </td>
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                ng-model="vm.investmentDeclaration.secArow12"
-                ng-change="change()"
-                id = "input"
-                class="form-control"
-                style="
+              <input type="number" ng-model="vm.investmentDeclaration.secArow12" ng-change="change()" id="input"
+                class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.secArow12}}
-              />
+                " value={{vm.investmentDeclaration.secArow12}} />
             </td>
           </tr>
           <tr>
@@ -727,20 +488,13 @@ input[type=number] {
               <span class="fontColor">Employees Contribution to PF</span>
             </td>
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                ng-model="vm.investmentDeclaration.secArow13"
-                ng-change="change()"
-                id = "input"
-                class="form-control"
-                style="
+              <input type="number" ng-model="vm.investmentDeclaration.secArow13" ng-change="change()" id="input"
+                class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                 value={{vm.investmentDeclaration.secArow13}}
-              />
+                " value={{vm.investmentDeclaration.secArow13}} />
             </td>
             <td class="textLeft" colspan="4">
               <span class="dangerText">Standard contribution of Rs. 1800</span>
@@ -751,25 +505,16 @@ input[type=number] {
               <span class="fontColor">14</span>
             </td>
             <td class="cellTopBtmLeft textLeft" colspan="10" valign="top">
-              <span class="fontColor"
-                >Employees Voluntary Contribution to PF</span
-              >
+              <span class="fontColor">Employees Voluntary Contribution to PF</span>
             </td>
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                ng-model="vm.investmentDeclaration.secArow14"
-                ng-change="change()"
-                id = "input"
-                class="form-control"
-                style="
+              <input type="number" ng-model="vm.investmentDeclaration.secArow14" ng-change="change()" id="input"
+                class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                 value={{vm.investmentDeclaration.secArow14}}
-              />
+                " value={{vm.investmentDeclaration.secArow14}} />
             </td>
           </tr>
           <tr>
@@ -780,23 +525,14 @@ input[type=number] {
               <b><span class="fontColor">Sub Total Under Section 80C*</span></b>
             </td>
             <td class="cell textRight" sdval="0" sdnum="1033;">
-              <b
-                ><span class="fontColor">
-                  <input
-                    type="number"
-                    readonly="readonly"
-                    ng-model="vm.investmentDeclaration.secArowSubTotal"
-                    class="form-control"
-                    id = "input"
-                    style="
+              <b><span class="fontColor">
+                  <input type="number" readonly="readonly" ng-model="vm.investmentDeclaration.secArowSubTotal"
+                    class="form-control" id="input" style="
                       background-color: transparent;
                       border: none;
                       color: black;
                       height: 20px;
-                    "
-                     value={{vm.investmentDeclaration.secArowSubTotal}}
-                  /> </span
-              ></b>
+                    " value={{vm.investmentDeclaration.secArowSubTotal}} /> </span></b>
             </td>
           </tr>
           <tr>
@@ -804,26 +540,17 @@ input[type=number] {
               <span class="fontColor">15</span>
             </td>
             <td class="cellTopBtmLeft textLeft" colspan="10" valign="top">
-              <span class="fontColor"
-                >Contribution to Rajiv Gandhi Equity Savings
-                <b>Scheme (Sec 80 CCG)</b></span
-              >
+              <span class="fontColor">Contribution to Rajiv Gandhi Equity Savings
+                <b>Scheme (Sec 80 CCG)</b></span>
             </td>
 
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secArow15"
-                class="form-control"
-                style="
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secArow15" class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.secArow15}}
-              />
+                " value={{vm.investmentDeclaration.secArow15}} />
             </td>
           </tr>
           <tr>
@@ -831,65 +558,40 @@ input[type=number] {
               <span class="fontColor">16</span>
             </td>
             <td class="cellTopBtmLeft textLeft" colspan="10" valign="top">
-              <span class="fontColor"
-                >NPS-2015 <br />The additional deduction of Rs. 50,000/- under
+              <span class="fontColor">NPS-2015 <br />The additional deduction of Rs. 50,000/- under
                 Section 80CCD(1B) is available to assess over and above the
-                benefit of Rs. 1.50</span
-              >
+                benefit of Rs. 1.50</span>
             </td>
 
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secArow16"
-                class="form-control"
-                style="
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secArow16" class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.secArow16}}
-              />
+                " value={{vm.investmentDeclaration.secArow16}} />
             </td>
           </tr>
 
-          
+
           <tr>
-            <td
-              class="cell textCenter darkBackground"
-              height="20"
-              valign="middle"
-            >
+            <td class="cell textCenter darkBackground" height="20" valign="middle">
               <b><span class="fontColor">B.</span></b>
             </td>
             <td class="inputSmLeft textLeft darkBackground" colspan="10">
-              <b
-                ><span class="fontColor"
-                  >PARTICULARS OF INVESTMENT / EXPENDITURE DEDUCTIBLE FROM GROSS
-                  TOTAL INCOME</span
-                ></b
-              >
+              <b><span class="fontColor">PARTICULARS OF INVESTMENT / EXPENDITURE DEDUCTIBLE FROM GROSS
+                  TOTAL INCOME</span></b>
             </td>
             <td class="textRight darkBackground">
               <span class="fontColor"> </span>
             </td>
           </tr>
           <tr>
-            <td
-              class="cellTopBtmLeft textCenter"
-              rowspan="3"
-              height="60"
-              valign="middle"
-              sdval="1"
-              sdnum="1033;"
-            >
+            <td class="cellTopBtmLeft textCenter" rowspan="3" height="60" valign="middle" sdval="1" sdnum="1033;">
               <span class="fontColor">1</span>
             </td>
             <td class="inputSmLeft textLeft" colspan="8">
-              <span class="fontColor"
-                >Medical Insurance Premium &ndash; ( MEDICLAIM PREMIUM) Up to
+              <span class="fontColor">Medical Insurance Premium &ndash; ( MEDICLAIM PREMIUM) Up to
                 Rs.25,000/-
               </span>
             </td>
@@ -899,949 +601,803 @@ input[type=number] {
             <td class="cell textLeft" rowspan="3" valign="middle">
               <b><span class="fontColor">(U/s.80D)</span></b>
             </td>
-            <td
-              class="cell textRight inputBackground"
-              rowspan="3"
-              valign="middle"
-            >
-              <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secBrow1"
-                class="form-control"
-                style="
+            <td class="cell textRight inputBackground" rowspan="3" valign="middle">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secBrow1" class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.secBrow1}}
-              />
+                " value={{vm.investmentDeclaration.secBrow1}} />
             </td>
           </tr>
           <tr>
-            <td
-              style="border-left: 1px solid #000000"
-              colspan="8"
-              class="textLeft"
-            >
-              <span class="fontColor"
-                >(Paid for Self / Spouse / Dependent parents &amp; Dependent
-                children)</span
-              >
+            <td style="border-left: 1px solid #000000" colspan="8" class="textLeft">
+              <span class="fontColor">(Paid for Self / Spouse / Dependent parents &amp; Dependent
+                children)</span>
             </td>
             <td style="border-right: 1px solid #000000" class="textLeft">
               <span class="fontColor"><br /></span>
             </td>
           </tr>
           <tr>
-            <td
-              style="border-left: 1px solid #000000"
-              colspan="8"
-              class="textLeft"
-            >
-              <span class="fontColor"
-                >Up to Rs.50,000 in case any member of the family is a Senior
-                Citizen</span
-              >
+            <td style="border-left: 1px solid #000000" colspan="8" class="textLeft">
+              <span class="fontColor">Up to Rs.50,000 in case any member of the family is a Senior
+                Citizen</span>
             </td>
             <td style="border-right: 1px solid #000000" class="textLeft">
               <span class="fontColor"><br /></span>
             </td>
           </tr>
           <tr>
-            <td
-              class="cellTopBtmLeft textCenter"
-              height="29"
-              valign="middle"
-              sdval="2"
-              sdnum="1033;"
-            >
+            <td class="cellTopBtmLeft textCenter" height="29" valign="middle" sdval="2" sdnum="1033;">
               <span class="fontColor">2</span>
             </td>
             <td class="cell textLeft" colspan="9" valign="middle">
-              <span class="fontColor"
-                >Repayment of <b>Interest on Loan</b> taken for Higher Education
-                from Govt Banks and Institutions</span
-              >
+              <span class="fontColor">Repayment of <b>Interest on Loan</b> taken for Higher Education
+                from Govt Banks and Institutions</span>
             </td>
             <td class="cellTopBtmRight textLeft" valign="middle">
               <b><span class="fontColor">(U/s.80E)</span></b>
             </td>
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secBrow2"
-                class="form-control"
-                style="
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secBrow2" class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.secBrow2}}
-              />
+                " value={{vm.investmentDeclaration.secBrow2}} />
             </td>
           </tr>
           <tr>
-            <td
-              class="cellTopBtmLeft textCenter"
-              height="32"
-              valign="middle"
-              sdval="3"
-              sdnum="1033;"
-            >
+            <td class="cellTopBtmLeft textCenter" height="32" valign="middle" sdval="3" sdnum="1033;">
               <span class="fontColor">3</span>
             </td>
             <td class="cell textCenter" colspan="9" valign="middle">
-              <span class="fontColor"
-                >Exemption for physically handicapped (self) Rs.50,000 or
-                Rs.75,000 in case of severe disability</span
-              >
+              <span class="fontColor">Exemption for physically handicapped (self) Rs.50,000 or
+                Rs.75,000 in case of severe disability</span>
             </td>
             <td class="cellTopBtmRight textLeft" valign="middle">
               <b><span class="fontColor">(U/s.80U)</span></b>
             </td>
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secBrow3"
-                class="form-control"
-                style="
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secBrow3" class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.secBrow3}}
-              />
+                " value={{vm.investmentDeclaration.secBrow3}} />
             </td>
           </tr>
           <tr>
-            <td
-              class="cellTopBtmLeft textCenter"
-              height="31"
-              valign="middle"
-              sdval="4"
-              sdnum="1033;"
-            >
+            <td class="cellTopBtmLeft textCenter" height="31" valign="middle" sdval="4" sdnum="1033;">
               <span class="fontColor">4</span>
             </td>
             <td class="cell textLeft" colspan="9" valign="middle">
-              <span class="fontColor"
-                >Interest on Deposits in Savings account</span
-              >
+              <span class="fontColor">Interest on Deposits in Savings account</span>
             </td>
             <td class="cellTopBtmRight textLeft" valign="middle">
               <b><span class="fontColor">(U/s 80TTA)</span></b>
             </td>
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secBrow4"
-                class="form-control"
-                style="
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secBrow4" class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.secBrow4}}
-              />
+                " value={{vm.investmentDeclaration.secBrow4}} />
             </td>
           </tr>
           <tr>
-            <td
-              class="cellTopBtmLeft textCenter"
-              height="32"
-              valign="middle"
-              sdval="5"
-              sdnum="1033;"
-            >
+            <td class="cellTopBtmLeft textCenter" height="32" valign="middle" sdval="5" sdnum="1033;">
               <span class="fontColor">5</span>
             </td>
             <td class="cell textLeft" colspan="9" valign="middle">
-              <span class="fontColor"
-                >interest on income from deposits for senior citizens up
-                50000/-</span
-              >
+              <span class="fontColor">interest on income from deposits for senior citizens up
+                50000/-</span>
             </td>
             <td class="cellTopBtmRight textLeft" valign="middle">
               <b><span class="fontColor">(U/s 80TTB)</span></b>
             </td>
             <td class="cell textLeft inputBackground">
-              <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secBrow5"
-                class="form-control"
-                style="
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secBrow5" class="form-control" style="
                   background-color: transparent;
                   border: none;
                   color: black;
                   height: 20px;
-                "
-                value={{vm.investmentDeclaration.secBrow5}}
-              />
+                " value={{vm.investmentDeclaration.secBrow5}} />
             </td>
           </tr>
           <tr>
-            <td class = "cellTopBtmLeft textCenter" height="20"  sdval="6" sdnum="1033;"><span class="fontColor" >6</span ></td>
-            <td class = "cell textLeft inputBackground" colspan=9 ><span class="fontColor" >
-                <input
-                type="text"
-                id = "input"
-                placeholder="Others (please specify)"
-                ng-model="vm.investmentDeclaration.secBrow6col1"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.secBrow6col1}}
-                />
+            <td class="cellTopBtmLeft textCenter" height="20" sdval="6" sdnum="1033;"><span class="fontColor">6</span>
+            </td>
+            <td class="cell textLeft inputBackground" colspan=9><span class="fontColor">
+                <input type="text" id="input" placeholder="Others (please specify)"
+                  ng-model="vm.investmentDeclaration.secBrow6col1" class="form-control"
+                  style="background-color: transparent;border: none;color: black;height:20px"
+                  value={{vm.investmentDeclaration.secBrow6col1}} />
 
             </td>
-            <td class = "cellTopBtmRight textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cell textLeft inputBackground" >                        <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secBrow6"
-                class="form-control"
+            <td class="cellTopBtmRight textLeft"><span class="fontColor"><br></span></td>
+            <td class="cell textLeft inputBackground"> <input type="number" id="input"
+                ng-model="vm.investmentDeclaration.secBrow6" class="form-control"
                 style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.secBrow6}}
-                /></td>
-           
-        </tr>
-        <tr>
-            <td class = "cell textCenter darkBackground" height="20"  valign=middle ><b><span class="fontColor" >C.</span ></b></td>
-            <td style="border-left: 1px solid #000000" colspan=10 class="textLeft darkBackground"><b><span class="fontColor" >Payment of Interest on Housing Loan </span ></b></td>
-            <td class="textRight darkBackground"><span class="fontColor" > </span ></td>
-                            </tr>
-        <tr>
-            <td class = "cell textCenter" height="20"  valign=middle sdval="1" sdnum="1033;"><span class="fontColor" >1</span ></td>
-            <td class = "cellTopBtmLeft textLeft"  valign=middle colspan="9"><span class="fontColor" >Loan taken prior to 1 April, 1999       &emsp;    &emsp;              <b>-Upto Rs.30,000</b></span ></td>
-            <td class = "cellTopBtmRight textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cell textLeft inputBackground" >
-                <input
-                id = "input"
-                type="number"
-                ng-model="vm.investmentDeclaration.secCrow1"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.secCrow1}}
-                />
-            
-            </td>
-           
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="48"  valign=middle sdval="2" sdnum="1033;"><span class="fontColor" >2</span ></td>
-            <td class = "cell textLeft" colspan=10  valign=middle><span class="fontColor" >Loan taken on or after 1 April, 1999 and acquisition /Construction completed within 3 years from the end of Financial year in which capital was <b>Borrowed &ndash; Upto Rs.150, 000 inclusive of (I) above</b></span ></td>
-            <td class = "cell textLeft inputBackground" >
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secCrow2"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.secCrow2}}
-                />
-            </td>
-                           </tr>
-        <tr>
-            <td class = "cell textCenter" height="24"  valign=middle sdval="3" sdnum="1033;"><span class="fontColor" >3</span ></td>
-            <td class = "cell textLeft" colspan=9  valign=middle><span class="fontColor" >Interest on self occupied housing loan*</span ></td>
-            <td class = "cellTopBtmRight textLeft"  valign=middle><b><span class="fontColor" ><br></span ></b></td>
-            <td class = "cell textLeft inputBackground">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secCrow3"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.secCrow3}}
-                />
-            </td>
-            <td class="textLeft warningBackground" colspan=4 ><b><span class="fontColor" >* Limit has been increased to 2.00 lacs</span ></b></td>
-                           </tr>
-        <tr>
-            <td class = "cell textCenter darkBackground" height="24"  valign=middle ><span class="fontColor" ><br></span ></td>
-            <td class = "cell textLeft darkBackground" colspan=10  valign=middle><b><span class="fontColor" >Additional Information Required (U/s 80EE) -Only to the extent not cliamed in FY2020-21</span ></b></td>
-            <td class = "cellTopBtmRight textLeft darkBackground"  ><span class="fontColor" ><br></span ></td>
-            
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="24"  valign=middle><span class="fontColor" ><br></span ></td>
-            <td class = "cell textLeft" colspan=10 rowspan=2  valign=middle><span class="fontColor" >First time home buyers deduction can be claimed on home loan interest paid on home loan up to maximum Rs 50,000 per financial year.  You can claim this deduction until you have fully repaid the loan.</span ></td>
-            <td class = "cell textLeft inputBackground"  valign=middle  sdnum="1033;1033;M/D/YYYY">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secCrow4row1"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.secCrow4row1}}
-                />
-            </td>
-            
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="24"  valign=middle><span class="fontColor" ><br></span ></td>
-            <td class = "cell textLeft inputBackground"  valign=middle inputBackground sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secCrow4row2"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.secCrow4row2}}
-                />
-            </td>
-           
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="24" valign=middle><span class="fontColor" ><br></span ></td>
-            <td class = "cell textLeft" colspan=10  valign=middle><span class="fontColor" >Loan has been sanctioned by a Financial Institution or a Housing Finance Company</span ></td>
-            <td class = "cell textLeft inputBackground"  valign=middle  sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secCrow5"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.secCrow5}}
-                />
-            </td>
-           
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="24"  valign=middle><span class="fontColor" ><br></span ></td>
-            <td class = "cell textLeft" colspan=10  valign=middle><span class="fontColor" >Loan taken for this house is Rs 35 lakhs or less</span ></td>
-            <td class = "cell textLeft inputBackground"  valign=middle >
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secCrow6"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.secCrow6}}
-                />
-            </td>
-                           </tr>
-        <tr>
-            <td class = "cell textCenter darkBackground" height="24"  valign=middle><b><span class="fontColor" >D.</span ></b></td>
-            <td class = "cell textLeft darkBackground" colspan=11  valign=middle ><b><span class="fontColor" >Income from Let Out Property</span ></b></td>
-           
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="24"  valign=middle><span class="fontColor" ><br></span ></td>
-            <td class = "cell textLeft" colspan=10  valign=middle><span class="fontColor" >Rent Received during the year (Annual Value)</span ></td>
-            <td class = "cell textLeft inputBackground"  valign=middle >
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secDrow1"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.secDrow1}}
-                />
-            </td>
-          
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="24"  valign=middle><span class="fontColor" ><br></span ></td>
-            <td class = "cell textLeft" colspan=10  valign=middle><span class="fontColor" >Interest Paid during the year</span ></td>
-            <td class = "cell textLeft inputBackground"  valign=middle>
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secDrow2"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.secDrow2}}
-                />
-            </td>
-           
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="24"  valign=middle><span class="fontColor" ><br></span ></td>
-            <td class = "cell textLeft" colspan=10  valign=middle><span class="fontColor" >Municipal Taxes Paid (only for letout property)</span ></td>
-            <td class = "cell textLeft inputBackground"  valign=middle>
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secDrow3"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.secDrow3}}
-                />
-            </td>
-           
-        </tr>
-        <tr>
-            <td class = "cell textCenter darkBackground" height="46"  valign=middle><b><span class="fontColor" >E.</span ></b></td>
-            <td class = "cell textLeft darkBackground" colspan=11  valign=top><b><span face="Arial" class="fontColor" >Rent paid/payable month wise for rented accommodation (for claiming exemption U/s. 10(13A)                          Please fill month wise.</span ></b></td>
-           
-        </tr>
-        <tr>
-            <td class = "cell textRight" height="20"  sdval="43922" sdnum="1033;1033;MMM-YY"><b><span class="fontColor" >Apr-20</span ></b></td>
-            <td class = "cell textRight"   sdval="43953" sdnum="1033;1033;MMM-YY"><b><span class="fontColor" >May-20</span ></b></td>
-            <td class = "cell textRight"  sdval="43984" sdnum="1033;1033;MMM-YY"><b><span class="fontColor" >Jun-20</span ></b></td>
-            <td class = "cell textRight"  sdval="44015" sdnum="1033;1033;MMM-YY"><b><span class="fontColor" >Jul-20</span ></b></td>
-            <td class = "cell textRight"  sdval="44046" sdnum="1033;1033;MMM-YY"><b><span class="fontColor" >Aug-20</span ></b></td>
-            <td class = "cell textRight" sdval="44077" sdnum="1033;1033;MMM-YY"><b><span class="fontColor" >Sep-20</span ></b></td>
-            <td class = "cell textRight"  sdval="44108" sdnum="1033;1033;MMM-YY"><b><span class="fontColor" >Oct-20</span ></b></td>
-            <td class = "cell textRight"  sdval="44139" sdnum="1033;1033;MMM-YY"><b><span class="fontColor" >Nov-20</span ></b></td>
-            <td class = "cell textRight"  sdval="44170" sdnum="1033;1033;MMM-YY"><b><span class="fontColor" >Dec-20</span ></b></td>
-            <td class = "cell textRight"  sdval="44201" sdnum="1033;1033;MMM-YY"><b><span class="fontColor" >Jan-21</span ></b></td>
-            <td class = "cell textRight"  sdval="44232" sdnum="1033;1033;MMM-YY"><b><span class="fontColor" >Feb-21</span ></b></td>
-            <td class = "cell textRight"  sdval="44263" sdnum="1033;1033;MMM-YY"><b><span class="fontColor" >Mar-21</span ></b></td>
-            
-        </tr>
-        <tr>
-            <td class = "cell textLeft inputBackground" height="30"   sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
-                <input
-                type="number"
-                id = "input"
-                string-to-number
-                ng-model="vm.investmentDeclaration.secEcol1"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
-                value={{vm.investmentDeclaration.secEcol1}}
-                />                    </td>
-            <td class = "cell textLeft inputBackground"   sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secEcol2"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
-                value={{vm.investmentDeclaration.secEcol2}}
-                />
-            
-            </td>
-            <td class = "cell textLeft inputBackground"  sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secEcol3"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
-                value={{vm.investmentDeclaration.secEcol3}}
-                />
-            </td>
-            <td class = "cell textLeft inputBackground"  sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
-                <input
-                id = "input"
-                type="number"
-                ng-model="vm.investmentDeclaration.secEcol4"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
-                value={{vm.investmentDeclaration.secEcol4}}
-                />
-            </td>
-            <td class = "cell textLeft inputBackground"   sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secEcol5"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
-                value={{vm.investmentDeclaration.secEcol5}}
-                />
-            </td>
-            <td class = "cell textLeft inputBackground"   sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secEcol6"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
-                value={{vm.investmentDeclaration.secEcol6}}
-                />
-            </td>
-            <td class = "cell textLeft inputBackground"   sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secEcol7"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
-                value={{vm.investmentDeclaration.secEcol7}}
-                />
-            </td>
-            <td class = "cell textLeft inputBackground"  sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secEcol8"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
-                value={{vm.investmentDeclaration.secEcol8}}
-                />
-            </td>
-            <td class = "cell textLeft inputBackground"   sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secEcol9"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
-                value={{vm.investmentDeclaration.secEcol9}}
-                />
-            </td>
-            <td class = "cell textLeft inputBackground"   sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secEcol10"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
-                value={{vm.investmentDeclaration.secEcol10}}
-                />
-            </td>
-            <td class = "cell textLeft inputBackground"   sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secEcol11"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
-                value={{vm.investmentDeclaration.secEcol11}}
-                />
-            </td>
-            <td class = "cell textLeft inputBackground"   sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secEcol12"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
-                value={{vm.investmentDeclaration.secEcol12}}
-                />
-            </td>
-          
-        </tr>
-        <tr>
-            <td class = "cell textCenter darkBackground" height="22"  valign=middle><b><span class="fontColor" >F.</span ></b></td>
-            <td class = "cell textLeft darkBackground" colspan=11  valign=top><b><span face="Arial" class="fontColor" >Reimbursement of expenses</span ></b></td>
-          
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="24"  sdval="1" sdnum="1033;"><span class="fontColor" >1</span ></td>
-            <td class = "cell textLeft" colspan=10 ><span class="fontColor" >The govt has removed the conveyance &amp; medical exemptions &amp; introduced a standard deduction of Rs. 50,000/-.</span ></td>
-            <td class = "cell textLeft inputBackground"  sdnum="1033;0;@">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secFrow1"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.secFrow1}}   />
-            </td>
-                           </tr>
-        <tr>
-            <td class = "cell textCenter" height="20"  sdval="2" sdnum="1033;"><span class="fontColor" >2</span ></td>
-            <td class = "cell textLeft" colspan=10><span class="fontColor" >Leave Travel Bills</span ></td>
-            <td class = "cell textLeft inputBackground"  sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ "> 
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.secFrow2"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.secFrow2}}
-                /></td>
-        </tr>
-        <tr  ng-if = "(!vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected'|| vm.investmentDeclaration.status === 'Partially Approved')&& !vm.print">
-          <td colspan="15">
-            
-            <div class="fileUploadInput">
-              <b>Attachments</b>
+                value={{vm.investmentDeclaration.secBrow6}} /></td>
 
-<div style="display: flex;justify-content: flex-start;"> 
-<div class="inputSectionSpace">
-  <label>Select Category</label>
-  <select class="form-control" ng-model="vm.searchObj.status" ng-change="onCategoryChange(vm.searchObj.status)"
-  ng-options="opt as opt for opt in vm.fileStatus"></select>
+          </tr>
+          <tr>
+            <td class="cell textCenter darkBackground" height="20" valign=middle><b><span
+                  class="fontColor">C.</span></b></td>
+            <td style="border-left: 1px solid #000000" colspan=10 class="textLeft darkBackground"><b><span
+                  class="fontColor">Payment of Interest on Housing Loan </span></b></td>
+            <td class="textRight darkBackground"><span class="fontColor"> </span></td>
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="20" valign=middle sdval="1" sdnum="1033;"><span
+                class="fontColor">1</span></td>
+            <td class="cellTopBtmLeft textLeft" valign=middle colspan="9"><span class="fontColor">Loan taken prior to 1
+                April, 1999 &emsp; &emsp; <b>-Upto Rs.30,000</b></span></td>
+            <td class="cellTopBtmRight textLeft"><span class="fontColor"><br></span></td>
+            <td class="cell textLeft inputBackground">
+              <input id="input" type="number" ng-model="vm.investmentDeclaration.secCrow1" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.secCrow1}} />
 
-</div>
-<div class="inputSectionSpace">
-  <label>Amount</label>
-<input
-  type="number"
-  id = "input"
-  placeholder="Amount"
-  ng-model="vm.amount"
-  class="form-control"
-  style="background-color: transparent;border: none;color: black;height:30px;border: 1px solid #D5D5D5 ;"
-  value={{vm.amount}}
-  />
-</div>
-  <div  ng-if = "vm.searchObj.status === '80C-Rental Receipts'" class="inputSectionSpace">
-   <label>Select Start Month</label>
-    <select class="form-control" ng-model="vm.searchObj.startMonth"
-       ng-options="opt as opt for opt in vm.months"></select>
+            </td>
 
-   </div>
-<div  ng-if = "vm.searchObj.status === '80C-Rental Receipts'">
-<label>Select End Month</label>
-<select class="form-control" ng-model="vm.searchObj.endMonth"
-ng-options="opt as opt for opt in vm.months"></select>
-</div>
-</div>
- <div style="display: flex;justify-content: flex-start;">
-    <div>
-      <input type="file" ng-file-model="vm.files" id = "fileUploadInput" class="inputSectionTop"/>
-</div>
-    <div>
-      <button  ng-click="vm.uploadFile()" class="inputSection">upload</button>
-</div>
-   </div>         
-      </div>
-          </td>
-          <td class="textLeft">
-            <span class="fontColor"><br /></span>
-          </td>
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="48" valign=middle sdval="2" sdnum="1033;"><span
+                class="fontColor">2</span></td>
+            <td class="cell textLeft" colspan=10 valign=middle><span class="fontColor">Loan taken on or after 1 April,
+                1999 and acquisition /Construction completed within 3 years from the end of Financial year in which
+                capital was <b>Borrowed &ndash; Upto Rs.150, 000 inclusive of (I) above</b></span></td>
+            <td class="cell textLeft inputBackground">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secCrow2" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.secCrow2}} />
+            </td>
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="24" valign=middle sdval="3" sdnum="1033;"><span
+                class="fontColor">3</span></td>
+            <td class="cell textLeft" colspan=9 valign=middle><span class="fontColor">Interest on self occupied housing
+                loan*</span></td>
+            <td class="cellTopBtmRight textLeft" valign=middle><b><span class="fontColor"><br></span></b></td>
+            <td class="cell textLeft inputBackground">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secCrow3" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.secCrow3}} />
+            </td>
+            <td class="textLeft warningBackground" colspan=4><b><span class="fontColor">* Limit has been increased to
+                  2.00 lacs</span></b></td>
+          </tr>
+          <tr>
+            <td class="cell textCenter darkBackground" height="24" valign=middle><span class="fontColor"><br></span>
+            </td>
+            <td class="cell textLeft darkBackground" colspan=10 valign=middle><b><span class="fontColor">Additional
+                  Information Required (U/s 80EE) -Only to the extent not cliamed in FY2020-21</span></b></td>
+            <td class="cellTopBtmRight textLeft darkBackground"><span class="fontColor"><br></span></td>
 
-          <td></td>
-        </tr>
- <tr>
-<td ng-if="vm.receipts.length > 0" colspan="15" >
-          <table class="table table-condensed table-bordered table-striped tableSpace" export-table>
-            <thead>
-                <tr>
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="24" valign=middle><span class="fontColor"><br></span></td>
+            <td class="cell textLeft" colspan=10 rowspan=2 valign=middle><span class="fontColor">First time home buyers
+                deduction can be claimed on home loan interest paid on home loan up to maximum Rs 50,000 per financial
+                year. You can claim this deduction until you have fully repaid the loan.</span></td>
+            <td class="cell textLeft inputBackground" valign=middle sdnum="1033;1033;M/D/YYYY">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secCrow4row1" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.secCrow4row1}} />
+            </td>
+
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="24" valign=middle><span class="fontColor"><br></span></td>
+            <td class="cell textLeft inputBackground" valign=middle inputBackground
+              sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secCrow4row2" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.secCrow4row2}} />
+            </td>
+
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="24" valign=middle><span class="fontColor"><br></span></td>
+            <td class="cell textLeft" colspan=10 valign=middle><span class="fontColor">Loan has been sanctioned by a
+                Financial Institution or a Housing Finance Company</span></td>
+            <td class="cell textLeft inputBackground" valign=middle
+              sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secCrow5" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.secCrow5}} />
+            </td>
+
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="24" valign=middle><span class="fontColor"><br></span></td>
+            <td class="cell textLeft" colspan=10 valign=middle><span class="fontColor">Loan taken for this house is Rs
+                35 lakhs or less</span></td>
+            <td class="cell textLeft inputBackground" valign=middle>
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secCrow6" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.secCrow6}} />
+            </td>
+          </tr>
+          <tr>
+            <td class="cell textCenter darkBackground" height="24" valign=middle><b><span
+                  class="fontColor">D.</span></b></td>
+            <td class="cell textLeft darkBackground" colspan=11 valign=middle><b><span class="fontColor">Income from Let
+                  Out Property</span></b></td>
+
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="24" valign=middle><span class="fontColor"><br></span></td>
+            <td class="cell textLeft" colspan=10 valign=middle><span class="fontColor">Rent Received during the year
+                (Annual Value)</span></td>
+            <td class="cell textLeft inputBackground" valign=middle>
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secDrow1" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.secDrow1}} />
+            </td>
+
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="24" valign=middle><span class="fontColor"><br></span></td>
+            <td class="cell textLeft" colspan=10 valign=middle><span class="fontColor">Interest Paid during the
+                year</span></td>
+            <td class="cell textLeft inputBackground" valign=middle>
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secDrow2" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.secDrow2}} />
+            </td>
+
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="24" valign=middle><span class="fontColor"><br></span></td>
+            <td class="cell textLeft" colspan=10 valign=middle><span class="fontColor">Municipal Taxes Paid (only for
+                letout property)</span></td>
+            <td class="cell textLeft inputBackground" valign=middle>
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secDrow3" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.secDrow3}} />
+            </td>
+
+          </tr>
+          <tr>
+            <td class="cell textCenter darkBackground" height="46" valign=middle><b><span
+                  class="fontColor">E.</span></b></td>
+            <td class="cell textLeft darkBackground" colspan=11 valign=top><b><span face="Arial" class="fontColor">Rent
+                  paid/payable month wise for rented accommodation (for claiming exemption U/s. 10(13A) Please fill
+                  month wise.</span></b></td>
+
+          </tr>
+          <tr>
+            <td class="cell textRight" height="20" sdval="43922" sdnum="1033;1033;MMM-YY"><b><span
+                  class="fontColor">Apr-20</span></b></td>
+            <td class="cell textRight" sdval="43953" sdnum="1033;1033;MMM-YY"><b><span
+                  class="fontColor">May-20</span></b></td>
+            <td class="cell textRight" sdval="43984" sdnum="1033;1033;MMM-YY"><b><span
+                  class="fontColor">Jun-20</span></b></td>
+            <td class="cell textRight" sdval="44015" sdnum="1033;1033;MMM-YY"><b><span
+                  class="fontColor">Jul-20</span></b></td>
+            <td class="cell textRight" sdval="44046" sdnum="1033;1033;MMM-YY"><b><span
+                  class="fontColor">Aug-20</span></b></td>
+            <td class="cell textRight" sdval="44077" sdnum="1033;1033;MMM-YY"><b><span
+                  class="fontColor">Sep-20</span></b></td>
+            <td class="cell textRight" sdval="44108" sdnum="1033;1033;MMM-YY"><b><span
+                  class="fontColor">Oct-20</span></b></td>
+            <td class="cell textRight" sdval="44139" sdnum="1033;1033;MMM-YY"><b><span
+                  class="fontColor">Nov-20</span></b></td>
+            <td class="cell textRight" sdval="44170" sdnum="1033;1033;MMM-YY"><b><span
+                  class="fontColor">Dec-20</span></b></td>
+            <td class="cell textRight" sdval="44201" sdnum="1033;1033;MMM-YY"><b><span
+                  class="fontColor">Jan-21</span></b></td>
+            <td class="cell textRight" sdval="44232" sdnum="1033;1033;MMM-YY"><b><span
+                  class="fontColor">Feb-21</span></b></td>
+            <td class="cell textRight" sdval="44263" sdnum="1033;1033;MMM-YY"><b><span
+                  class="fontColor">Mar-21</span></b></td>
+
+          </tr>
+          <tr>
+            <td class="cell textLeft inputBackground" height="30"
+              sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+              <input type="number" id="input" string-to-number ng-model="vm.investmentDeclaration.secEcol1"
+                class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
+                value={{vm.investmentDeclaration.secEcol1}} />
+            </td>
+            <td class="cell textLeft inputBackground"
+              sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secEcol2" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
+                value={{vm.investmentDeclaration.secEcol2}} />
+
+            </td>
+            <td class="cell textLeft inputBackground"
+              sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secEcol3" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
+                value={{vm.investmentDeclaration.secEcol3}} />
+            </td>
+            <td class="cell textLeft inputBackground"
+              sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+              <input id="input" type="number" ng-model="vm.investmentDeclaration.secEcol4" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
+                value={{vm.investmentDeclaration.secEcol4}} />
+            </td>
+            <td class="cell textLeft inputBackground"
+              sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secEcol5" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
+                value={{vm.investmentDeclaration.secEcol5}} />
+            </td>
+            <td class="cell textLeft inputBackground"
+              sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secEcol6" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
+                value={{vm.investmentDeclaration.secEcol6}} />
+            </td>
+            <td class="cell textLeft inputBackground"
+              sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secEcol7" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
+                value={{vm.investmentDeclaration.secEcol7}} />
+            </td>
+            <td class="cell textLeft inputBackground"
+              sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secEcol8" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
+                value={{vm.investmentDeclaration.secEcol8}} />
+            </td>
+            <td class="cell textLeft inputBackground"
+              sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secEcol9" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
+                value={{vm.investmentDeclaration.secEcol9}} />
+            </td>
+            <td class="cell textLeft inputBackground"
+              sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secEcol10" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
+                value={{vm.investmentDeclaration.secEcol10}} />
+            </td>
+            <td class="cell textLeft inputBackground"
+              sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secEcol11" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
+                value={{vm.investmentDeclaration.secEcol11}} />
+            </td>
+            <td class="cell textLeft inputBackground"
+              sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secEcol12" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px;padding:0"
+                value={{vm.investmentDeclaration.secEcol12}} />
+            </td>
+
+          </tr>
+          <tr>
+            <td class="cell textCenter darkBackground" height="22" valign=middle><b><span
+                  class="fontColor">F.</span></b></td>
+            <td class="cell textLeft darkBackground" colspan=11 valign=top><b><span face="Arial"
+                  class="fontColor">Reimbursement of expenses</span></b></td>
+
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="24" sdval="1" sdnum="1033;"><span class="fontColor">1</span></td>
+            <td class="cell textLeft" colspan=10><span class="fontColor">The govt has removed the conveyance &amp;
+                medical exemptions &amp; introduced a standard deduction of Rs. 50,000/-.</span></td>
+            <td class="cell textLeft inputBackground" sdnum="1033;0;@">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secFrow1" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.secFrow1}} />
+            </td>
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="20" sdval="2" sdnum="1033;"><span class="fontColor">2</span></td>
+            <td class="cell textLeft" colspan=10><span class="fontColor">Leave Travel Bills</span></td>
+            <td class="cell textLeft inputBackground"
+              sdnum="1033;0;_ * #,##0_ ;_ * -#,##0_ ;_ * &quot;-&quot;??_ ;_ @_ ">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.secFrow2" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.secFrow2}} />
+            </td>
+          </tr>
+          <tr
+            ng-if="(!vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected'|| vm.investmentDeclaration.status === 'Partially Approved')&& !vm.print">
+            <td colspan="15">
+
+              <div class="fileUploadInput">
+                <b>Attachments</b>
+
+                <div style="display: flex;justify-content: flex-start;">
+                  <div class="inputSectionSpace">
+                    <label>Select Category</label>
+                    <select class="form-control" ng-model="vm.searchObj.status"
+                      ng-change="onCategoryChange(vm.searchObj.status)"
+                      ng-options="opt as opt for opt in vm.fileStatus"></select>
+
+                  </div>
+                  <div class="inputSectionSpace">
+                    <label>Amount</label>
+                    <input type="number" id="input" placeholder="Amount" ng-model="vm.amount" class="form-control"
+                      style="background-color: transparent;border: none;color: black;height:30px;border: 1px solid #D5D5D5 ;"
+                      value={{vm.amount}} />
+                  </div>
+                  <div ng-if="vm.searchObj.status === '80C-Rental Receipts'" class="inputSectionSpace">
+                    <label>Select Start Month</label>
+                    <select class="form-control" ng-model="vm.searchObj.startMonth"
+                      ng-options="opt as opt for opt in vm.months"></select>
+
+                  </div>
+                  <div ng-if="vm.searchObj.status === '80C-Rental Receipts'">
+                    <label>Select End Month</label>
+                    <select class="form-control" ng-model="vm.searchObj.endMonth"
+                      ng-options="opt as opt for opt in vm.months"></select>
+                  </div>
+                </div>
+                <div style="display: flex;justify-content: flex-start;">
+                  <div>
+                    <input type="file" ng-file-model="vm.files" id="fileUploadInput" class="inputSectionTop" />
+                  </div>
+                  <div>
+                    <button ng-click="vm.uploadFile()" class="inputSection">upload</button>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td class="textLeft">
+              <span class="fontColor"><br /></span>
+            </td>
+
+            <td></td>
+          </tr>
+          <tr>
+            <td ng-if="vm.receipts.length > 0" colspan="15">
+              <table class="table table-condensed table-bordered table-striped tableSpace" export-table>
+                <thead>
+                  <tr>
                     <th class="table-heading">#</th>
                     <th class="table-heading">Category</th>
                     <th class="table-heading">Amount</th>
                     <th class="table-heading">File</th>
-                    <th ng-if = "!vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected' || vm.investmentDeclaration.status === 'Partially Approved'" class="table-heading" style="width: 120px;">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="file in vm.receipts">
+                    <th
+                      ng-if="!vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected' || vm.investmentDeclaration.status === 'Partially Approved'"
+                      class="table-heading" style="width: 120px;">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="file in vm.receipts">
                     <td class="table-heading">{{$index+1}}</td>
                     <td class="table-heading">{{file.category}}</td>
                     <td class="table-heading">{{file.amount}}</td>
                     <td class="table-heading">{{file.file}}</td>
-                   
-                    <td ng-if = "!vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected' || vm.investmentDeclaration.status === 'Partially Approved' " class="table-heading">
-                     <a 
-                ng-if = "file.status === 'false'"
-          class="btn btn-danger btn-icon btn-rounded"
-          title="Delete Receipt"
-          ng-click="vm.deleteFile(file)"
-        >
-          <span class="fa fa-trash-o" aria-hidden="true"></span>
-        </a>
- </td>
-                   
-                </tr>
-            </tbody>
+
+                    <td
+                      ng-if="!vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected' || vm.investmentDeclaration.status === 'Partially Approved' "
+                      class="table-heading">
+                      <a ng-if="file.status === 'false'" class="btn btn-danger btn-icon btn-rounded"
+                        title="Delete Receipt" ng-click="vm.deleteFile(file)">
+                        <span class="fa fa-trash-o" aria-hidden="true"></span>
+                      </a>
+                    </td>
+
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+
+          </tr>
+          <tr>
+            <td height="20" class="textLeft"><span class="fontColor"><br></span></td>
+          </tr>
+          <tr>
+            <td class="cellBorder textLeft" height="21"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft"><b><span class="fontColor"><br></span></b></td>
+            <td class="cellBorder textLeft" colspan="3">
+              <input type="text" id="input" ng-model="vm.investmentDeclaration.signature1" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.signature1}} />
+
+            </td>
+          </tr>
+          <tr>
+            <td height="20" class="textLeft" colspan=10><b><span face="Arial" class="fontColor">** Original Proof of
+                  investments to be submitted by 31st December 2020</span></b></td>
+            <td class="textLeft" colspan=6><b><span class="fontColor">Signature of the Employee</span></b></td>
+          </tr>
+          <tr>
+            <td height="20" class="textLeft"><span class="fontColor"><br></span></td>
+          </tr>
+          <tr>
+            <td height="20" class="textLeft"><span class="fontColor"><br></span></td>
+          </tr>
+          <tr>
+            <td height="20" class="textLeft"><b><span face="Arial" class="fontColor"><br></span></b></td>
+          </tr>
+          <tr>
+            <td height="20" class="textLeft" colspan=15><b><span face="Arial" class="fontColor">** Section 80DDB &amp;
+                  80 G (Donation) will not be taken for consideration for the salary part. Individual has to file
+                </span></b></td>
+          </tr>
+          <tr>
+            <td height="20" class="textLeft" colspan=10><b><span face="Arial" class="fontColor"> IT returns with these
+                  Sections along with his/her other Income. </span></b></td>
+          </tr>
+          <tr>
+            <td height="20" class="textLeft"><span class="fontColor"><br></span></td>
+          </tr>
+          <tr>
+            <td height="20" class="textLeft"><span class="fontColor"><br></span></td>
+          </tr>
+          <tr>
+            <td colspan=12 height="21" class="textCenter"><b><u><span face="Times New Roman" size=3
+                    class="fontColor">Income from Previous Employer</span></u></b></td>
+          </tr>
+          <tr>
+            <td height="20" class="textLeft" colspan=10><span class="fontColor">Please furnish these particulars if
+                joined in the mid of the year i.e. April 1, 2021 to March 31, 2022</span></td>
+          </tr>
+          <tr>
+            <td class="cellBtmRht textLeft darkBackground" colspan=11 height="20"><b><span face="Times New Roman"
+                  class="fontColor">Details of Previous Employment (Attach IT computation / Form 16) **</span></b></td>
+            <td class="inputSmRightLeft textRight darkBackground"><b><span class="fontColor">Amount</span></b></td>
+          </tr>
+          <tr>
+            <td class="cell textLeft" colspan=11 height="20"><span class="fontColor">Taxable Salary Income</span></td>
+            <td class="cell textLeft">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.taxableSalaryIncome"
+                class="form-control" style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.taxableSalaryIncome}} />
+
+            </td>
+          </tr>
+          <tr>
+            <td class="cell textLeft" colspan=11 height="20"><span class="fontColor">Taxable Perquisites</span></td>
+            <td class="cell textLeft">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.taxPerquisites" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.taxPerquisites}} />
+
+            </td>
+          </tr>
+          <tr>
+            <td class="cell textLeft" colspan=11 height="20"><span class="fontColor">PF Deducted</span></td>
+            <td class="cell textLeft">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.pfDeducted" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.pfDeducted}} />
+
+            </td>
+          </tr>
+          <tr>
+            <td class="cell textLeft" colspan=11 height="20"><span class="fontColor">Tax on profession deducted</span>
+            </td>
+            <td class="cell textLeft">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.professionDeducted"
+                class="form-control" style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.professionDeducted}} />
+
+            </td>
+          </tr>
+          <tr>
+            <td class="cell textLeft" colspan=11 height="20"><span class="fontColor">Income Tax deducted</span></td>
+            <td class="cell textLeft"> <input type="number" id="input" ng-model="vm.investmentDeclaration.taxDeducted"
+                class="form-control" style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.taxDeducted}} />
+            </td>
+          </tr>
+          <tr>
+            <td class="cell textLeft" colspan=11 height="20"><span class="fontColor">Period of employment with previous
+                employer</span></td>
+            <td class="cell textLeft">
+              <input type="number" id="input" ng-model="vm.investmentDeclaration.periOfEmployment" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.periOfEmployment}} />
+            </td>
+          </tr>
+          <tr>
+            <td height="20" class="textLeft" colspan=10><span face="Times New Roman" class="fontColor"> ** Supported by
+                Form 16 / IT computation sheet of previous employer with Form 12B.</span></td>
+          </tr>
+          <tr>
+            <td height="20" class="textLeft"><span class="fontColor"><br></span></td>
+          </tr>
+          <tr>
+            <td colspan=12 height="20" class="textCenter darkBackground"><b><u><span
+                    class="fontColor">DECLARATION</span></u></b></td>
+          </tr>
+          <tr>
+            <td height="20" class="textLeft"><span class="fontColor"><br></span></td>
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="46" valign=middle sdval="1" sdnum="1033;"><span
+                class="fontColor">1</span></td>
+            <td class="cell textLeft" colspan=11 valign=top><span class="fontColor">I understand that the eligibility to
+                deductions under Chapter VI - A and investment / expenditure u/s. 80C and 80CCF is based on estimated
+                projections which I will confirm with documentary evidence before 31st December 2020.</span></td>
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="45" valign=middle sdval="2" sdnum="1033;"><span
+                class="fontColor">2</span></td>
+            <td class="cell textLeft" colspan=11 valign=top><span class="fontColor">I shall intimate the Company of any
+                change in my contributions/Investments/payments affecting my eligibility to deductions under Chapter VI
+                -A before 31st December 2020</span></td>
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="63" valign=middle sdval="3" sdnum="1033;"><span
+                class="fontColor">3</span></td>
+            <td class="cell textLeft" colspan=11 valign=top><span class="fontColor">My claim for exemption of HRA
+                (either full or part) is based on the rent actual paid by me and as per receipt obtained from the owner
+                which will be furnished as assured. </span></td>
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="66" valign=middle sdval="4" sdnum="1033;"><span
+                class="fontColor">4</span></td>
+            <td class="cell textLeft" colspan=11 valign=top><span class="fontColor">I understand that no refund of
+                excess tax, if any, deducted from my salary will be made to me by the Company under any circumstances
+                and that any such refund will have to be claimed by me in my Tax Return, to be filed by me with the
+                Income-tax authorities.</span></td>
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="54" valign=middle sdval="5" sdnum="1033;"><span
+                class="fontColor">5</span></td>
+            <td class="cell textLeft" colspan=11 valign=top><span class="fontColor">I hereby undertake, agree and
+                confirm that I shall be fully responsible for any income tax liability that may arise if this
+                declaration is found incorrect in any manner.</span></td>
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="66" valign=middle sdval="6" sdnum="1033;"><span
+                class="fontColor">6</span></td>
+            <td class="cell textLeft" colspan=11 valign=top><span class="fontColor">I here by declare that Information
+                as stated above is true and correct . I am personally liable to Income Tax proceedings for any
+                misstatements in the declaration or proofs submitted herewith if they are inconsistent with the
+                requirement of Income Tax Act, 1961.</span></td>
+          </tr>
+          <tr>
+            <td colspan="9" height="21" class="textLeft"><span class="fontColor"><br></span></td>
+            <td class="textLeft" valign=bottom colspan="3"> <input type="text" id="input"
+                ng-model="vm.investmentDeclaration.signature2" class="form-control"
+                style="background-color: transparent;border: none;color: black;height:20px"
+                value={{vm.investmentDeclaration.signature2}} />
+            </td>
+          </tr>
+          <tr>
+            <td class="cellBorder textLeft" height="21"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft" colspan="6"><b><span class="fontColor">Signature of the Employee</span></b>
+            </td>
+            <td class="cellBorder textLeft"><span class="fontColor"><br></span></td>
+            <td class="cellBorder textLeft"><span class="fontColor"><br></span></td>
+          </tr>
+          <tr>
+            <td height="20" class="textLeft"><span class="fontColor"><br></span></td>
+          </tr>
+          <tr>
+            <td height="20" class="textLeft"><span class="fontColor"><br></span></td>
+          </tr>
+          <tr>
+            <td height="20" class="textLeft" colspan=15><b><span class="fontColor">Notes: The rates of Income tax on
+                  taxable income for the F.Y. 2019-2020 are as mentioned below:</span></b></td>
+          </tr>
+          <tr>
+            <td height="20" class="textLeft"><span class="fontColor"><br></span></td>
+            <td class="textLeft" colspan=5><b><u><span class="fontColor">Income Tax Slabs</span></u></b></td>
+
+          </tr>
+          <tr>
+            <td height="20" class="textLeft"><span class="fontColor"><br></span></td>
+            <td class="textLeft" colspan=10><b><u><span class="fontColor">&ndash; Exemption limit raised from Rs.
+                    1,60,000 to Rs. 1,80,000</span></u></b></td>
+          </tr>
+          <tr>
+            <td height="21" class="textLeft"><span class="fontColor"><br></span></td>
+          </tr>
+          <tr>
+            <td height="21" class="textLeft"><span class="fontColor"><br></span></td>
+            <td class="cell textCenter" colspan=5 valign=top><b><span face="Arial" size=1 class="fontColor">Upto Rs.
+                  2,50,000</span></b></td>
+            <td
+              style="border-top: 2px solid #000000; border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000"
+              class="textCenter" valign=top><b><span face="Arial" size=1 class="fontColor">NIL</span></b></td>
+          </tr>
+          <tr>
+            <td height="21" class="textLeft"><span class="fontColor"><br></span></td>
+            <td class="cell textCenter" colspan=5 valign=top><b><span face="Arial" size=1 class="fontColor">Rs. 2,50,001
+                  to Rs. 5,00,000</span></b></td>
+            <td
+              style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000"
+              class="textCenter" valign=top sdval="0.05" sdnum="1033;0;0%"><b><span face="Arial" size=1
+                  class="fontColor">5%</span></b></td>
+          </tr>
+          <tr>
+            <td height="20" class="textLeft"><span class="fontColor"><br></span></td>
+            <td class="cell textCenter" colspan=5 valign=top><b><span face="Arial" size=1 class="fontColor">Rs. 5,00,001
+                  to Rs. 10,00,000</span></b></td>
+            <td
+              style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000"
+              class="textCenter" valign=top sdval="0.2" sdnum="1033;0;0%"><b><span face="Arial" size=1
+                  class="fontColor">20%</span></b></td>
+          </tr>
+          <tr>
+            <td height="21" class="textLeft"><span class="fontColor"><br></span></td>
+            <td class="cell textCenter" colspan=5 valign=top><b><span face="Arial" size=1 class="fontColor">Above Rs.
+                  10,00,000</span></b></td>
+            <td
+              style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000"
+              class="textCenter" valign=top sdval="0.3" sdnum="1033;0;0%"><b><span face="Arial" size=1
+                  class="fontColor">30%</span></b></td>
+          </tr>
+          <tr>
+            <td height="21" class="textLeft"><span class="fontColor"><br></span></td>
+          </tr>
+          <tr>
+            <td height="21" class="textLeft"><span class="fontColor"><br></span></td>
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="21" sdval="1" sdnum="1033;"><span class="fontColor">1</span></td>
+            <td class="cell" colspan=11 class="textLeft"><span class="fontColor">Education Cess of 4% will be levied on
+                tax as applicable</span></td>
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="17" sdval="2" sdnum="1033;"><span class="fontColor">2</span></td>
+            <td class="cell" colspan=11 class="textLeft"><span class="fontColor">The maximum amount eligible for
+                deduction u/s 80 C is Rs.1, 50,000 and section 80CCF is Rs.20,000/-</span></td>
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="17" sdval="3" sdnum="1033;"><span class="fontColor">3</span></td>
+            <td class="cell" colspan=11 class="textLeft" valign=top><span class="fontColor">Investment made /
+                expenditure incurred is 100 % deductible from salary income up to the amount mentioned. </span></td>
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="60" sdval="4" sdnum="1033;"><span class="fontColor">4</span></td>
+            <td class="cell" colspan=11 class="textLeft" valign=top><span class="fontColor"> If an employee is residing
+                at different place other than his place of job, and if he has a property in his own place, which is
+                neither self occupied nor let out he is eligible to claim both HRA exemption and interest on house
+                property on providing a self-declaration. </span></td>
+          </tr>
+          <tr>
+            <td class="cell textCenter" height="39" sdval="5" sdnum="1033;"><span class="fontColor">5</span></td>
+            <td class="cell" colspan=11 class="textLeft" valign=top><span class="fontColor">For pervious employer income
+                Form 12 B along with Certified tax computation sheet issued by previous employer should be
+                submitted.</span></td>
+          </tr>
         </table>
-          </td>
-         
-        </tr>
- <tr>
-            <td height="20" class="textLeft"><span class="fontColor" ><br></span ></td>
-        </tr>
-        <tr>
-            <td class = "cellBorder textLeft" height="21" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft" ><b><span class="fontColor" ><br></span ></b></td>
-            <td class = "cellBorder textLeft"  colspan="3">
-                <input
-                type="text"
-                id = "input"
-                ng-model="vm.investmentDeclaration.signature1"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.signature1}}
-                />
-            
-            </td>
-        </tr>
-        <tr>
-            <td height="20" class="textLeft" colspan=10><b><span face="Arial" class="fontColor" >** Original Proof of investments to be submitted by 31st December 2020</span ></b></td>
-                              <td class="textLeft" colspan=6><b><span class="fontColor" >Signature of the Employee</span ></b></td>
-                            </tr>
-        <tr>
-            <td height="20" class="textLeft"><span class="fontColor" ><br></span ></td>
-        </tr>
-        <tr>
-            <td height="20" class="textLeft"><span class="fontColor" ><br></span ></td>
-        </tr>
-        <tr>
-            <td height="20" class="textLeft"><b><span face="Arial" class="fontColor" ><br></span ></b></td>
-        </tr>
-        <tr>
-            <td height="20" class="textLeft" colspan=15><b><span face="Arial" class="fontColor" >** Section 80DDB &amp; 80 G (Donation) will not be taken for consideration for the salary part. Individual has to file </span ></b></td>
-        </tr>
-        <tr>
-            <td height="20" class="textLeft" colspan=10><b><span face="Arial" class="fontColor" >       IT returns with these Sections along with his/her other Income.  </span ></b></td>
-        </tr>
-        <tr>
-            <td height="20" class="textLeft"><span class="fontColor" ><br></span ></td>
-        </tr>
-        <tr>
-            <td height="20" class="textLeft"><span class="fontColor" ><br></span ></td>
-        </tr>
-        <tr>
-            <td colspan=12 height="21" class="textCenter"><b><u><span face="Times New Roman" size=3 class="fontColor" >Income from Previous Employer</span ></u></b></td>
-        </tr>
-        <tr>
-            <td height="20" class="textLeft" colspan=10><span class="fontColor" >Please furnish these particulars if joined in the mid of the year i.e. April 1, 202 to March 31, 2021</span ></td>
-        </tr>
-        <tr>
-            <td class = "cellBtmRht textLeft darkBackground" colspan=11 height="20"><b><span face="Times New Roman" class="fontColor" >Details of Previous Employment (Attach IT computation / Form 16)  **</span ></b></td>
-            <td class = "inputSmRightLeft textRight darkBackground"><b><span class="fontColor" >Amount</span ></b></td>
-        </tr>
-        <tr>
-            <td class = "cell textLeft" colspan=11 height="20"><span class="fontColor" >Taxable Salary Income</span ></td>
-            <td class = "cell textLeft" >
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.taxableSalaryIncome"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.taxableSalaryIncome}}
-                />
-            
-            </td>
-        </tr>
-        <tr>
-            <td class = "cell textLeft" colspan=11 height="20" ><span class="fontColor" >Taxable Perquisites</span ></td>
-            <td class = "cell textLeft">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.taxPerquisites"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.taxPerquisites}}
-                />
-            
-            </td>
-        </tr>
-        <tr>
-            <td class = "cell textLeft" colspan=11 height="20"><span class="fontColor" >PF Deducted</span ></td>
-            <td class = "cell textLeft">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.pfDeducted"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.pfDeducted}}
-                />
-            
-            </td>
-        </tr>
-        <tr>
-            <td class = "cell textLeft" colspan=11 height="20"><span class="fontColor" >Tax on profession deducted</span ></td>
-            <td class = "cell textLeft">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.professionDeducted"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.professionDeducted}}
-                />
-            
-            </td>
-        </tr>
-        <tr>
-            <td class = "cell textLeft" colspan=11 height="20"><span class="fontColor" >Income Tax deducted</span ></td>
-            <td class = "cell textLeft"> <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.taxDeducted"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.taxDeducted}}
-                />
-            </td>
-        </tr>
-        <tr>
-            <td class = "cell textLeft" colspan=11 height="20" ><span class="fontColor" >Period of employment with previous employer</span ></td>
-            <td class = "cell textLeft">
-                <input
-                type="number"
-                id = "input"
-                ng-model="vm.investmentDeclaration.periOfEmployment"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.periOfEmployment}}
-                />
-            </td>
-        </tr>
-        <tr>
-            <td height="20" class="textLeft" colspan=10><span face="Times New Roman" class="fontColor" >       ** Supported by Form 16 / IT computation sheet of previous employer with Form 12B.</span ></td>
-        </tr>
-        <tr>
-            <td height="20" class="textLeft"><span class="fontColor" ><br></span ></td>
-        </tr>
-        <tr>
-            <td colspan=12 height="20" class="textCenter darkBackground"><b><u><span class="fontColor" >DECLARATION</span ></u></b></td>
-        </tr>
-        <tr>
-            <td height="20" class="textLeft"><span class="fontColor" ><br></span ></td>
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="46"  valign=middle sdval="1" sdnum="1033;"><span class="fontColor" >1</span ></td>
-            <td class = "cell textLeft" colspan=11  valign=top><span class="fontColor" >I understand that the eligibility to deductions under Chapter VI - A and investment / expenditure u/s. 80C and 80CCF is based on estimated projections which I will confirm with documentary evidence before 31st December 2020.</span ></td>
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="45"  valign=middle sdval="2" sdnum="1033;"><span class="fontColor" >2</span ></td>
-            <td class = "cell textLeft" colspan=11  valign=top><span class="fontColor" >I shall intimate the Company of any change in my contributions/Investments/payments affecting my eligibility to deductions under Chapter VI -A before 31st December 2020</span ></td>
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="63"  valign=middle sdval="3" sdnum="1033;"><span class="fontColor" >3</span ></td>
-            <td class = "cell textLeft" colspan=11  valign=top><span class="fontColor" >My claim for exemption of HRA (either full or part) is based on the rent actual paid by me and as per receipt obtained from the owner which will be furnished as assured. </span ></td>
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="66"  valign=middle sdval="4" sdnum="1033;"><span class="fontColor" >4</span ></td>
-            <td class = "cell textLeft" colspan=11  valign=top><span class="fontColor" >I understand that no refund of excess tax, if any, deducted from my salary will be made to me by the Company under any circumstances and that any such refund will have to be claimed by me in my Tax Return, to be filed by me with the Income-tax authorities.</span ></td>
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="54"  valign=middle sdval="5" sdnum="1033;"><span class="fontColor" >5</span ></td>
-            <td class = "cell textLeft" colspan=11  valign=top><span class="fontColor" >I hereby undertake, agree and confirm that I shall be fully responsible for any income tax liability that may arise if this declaration is found incorrect in any manner.</span ></td>
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="66"  valign=middle sdval="6" sdnum="1033;"><span class="fontColor" >6</span ></td>
-            <td class = "cell textLeft" colspan=11  valign=top><span class="fontColor" >I here by declare that Information as stated above is true and correct . I am personally liable to Income Tax proceedings for any misstatements in the declaration or proofs submitted herewith if they are inconsistent with the requirement of Income Tax Act, 1961.</span ></td>
-        </tr>
-        <tr>
-          <td colspan="9" height="21" class="textLeft"><span class="fontColor" ><br></span ></td>
-                               <td class="textLeft" valign=bottom colspan="3"> <input
-                type="text"
-                id = "input"
-                ng-model="vm.investmentDeclaration.signature2"
-                class="form-control"
-                style="background-color: transparent;border: none;color: black;height:20px"
-                value={{vm.investmentDeclaration.signature2}}
-                />
-            </td>
-        </tr>
-        <tr>
-            <td class = "cellBorder textLeft" height="21" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft"  colspan="6"><b><span class="fontColor" >Signature of the Employee</span ></b></td>
-            <td class = "cellBorder textLeft" ><span class="fontColor" ><br></span ></td>
-            <td class = "cellBorder textLeft" ><span class="fontColor" ><br></span ></td>
-        </tr>
-        <tr>
-            <td height="20" class="textLeft"><span class="fontColor" ><br></span ></td>
-        </tr>
-        <tr>
-            <td height="20" class="textLeft"><span class="fontColor" ><br></span ></td>
-        </tr>
-        <tr>
-            <td height="20" class="textLeft" colspan=15><b><span class="fontColor" >Notes:   The rates of Income tax on taxable income for the F.Y. 2019-2020  are as mentioned below:</span ></b></td>
-        </tr>
-        <tr>
-            <td height="20" class="textLeft"><span class="fontColor" ><br></span ></td>
-            <td class="textLeft" colspan=5><b><u><span class="fontColor" >Income Tax Slabs</span ></u></b></td>
-          
-        </tr>
-        <tr>
-            <td height="20" class="textLeft"><span class="fontColor" ><br></span ></td>
-            <td class="textLeft" colspan=10><b><u><span class="fontColor">&ndash; Exemption limit raised from Rs. 1,60,000 to Rs. 1,80,000</span ></u></b></td>
-        </tr>
-        <tr>
-            <td height="21" class="textLeft"><span class="fontColor" ><br></span ></td>
-        </tr>
-        <tr>
-            <td height="21" class="textLeft"><span class="fontColor" ><br></span ></td>
-            <td class = "cell textCenter" colspan=5  valign=top><b><span face="Arial" size=1 class="fontColor" >Upto Rs. 2,50,000</span ></b></td>
-            <td style="border-top: 2px solid #000000; border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" class="textCenter" valign=top><b><span face="Arial" size=1 class="fontColor" >NIL</span ></b></td>
-        </tr>
-        <tr>
-            <td height="21" class="textLeft"><span class="fontColor" ><br></span ></td>
-            <td class = "cell textCenter" colspan=5 valign=top><b><span face="Arial" size=1 class="fontColor" >Rs. 2,50,001 to Rs. 5,00,000</span ></b></td>
-            <td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" class="textCenter" valign=top sdval="0.05" sdnum="1033;0;0%"><b><span face="Arial" size=1 class="fontColor" >5%</span ></b></td>
-        </tr>
-        <tr>
-            <td height="20" class="textLeft"><span class="fontColor" ><br></span ></td>
-            <td class = "cell textCenter" colspan=5  valign=top><b><span face="Arial" size=1 class="fontColor" >Rs. 5,00,001 to Rs. 10,00,000</span ></b></td>
-            <td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" class="textCenter" valign=top sdval="0.2" sdnum="1033;0;0%"><b><span face="Arial" size=1 class="fontColor" >20%</span ></b></td>
-        </tr>
-        <tr>
-            <td height="21" class="textLeft"><span class="fontColor" ><br></span ></td>
-            <td class = "cell textCenter" colspan=5  valign=top><b><span face="Arial" size=1 class="fontColor" >Above Rs. 10,00,000</span ></b></td>
-            <td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" class="textCenter" valign=top sdval="0.3" sdnum="1033;0;0%"><b><span face="Arial" size=1 class="fontColor" >30%</span ></b></td>
-        </tr>
-        <tr>
-            <td height="21" class="textLeft"><span class="fontColor" ><br></span ></td>
-        </tr>
-        <tr>
-            <td height="21" class="textLeft"><span class="fontColor" ><br></span ></td>
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="21"  sdval="1" sdnum="1033;"><span class="fontColor" >1</span ></td>
-            <td class = "cell" colspan=11 class="textLeft"><span class="fontColor" >Education Cess of 4% will be levied on tax as applicable</span ></td>
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="17"  sdval="2" sdnum="1033;"><span class="fontColor" >2</span ></td>
-            <td class = "cell" colspan=11 class="textLeft"><span class="fontColor" >The maximum amount eligible for deduction u/s 80 C is Rs.1, 50,000 and section 80CCF is Rs.20,000/-</span ></td>
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="17"  sdval="3" sdnum="1033;"><span class="fontColor" >3</span ></td>
-            <td class = "cell" colspan=11 class="textLeft" valign=top><span class="fontColor" >Investment made / expenditure incurred is 100 % deductible from salary income up to the amount mentioned. </span ></td>
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="60"  sdval="4" sdnum="1033;"><span class="fontColor" >4</span ></td>
-            <td class = "cell" colspan=11 class="textLeft" valign=top><span class="fontColor" > If an employee is residing at different place other than his place of job, and if he has a property in his own place, which is neither self occupied nor let out he is eligible to claim both HRA exemption and interest on house property on providing a self-declaration.  </span ></td>
-        </tr>
-        <tr>
-            <td class = "cell textCenter" height="39"  sdval="5" sdnum="1033;"><span class="fontColor" >5</span ></td>
-            <td class = "cell" colspan=11 class="textLeft" valign=top><span class="fontColor" >For pervious employer income Form 12 B along with Certified tax computation sheet issued by previous employer should be submitted.</span ></td>
-        </tr>
-</table>
       </form>
 
       <div style="margin-top: 20px" class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4">
-        </button>
-        <button
-        ng-if = "(vm.investmentDeclaration.status === ''|| !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected' || vm.investmentDeclaration.status === 'Partially Approved') && !vm.print"
-        class="btn btn-primary "
-          type="button"
-          ng-click="vm.sbmitNowInvestmentDeclaration(submit = false);"
-        >
-          Save for Later
-        </button>
+          </button>
+          <button
+            ng-if="(vm.investmentDeclaration.status === ''|| !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected' || vm.investmentDeclaration.status === 'Partially Approved') && !vm.print"
+            class="btn btn-primary " type="button" ng-click="vm.sbmitNowInvestmentDeclaration(submit = false);">
+            Save for Later
+          </button>
 
         </div>
         <div class="col-md-4">
 
-        <button
-        ng-if = "(vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected' || vm.investmentDeclaration.status === 'Partially Approved') && !vm.print"
-        class="btn btn-primary "
-          type="button"
-          ng-click="vm.submitNowConfirm(submit = true);"
-        >
-          Submit Now
-</button>
-</div>
+          <button
+            ng-if="(vm.investmentDeclaration.status === '' || !vm.investmentDeclaration.status || vm.investmentDeclaration.status === 'Rejected' || vm.investmentDeclaration.status === 'Partially Approved') && !vm.print"
+            class="btn btn-primary " type="button" ng-click="vm.submitNowConfirm(submit = true);">
+            Submit Now
+          </button>
+        </div>
       </div>
     </div>
   </div>

@@ -105,7 +105,7 @@
   ) {
     var vm = this;
     (vm.user = {}),
-      (vm.financialYear = "2020-2021"),
+      (vm.financialYear = "2021-2022"),
       (vm.taxSavingId = ""),
       (vm.receipts = []),
       (vm.min = 0),
@@ -273,7 +273,7 @@
         day = ("0" + date.getDate()).slice(-2);
       return [date.getFullYear(), month, day].join("-");
     }
-    $scope.onCategoryChange = function (value) {};
+    $scope.onCategoryChange = function (value) { };
 
     vm.uploadFile = function () {
       if (vm.amount <= 0) {
@@ -406,8 +406,8 @@
 <link href="app-content/wavelabs.css" rel="stylesheet" media="screen, print"/>
 
     </head><body onload="window.print()">` +
-          innerContents +
-          `</html>`
+        innerContents +
+        `</html>`
       );
       popupWinindow.popupWinindow();
     };
