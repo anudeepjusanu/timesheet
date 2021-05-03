@@ -26,6 +26,11 @@
                         return (searchObj.userResourceType == item.userResourceType);
                     });
                 }
+                if (searchObj.practice && searchObj.practice.length > 0 && searchObj.practice != "All") {
+                    output = $filter('filter')(output, function (item) {
+                        return (searchObj.practice == item.practice);
+                    });
+                }
                 if (searchObj.employeeCategory && searchObj.employeeCategory.length > 0 && searchObj.employeeCategory != "All") {
                     output = $filter('filter')(output, function (item) {
                         return (searchObj.employeeCategory == item.employeeCategory);

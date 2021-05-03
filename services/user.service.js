@@ -641,7 +641,9 @@ function getPractices() {
     var list_practice = [
         'Digital',
         'AI & Data',
-        'Industry 4.0 & connectivity'
+        'Industry 4.0 & connectivity',
+        'TES',
+        'Data'
     ];
     deferred.resolve(list_practice);
 
