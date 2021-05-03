@@ -732,6 +732,7 @@
         vm.users = [];
         vm.search = {
             userName: "",
+            practice: "All",
             userResourceType: "",
             userResourceStatus: "",
             employeeCategory: "All",
@@ -739,8 +740,11 @@
             orderBy: 'name',
             sortDESC: false
         };
+        vm.practices = [];
+        vm.allPractices = [];
         vm.userColumns = {
             "name": { label: "Name", selected: true },
+            "practice": { label: "Practice", selected: true },
             "userResourceType": { label: "Type", selected: true },
             "phone": { label: "Mobile", selected: false },
             "employeeId": { label: "Employee ID", selected: true },
@@ -795,6 +799,9 @@
                 resolve: {
                     user: function () {
                         return user;
+                    },
+                    practices: function () {
+                        return vm.practices;
                     },
                     reportUsers: function () {
                         var reportUsers = [];
@@ -882,8 +889,19 @@
             });
         }
 
-        initController();
+        vm.getPractices = function () {
+            UserService.getPractices().then(function (response) {
+                vm.practices = response.practices;
+                vm.allPractices = angular.copy(response.practices);
+                vm.allPractices.unshift("All");
+            }, function (error) {
+                if (error) {
+                    vm.alerts.push({ msg: error, type: 'danger' });
+                }
+            });
+        }
 
+        initController();
         function initController() {
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
@@ -893,6 +911,7 @@
                 } else {
                     vm.isAdmin = false;
                 }
+                vm.getPractices();
             });
         }
     }
@@ -1067,7 +1086,7 @@
         }
     }
 
-    function UserModelController(UserService, $filter, noty, $uibModalInstance, user, reportUsers) {
+    function UserModelController(UserService, $filter, noty, $uibModalInstance, user, reportUsers, practices) {
         var vm = this;
         vm.userObj = user;
         vm.alerts = [];
@@ -1088,6 +1107,8 @@
             { id: "InternalContractor", label: "Internal Contractor" },
             { id: "ExternalContractor", label: "External Contractor" }
         ]
+        vm.practices = practices;
+        console.log(vm.practices);
         if (vm.userObj.joinDate) {
             vm.userObj.joinDate = new Date(vm.userObj.joinDate);
         }
@@ -1106,6 +1127,7 @@
                     "reportingTo": vm.userObj.reportingTo,
                     "employeeCategory": vm.userObj.employeeCategory,
                     "skillCategory": vm.userObj.skillCategory,
+                    "practice": vm.userObj.practice,
                     "profileImgUrl": vm.userObj.profileImgUrl,
                     "isActive": vm.userObj.isActive
                 }
@@ -1125,8 +1147,17 @@
             $uibModalInstance.close();
         }
 
-        init();
+        vm.getPractices = function () {
+            UserService.getPractices().then(function (response) {
+                vm.practices = response.practices;
+            }, function (error) {
+                if (error) {
+                    vm.alerts.push({ msg: error, type: 'danger' });
+                }
+            });
+        }
 
+        init();
         function init() {
             vm.userRoles = UserService.getUserRoles();
         }

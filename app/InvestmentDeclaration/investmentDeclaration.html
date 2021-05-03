@@ -4,13 +4,8 @@
 <div class="page-content-wrap">
   <div class="row">
     <div class="col-md-6">
-      <a
-        ui-sref="TaxOldRegime"
-        class="tile tile-info"
-        ng-class-even="tile-valign"
-        ng-class-odd="tile-primary"
-        style="font-size: 16px"
-      >
+      <a href="javascript:alert('Tax Declaration period has been completed!');" class="tile tile-info"
+        ng-class-even="tile-valign" ng-class-odd="tile-primary" style="font-size: 16px">
         Tax Old Regime
         <div class="informer informer-default"></div>
         <div class="informer informer-default dir-br">
@@ -19,13 +14,8 @@
       </a>
     </div>
     <div class="col-md-6">
-      <a
-        ui-sref="TaxNewRegime"
-        class="tile tile-info"
-        ng-class-even="tile-valign"
-        ng-class-odd="tile-primary"
-        style="font-size: 16px"
-      >
+      <a ui-sref="TaxNewRegime" class="tile tile-info" ng-class-even="tile-valign" ng-class-odd="tile-primary"
+        style="font-size: 16px">
         Tax New Regime
         <div class="informer informer-default"></div>
         <div class="informer informer-default dir-br">
@@ -36,14 +26,8 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-      <a
-        ui-sref="accountInvestments"
-        ng-if="vm.user.userRole == 'finance'"
-        class="tile tile-info"
-        ng-class-even="tile-valign"
-        ng-class-odd="tile-primary"
-        style="font-size: 16px"
-      >
+      <a ui-sref="accountInvestments" ng-if="vm.user.userRole == 'finance'" class="tile tile-info"
+        ng-class-even="tile-valign" ng-class-odd="tile-primary" style="font-size: 16px">
         Account Investments
         <div class="informer informer-default"></div>
         <div class="informer informer-default dir-br">

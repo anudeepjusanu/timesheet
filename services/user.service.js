@@ -33,6 +33,7 @@ service.updatePushToken = updatePushToken;
 service.migrateAccount = migrateAccount;
 service.getUserbyName = getUserbyName;
 service.botMigration = botMigration;
+service.getPractices = getPractices;
 module.exports = service;
 
 function authenticate(username, password) {
@@ -631,5 +632,18 @@ function botMigration(migrated) {
             deferred.resolve();
         }
     });
+    return deferred.promise;
+}
+
+function getPractices() {
+    var deferred = Q.defer();
+
+    var list_practice = [
+        'Digital',
+        'AI & Data',
+        'Industry 4.0 & connectivity'
+    ];
+    deferred.resolve(list_practice);
+
     return deferred.promise;
 }

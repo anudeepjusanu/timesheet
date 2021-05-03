@@ -27,6 +27,7 @@ var UserSchema = new Schema({
     userRole: String,
     reportingTo: String,
     employeeType: String,
+    practice: String,
     joinDate: String,
     pushToken: String,
     isActive: Boolean,

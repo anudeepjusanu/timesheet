@@ -35,6 +35,7 @@ router.get('/myLeaveWalletBalance', getMyLeaveWalletBalance);
 router.get('/bot', getBotMigration);
 router.post('/bot', postBotMigration);
 router.get('/myInventory', getMyInventories);
+router.get('/practices', getPractices);
 
 
 module.exports = router;
@@ -330,6 +331,14 @@ function postBotMigration(req, res) {
 function getMyInventories(req, res) {
     InventoryService.getMyInventories(req.user.sub).then(data => {
         res.send({ inventories: data });
+    }).catch(error => {
+        res.status(400).send(error);
+    });
+}
+
+function getPractices(req, res) {
+    userService.getPractices(req.user.sub).then(data => {
+        res.send({ practices: data });
     }).catch(error => {
         res.status(400).send(error);
     });

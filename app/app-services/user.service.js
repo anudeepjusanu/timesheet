@@ -31,6 +31,7 @@
         service.getMyLeaveWalletBalance = getMyLeaveWalletBalance;
         service.updateUserLeaveBalance = updateUserLeaveBalance;
         service.getMyInventory = getMyInventory;
+        service.getPractices = getPractices;
 
         service.getAllUserSkillProfiles = getAllUserSkillProfiles;
         service.addUserSkill = addUserSkill;
@@ -137,6 +138,9 @@
             return $http.get('/api/users/myInventory/').then(handleSuccess, handleError);
         }
 
+        function getPractices() {
+            return $http.get('/api/users/practices/').then(handleSuccess, handleError);
+        }
 
         function getAllUserSkillProfiles() {
             return $http.get('/api/skills/allUserSkills/').then(handleSuccess, handleError);
