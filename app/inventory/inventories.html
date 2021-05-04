@@ -114,7 +114,7 @@
                             </td>
                             <td ng-show="vm.inventoryColumns['deviceStatus'].selected">
                                 <select class="form-control" ng-model="vm.search.deviceStatus"
-                                    ng-options="opt as opt for opt in ['All', 'Working', 'Assigned', 'Assigned Multiple', 'Assigned OE Client', 'Available', 'Available For Freshers', 'Collect Laptop', 'Repair', 'Scrap']"></select>
+                                    ng-options="opt as opt for opt in ['All', 'Working', 'Assigned', 'Assigned Multiple', 'Assigned OE Client', 'Available OE Client', 'Available', 'Available For Freshers', 'Collect Laptop', 'Repair', 'Scrap', 'Yet to join', 'Lost']"></select>
                             </td>
                             <td ng-show="vm.inventoryColumns['location'].selected">
                                 <input class="form-control" type="text" ng-model="vm.search.location" />

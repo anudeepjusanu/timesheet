@@ -120,34 +120,34 @@ function assignUser(InventoryId, assignData) {
 
 function changeStatus(InventoryId, inventoryData) {
     return new Promise((resolve, reject) => {
-        if (["Repair", "Repair Done", "Scrap", "Available For Freshers", "Assigned Multiple", "Assigned OE Client", "Collect Laptop", "Lost"].includes(inventoryData.deviceStatus)) {
-            InventoryModel.findById(InventoryId, function (err, InventoryObj) {
-                if (err) return handleError(err);
+        //if (["Repair", "Repair Done", "Scrap", "Available For Freshers", "Assigned Multiple", "Assigned OE Client", "Available OE Client", "Collect Laptop", "Yet to join", "Lost"].includes(inventoryData.deviceStatus)) {
+        InventoryModel.findById(InventoryId, function (err, InventoryObj) {
+            if (err) return handleError(err);
 
-                if (inventoryData.deviceStatus == "Repair Done") {
-                    if (InventoryObj.userId && String(InventoryObj.userId).length > 0) {
-                        inventoryData.deviceStatus = "Assigned";
-                    } else {
-                        inventoryData.deviceStatus = "Available";
-                    }
+            if (inventoryData.deviceStatus == "Repair Done") {
+                if (InventoryObj.userId && String(InventoryObj.userId).length > 0) {
+                    inventoryData.deviceStatus = "Assigned";
+                } else {
+                    inventoryData.deviceStatus = "Available";
                 }
-                InventoryObj.history.push({
-                    inventoryAction: "Status Change",
-                    prevValue: InventoryObj.deviceStatus,
-                    newValue: inventoryData.deviceStatus,
-                    affectedDate: inventoryData.affectedDate,
-                    comment: inventoryData.comment
-                });
-                InventoryObj.deviceStatus = inventoryData.deviceStatus;
-                InventoryObj.latestComment = inventoryData.comment;
-                InventoryObj.save(function (error) {
-                    if (error) reject(error);
-                    resolve(InventoryObj);
-                });
+            }
+            InventoryObj.history.push({
+                inventoryAction: "Status Change",
+                prevValue: InventoryObj.deviceStatus,
+                newValue: inventoryData.deviceStatus,
+                affectedDate: inventoryData.affectedDate,
+                comment: inventoryData.comment
             });
-        } else {
-            reject({ message: "Invalid device status value!" });
-        }
+            InventoryObj.deviceStatus = inventoryData.deviceStatus;
+            InventoryObj.latestComment = inventoryData.comment;
+            InventoryObj.save(function (error) {
+                if (error) reject(error);
+                resolve(InventoryObj);
+            });
+        });
+        // } else {
+        //     reject({ message: "Invalid device status value!" });
+        // }
     });
 }
 
