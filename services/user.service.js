@@ -643,8 +643,7 @@ function getPractices() {
         'Digital',
         'Design & Digital',
         'TES',
-        'Industry 4.0 & connectivity',
-        'Data'
+        'Industry 4.0 & connectivity'
     ];
     deferred.resolve(list_practice);
 
