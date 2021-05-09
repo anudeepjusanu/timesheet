@@ -4,13 +4,14 @@
 <div class="modal-body" id="modal-body">
     <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
         close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
-    <div class="row">
-        <div class="col-md-2 image">
-            <img src="app-content/assets/user.jpg" class="img-circle group-item-img"
-                style="height: 80px; margin-right: 20px;" alt="{{vm.user.userName}}">
-        </div>
-        <div class="col-md-10 info">
-            <form class="form-horizontal" name="vm.assignForm">
+    <form class="form-horizontal" name="vm.assignForm">
+        <div class="row">
+            <div class="col-md-2 image">
+                <img src="app-content/assets/user.jpg" class="img-circle group-item-img"
+                    style="height: 80px; margin-right: 20px;" alt="{{vm.user.userName}}">
+            </div>
+            <div class="col-md-10 info">
+
                 <div class="form-group">
                     <label class="col-md-2 control-label">Name</label>
                     <div ng-if="vm.user.chooseUser" class="col-md-10">
@@ -40,73 +41,81 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-2 control-label">Billable Dates</label>
-                    <div class="col-md-12">
-                        <button type="button" class="btn btn-xs btn-primary pull-right"
-                            ng-click="vm.addBillDate(vm.user)">Add</button>
-                        <table id="" class="table">
-                            <tr ng-if="vm.user.billDates.length > 0">
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Allocated Hours</th>
-                                <th>Billable Limit</th>
-                                <th>Resource Type</th>
-                                <th>Resource Status</th>
-                                <th>Sales ID</th>
-                                <th></th>
-                            </tr>
-                            <tr ng-repeat="billDate in vm.user.billDates" class="">
-                                <td>
-                                    <p class="input-group">
-                                        <input type="text" class="form-control" uib-datepicker-popup
-                                            ng-model="billDate.start" is-open="billDate.startOpened"
-                                            datepicker-options="vm.dateOptions" close-text="Close" />
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default"
-                                                ng-click="billDate.startOpened=true;"><i
-                                                    class="glyphicon glyphicon-calendar"></i></button>
-                                        </span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <p class="input-group">
-                                        <input type="text" class="form-control" uib-datepicker-popup
-                                            ng-model="billDate.end" is-open="billDate.endOpened"
-                                            datepicker-options="vm.dateOptions" close-text="Close" />
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default"
-                                                ng-click="billDate.endOpened=true;"><i
-                                                    class="glyphicon glyphicon-calendar"></i></button>
-                                        </span>
-                                    </p>
-                                </td>
-                                <td><input type="number" class="form-control" ng-model="billDate.allocatedHours"
-                                        max="80" style="width: 80px;" /></td>
-                                <td><input type="number" class="form-control" ng-model="billDate.billableMaxHours"
-                                        max="80" style="width: 80px;" /></td>
-                                <td>
-                                    <select class="form-control" ng-model="billDate.resourceType"
-                                        ng-options="resourceType.resourceTypeId as resourceType.resourceTypeVal for resourceType in vm.resourceTypes">
-                                    </select>
-                                </td>
-                                <td>
-                                    <select class="form-control" ng-model="billDate.resourceStatus"
-                                        ng-options="opt as opt for opt in ['Open', 'Lock']">
-                                    </select>
-                                </td>
-                                <td><input type="text" class="form-control" ng-model="billDate.salesItemId" max="80"
-                                        style="width: 80px;" /></td>
-                                <td>
-                                    <a ng-click="vm.deleteBillDate(billDate, $index)"><span
-                                            class="fa fa-times"></span></a>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
                 </div>
-            </form>
+            </div>
+            <div class="row">
+                <label class="col-md-2 control-label">Billable Dates</label>
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-xs btn-primary pull-right"
+                        ng-click="vm.addBillDate(vm.user)">Add</button>
+                    <table id="" class="table">
+                        <tr ng-if="vm.user.billDates.length > 0">
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Allocated Hours</th>
+                            <th>Billable Limit</th>
+                            <th>Resource Type</th>
+                            <th>Resource Status</th>
+                            <th>Practice</th>
+                            <th>Sales ID</th>
+                            <th></th>
+                        </tr>
+                        <tr ng-repeat="billDate in vm.user.billDates" class="">
+                            <td>
+                                <p class="input-group">
+                                    <input type="text" class="form-control" uib-datepicker-popup
+                                        ng-model="billDate.start" is-open="billDate.startOpened"
+                                        datepicker-options="vm.dateOptions" close-text="Close" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
+                                            ng-click="billDate.startOpened=true;"><i
+                                                class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </p>
+                            </td>
+                            <td>
+                                <p class="input-group">
+                                    <input type="text" class="form-control" uib-datepicker-popup ng-model="billDate.end"
+                                        is-open="billDate.endOpened" datepicker-options="vm.dateOptions"
+                                        close-text="Close" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
+                                            ng-click="billDate.endOpened=true;"><i
+                                                class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </p>
+                            </td>
+                            <td><input type="number" class="form-control" ng-model="billDate.allocatedHours" max="80"
+                                    style="width: 80px;" /></td>
+                            <td><input type="number" class="form-control" ng-model="billDate.billableMaxHours" max="80"
+                                    style="width: 80px;" /></td>
+                            <td>
+                                <select class="form-control" ng-model="billDate.resourceType"
+                                    ng-options="resourceType.resourceTypeId as resourceType.resourceTypeVal for resourceType in vm.resourceTypes">
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-control" ng-model="billDate.resourceStatus"
+                                    ng-options="opt as opt for opt in ['Open', 'Lock']">
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-control" ng-model="billDate.practice"
+                                    ng-options="opt as opt for opt in vm.practices">
+                                </select>
+                            </td>
+                            <td><input type="text" class="form-control" ng-model="billDate.salesItemId" max="80"
+                                    style="width: 80px;" />
+                            </td>
+                            <td>
+                                <a ng-click="vm.deleteBillDate(billDate, $index)"><span class="fa fa-times"></span></a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary" type="button" ng-disabled="!vm.enableSaveBtn"

@@ -639,10 +639,11 @@ function getPractices() {
     var deferred = Q.defer();
 
     var list_practice = [
-        'Digital',
         'AI & Data',
-        'Industry 4.0 & connectivity',
+        'Digital',
+        'Design & Digital',
         'TES',
+        'Industry 4.0 & connectivity',
         'Data'
     ];
     deferred.resolve(list_practice);

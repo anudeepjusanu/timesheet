@@ -40,7 +40,7 @@
             ProjectService.getAll().then(function (response) {
                 vm.projects = response;
                 console.log("vm.projects", vm.projects);
- 
+
             }, function (error) {
                 console.log(error);
             });
@@ -51,7 +51,7 @@
             projectBillType: "",
             projectType: "",
             businessUnit: "All",
-            costAccount:"",
+            costAccount: "",
             isActive: true
         };
         vm.projectColumns = {
@@ -78,7 +78,7 @@
             ProjectService.getClients().then(function (response) {
                 vm.clients = response;
                 vm.clients.unshift({ _id: "", "clientName": "All" });
-                console.log("vm.clients",vm.clients);
+                console.log("vm.clients", vm.clients);
 
             }, function (error) {
                 console.log(error);
@@ -185,7 +185,7 @@
         vm.obj = {
             visibility: 'Private',
             isActive: true,
-            billingCycle:'M'
+            billingCycle: 'M'
         };
         vm.isNew = true;
         vm.projectTypes = [
@@ -465,7 +465,6 @@
         }
 
         init();
-
         function init() {
             if ($stateParams.id) {
                 vm.isNew = false;
@@ -477,7 +476,7 @@
         }
     }
 
-    function AssignUserModel($uibModalInstance, ProjectService, UserService, noty, user, project) {
+    function AssignUserModel($uibModalInstance, ProjectService, UserService, noty, user, project, practices) {
         var vm = this;
         vm.alerts = [];
         vm.closeAlert = function (index) {
@@ -496,6 +495,7 @@
             { "resourceTypeId": "intern", "resourceTypeVal": "Intern" },
             { "resourceTypeId": "bench", "resourceTypeVal": "Bench" }
         ];
+        vm.practices = practices;
 
         vm.users = [];
         vm.projects = [];
@@ -575,7 +575,6 @@
             if (form.$valid) {
                 vm.enableSaveBtn = false;
                 var assignedUsers = [];
-                console.log(vm.user);
                 assignedUsers.push(vm.user);
                 ProjectService.assignUsers(vm.project._id, assignedUsers).then(function (response) {
                     noty.showSuccess("Saved successfully!");
@@ -780,6 +779,7 @@
             "userResourceType": { label: "Resource Type", selected: true },
             "isActive": { label: "Status", selected: true },
         };
+        vm.practices = [];
         vm.sorting = function (orderBy) {
             if (vm.search.orderBy == orderBy) {
                 vm.search.sortDESC = !vm.search.sortDESC;
@@ -900,6 +900,9 @@
                     },
                     project: function () {
                         return project;
+                    },
+                    practices: function () {
+                        return vm.practices;
                     }
                 }
             });
@@ -910,8 +913,18 @@
                 getProjectUsers();
             });
         }
-        initController();
 
+        vm.getPractices = function () {
+            UserService.getPractices().then(function (response) {
+                vm.practices = response.practices;
+            }, function (error) {
+                if (error) {
+                    vm.alerts.push({ msg: error, type: 'danger' });
+                }
+            });
+        }
+
+        initController();
         function initController() {
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
@@ -920,6 +933,7 @@
                 }
             });
             getProjectUsers();
+            vm.getPractices();
         }
     };
 
@@ -928,6 +942,7 @@
         vm.user = {};
         vm.users = [];
         vm.allUsers = [];
+        vm.practices = [];
         vm.search = {
             userName: "",
             userResourceType: "",
@@ -1004,6 +1019,9 @@
                     },
                     project: function () {
                         return project;
+                    },
+                    practices: function () {
+                        return vm.practices;
                     }
                 }
             });
@@ -1015,8 +1033,17 @@
             });
         }
 
-        initController();
+        vm.getPractices = function () {
+            UserService.getPractices().then(function (response) {
+                vm.practices = response.practices;
+            }, function (error) {
+                if (error) {
+                    vm.alerts.push({ msg: error, type: 'danger' });
+                }
+            });
+        }
 
+        initController();
         function initController() {
             UserService.GetCurrent().then(function (user) {
                 vm.user = user;
@@ -1025,6 +1052,7 @@
                 }
             });
             getUserProjects();
+            vm.getPractices();
         }
     };
 

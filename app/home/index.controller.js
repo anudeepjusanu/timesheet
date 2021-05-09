@@ -1113,7 +1113,6 @@
             { id: "ExternalContractor", label: "External Contractor" }
         ]
         vm.practices = practices;
-        console.log(vm.practices);
         if (vm.userObj.joinDate) {
             vm.userObj.joinDate = new Date(vm.userObj.joinDate);
         }
