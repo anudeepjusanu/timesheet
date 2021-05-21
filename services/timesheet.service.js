@@ -46,6 +46,9 @@ function createTimesheet(currentUser, userParam) {
     if (!userParam.userId) {
         userParam.userId = currentUser._id + "";
     }
+    if (!userParam.practice) {
+        userParam.practice = "";
+    }
     _.each(userParam.projects, function (projectObj) {
         projectObj.projectId = mongo.helper.toObjectID(projectObj.projectId);
     });
@@ -104,6 +107,7 @@ function createTimesheet(currentUser, userParam) {
                         week: userParam.week,
                         weekDate: new Date(userParam.weekDate),
                         userResourceType: user.userResourceType,
+                        practice: userParam.practice,
                         totalHours: userParam.totalHours,
                         totalBillableHours: userParam.totalBillableHours,
                         timeoffHours: userParam.timeoffHours,

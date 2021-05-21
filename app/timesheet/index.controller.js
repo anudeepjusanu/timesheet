@@ -633,6 +633,7 @@
         vm.timesheetHours = 0;
         vm.userAssignedHours = 0;
         vm.timesheet = {
+            practice: "",
             weekDate: new Date(),
             projects: [],
             totalHours: 0,
@@ -945,6 +946,9 @@
                         };
                     }, function (error) { });
                 }
+                if (vm.user.practice) {
+                    vm.timesheet.practice = vm.user.practice;
+                }
             });
         }
     }
@@ -955,6 +959,7 @@
         vm.alerts = [];
         vm.userAssignedHours = 0;
         vm.timesheet = {
+            practice: "",
             weekDate: new Date(),
             projects: [],
             totalHours: 0,
@@ -1164,6 +1169,9 @@
                     vm.hasProjects = true;
                 } else {
                     vm.hasProjects = false;
+                }
+                if (vm.user.practice) {
+                    vm.timesheet.practice = vm.user.practice;
                 }
             });
         }
