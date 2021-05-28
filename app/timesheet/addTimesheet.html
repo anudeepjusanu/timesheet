@@ -7,7 +7,8 @@
             <span ng-if="!vm.isNew">Edit Hours</span>
         </li>
     </ul>
-    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
+    <div uib-alert class="wl-alerts" ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')"
+        close="vm.closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
     <div class="page-content-wrap">
         <div class="row">
             <div class="col-md-12">
@@ -23,10 +24,15 @@
                                 <label class="col-md-2 control-label">Week</label>
                                 <div class="col-md-8">
                                     <p class="input-group">
-                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="vm.timesheet.weekDate" is-open="vm.timesheetDateOpened" datepicker-options="vm.dateOptions" readonly ng-required="true" close-text="Close" ng-change="vm.setAssignedProjects();" ng-disabled="!vm.isNew"
-                                        />
+                                        <input type="text" class="form-control" uib-datepicker-popup
+                                            ng-model="vm.timesheet.weekDate" is-open="vm.timesheetDateOpened"
+                                            datepicker-options="vm.dateOptions" readonly ng-required="true"
+                                            close-text="Close" ng-change="vm.setAssignedProjects();"
+                                            ng-disabled="!vm.isNew" />
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default" ng-click="vm.timesheetDateOpened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+                                            <button type="button" class="btn btn-default"
+                                                ng-click="vm.timesheetDateOpened=true;"><i
+                                                    class="glyphicon glyphicon-calendar"></i></button>
                                         </span>
                                     </p>
                                 </div>
@@ -46,23 +52,43 @@
                             <tr ng-repeat="project in vm.timesheet.projects">
                                 <td>{{project.projectName}}</td>
                                 <td><b>{{project.allocatedHours}}</b></td>
-                                <td><input type="number" ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" min="0" max="70" placeholder="Your Hours" class="form-control" ng-model="project.projectHours" ng-required="true" ng-change="vm.calTotalHours();"
-                                    /></td>
+                                <td><input type="number"
+                                        ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" min="0"
+                                        max="70" placeholder="Your Hours" class="form-control"
+                                        ng-model="project.projectHours" ng-required="true"
+                                        ng-change="vm.calTotalHours();" /></td>
                                 <td>
-                                    <select ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" class="form-control" ng-model="project.sickLeaveHours" ng-required="true" ng-change="vm.calTotalHours();"
-                                    ng-options="opt.id as opt.label for opt in vm.masterLeavesVals"></select>
+                                    <select ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId"
+                                        class="form-control" ng-model="project.sickLeaveHours" ng-required="true"
+                                        ng-change="vm.calTotalHours();"
+                                        ng-options="opt.id as opt.label for opt in vm.masterLeavesVals"></select>
                                     <!-- <input type="number" ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" min="0" max="40" class="form-control" ng-model="project.sickLeaveHours" ng-required="true" ng-change="vm.calTotalHours();" /> -->
                                 </td>
                                 <td>
-                                    <select ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" class="form-control" ng-model="project.timeoffHours" ng-required="true" ng-change="vm.calTotalHours();"
-                                    ng-options="opt.id as opt.label for opt in vm.masterLeavesVals"></select>
+                                    <select ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId"
+                                        class="form-control" ng-model="project.timeoffHours" ng-required="true"
+                                        ng-change="vm.calTotalHours();"
+                                        ng-options="opt.id as opt.label for opt in vm.masterLeavesVals"></select>
                                     <!-- <input type="number" ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" min="0" max="40" class="form-control" ng-model="project.timeoffHours" ng-required="true" ng-change="vm.calTotalHours();" /> -->
                                 </td>
                                 <td>
-                                    <input type="number" ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" min="0" max="40" class="form-control" ng-model="project.corpHolidayHours" ng-required="true" ng-change="vm.calTotalHours();" />
+                                    <select ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId"
+                                        class="form-control" ng-model="project.corpHolidayHours" ng-required="true"
+                                        ng-change="vm.calTotalHours();"
+                                        ng-options="opt.id as opt.label for opt in vm.masterCorpHolidayVals"></select>
+                                    <!-- <input type="number"
+                                        ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" min="0"
+                                        max="40" class="form-control" ng-model="project.corpHolidayHours"
+                                        ng-required="true" ng-change="vm.calTotalHours();" /> -->
                                 </td>
-                                <td><input type="number" ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" min="0" max="40" class="form-control" ng-model="project.overtimeHours" readonly="readonly" /></td>
-                                <td><textarea class="form-control" ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" placeholder="Please enter your comment" rows="2" ng-model="project.projectComment"></textarea></td>
+                                <td><input type="number"
+                                        ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId" min="0"
+                                        max="40" class="form-control" ng-model="project.overtimeHours"
+                                        readonly="readonly" /></td>
+                                <td><textarea class="form-control"
+                                        ng-disabled="!vm.isNew && project.projectId !=vm.rejectedProjectId"
+                                        placeholder="Please enter your comment" rows="2"
+                                        ng-model="project.projectComment"></textarea></td>
                             </tr>
                             <tr>
                                 <th colspan="2">Total Hours :</th>
@@ -73,7 +99,8 @@
                                 <th>{{vm.timesheet.overtimeHours}}</th>
                                 <th>
                                     <span class="pull-left">{{vm.timesheetHours}}</span>
-                                    <button type="button" class="btn btn-primary btn-lg pull-right" ng-click="vm.saveTimesheet(timesheetForm);">Submit</button>
+                                    <button type="button" class="btn btn-primary btn-lg pull-right"
+                                        ng-click="vm.saveTimesheet(timesheetForm);">Submit</button>
                                 </th>
                             </tr>
                         </table>

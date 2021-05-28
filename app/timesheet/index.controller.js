@@ -665,10 +665,18 @@
             { id: 12, label: '1.5 Days' },
             { id: 16, label: '2 days' },
             { id: 20, label: '2.5 days' },
-            { id: 24, label: '3' },
+            { id: 24, label: '3 days' },
             { id: 28, label: '3.5 days' },
             { id: 32, label: '4 days' },
             { id: 36, label: '4.5 days' },
+            { id: 40, label: '5 days' }
+        ];
+        vm.masterCorpHolidayVals = [
+            { id: 0, label: '0' },
+            { id: 8, label: '1 Day' },
+            { id: 16, label: '2 days' },
+            { id: 24, label: '3 days' },
+            { id: 32, label: '4 days' },
             { id: 40, label: '5 days' }
         ];
 
