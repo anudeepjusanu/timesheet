@@ -773,7 +773,8 @@
                 var BillData = {
                     resourceType: "buffer",
                     allocatedHours: 40,
-                    billableMaxHours: 0
+                    billableMaxHours: 0,
+                    practice: ''
                 };
                 var weekDate = new Date(vm.timesheet.weekDate);
                 _.each(project.billDates, function (billDate) {
@@ -786,6 +787,7 @@
                             BillData.allocatedHours = billDate.allocatedHours;
                             BillData.billableMaxHours = billDate.billableMaxHours;
                             BillData.resourceStatus = billDate.resourceStatus;
+                            BillData.practice = billDate.practice;
                             isValidProject = true;
                         }
                     } else if (billDate.start && billDate.start != "") {
@@ -795,6 +797,7 @@
                             BillData.allocatedHours = billDate.allocatedHours;
                             BillData.billableMaxHours = billDate.billableMaxHours;
                             BillData.resourceStatus = billDate.resourceStatus;
+                            BillData.practice = billDate.practice;
                             isValidProject = true;
                         }
                     } else if (billDate.end && billDate.end != "") {
@@ -804,6 +807,7 @@
                             BillData.allocatedHours = billDate.allocatedHours;
                             BillData.billableMaxHours = billDate.billableMaxHours;
                             BillData.resourceStatus = billDate.resourceStatus;
+                            BillData.practice = billDate.practice;
                             isValidProject = true;
                         }
                     } else if (billDate.start == "" && billDate.end == "") {
@@ -811,6 +815,7 @@
                         BillData.allocatedHours = billDate.allocatedHours;
                         BillData.billableMaxHours = billDate.billableMaxHours;
                         BillData.resourceStatus = billDate.resourceStatus;
+                        BillData.practice = billDate.practice;
                         isValidProject = true;
                     }
                 });
@@ -831,6 +836,7 @@
                         projectComment: "",
                         isAssigned: true,
                         sheetStatus: "Pending",
+                        practice: (BillData.practice) ? BillData.practice : '',
                         resourceStatus: BillData.resourceStatus
                     });
                 }
